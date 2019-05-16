@@ -1,0 +1,12 @@
+D:\Project\C#\Capstone\Capstone\Capstone.Model\bin\Debug\netcoreapp2.2\Capstone.Model.deps.json
+D:\Project\C#\Capstone\Capstone\Capstone.Model\bin\Debug\netcoreapp2.2\Capstone.Model.dll
+D:\Project\C#\Capstone\Capstone\Capstone.Model\obj\Debug\netcoreapp2.2\Capstone.Model.csprojAssemblyReference.cache
+D:\Project\C#\Capstone\Capstone\Capstone.Model\obj\Debug\netcoreapp2.2\Capstone.Model.csproj.CoreCompileInputs.cache
+D:\Project\C#\Capstone\Capstone\Capstone.Model\obj\Debug\netcoreapp2.2\Capstone.Model.AssemblyInfoInputs.cache
+D:\Project\C#\Capstone\Capstone\Capstone.Model\obj\Debug\netcoreapp2.2\Capstone.Model.AssemblyInfo.cs
+D:\Project\C#\Capstone\Capstone\Capstone.Model\bin\Debug\netcoreapp2.2\Capstone.Model.pdb
+D:\Project\C#\Capstone\Capstone\Capstone.Model\bin\Debug\netcoreapp2.2\Microsoft.Extensions.Identity.Stores.dll
+D:\Project\C#\Capstone\Capstone\Capstone.Model\bin\Debug\netcoreapp2.2\Microsoft.Extensions.Identity.Stores.xml
+D:\Project\C#\Capstone\Capstone\Capstone.Model\obj\Debug\netcoreapp2.2\Capstone.Model.csproj.CopyComplete
+D:\Project\C#\Capstone\Capstone\Capstone.Model\obj\Debug\netcoreapp2.2\Capstone.Model.dll
+D:\Project\C#\Capstone\Capstone\Capstone.Model\obj\Debug\netcoreapp2.2\Capstone.Model.pdb
