@@ -1,0 +1,14 @@
+D:\Project\C#\Capstone\Capstone\Capstone.Service\bin\Debug\netcoreapp2.2\Capstone.Service.deps.json
+D:\Project\C#\Capstone\Capstone\Capstone.Service\bin\Debug\netcoreapp2.2\Capstone.Service.dll
+D:\Project\C#\Capstone\Capstone\Capstone.Service\bin\Debug\netcoreapp2.2\Capstone.Service.pdb
+D:\Project\C#\Capstone\Capstone\Capstone.Service\bin\Debug\netcoreapp2.2\Capstone.Data.dll
+D:\Project\C#\Capstone\Capstone\Capstone.Service\bin\Debug\netcoreapp2.2\Capstone.Model.dll
+D:\Project\C#\Capstone\Capstone\Capstone.Service\bin\Debug\netcoreapp2.2\Capstone.Data.pdb
+D:\Project\C#\Capstone\Capstone\Capstone.Service\bin\Debug\netcoreapp2.2\Capstone.Model.pdb
+D:\Project\C#\Capstone\Capstone\Capstone.Service\obj\Debug\netcoreapp2.2\Capstone.Service.csprojAssemblyReference.cache
+D:\Project\C#\Capstone\Capstone\Capstone.Service\obj\Debug\netcoreapp2.2\Capstone.Service.csproj.CoreCompileInputs.cache
+D:\Project\C#\Capstone\Capstone\Capstone.Service\obj\Debug\netcoreapp2.2\Capstone.Service.AssemblyInfoInputs.cache
+D:\Project\C#\Capstone\Capstone\Capstone.Service\obj\Debug\netcoreapp2.2\Capstone.Service.AssemblyInfo.cs
+D:\Project\C#\Capstone\Capstone\Capstone.Service\obj\Debug\netcoreapp2.2\Capstone.Service.csproj.CopyComplete
+D:\Project\C#\Capstone\Capstone\Capstone.Service\obj\Debug\netcoreapp2.2\Capstone.Service.dll
+D:\Project\C#\Capstone\Capstone\Capstone.Service\obj\Debug\netcoreapp2.2\Capstone.Service.pdb
