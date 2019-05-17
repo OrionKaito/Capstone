@@ -1,12 +1,14 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Capstone.Model
 {
-    public class Workflow
+    public class WorkFlow
     {
-        public double WorkflowID { get; set; }
+        [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public Guid WorkFlowID { get; set; }
         public string Name { get; set; }
     }
 }

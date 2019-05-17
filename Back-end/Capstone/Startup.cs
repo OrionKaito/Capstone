@@ -1,8 +1,10 @@
 ﻿using Capstone.Data;
+using Capstone.Data.Infrastructrure;
+using Capstone.Data.Repositories;
+using Capstone.Service;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Swashbuckle.AspNetCore.Swagger;
@@ -21,7 +23,20 @@ namespace Capstone
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<CapstoneEntities>(opt => opt.UseInMemoryDatabase("Capstone"));
+            services.AddDbContext<CapstoneEntities>();
+
+            #region DI
+
+            services.AddScoped<IDbFactory, DbFactory>();
+            services.AddTransient<IUnitOfWork, UnitOfWork>();
+
+            //WorkFlow
+            services.AddTransient<IWorkFlowRepository, WorkFlowRepository>();
+            services.AddTransient<IWorkFlowService, WorkFlowService>();
+
+            #endregion
+
+            //services.AddDbContext<CapstoneEntities>(opt => opt.UseSqlServer("CapstoneEntities"));
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
             // Register the Swagger generator, defining 1 or more Swagger documents
@@ -45,15 +60,15 @@ namespace Capstone
                 c.RoutePrefix = string.Empty;
             });
 
-            //if (env.IsDevelopment())
-            //{
-            //    app.UseDeveloperExceptionPage();
-            //}
-            //else
-            //{
-            //    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-            //    app.UseHsts();
-            //}
+            if (env.IsDevelopment())
+            {
+                app.UseDeveloperExceptionPage();
+            }
+            else
+            {
+                // the default hsts value is 30 days. you may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
+                app.UseHsts();
+            }
 
             app.UseHttpsRedirection();
             app.UseMvc();
