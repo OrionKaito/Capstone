@@ -1,12 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
+﻿using Capstone.Model;
+using Capstone.Service;
+using Capstone.ViewModel;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using Capstone.Data;
-using Capstone.Model;
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Capstone.Controllers
 {
@@ -14,107 +12,60 @@ namespace Capstone.Controllers
     [ApiController]
     public class WorkflowsController : ControllerBase
     {
-        private readonly CapstoneEntities _context;
+        private readonly IWorkFlowService _workFlowService;
 
-        public WorkflowsController(CapstoneEntities context)
+        public WorkflowsController(IWorkFlowService workFlowService)
         {
-            _context = context;
+            _workFlowService = workFlowService;
         }
 
         // GET: api/Workflows
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Workflow>>> GetWorkflows()
+        public ActionResult<IEnumerable<WorkFlow>> GetWorkflows()
         {
-            return await _context.Workflows.ToListAsync();
+            List<WorkflowVM> result = new List<WorkflowVM>();
+            var workFlow = new WorkflowVM();
+            var data = _workFlowService.GetAll();
+            foreach (var item in data)
+            {
+                workFlow.WorkflowId = item.WorkFlowID;
+                workFlow.Name = item.Name;
+                result.Add(workFlow);
+            }
+            return Ok(result);
         }
 
         // GET: api/Workflows/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Workflow>> GetWorkflow(double id)
+        public ActionResult<WorkFlow> GetWorkflow(Guid id)
         {
-            var workflow = await _context.Workflows.FindAsync(id);
-
-            if (workflow == null)
-            {
-                return NotFound();
-            }
-
-            return workflow;
+            return null;
         }
 
         // PUT: api/Workflows/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutWorkflow(double id, Workflow workflow)
+        public IActionResult PutWorkflow(Guid id, WorkFlow workflow)
         {
-            if (id != workflow.WorkflowID)
-            {
-                return BadRequest();
-            }
-
-            _context.Entry(workflow).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!WorkflowExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return NoContent();
+            return null;
         }
 
         // POST: api/Workflows
         [HttpPost]
-        public async Task<ActionResult<Workflow>> PostWorkflow(Workflow workflow)
+        public ActionResult<WorkFlow> PostWorkflow(WorkflowCM model)
         {
-            _context.Workflows.Add(workflow);
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateException)
-            {
-                if (WorkflowExists(workflow.WorkflowID))
-                {
-                    return Conflict();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return CreatedAtAction("GetWorkflow", new { id = workflow.WorkflowID }, workflow);
+            return null;
         }
 
         // DELETE: api/Workflows/5
         [HttpDelete("{id}")]
-        public async Task<ActionResult<Workflow>> DeleteWorkflow(double id)
+        public ActionResult<WorkFlow> DeleteWorkflow(Guid id)
         {
-            var workflow = await _context.Workflows.FindAsync(id);
-            if (workflow == null)
-            {
-                return NotFound();
-            }
-
-            _context.Workflows.Remove(workflow);
-            await _context.SaveChangesAsync();
-
-            return workflow;
+            return null;
         }
 
-        private bool WorkflowExists(double id)
-        {
-            return _context.Workflows.Any(e => e.WorkflowID == id);
-        }
+        //private bool WorkflowExists(Guid id)
+        //{
+        //    return _context.Workflows.Any(e => e.WorkFlowID == id);
+        //}
     }
 }

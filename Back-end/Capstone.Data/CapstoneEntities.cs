@@ -6,12 +6,14 @@ namespace Capstone.Data
 {
     public class CapstoneEntities : IdentityDbContext<User>
     {
-        public CapstoneEntities(DbContextOptions<CapstoneEntities> options)
-            : base(options)
+        public CapstoneEntities()
+            : base(new DbContextOptionsBuilder()
+                  .UseSqlServer(@"Server=.;Database=Capstone;user id=sa;password=920713823597;Trusted_Connection=True;")
+                  .Options)
         {
         }
 
-        public DbSet<Workflow> Workflows { get; set; }
+        public DbSet<WorkFlow> Workflows { get; set; }
 
         public void Commit()
         {
