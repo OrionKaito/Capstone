@@ -8,12 +8,13 @@ namespace Capstone.Data
     {
         public CapstoneEntities()
             : base(new DbContextOptionsBuilder()
-                  .UseSqlServer(@"Server=.;Database=Capstone;user id=sa;password=920713823597;Trusted_Connection=True;")
+                  .UseSqlServer(@"Server=.;Database=Capstone;user id=sa;password=123456789;Trusted_Connection=True;")
                   .Options)
         {
         }
 
         public DbSet<WorkFlow> Workflows { get; set; }
+        public DbSet<ActionType> ActionTypes { get; set; }
 
         public void Commit()
         {
