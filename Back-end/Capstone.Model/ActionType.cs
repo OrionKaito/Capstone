@@ -10,5 +10,6 @@ namespace Capstone.Model
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public Guid ActionTypeID { get; set; }
         public string Name { get; set; }
+        public bool IsDelete { get; set; }
     }
 }

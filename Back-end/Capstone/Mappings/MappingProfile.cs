@@ -16,6 +16,15 @@ namespace Capstone.Mappings
 
             CreateMap<WorkFlow, WorkflowCM>();
             CreateMap<WorkflowCM, WorkFlow>();
+
+            CreateMap<ActionType, ActionTypeVM>();
+            CreateMap<ActionTypeVM, ActionType>();
+
+            CreateMap<ActionType, ActionTypeCM>();
+            CreateMap<ActionTypeCM, ActionType>();
+
+            CreateMap<ActionType, ActionTypeUM>();
+            CreateMap<ActionTypeUM, ActionType>();
         }
     }
 }
