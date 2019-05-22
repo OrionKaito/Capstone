@@ -34,6 +34,10 @@ namespace Capstone
             services.AddTransient<IWorkFlowRepository, WorkFlowRepository>();
             services.AddTransient<IWorkFlowService, WorkFlowService>();
 
+            //ActionType
+            services.AddTransient<IActionTypeRepository, ActionTypeRepository>();
+            services.AddTransient<IActionTypeService, ActionTypeService>();
+
             #endregion
 
             //services.AddDbContext<CapstoneEntities>(opt => opt.UseSqlServer("CapstoneEntities"));
