@@ -1,13 +1,18 @@
-﻿using Capstone.Data;
+﻿using AutoMapper;
+using Capstone.Data;
 using Capstone.Data.Infrastructrure;
 using Capstone.Data.Repositories;
+using Capstone.Model;
 using Capstone.Service;
+using Capstone.ViewModel;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Swashbuckle.AspNetCore.Swagger;
+using AutoMapper;
+using Capstone.Mappings;
 
 namespace Capstone
 {
@@ -40,6 +45,14 @@ namespace Capstone
 
             #endregion
 
+            // Auto Mapper Configurations
+            var mappingConfig = new MapperConfiguration(mc =>
+            {
+                mc.AddProfile(new MappingProfile());
+            });
+            IMapper mapper = mappingConfig.CreateMapper();
+            services.AddSingleton(mapper);
+
             //services.AddDbContext<CapstoneEntities>(opt => opt.UseSqlServer("CapstoneEntities"));
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
@@ -48,6 +61,7 @@ namespace Capstone
             {
                 c.SwaggerDoc("v1", new Info { Title = "Capstone API", Version = "v1" });
             });
+            
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

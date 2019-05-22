@@ -1,10 +1,10 @@
-﻿using Capstone.Model;
+﻿using AutoMapper;
+using Capstone.Model;
 using Capstone.Service;
 using Capstone.ViewModel;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 
 namespace Capstone.Controllers
 {
@@ -12,10 +12,12 @@ namespace Capstone.Controllers
     [ApiController]
     public class WorkflowsController : ControllerBase
     {
+        private readonly IMapper _mapper;
         private readonly IWorkFlowService _workFlowService;
 
-        public WorkflowsController(IWorkFlowService workFlowService)
+        public WorkflowsController(IMapper mapper, IWorkFlowService workFlowService)
         {
+            _mapper = mapper;
             _workFlowService = workFlowService;
         }
 
@@ -28,9 +30,7 @@ namespace Capstone.Controllers
             var data = _workFlowService.GetAll();
             foreach (var item in data)
             {
-                workFlow.WorkflowId = item.WorkFlowID;
-                workFlow.Name = item.Name;
-                result.Add(workFlow);
+                result.Add(_mapper.Map<WorkflowVM>(item));
             }
             return Ok(result);
         }
@@ -53,7 +53,18 @@ namespace Capstone.Controllers
         [HttpPost]
         public ActionResult<WorkFlow> PostWorkflow(WorkflowCM model)
         {
-            return null;
+            WorkFlow workFlow = new WorkFlow();
+            try
+            {
+                workFlow = _mapper.Map<WorkFlow>(model);
+                _workFlowService.Create(workFlow);
+                _workFlowService.Save();
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+            return CreatedAtRoute("GetWorkflow", workFlow);
         }
 
         // DELETE: api/Workflows/5
