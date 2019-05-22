@@ -3,7 +3,7 @@ using Capstone.Data.Repositories;
 using Capstone.Model;
 using System;
 using System.Collections.Generic;
-using System.Text;
+using System.Linq;
 
 namespace Capstone.Service
 {
@@ -12,7 +12,6 @@ namespace Capstone.Service
         IEnumerable<ActionType> GetAll();
         ActionType GetByID(Guid ID);
         void Create(ActionType actionType);
-        void Update(ActionType actionType);
         void Delete(ActionType actionType);
         void Save();
     }
@@ -40,7 +39,7 @@ namespace Capstone.Service
 
         public IEnumerable<ActionType> GetAll()
         {
-            return _actionTypeRepository.GetAll();
+            return _actionTypeRepository.GetAll().Where(a => a.IsDelete == false);
         }
 
         public ActionType GetByID(Guid ID)
@@ -51,11 +50,6 @@ namespace Capstone.Service
         public void Save()
         {
             _unitOfWork.Commit();
-        }
-
-        public void Update(ActionType actionType)
-        {
-            _actionTypeRepository.Update(actionType);
         }
     }
 }
