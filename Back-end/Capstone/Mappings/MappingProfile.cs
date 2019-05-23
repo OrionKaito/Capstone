@@ -25,6 +25,15 @@ namespace Capstone.Mappings
 
             CreateMap<ActionType, ActionTypeUM>();
             CreateMap<ActionTypeUM, ActionType>();
+
+            CreateMap<Group, GroupVM>();
+            CreateMap<GroupVM, Group>();
+
+            CreateMap<Group, GroupCM>();
+            CreateMap<GroupCM, Group>();
+
+            CreateMap<Group, GroupUM>();
+            CreateMap<GroupUM, Group>();
         }
     }
 }

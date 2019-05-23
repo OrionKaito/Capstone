@@ -37,9 +37,9 @@ namespace Capstone.Controllers
 
         // GET: api/ActionTypes/5
         [HttpGet("{id}")]
-        public ActionResult<ActionType> GetActionType(Guid id)
+        public ActionResult<ActionType> GetActionType(Guid ID)
         {
-            var rs = _actionTypeService.GetByID(id);
+            var rs = _actionTypeService.GetByID(ID);
             if (rs == null) return NotFound("ID not found!");
             ActionTypeVM result = _mapper.Map<ActionTypeVM>(rs);
             return Ok(result);
@@ -72,7 +72,7 @@ namespace Capstone.Controllers
             {
                 var actionTypeInDb = _actionTypeService.GetByID(model.ActionTypeID);
                 if (actionTypeInDb == null) return NotFound("ID not found!");
-                _mapper.Map(model, actionTypeInDb);
+                //_mapper.Map(model, actionTypeInDb);
                 _actionTypeService.Save();
             }
             catch (Exception e)
