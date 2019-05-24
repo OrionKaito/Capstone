@@ -7,5 +7,6 @@ namespace Capstone.Model
     {
         public String FullName { get; set; }
         public bool? IsEnabled { get; set; }
+        
     }
 }

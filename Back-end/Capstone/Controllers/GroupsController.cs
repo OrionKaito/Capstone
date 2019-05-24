@@ -10,29 +10,29 @@ namespace Capstone.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class ActionTypesController : ControllerBase
+    public class GroupsController : ControllerBase
     {
         private readonly IMapper _mapper;
-        private readonly IActionTypeService _actionTypeService;
+        private readonly IGroupService _groupService;
 
-        public ActionTypesController(IMapper mapper, IActionTypeService actionTypeService)
+        public GroupsController(IMapper mapper, IGroupService groupService)
         {
             _mapper = mapper;
-            _actionTypeService = actionTypeService;
+            _groupService = groupService;
         }
 
-        // POST: api/ActionTypes
+        // POST: api/Groups
         [HttpPost]
-        public ActionResult<ActionType> PostActionType(ActionTypeCM model)
+        public ActionResult<Group> PostGroup(GroupCM model)
         {
             if (!ModelState.IsValid) return BadRequest(ModelState);
             try
             {
-                ActionType actionType = new ActionType();
-                actionType = _mapper.Map<ActionType>(model);
-                _actionTypeService.Create(actionType);
-                _actionTypeService.Save();
-                return StatusCode(201, "Action Type Created!");
+                Group group = new Group();
+                group = _mapper.Map<Group>(model);
+                _groupService.Create(group);
+                _groupService.Save();
+                return StatusCode(201, "Group Created!");
             }
             catch (Exception e)
             {
@@ -40,18 +40,18 @@ namespace Capstone.Controllers
             }
         }
 
-        // GET: api/ActionTypes
+        // GET: api/Groups
         [HttpGet]
-        public ActionResult<IEnumerable<ActionType>> GetActionTypes()
+        public ActionResult<IEnumerable<Group>> GetGroups()
         {
             if (!ModelState.IsValid) return BadRequest(ModelState);
             try
             {
-                List<ActionTypeVM> result = new List<ActionTypeVM>();
-                var data = _actionTypeService.GetAll();
+                List<GroupVM> result = new List<GroupVM>();
+                var data = _groupService.GetAll();
                 foreach (var item in data)
                 {
-                    result.Add(_mapper.Map<ActionTypeVM>(item));
+                    result.Add(_mapper.Map<GroupVM>(item));
                 }
                 return Ok(result);
             }
@@ -61,16 +61,16 @@ namespace Capstone.Controllers
             }
         }
 
-        // GET: api/ActionTypes/5
+        // GET: api/Groups/5
         [HttpGet("GetByID")]
-        public ActionResult<ActionType> GetActionType(Guid ID)
+        public ActionResult<Group> GetGroup(Guid ID)
         {
             if (!ModelState.IsValid) return BadRequest(ModelState);
             try
             {
-                var rs = _actionTypeService.GetByID(ID);
+                var rs = _groupService.GetByID(ID);
                 if (rs == null) return NotFound("ID not found!");
-                ActionTypeVM result = _mapper.Map<ActionTypeVM>(rs);
+                GroupVM result = _mapper.Map<GroupVM>(rs);
                 return Ok(result);
             }
             catch (Exception e)
@@ -78,18 +78,18 @@ namespace Capstone.Controllers
                 return BadRequest(e.Message);
             }
         }
-
-        // PUT: api/ActionTypes/5
+        
+        // PUT: api/Groups/5
         [HttpPut]
-        public IActionResult PutActionType(ActionTypeUM model)
+        public IActionResult PutGroup(GroupUM model)
         {
             if (!ModelState.IsValid) return BadRequest(ModelState);
             try
             {
-                var actionTypeInDb = _actionTypeService.GetByID(model.ID);
-                if (actionTypeInDb == null) return NotFound("ID not found!");
-                _mapper.Map(model, actionTypeInDb);
-                _actionTypeService.Save();
+                var groupInDb = _groupService.GetByID(model.ID);
+                if (groupInDb == null) return NotFound("ID not found!");
+                _mapper.Map(model, groupInDb);
+                _groupService.Save();
                 return Ok("success");
             }
             catch (Exception e)
@@ -98,17 +98,17 @@ namespace Capstone.Controllers
             }
         }
 
-        // DELETE: api/ActionTypes/5
+        // DELETE: api/Groups/5
         [HttpDelete]
-        public ActionResult DeleteActionType(Guid ID)
+        public ActionResult DeleteGroup(Guid ID)
         {
             if (!ModelState.IsValid) return BadRequest(ModelState);
             try
             {
-                var actionTypeInDb = _actionTypeService.GetByID(ID);
-                if (actionTypeInDb == null) return NotFound("ID not found!");
-                actionTypeInDb.IsDelete = true;
-                _actionTypeService.Save();
+                var groupInDb = _groupService.GetByID(ID);
+                if (groupInDb == null) return NotFound("ID not found!");
+                groupInDb.IsDelete = true;
+                _groupService.Save();
                 return Ok("success");
             }
             catch (Exception e)

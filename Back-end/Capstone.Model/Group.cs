@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Capstone.Model
 {
-    public class ActionType
+    public class Group
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]

@@ -2,18 +2,18 @@
 
 namespace Capstone.ViewModel
 {
-    public class ActionTypeVM
+    public class GroupVM
     {
         public Guid ID { get; set; }
         public string Name { get; set; }
     }
 
-    public class ActionTypeCM
+    public class GroupCM
     {
         public string Name { get; set; }
     }
 
-    public class ActionTypeUM
+    public class GroupUM
     {
         public Guid ID { get; set; }
         public string Name { get; set; }
