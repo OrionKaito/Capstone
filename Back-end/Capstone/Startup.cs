@@ -13,6 +13,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Swashbuckle.AspNetCore.Swagger;
 using AutoMapper;
 using Capstone.Mappings;
+using Microsoft.AspNetCore.Identity;
 
 namespace Capstone
 {
@@ -43,6 +44,14 @@ namespace Capstone
             services.AddTransient<IActionTypeRepository, ActionTypeRepository>();
             services.AddTransient<IActionTypeService, ActionTypeService>();
 
+            //ActionType
+            services.AddTransient<IGroupRepository, GroupRepository>();
+            services.AddTransient<IGroupService, GroupService>();
+
+            //ActionType
+            services.AddTransient<IUserGroupRepository, UserGroupRepository>();
+            services.AddTransient<IUserGroupService, UserGroupService>();
+
             #endregion
 
             // Auto Mapper Configurations
@@ -52,6 +61,19 @@ namespace Capstone
             });
             IMapper mapper = mappingConfig.CreateMapper();
             services.AddSingleton(mapper);
+
+            // Add identity
+            var authBuilder = services.AddIdentityCore<User>(o =>
+            {
+                // configure identity options
+                o.Password.RequireDigit = false;
+                o.Password.RequireLowercase = false;
+                o.Password.RequireUppercase = false;
+                o.Password.RequireNonAlphanumeric = false;
+                o.Password.RequiredLength = 6;
+            });
+            authBuilder = new IdentityBuilder(authBuilder.UserType, typeof(IdentityRole), authBuilder.Services);
+            authBuilder.AddEntityFrameworkStores<CapstoneEntities>().AddDefaultTokenProviders();
 
             //services.AddDbContext<CapstoneEntities>(opt => opt.UseSqlServer("CapstoneEntities"));
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);

@@ -21,46 +21,62 @@ namespace Capstone.Controllers
             _actionTypeService = actionTypeService;
         }
 
-        // GET: api/ActionTypes
-        [HttpGet]
-        public ActionResult<IEnumerable<ActionType>> GetActionTypes()
-        {
-            List<ActionTypeVM> result = new List<ActionTypeVM>();
-            var actionType = new ActionTypeVM();
-            var data = _actionTypeService.GetAll();
-            foreach (var item in data)
-            {
-                result.Add(_mapper.Map<ActionTypeVM>(item));
-            }
-            return Ok(result);
-        }
-
-        // GET: api/ActionTypes/5
-        [HttpGet("{id}")]
-        public ActionResult<ActionType> GetActionType(Guid ID)
-        {
-            var rs = _actionTypeService.GetByID(ID);
-            if (rs == null) return NotFound("ID not found!");
-            ActionTypeVM result = _mapper.Map<ActionTypeVM>(rs);
-            return Ok(result);
-        }
-
         // POST: api/ActionTypes
         [HttpPost]
         public ActionResult<ActionType> PostActionType(ActionTypeCM model)
         {
-            ActionType actionType = new ActionType();
+            if (!ModelState.IsValid) return BadRequest(ModelState);
             try
             {
+                ActionType actionType = new ActionType();
                 actionType = _mapper.Map<ActionType>(model);
                 _actionTypeService.Create(actionType);
                 _actionTypeService.Save();
+                return StatusCode(201, "Action Type Created!");
             }
             catch (Exception e)
             {
                 return BadRequest(e.Message);
             }
-            return StatusCode(201, actionType.ActionTypeID);
+        }
+
+        // GET: api/ActionTypes
+        [HttpGet]
+        public ActionResult<IEnumerable<ActionType>> GetActionTypes()
+        {
+            if (!ModelState.IsValid) return BadRequest(ModelState);
+            try
+            {
+                List<ActionTypeVM> result = new List<ActionTypeVM>();
+                var data = _actionTypeService.GetAll();
+                foreach (var item in data)
+                {
+                    result.Add(_mapper.Map<ActionTypeVM>(item));
+                }
+                return Ok(result);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
+
+        // GET: api/ActionTypes/5
+        [HttpGet("GetByID")]
+        public ActionResult<ActionType> GetActionType(Guid ID)
+        {
+            if (!ModelState.IsValid) return BadRequest(ModelState);
+            try
+            {
+                var rs = _actionTypeService.GetByID(ID);
+                if (rs == null) return NotFound("ID not found!");
+                ActionTypeVM result = _mapper.Map<ActionTypeVM>(rs);
+                return Ok(result);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
         }
 
         // PUT: api/ActionTypes/5
@@ -70,21 +86,21 @@ namespace Capstone.Controllers
             if (!ModelState.IsValid) return BadRequest(ModelState);
             try
             {
-                var actionTypeInDb = _actionTypeService.GetByID(model.ActionTypeID);
+                var actionTypeInDb = _actionTypeService.GetByID(model.ID);
                 if (actionTypeInDb == null) return NotFound("ID not found!");
-                //_mapper.Map(model, actionTypeInDb);
+                _mapper.Map(model, actionTypeInDb);
                 _actionTypeService.Save();
+                return Ok("success");
             }
             catch (Exception e)
             {
                 return BadRequest(e.Message);
             }
-            return Ok("success");
         }
 
         // DELETE: api/ActionTypes/5
         [HttpDelete]
-        public IActionResult DeleteActionType(Guid ID)
+        public ActionResult DeleteActionType(Guid ID)
         {
             if (!ModelState.IsValid) return BadRequest(ModelState);
             try
@@ -93,12 +109,12 @@ namespace Capstone.Controllers
                 if (actionTypeInDb == null) return NotFound("ID not found!");
                 actionTypeInDb.IsDelete = true;
                 _actionTypeService.Save();
+                return Ok("success");
             }
             catch (Exception e)
             {
                 return BadRequest(e.Message);
             }
-            return Ok("success");
         }
     }
 }

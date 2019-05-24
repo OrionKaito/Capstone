@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Text;
 
 namespace Capstone.Model
 {
@@ -11,10 +9,15 @@ namespace Capstone.Model
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public Guid ID { get; set; }
-        public Guid UserID { get; set; }
-        public Guid GroupID { get; set; }
+        
+        public string UserId { get; set; }
+        [ForeignKey("UserId")]
         public User User { get; set; }
+        
+        public Guid GroupID { get; set; }
+        [ForeignKey("GroupID")]
         public Group Group { get; set; }
+
         public bool IsDelete { get; set; }
     }
 }

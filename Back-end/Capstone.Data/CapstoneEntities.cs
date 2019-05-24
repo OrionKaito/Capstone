@@ -16,6 +16,7 @@ namespace Capstone.Data
         public DbSet<WorkFlow> Workflows { get; set; }
         public DbSet<ActionType> ActionTypes { get; set; }
         public DbSet<Group> Groups { get; set; }
+        public DbSet<UserGroup> UserGroups { get; set; }
 
         public void Commit()
         {

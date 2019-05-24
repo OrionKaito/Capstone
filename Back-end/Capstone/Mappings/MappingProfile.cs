@@ -34,6 +34,15 @@ namespace Capstone.Mappings
 
             CreateMap<Group, GroupUM>();
             CreateMap<GroupUM, Group>();
+
+            CreateMap<UserGroup, UserGroupVM>();
+            CreateMap<UserGroupVM, UserGroup>();
+
+            CreateMap<UserGroup, UserGroupCM>();
+            CreateMap<UserGroupCM, UserGroup>();
+
+            CreateMap<UserGroup, UserGroupUM>();
+            CreateMap<UserGroupUM, UserGroup>();
         }
     }
 }

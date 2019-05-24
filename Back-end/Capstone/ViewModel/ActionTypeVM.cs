@@ -4,7 +4,7 @@ namespace Capstone.ViewModel
 {
     public class ActionTypeVM
     {
-        public Guid ActionTypeID { get; set; }
+        public Guid ID { get; set; }
         public string Name { get; set; }
     }
 
@@ -15,7 +15,7 @@ namespace Capstone.ViewModel
 
     public class ActionTypeUM
     {
-        public Guid ActionTypeID { get; set; }
+        public Guid ID { get; set; }
         public string Name { get; set; }
     }
 }
