@@ -14,6 +14,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using Swashbuckle.AspNetCore.Swagger;
+using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace Capstone
@@ -81,7 +83,7 @@ namespace Capstone
             // Add identity
             var authBuilder = services.AddIdentityCore<User>(o =>
             {
-                // configure identity options
+                // Configure identity options
                 o.Password.RequireDigit = false;
                 o.Password.RequireLowercase = false;
                 o.Password.RequireUppercase = false;
@@ -98,6 +100,17 @@ namespace Capstone
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new Info { Title = "Capstone API", Version = "v1" });
+                c.AddSecurityDefinition("Bearer",
+                new ApiKeyScheme
+                {
+                    In = "header",
+                    Description = "Please enter into field the word 'Bearer' following by space and JWT",
+                    Name = "Authorization",
+                    Type = "apiKey"
+                });
+                c.AddSecurityRequirement(new Dictionary<string, IEnumerable<string>> {
+                { "Bearer", Enumerable.Empty<string>() },
+            });
             });
             
         }
@@ -105,9 +118,10 @@ namespace Capstone
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
-            //Enable middleware to serve generated Swagger as a JSON endpoint.
+            // Enable middleware to serve generated Swagger as a JSON endpoint.
             app.UseSwagger();
-
+            // Enable jwt
+            app.UseAuthentication();
             // Enable middleware to serve swagger-ui (HTML, JS, CSS, etc.),
             // Specifying the swagger JSON endpoint.
             app.UseSwaggerUI(c =>
