@@ -25,14 +25,21 @@ namespace Capstone.Controllers
         [HttpGet]
         public ActionResult<IEnumerable<WorkFlow>> GetWorkflows()
         {
-            List<WorkflowVM> result = new List<WorkflowVM>();
-            var workFlow = new WorkflowVM();
-            var data = _workFlowService.GetAll();
-            foreach (var item in data)
+            try
             {
-                result.Add(_mapper.Map<WorkflowVM>(item));
+                List<WorkflowVM> result = new List<WorkflowVM>();
+                var workFlow = new WorkflowVM();
+                var data = _workFlowService.GetAll();
+                foreach (var item in data)
+                {
+                    result.Add(_mapper.Map<WorkflowVM>(item));
+                }
+                return Ok(result);
             }
-            return Ok(result);
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
         }
 
         // GET: api/Workflows/5
@@ -53,18 +60,26 @@ namespace Capstone.Controllers
         [HttpPost]
         public ActionResult<WorkFlow> PostWorkflow(WorkflowCM model)
         {
-            WorkFlow workFlow = new WorkFlow();
+            if (!ModelState.IsValid) return BadRequest(ModelState);
             try
             {
-                workFlow = _mapper.Map<WorkFlow>(model);
-                _workFlowService.Create(workFlow);
-                _workFlowService.Save();
+                WorkFlow workFlow = new WorkFlow();
+                try
+                {
+                    workFlow = _mapper.Map<WorkFlow>(model);
+                    _workFlowService.Create(workFlow);
+                    _workFlowService.Save();
+                }
+                catch (Exception e)
+                {
+                    return BadRequest(e.Message);
+                }
+                return CreatedAtRoute("GetWorkflow", workFlow);
             }
             catch (Exception e)
             {
                 return BadRequest(e.Message);
             }
-            return CreatedAtRoute("GetWorkflow", workFlow);
         }
 
         // DELETE: api/Workflows/5
