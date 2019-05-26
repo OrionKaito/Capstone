@@ -24,7 +24,7 @@ namespace Capstone.Controllers
 
         // POST: api/UserGroups
         [HttpPost]
-        public ActionResult<UserGroup> PostGroup(UserGroupCM model)
+        public ActionResult PostGroup(UserGroupCM model)
         {
             if (!ModelState.IsValid) return BadRequest(ModelState);
             try
@@ -45,7 +45,6 @@ namespace Capstone.Controllers
         [HttpGet("GetByUserID")]
         public ActionResult<IEnumerable<UserGroup>> GetByUserID(string ID)
         {
-            if (!ModelState.IsValid) return BadRequest(ModelState);
             try
             {
                 List<UserGroupVM> result = new List<UserGroupVM>();
@@ -67,7 +66,6 @@ namespace Capstone.Controllers
         [HttpGet]
         public ActionResult<UserGroup> GetUserGroup(Guid ID)
         {
-            if (!ModelState.IsValid) return BadRequest(ModelState);
             try
             {
                 var rs = _userGroupService.GetByID(ID);
@@ -104,12 +102,11 @@ namespace Capstone.Controllers
         [HttpDelete]
         public ActionResult DeleteUserGroup(Guid ID)
         {
-            if (!ModelState.IsValid) return BadRequest(ModelState);
             try
             {
-                var ugInDb = _userGroupService.GetByID(ID);
-                if (ugInDb == null) return NotFound("ID not found!");
-                ugInDb.IsDelete = true;
+                var userGroupInDb = _userGroupService.GetByID(ID);
+                if (userGroupInDb == null) return NotFound("ID not found!");
+                userGroupInDb.IsDelete = true;
                 _userGroupService.Save();
                 return Ok("success");
             }

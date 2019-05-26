@@ -47,14 +47,29 @@ namespace Capstone
             services.AddTransient<IActionTypeRepository, ActionTypeRepository>();
             services.AddTransient<IActionTypeService, ActionTypeService>();
 
-            //ActionType
+            //Group
             services.AddTransient<IGroupRepository, GroupRepository>();
             services.AddTransient<IGroupService, GroupService>();
 
-            //ActionType
+            //UserGroup
             services.AddTransient<IUserGroupRepository, UserGroupRepository>();
             services.AddTransient<IUserGroupService, UserGroupService>();
 
+            //Role
+            services.AddTransient<IRoleRepository, RoleRepository>();
+            services.AddTransient<IRoleService, RoleService>();
+
+            //RoleOfGroup
+            services.AddTransient<IRoleOfGroupRepository, RoleOfGroupRepository>();
+            services.AddTransient<IRoleOfGroupService, RoleOfGroupService>();
+
+            //Permission
+            services.AddTransient<IPermissionRepository, PermissionRepository>();
+            services.AddTransient<IPermissionService, PermissionService>();
+
+            //PermissionOfRole
+            services.AddTransient<IPermissionOfRoleRepository, PermissionOfRoleRepository>();
+            services.AddTransient<IPermissionOfRoleService, PermissionOfRoleService>();
             #endregion
 
             // Auto Mapper Configurations

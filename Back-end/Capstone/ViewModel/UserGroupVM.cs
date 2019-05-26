@@ -1,5 +1,4 @@
-﻿using Capstone.Model;
-using System;
+﻿using System;
 
 namespace Capstone.ViewModel
 {
