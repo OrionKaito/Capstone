@@ -86,6 +86,17 @@ namespace Capstone.Mappings
 
             CreateMap<PermissionOfRole, PermissionOfRoleUM>();
             CreateMap<PermissionOfRoleUM, PermissionOfRole>();
+
+            //UserRole
+            CreateMap<UserRole, UserRoleVM>();
+            CreateMap<UserRoleVM, UserRole>();
+
+            CreateMap<UserRole, UserRoleCM>();
+            CreateMap<UserRoleCM, UserRole>();
+
+            CreateMap<UserGroup, UserRoleUM>();
+            CreateMap<UserRoleUM, UserRole>();
+
         }
     }
 }

@@ -70,6 +70,11 @@ namespace Capstone
             //PermissionOfRole
             services.AddTransient<IPermissionOfRoleRepository, PermissionOfRoleRepository>();
             services.AddTransient<IPermissionOfRoleService, PermissionOfRoleService>();
+
+            //UserRole
+            services.AddTransient<IUserRoleRepository, UserRoleRepository>();
+            services.AddTransient<IUserRoleService, UserRoleService>();
+
             #endregion
 
             // Auto Mapper Configurations

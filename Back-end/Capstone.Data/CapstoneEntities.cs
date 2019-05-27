@@ -21,6 +21,7 @@ namespace Capstone.Data
         public DbSet<RoleOfGroup> RoleOfGroups { get; set; }
         public DbSet<Permission> Permissions { get; set; }
         public DbSet<PermissionOfRole> PermissionOfRoles { get; set; }
+        public DbSet<UserRole> UserRoles { get; set; }
 
         public void Commit()
         {

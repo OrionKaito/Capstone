@@ -60,6 +60,27 @@ namespace Capstone.Controllers
             }
         }
 
+        // GET: api/Permissions
+        [HttpGet("GetByUserID")]
+        public ActionResult<IEnumerable<Guid>> GetByUserID(string ID)
+        {
+            try
+            {
+                List<Guid> result = new List<Guid>();
+                var data = _permissionService.GetByUserID(ID);
+                foreach (var item in data)
+                {
+                    result.Add(item);
+                }
+                if (result.Count == 0) return BadRequest("ID not found!");
+                return Ok(result);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
+
         // GET: api/Permissions/GetByID
         [HttpGet("GetByID")]
         public ActionResult<Permission> GetPermission(Guid ID)
