@@ -1,8 +1,5 @@
 ﻿using Capstone.Data.Infrastructrure;
 using Capstone.Model;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Capstone.Data.Repositories
 {

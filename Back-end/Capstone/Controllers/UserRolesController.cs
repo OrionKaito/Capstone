@@ -11,29 +11,29 @@ namespace Capstone.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class UserGroupsController : ControllerBase
+    public class UserRolesController : ControllerBase
     {
         private readonly IMapper _mapper;
-        private readonly IUserGroupService _userGroupService;
+        private readonly IUserRoleService _userRoleService;
 
-        public UserGroupsController(IMapper mapper, IUserGroupService userGroupService)
+        public UserRolesController(IMapper mapper, IUserRoleService UserRoleService)
         {
             _mapper = mapper;
-            _userGroupService = userGroupService;
+            _userRoleService = UserRoleService;
         }
 
-        // POST: api/UserGroups
+        // POST: api/UserRoles
         [HttpPost]
-        public ActionResult PostUserGroup(UserGroupCM model)
+        public ActionResult PostUserRole(UserRoleCM model)
         {
             if (!ModelState.IsValid) return BadRequest(ModelState);
             try
             {
-                UserGroup userGroup = new UserGroup();
-                userGroup = _mapper.Map<UserGroup>(model);
-                _userGroupService.Create(userGroup);
-                _userGroupService.Save();
-                return StatusCode(201, "User Group Created!");
+                UserRole userRole = new UserRole();
+                userRole = _mapper.Map<UserRole>(model);
+                _userRoleService.Create(userRole);
+                _userRoleService.Save();
+                return StatusCode(201, "User Role Created!");
             }
             catch (Exception e)
             {
@@ -41,18 +41,18 @@ namespace Capstone.Controllers
             }
         }
 
-        // GET: api/UserGroups
+        // GET: api/UserRoles
         [HttpGet("GetByUserID")]
-        public ActionResult<IEnumerable<UserGroup>> GetByUserID(string ID)
+        public ActionResult<IEnumerable<UserRole>> GetByUserID(string ID)
         {
             try
             {
-                List<UserGroupVM> result = new List<UserGroupVM>();
-                var data = _userGroupService.GetByUserID(ID);
+                List<UserRoleVM> result = new List<UserRoleVM>();
+                var data = _userRoleService.GetByUserID(ID);
                 if (data.Count() == 0) return NotFound("List empty");
                 foreach (var item in data)
                 {
-                    result.Add(_mapper.Map<UserGroupVM>(item));
+                    result.Add(_mapper.Map<UserRoleVM>(item));
                 }
                 return Ok(result);
             }
@@ -62,15 +62,15 @@ namespace Capstone.Controllers
             }
         }
 
-        // GET: api/UserGroups/5
+        // GET: api/UserRoles/5
         [HttpGet]
-        public ActionResult<UserGroup> GetUserGroup(Guid ID)
+        public ActionResult<UserRole> GetUserRole(Guid ID)
         {
             try
             {
-                var rs = _userGroupService.GetByID(ID);
+                var rs = _userRoleService.GetByID(ID);
                 if (rs == null) return NotFound("ID not found");
-                UserGroupVM result = _mapper.Map<UserGroupVM>(rs);
+                UserRoleVM result = _mapper.Map<UserRoleVM>(rs);
                 return Ok(result);
             }
             catch (Exception e)
@@ -79,17 +79,17 @@ namespace Capstone.Controllers
             }
         }
 
-        // PUT: api/Usergroups
+        // PUT: api/UserRoles
         [HttpPut]
-        public IActionResult PutUserGroup(UserGroupUM model)
+        public IActionResult PutUserRole(UserRoleUM model)
         {
             if (!ModelState.IsValid) return BadRequest(ModelState);
             try
             {
-                var userGroupInDb = _userGroupService.GetByID(model.ID);
-                if (userGroupInDb == null) return BadRequest("ID not found!");
-                _mapper.Map(model, userGroupInDb);
-                _userGroupService.Save();
+                var userRoleInDb = _userRoleService.GetByID(model.ID);
+                if (userRoleInDb == null) return BadRequest("ID not found!");
+                _mapper.Map(model, userRoleInDb);
+                _userRoleService.Save();
                 return Ok("success");
             }
             catch (Exception e)
@@ -97,17 +97,17 @@ namespace Capstone.Controllers
                 return BadRequest(e.Message);
             }
         }
-        
-        // DELETE: api/Usergroups
+
+        // DELETE: api/UserRoles
         [HttpDelete]
-        public ActionResult DeleteUserGroup(Guid ID)
+        public ActionResult DeleteUserRole(Guid ID)
         {
             try
             {
-                var userGroupInDb = _userGroupService.GetByID(ID);
-                if (userGroupInDb == null) return NotFound("ID not found!");
-                userGroupInDb.IsDelete = true;
-                _userGroupService.Save();
+                var userRoleInDb = _userRoleService.GetByID(ID);
+                if (userRoleInDb == null) return NotFound("ID not found!");
+                userRoleInDb.IsDelete = true;
+                _userRoleService.Save();
                 return Ok("success");
             }
             catch (Exception e)

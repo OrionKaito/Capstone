@@ -17,6 +17,11 @@ namespace Capstone.Data
         public DbSet<ActionType> ActionTypes { get; set; }
         public DbSet<Group> Groups { get; set; }
         public DbSet<UserGroup> UserGroups { get; set; }
+        public DbSet<Role> Roles { get; set; }
+        public DbSet<RoleOfGroup> RoleOfGroups { get; set; }
+        public DbSet<Permission> Permissions { get; set; }
+        public DbSet<PermissionOfRole> PermissionOfRoles { get; set; }
+        public DbSet<UserRole> UserRoles { get; set; }
 
         public void Commit()
         {
