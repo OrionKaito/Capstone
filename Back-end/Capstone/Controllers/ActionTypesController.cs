@@ -44,7 +44,6 @@ namespace Capstone.Controllers
         [HttpGet]
         public ActionResult<IEnumerable<ActionType>> GetActionTypes()
         {
-            if (!ModelState.IsValid) return BadRequest(ModelState);
             try
             {
                 List<ActionTypeVM> result = new List<ActionTypeVM>();
@@ -65,7 +64,6 @@ namespace Capstone.Controllers
         [HttpGet("GetByID")]
         public ActionResult<ActionType> GetActionType(Guid ID)
         {
-            if (!ModelState.IsValid) return BadRequest(ModelState);
             try
             {
                 var rs = _actionTypeService.GetByID(ID);
@@ -102,7 +100,6 @@ namespace Capstone.Controllers
         [HttpDelete]
         public ActionResult DeleteActionType(Guid ID)
         {
-            if (!ModelState.IsValid) return BadRequest(ModelState);
             try
             {
                 var actionTypeInDb = _actionTypeService.GetByID(ID);

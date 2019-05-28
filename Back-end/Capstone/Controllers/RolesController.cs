@@ -10,29 +10,29 @@ namespace Capstone.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class GroupsController : ControllerBase
+    public class RolesController : ControllerBase
     {
         private readonly IMapper _mapper;
-        private readonly IGroupService _groupService;
+        private readonly IRoleService _roleService;
 
-        public GroupsController(IMapper mapper, IGroupService groupService)
+        public RolesController(IMapper mapper, IRoleService roleService)
         {
             _mapper = mapper;
-            _groupService = groupService;
+            _roleService = roleService;
         }
 
-        // POST: api/Groups
+        // POST: api/Roles
         [HttpPost]
-        public ActionResult<Group> PostGroup(GroupCM model)
+        public ActionResult<Role> PostRole(RoleCM model)
         {
             if (!ModelState.IsValid) return BadRequest(ModelState);
             try
             {
-                Group group = new Group();
-                group = _mapper.Map<Group>(model);
-                _groupService.Create(group);
-                _groupService.Save();
-                return StatusCode(201, "Group Created!");
+                Role role = new Role();
+                role = _mapper.Map<Role>(model);
+                _roleService.Create(role);
+                _roleService.Save();
+                return StatusCode(201, "Role Type Created!");
             }
             catch (Exception e)
             {
@@ -40,17 +40,17 @@ namespace Capstone.Controllers
             }
         }
 
-        // GET: api/Groups
+        // GET: api/Roles
         [HttpGet]
-        public ActionResult<IEnumerable<Group>> GetGroups()
+        public ActionResult<IEnumerable<Role>> GetRoles()
         {
             try
             {
-                List<GroupVM> result = new List<GroupVM>();
-                var data = _groupService.GetAll();
+                List<RoleVM> result = new List<RoleVM>();
+                var data = _roleService.GetAll();
                 foreach (var item in data)
                 {
-                    result.Add(_mapper.Map<GroupVM>(item));
+                    result.Add(_mapper.Map<RoleVM>(item));
                 }
                 return Ok(result);
             }
@@ -60,15 +60,15 @@ namespace Capstone.Controllers
             }
         }
 
-        // GET: api/Groups/5
+        // GET: api/Roles/GetByID
         [HttpGet("GetByID")]
-        public ActionResult<Group> GetGroup(Guid ID)
+        public ActionResult<Role> GetRole(Guid ID)
         {
             try
             {
-                var rs = _groupService.GetByID(ID);
-                if (rs == null) return NotFound("ID not found!");
-                GroupVM result = _mapper.Map<GroupVM>(rs);
+                var rs = _roleService.GetByID(ID);
+                if (rs == null) return BadRequest("ID not found!");
+                RoleVM result = _mapper.Map<RoleVM>(rs);
                 return Ok(result);
             }
             catch (Exception e)
@@ -76,18 +76,18 @@ namespace Capstone.Controllers
                 return BadRequest(e.Message);
             }
         }
-        
-        // PUT: api/Groups/5
+
+        // PUT: api/Roles
         [HttpPut]
-        public IActionResult PutGroup(GroupUM model)
+        public IActionResult PutRole(RoleUM model)
         {
             if (!ModelState.IsValid) return BadRequest(ModelState);
             try
             {
-                var groupInDb = _groupService.GetByID(model.ID);
-                if (groupInDb == null) return NotFound("ID not found!");
-                _mapper.Map(model, groupInDb);
-                _groupService.Save();
+                var roleInDb = _roleService.GetByID(model.ID);
+                if (roleInDb == null) return BadRequest("ID not found!");
+                _mapper.Map(model, roleInDb);
+                _roleService.Save();
                 return Ok("success");
             }
             catch (Exception e)
@@ -96,16 +96,16 @@ namespace Capstone.Controllers
             }
         }
 
-        // DELETE: api/Groups/5
+        // DELETE: api/Roles
         [HttpDelete]
-        public ActionResult DeleteGroup(Guid ID)
+        public ActionResult DeleteRole(Guid ID)
         {
             try
             {
-                var groupInDb = _groupService.GetByID(ID);
-                if (groupInDb == null) return NotFound("ID not found!");
-                groupInDb.IsDelete = true;
-                _groupService.Save();
+                var roleInDb = _roleService.GetByID(ID);
+                if (roleInDb == null) return BadRequest("ID not found!");
+                roleInDb.IsDelete = true;
+                _roleService.Save();
                 return Ok("success");
             }
             catch (Exception e)
