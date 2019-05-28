@@ -1,4 +1,5 @@
 ﻿using Capstone.Model;
+using Capstone.Service;
 using Capstone.ViewModel;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -19,11 +20,13 @@ namespace Capstone.Controllers
     {
         private readonly IConfiguration _config;
         private readonly UserManager<User> _userManager;
+        private readonly IPermissionService _permissionService;
 
-        public TokenController(IConfiguration config, UserManager<User> userManager)
+        public TokenController(IConfiguration config, UserManager<User> userManager, IPermissionService permissionService)
         {
             _config = config;
             _userManager = userManager;
+            _permissionService = permissionService;
         }
 
         [AllowAnonymous]
@@ -64,9 +67,18 @@ namespace Capstone.Controllers
 
         private string GenerateJSONWebToken(User user)
         {
+            var permissions = _permissionService.GetByUserID(user.Id);
+
+            string listPermission = "";
+            foreach (var item in permissions)
+            {
+                listPermission = listPermission + " " + item.ToString();
+            }
+
             var claims = new[]
             {
                 new Claim(JwtRegisteredClaimNames.Sub, user.UserName),
+                new Claim("permissions", listPermission),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
             };
 

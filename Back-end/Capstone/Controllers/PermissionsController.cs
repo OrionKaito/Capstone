@@ -62,11 +62,11 @@ namespace Capstone.Controllers
 
         // GET: api/Permissions
         [HttpGet("GetByUserID")]
-        public ActionResult<IEnumerable<Guid>> GetByUserID(string ID)
+        public ActionResult<IEnumerable<string>> GetByUserID(string ID)
         {
             try
             {
-                List<Guid> result = new List<Guid>();
+                List<string> result = new List<string>();
                 var data = _permissionService.GetByUserID(ID);
                 foreach (var item in data)
                 {
