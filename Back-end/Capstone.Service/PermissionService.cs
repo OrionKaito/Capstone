@@ -11,7 +11,7 @@ namespace Capstone.Service
     {
         IEnumerable<Permission> GetAll();
         Permission GetByID(Guid ID);
-        IEnumerable<Guid> GetByUserID(string ID);
+        IEnumerable<string> GetByUserID(string ID);
         void Create(Permission permission);
         void Delete(Permission permission);
         void Save();
@@ -21,16 +21,14 @@ namespace Capstone.Service
     {
         private readonly IPermissionRepository _permissionRepository;
         private readonly IPermissionOfRoleRepository _permissionOfRoleRepository;
-        private readonly IRoleRepository _roleRepository;
         private readonly IUserRoleRepository _userRoleRepository;
         private readonly IUnitOfWork _unitOfWork;
 
         public PermissionService(IPermissionRepository permissionRepository, IPermissionOfRoleRepository permissionOfRoleRepository,
-            IRoleRepository roleRepository, IUserRoleRepository userRoleRepository, IUnitOfWork unitOfWork)
+            IUserRoleRepository userRoleRepository, IUnitOfWork unitOfWork)
         {
             _permissionRepository = permissionRepository;
             _permissionOfRoleRepository = permissionOfRoleRepository;
-            _roleRepository = roleRepository;
             _userRoleRepository = userRoleRepository;
             _unitOfWork = unitOfWork;
         }
@@ -55,32 +53,32 @@ namespace Capstone.Service
             return _permissionRepository.GetById(ID);
         }
 
-        public IEnumerable<Guid> GetByUserID(string ID)
+        public IEnumerable<string> GetByUserID(string ID)
         {
-            var permission = _permissionRepository.GetAll().Where(p => p.IsDelete == false);
-            var por = _permissionOfRoleRepository.GetAll().Where(p => p.IsDelete == false);
-            var role = _roleRepository.GetAll().Where(p => p.IsDelete == false);
-            var ur = _userRoleRepository.GetAll().Where(p => p.IsDelete == false);
+            List<UserRole> listUserRole = new List<UserRole>();
+            var data = _userRoleRepository.GetMany(u => u.IsDelete == false && u.UserID.Equals(ID));
+            foreach (var item in data)
+            {
+                listUserRole.Add(item);
+            }
 
-            var rs = permission.Join(por, p => p.ID, po => po.PermissionID, (p, po) => new
+            List<PermissionOfRole> listPermissionOfRole = new List<PermissionOfRole>();
+            foreach (var item in listUserRole)
             {
-                Names = p.Name,
-                PermissId = p.ID,
-                PermissName = p.Name,
-                RoleId = po.RoleID
-            }).Join(role, pn => pn.RoleId, r => r.ID, (pn, r) => new
+                var getByRoleID = _permissionOfRoleRepository.GetMany(p => p.IsDelete == false && p.RoleID == item.RoleID);
+                foreach (var permissionItem in getByRoleID)
+                {
+                    listPermissionOfRole.Add(permissionItem);
+                }
+            }
+
+            List<string> listNameOfPermission = new List<string>();
+            foreach (var permission in listPermissionOfRole)
             {
-                RoleIds = r.ID,
-                PermissIds = pn.PermissId,
-                PermissNames = pn.PermissName
-            }).Join(ur, rn => rn.RoleIds, u => u.RoleID, (rn, r) => new
-            {
-                RoleIds = r.ID,
-                PermissIdss = rn.PermissIds,
-                PermissNamess = rn.PermissNames,
-                UserId = r.UserID
-            }).Where(m => m.UserId.Equals(ID)).Select(m => m.PermissIdss);
-            return rs;
+                listNameOfPermission.Add(_permissionRepository.GetById(permission.PermissionID).Name);
+            }
+            
+            return listNameOfPermission;
         }
 
         public void Save()

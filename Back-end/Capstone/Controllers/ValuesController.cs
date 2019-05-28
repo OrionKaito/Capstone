@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Capstone.Controllers
 {
@@ -13,7 +14,9 @@ namespace Capstone.Controllers
         [Authorize]
         public ActionResult<IEnumerable<string>> Get()
         {
-            return new string[] { "value1", "value2" };
+            var currentUSer = HttpContext.User;
+            var permissions = currentUSer.Claims.FirstOrDefault(c => c.Type == "permissions").Value;
+            return new string[] { permissions, "username" };
         }
 
         // GET api/values/5
