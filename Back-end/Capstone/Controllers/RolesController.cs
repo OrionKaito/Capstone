@@ -28,13 +28,11 @@ namespace Capstone.Controllers
             if (!ModelState.IsValid) return BadRequest(ModelState);
             try
             {
-                var nameExist = _roleService.GetByName(model.Name);
-                if (nameExist != null) return BadRequest("Role Name is existed!");
-
                 Role role = new Role();
                 role = _mapper.Map<Role>(model);
                 _roleService.Create(role);
-                return StatusCode(201, role.ID);
+                _roleService.Save();
+                return StatusCode(201, "Role Type Created!");
             }
             catch (Exception e)
             {
@@ -86,9 +84,6 @@ namespace Capstone.Controllers
             if (!ModelState.IsValid) return BadRequest(ModelState);
             try
             {
-                var nameExist = _roleService.GetByName(model.Name);
-                if (nameExist != null) return BadRequest("Role Name is existed!");
-
                 var roleInDb = _roleService.GetByID(model.ID);
                 if (roleInDb == null) return BadRequest("ID not found!");
                 _mapper.Map(model, roleInDb);
@@ -109,7 +104,7 @@ namespace Capstone.Controllers
             {
                 var roleInDb = _roleService.GetByID(ID);
                 if (roleInDb == null) return BadRequest("ID not found!");
-                roleInDb.IsDeleted = true;
+                roleInDb.IsDelete = true;
                 _roleService.Save();
                 return Ok("success");
             }

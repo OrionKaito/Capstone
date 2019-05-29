@@ -68,6 +68,7 @@ namespace Capstone.Controllers
                 {
                     workFlow = _mapper.Map<WorkFlow>(model);
                     _workFlowService.Create(workFlow);
+                    _workFlowService.Save();
                 }
                 catch (Exception e)
                 {

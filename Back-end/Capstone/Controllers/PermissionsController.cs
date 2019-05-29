@@ -28,13 +28,11 @@ namespace Capstone.Controllers
             if (!ModelState.IsValid) return BadRequest(ModelState);
             try
             {
-                var nameExist = _permissionService.GetByName(model.Name);
-                if (nameExist != null) return BadRequest("Permission Name is existed!");
-
                 Permission permission = new Permission();
                 permission = _mapper.Map<Permission>(model);
                 _permissionService.Create(permission);
-                return StatusCode(201, permission.ID);
+                _permissionService.Save();
+                return StatusCode(201, "Permission is created!");
             }
             catch (Exception e)
             {
@@ -107,9 +105,6 @@ namespace Capstone.Controllers
             if (!ModelState.IsValid) return BadRequest(ModelState);
             try
             {
-                var nameExist = _permissionService.GetByName(model.Name);
-                if (nameExist != null) return BadRequest("Permission Name is existed!");
-
                 var permissionInDb = _permissionService.GetByID(model.ID);
                 if (permissionInDb == null) return BadRequest("ID not found!");
                 _mapper.Map(model, permissionInDb);
@@ -130,7 +125,7 @@ namespace Capstone.Controllers
             {
                 var permissionInDb = _permissionService.GetByID(ID);
                 if (permissionInDb == null) return BadRequest("ID not found!");
-                permissionInDb.IsDeleted = true;
+                permissionInDb.IsDelete = true;
                 _permissionService.Save();
                 return Ok("success");
             }

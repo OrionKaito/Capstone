@@ -13,7 +13,6 @@ namespace Capstone.Service
         IEnumerable<RoleOfGroup> GetByGroup(Guid ID);
         IEnumerable<RoleOfGroup> GetByRole(Guid ID);
         RoleOfGroup GetByID(Guid ID);
-        RoleOfGroup CheckExist(Guid RoleID, Guid GroupID);
         void Create(RoleOfGroup rog);
         void Delete(RoleOfGroup rog);
         void Save();
@@ -33,28 +32,26 @@ namespace Capstone.Service
         public void Create(RoleOfGroup rog)
         {
             _roleOfGroupRepository.Add(rog);
-            _unitOfWork.Commit();
         }
 
         public void Delete(RoleOfGroup rog)
         {
             _roleOfGroupRepository.Delete(rog);
-            _unitOfWork.Commit();
         }
 
         public IEnumerable<RoleOfGroup> GetAll()
         {
-            return _roleOfGroupRepository.GetAll().Where(r => r.IsDeleted == false);
+            return _roleOfGroupRepository.GetAll().Where(r => r.IsDelete == false);
         }
 
         public IEnumerable<RoleOfGroup> GetByGroup(Guid ID)
         {
-            return _roleOfGroupRepository.GetMany(r => r.IsDeleted == false && r.GroupID == ID);
+            return _roleOfGroupRepository.GetMany(r => r.IsDelete == false && r.GroupID == ID);
         }
 
         public IEnumerable<RoleOfGroup> GetByRole(Guid ID)
         {
-            return _roleOfGroupRepository.GetMany(r => r.IsDeleted == false && r.RoleID == ID);
+            return _roleOfGroupRepository.GetMany(r => r.IsDelete == false && r.RoleID == ID);
         }
 
         public RoleOfGroup GetByID(Guid ID)
@@ -65,11 +62,6 @@ namespace Capstone.Service
         public void Save()
         {
             _unitOfWork.Commit();
-        }
-
-        public RoleOfGroup CheckExist(Guid RoleID, Guid GroupID)
-        {
-            return _roleOfGroupRepository.CheckExist(RoleID, GroupID);
         }
     }
 }

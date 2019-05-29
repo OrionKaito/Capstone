@@ -18,6 +18,6 @@ namespace Capstone.Model
         [ForeignKey("GroupID")]
         public virtual Group Group { get; set; }
 
-        public bool IsDeleted { get; set; }
+        public bool IsDelete { get; set; }
     }
 }

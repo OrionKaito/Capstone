@@ -11,7 +11,6 @@ namespace Capstone.Service
     {
         IEnumerable<Permission> GetAll();
         Permission GetByID(Guid ID);
-        Permission GetByName(string Name);
         IEnumerable<string> GetByUserID(string ID);
         void Create(Permission permission);
         void Delete(Permission permission);
@@ -37,18 +36,16 @@ namespace Capstone.Service
         public void Create(Permission permission)
         {
             _permissionRepository.Add(permission);
-            _unitOfWork.Commit();
         }
 
         public void Delete(Permission permission)
         {
             _permissionRepository.Delete(permission);
-            _unitOfWork.Commit();
         }
 
         public IEnumerable<Permission> GetAll()
         {
-            return _permissionRepository.GetAll().Where(p => p.IsDeleted == false);
+            return _permissionRepository.GetAll().Where(p => p.IsDelete == false);
         }
 
         public Permission GetByID(Guid ID)
@@ -56,15 +53,10 @@ namespace Capstone.Service
             return _permissionRepository.GetById(ID);
         }
 
-        public Permission GetByName(string Name)
-        {
-            return _permissionRepository.GetByName(Name);
-        }
-
         public IEnumerable<string> GetByUserID(string ID)
         {
             List<UserRole> listUserRole = new List<UserRole>();
-            var data = _userRoleRepository.GetMany(u => u.IsDeleted == false && u.UserID.Equals(ID));
+            var data = _userRoleRepository.GetMany(u => u.IsDelete == false && u.UserID.Equals(ID));
             foreach (var item in data)
             {
                 listUserRole.Add(item);
@@ -73,7 +65,7 @@ namespace Capstone.Service
             List<PermissionOfRole> listPermissionOfRole = new List<PermissionOfRole>();
             foreach (var item in listUserRole)
             {
-                var getByRoleID = _permissionOfRoleRepository.GetMany(p => p.IsDeleted == false && p.RoleID == item.RoleID);
+                var getByRoleID = _permissionOfRoleRepository.GetMany(p => p.IsDelete == false && p.RoleID == item.RoleID);
                 foreach (var permissionItem in getByRoleID)
                 {
                     listPermissionOfRole.Add(permissionItem);

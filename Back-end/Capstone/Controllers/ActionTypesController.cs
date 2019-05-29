@@ -28,13 +28,11 @@ namespace Capstone.Controllers
             if (!ModelState.IsValid) return BadRequest(ModelState);
             try
             {
-                var nameExist = _actionTypeService.GetByName(model.Name);
-                if (nameExist != null) return BadRequest("ActionType Name is existed!");
-
                 ActionType actionType = new ActionType();
                 actionType = _mapper.Map<ActionType>(model);
                 _actionTypeService.Create(actionType);
-                return StatusCode(201, actionType.ID);
+                _actionTypeService.Save();
+                return StatusCode(201, "Action Type Created!");
             }
             catch (Exception e)
             {
@@ -88,10 +86,6 @@ namespace Capstone.Controllers
             {
                 var actionTypeInDb = _actionTypeService.GetByID(model.ID);
                 if (actionTypeInDb == null) return NotFound("ID not found!");
-
-                var nameExist = _actionTypeService.GetByName(model.Name);
-                if (nameExist != null) return BadRequest("ActionType Name is existed!");
-
                 _mapper.Map(model, actionTypeInDb);
                 _actionTypeService.Save();
                 return Ok("success");
@@ -110,7 +104,7 @@ namespace Capstone.Controllers
             {
                 var actionTypeInDb = _actionTypeService.GetByID(ID);
                 if (actionTypeInDb == null) return NotFound("ID not found!");
-                actionTypeInDb.IsDeleted = true;
+                actionTypeInDb.IsDelete = true;
                 _actionTypeService.Save();
                 return Ok("success");
             }

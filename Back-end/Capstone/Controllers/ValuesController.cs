@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Linq;
-using System.Security.Claims;
 
 namespace Capstone.Controllers
 {
@@ -17,8 +16,7 @@ namespace Capstone.Controllers
         {
             var currentUSer = HttpContext.User;
             var permissions = currentUSer.Claims.FirstOrDefault(c => c.Type == "permissions").Value;
-            var user = currentUSer.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier).Value;
-            return new string[] { permissions, user };
+            return new string[] { permissions, "username" };
         }
 
         // GET api/values/5

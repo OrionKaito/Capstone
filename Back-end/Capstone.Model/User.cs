@@ -6,7 +6,7 @@ namespace Capstone.Model
     public class User : IdentityUser
     {
         public String FullName { get; set; }
-        public bool? IsDeleted { get; set; }
+        public bool? IsEnabled { get; set; }
         
     }
 }

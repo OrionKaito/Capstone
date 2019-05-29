@@ -13,7 +13,6 @@ namespace Capstone.Service
         IEnumerable<UserRole> GetAll();
         IEnumerable<UserRole> GetByUserID(string ID);
         UserRole GetByID(Guid ID);
-        UserRole CheckExist(string UserID, Guid RoleID);
         void Create(UserRole userRole);
         void Delete(UserRole userRole);
         void Save();
@@ -30,26 +29,19 @@ namespace Capstone.Service
             _unitOfWork = unitOfWork;
         }
 
-        public UserRole CheckExist(string UserID, Guid RoleID)
-        {
-            return _userRoleRepository.CheckExist(UserID, RoleID);
-        }
-
         public void Create(UserRole userRole)
         {
             _userRoleRepository.Add(userRole);
-            _unitOfWork.Commit();
         }
 
         public void Delete(UserRole userRole)
         {
             _userRoleRepository.Delete(userRole);
-            _unitOfWork.Commit();
         }
 
         public IEnumerable<UserRole> GetAll()
         {
-            return _userRoleRepository.GetAll().Where(u => u.IsDeleted == false);
+            return _userRoleRepository.GetAll().Where(u => u.IsDelete == false);
         }
 
         public UserRole GetByID(Guid ID)
@@ -59,7 +51,7 @@ namespace Capstone.Service
 
         public IEnumerable<UserRole> GetByUserID(string ID)
         {
-            return _userRoleRepository.GetMany(u => u.IsDeleted == false && u.UserID.Equals(ID));
+            return _userRoleRepository.GetMany(u => u.IsDelete == false && u.UserID.Equals(ID));
         }
 
         public void Save()

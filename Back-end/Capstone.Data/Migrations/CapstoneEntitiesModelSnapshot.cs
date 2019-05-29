@@ -47,6 +47,134 @@ namespace Capstone.Data.Migrations
                     b.ToTable("Groups");
                 });
 
+            modelBuilder.Entity("Capstone.Model.Permission", b =>
+                {
+                    b.Property<Guid>("ID")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<bool>("IsDelete");
+
+                    b.Property<string>("Name");
+
+                    b.HasKey("ID");
+
+                    b.ToTable("Permissions");
+                });
+
+            modelBuilder.Entity("Capstone.Model.PermissionOfRole", b =>
+                {
+                    b.Property<Guid>("ID")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<bool>("IsDelete");
+
+                    b.Property<Guid>("PermissionID");
+
+                    b.Property<Guid>("RoleID");
+
+                    b.HasKey("ID");
+
+                    b.HasIndex("PermissionID");
+
+                    b.HasIndex("RoleID");
+
+                    b.ToTable("PermissionOfRoles");
+                });
+
+            modelBuilder.Entity("Capstone.Model.Request", b =>
+                {
+                    b.Property<Guid>("ID")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<DateTime>("timeStamp");
+
+                    b.HasKey("ID");
+
+                    b.ToTable("Requests");
+                });
+
+            modelBuilder.Entity("Capstone.Model.RequestAction", b =>
+                {
+                    b.Property<Guid>("ID")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("status");
+
+                    b.Property<DateTime>("timeStamp");
+
+                    b.HasKey("ID");
+
+                    b.ToTable("RequestActions");
+                });
+
+            modelBuilder.Entity("Capstone.Model.RequestFile", b =>
+                {
+                    b.Property<Guid>("ID")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<bool>("isEnable");
+
+                    b.Property<string>("name");
+
+                    b.Property<string>("path");
+
+                    b.Property<DateTime>("timeStamp");
+
+                    b.HasKey("ID");
+
+                    b.ToTable("RequestFiles");
+                });
+
+            modelBuilder.Entity("Capstone.Model.RequestValue", b =>
+                {
+                    b.Property<Guid>("ID")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("data");
+
+                    b.Property<DateTime>("timeStamp");
+
+                    b.HasKey("ID");
+
+                    b.ToTable("RequestValues");
+                });
+
+            modelBuilder.Entity("Capstone.Model.Role", b =>
+                {
+                    b.Property<Guid>("ID")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<bool>("IsDelete");
+
+                    b.Property<string>("Name");
+
+                    b.HasKey("ID");
+
+                    b.ToTable("Roles");
+                });
+
+            modelBuilder.Entity("Capstone.Model.RoleOfGroup", b =>
+                {
+                    b.Property<Guid>("ID")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<Guid>("GroupID");
+
+                    b.Property<bool>("IsDelete");
+
+                    b.Property<string>("Name");
+
+                    b.Property<Guid>("RoleID");
+
+                    b.HasKey("ID");
+
+                    b.HasIndex("GroupID");
+
+                    b.HasIndex("RoleID");
+
+                    b.ToTable("RoleOfGroups");
+                });
+
             modelBuilder.Entity("Capstone.Model.User", b =>
                 {
                     b.Property<string>("Id")
@@ -120,6 +248,26 @@ namespace Capstone.Data.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("UserGroups");
+                });
+
+            modelBuilder.Entity("Capstone.Model.UserRole", b =>
+                {
+                    b.Property<Guid>("ID")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<bool>("IsDelete");
+
+                    b.Property<Guid>("RoleID");
+
+                    b.Property<string>("UserID");
+
+                    b.HasKey("ID");
+
+                    b.HasIndex("RoleID");
+
+                    b.HasIndex("UserID");
+
+                    b.ToTable("UserRoles");
                 });
 
             modelBuilder.Entity("Capstone.Model.WorkFlow", b =>
@@ -244,6 +392,32 @@ namespace Capstone.Data.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
+            modelBuilder.Entity("Capstone.Model.PermissionOfRole", b =>
+                {
+                    b.HasOne("Capstone.Model.Permission", "Permission")
+                        .WithMany()
+                        .HasForeignKey("PermissionID")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("Capstone.Model.Role", "Role")
+                        .WithMany()
+                        .HasForeignKey("RoleID")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("Capstone.Model.RoleOfGroup", b =>
+                {
+                    b.HasOne("Capstone.Model.Group", "Group")
+                        .WithMany()
+                        .HasForeignKey("GroupID")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("Capstone.Model.Role", "Role")
+                        .WithMany()
+                        .HasForeignKey("RoleID")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
             modelBuilder.Entity("Capstone.Model.UserGroup", b =>
                 {
                     b.HasOne("Capstone.Model.Group", "Group")
@@ -254,6 +428,18 @@ namespace Capstone.Data.Migrations
                     b.HasOne("Capstone.Model.User", "User")
                         .WithMany()
                         .HasForeignKey("UserId");
+                });
+
+            modelBuilder.Entity("Capstone.Model.UserRole", b =>
+                {
+                    b.HasOne("Capstone.Model.Role", "Role")
+                        .WithMany()
+                        .HasForeignKey("RoleID")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("Capstone.Model.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserID");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

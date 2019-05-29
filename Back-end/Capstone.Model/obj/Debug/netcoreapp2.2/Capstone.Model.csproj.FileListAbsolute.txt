@@ -10,3 +10,15 @@ D:\Project\C#\Capstone\Capstone\Capstone.Model\bin\Debug\netcoreapp2.2\Microsoft
 D:\Project\C#\Capstone\Capstone\Capstone.Model\obj\Debug\netcoreapp2.2\Capstone.Model.csproj.CopyComplete
 D:\Project\C#\Capstone\Capstone\Capstone.Model\obj\Debug\netcoreapp2.2\Capstone.Model.dll
 D:\Project\C#\Capstone\Capstone\Capstone.Model\obj\Debug\netcoreapp2.2\Capstone.Model.pdb
+C:\Users\ChienPLQ\Documents\GitHub\Capstone\Back-end\Capstone.Model\bin\Debug\netcoreapp2.2\Capstone.Model.deps.json
+C:\Users\ChienPLQ\Documents\GitHub\Capstone\Back-end\Capstone.Model\bin\Debug\netcoreapp2.2\Capstone.Model.dll
+C:\Users\ChienPLQ\Documents\GitHub\Capstone\Back-end\Capstone.Model\bin\Debug\netcoreapp2.2\Capstone.Model.pdb
+C:\Users\ChienPLQ\Documents\GitHub\Capstone\Back-end\Capstone.Model\bin\Debug\netcoreapp2.2\Microsoft.Extensions.Identity.Stores.dll
+C:\Users\ChienPLQ\Documents\GitHub\Capstone\Back-end\Capstone.Model\bin\Debug\netcoreapp2.2\Microsoft.Extensions.Identity.Stores.xml
+C:\Users\ChienPLQ\Documents\GitHub\Capstone\Back-end\Capstone.Model\obj\Debug\netcoreapp2.2\Capstone.Model.csprojAssemblyReference.cache
+C:\Users\ChienPLQ\Documents\GitHub\Capstone\Back-end\Capstone.Model\obj\Debug\netcoreapp2.2\Capstone.Model.csproj.CoreCompileInputs.cache
+C:\Users\ChienPLQ\Documents\GitHub\Capstone\Back-end\Capstone.Model\obj\Debug\netcoreapp2.2\Capstone.Model.AssemblyInfoInputs.cache
+C:\Users\ChienPLQ\Documents\GitHub\Capstone\Back-end\Capstone.Model\obj\Debug\netcoreapp2.2\Capstone.Model.AssemblyInfo.cs
+C:\Users\ChienPLQ\Documents\GitHub\Capstone\Back-end\Capstone.Model\obj\Debug\netcoreapp2.2\Capstone.Model.csproj.CopyComplete
+C:\Users\ChienPLQ\Documents\GitHub\Capstone\Back-end\Capstone.Model\obj\Debug\netcoreapp2.2\Capstone.Model.dll
+C:\Users\ChienPLQ\Documents\GitHub\Capstone\Back-end\Capstone.Model\obj\Debug\netcoreapp2.2\Capstone.Model.pdb

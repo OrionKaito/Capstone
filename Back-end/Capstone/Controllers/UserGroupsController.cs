@@ -29,13 +29,11 @@ namespace Capstone.Controllers
             if (!ModelState.IsValid) return BadRequest(ModelState);
             try
             {
-                var checkExist = _userGroupService.CheckExist(model.UserId, model.GroupID);
-                if (checkExist != null) return BadRequest("Existed!");
-
                 UserGroup userGroup = new UserGroup();
                 userGroup = _mapper.Map<UserGroup>(model);
                 _userGroupService.Create(userGroup);
-                return StatusCode(201, userGroup.ID);
+                _userGroupService.Save();
+                return StatusCode(201, "User Group Created!");
             }
             catch (Exception e)
             {
@@ -88,9 +86,6 @@ namespace Capstone.Controllers
             if (!ModelState.IsValid) return BadRequest(ModelState);
             try
             {
-                var checkExist = _userGroupService.CheckExist(model.UserId, model.GroupID);
-                if (checkExist != null) return BadRequest("Existed!");
-
                 var userGroupInDb = _userGroupService.GetByID(model.ID);
                 if (userGroupInDb == null) return BadRequest("ID not found!");
                 _mapper.Map(model, userGroupInDb);
@@ -111,7 +106,7 @@ namespace Capstone.Controllers
             {
                 var userGroupInDb = _userGroupService.GetByID(ID);
                 if (userGroupInDb == null) return NotFound("ID not found!");
-                userGroupInDb.IsDeleted = true;
+                userGroupInDb.IsDelete = true;
                 _userGroupService.Save();
                 return Ok("success");
             }

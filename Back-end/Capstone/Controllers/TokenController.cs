@@ -40,12 +40,7 @@ namespace Capstone.Controllers
 
             var identity = CheckClaimIdentity(credentials.UserName, credentials.Password);
             if (identity.Result == null) {
-                return BadRequest("Invalid username or password!");
-            }
-
-            if (identity.Result.IsDeleted == true)
-            {
-                return BadRequest("Account is banned!");
+                return BadRequest("Invalid username or password.");
             }
 
             var tokenString = GenerateJSONWebToken(identity.Result);
@@ -75,7 +70,6 @@ namespace Capstone.Controllers
             var permissions = _permissionService.GetByUserID(user.Id);
 
             string listPermission = "";
-
             foreach (var item in permissions)
             {
                 listPermission = listPermission + " " + item.ToString();
@@ -83,7 +77,7 @@ namespace Capstone.Controllers
 
             var claims = new[]
             {
-                new Claim(JwtRegisteredClaimNames.Sub, user.Id),
+                new Claim(JwtRegisteredClaimNames.Sub, user.UserName),
                 new Claim("permissions", listPermission),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
             };
