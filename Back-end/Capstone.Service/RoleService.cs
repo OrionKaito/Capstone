@@ -11,6 +11,7 @@ namespace Capstone.Service
     {
         IEnumerable<Role> GetAll();
         Role GetByID(Guid ID);
+        Role GetByName(string Name);
         void Create(Role role);
         void Delete(Role role);
         void Save();
@@ -30,21 +31,28 @@ namespace Capstone.Service
         public void Create(Role role)
         {
             _roleRepository.Add(role);
+            _unitOfWork.Commit();
         }
 
         public void Delete(Role role)
         {
             _roleRepository.Delete(role);
+            _unitOfWork.Commit();
         }
 
         public IEnumerable<Role> GetAll()
         {
-            return _roleRepository.GetAll().Where(r => r.IsDelete == false);
+            return _roleRepository.GetAll().Where(r => r.IsDeleted == false);
         }
 
         public Role GetByID(Guid ID)
         {
             return _roleRepository.GetById(ID);
+        }
+
+        public Role GetByName(string Name)
+        {
+            return _roleRepository.GetByName(Name);
         }
 
         public void Save()

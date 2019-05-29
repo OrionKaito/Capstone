@@ -13,6 +13,7 @@ namespace Capstone.Service
         IEnumerable<PermissionOfRole> GetByRole(Guid ID);
         IEnumerable<PermissionOfRole> GetByPermission(Guid ID);
         PermissionOfRole GetByID(Guid ID);
+        PermissionOfRole CheckExist(Guid PermissionID, Guid RoleID);
         void Create(PermissionOfRole permissionOfRole);
         void Delete(PermissionOfRole permissionOfRole);
         void Save();
@@ -29,19 +30,26 @@ namespace Capstone.Service
             _unitOfWork = unitOfWork;
         }
 
+        public PermissionOfRole CheckExist(Guid PermissionID, Guid RoleID)
+        {
+            return _permissionOfRoleRepository.CheckExist(PermissionID, RoleID);
+        }
+
         public void Create(PermissionOfRole permissionOfRole)
         {
             _permissionOfRoleRepository.Add(permissionOfRole);
+            _unitOfWork.Commit();
         }
 
         public void Delete(PermissionOfRole permissionOfRole)
         {
             _permissionOfRoleRepository.Delete(permissionOfRole);
+            _unitOfWork.Commit();
         }
 
         public IEnumerable<PermissionOfRole> GetAll()
         {
-            return _permissionOfRoleRepository.GetAll().Where(p => p.IsDelete == false);
+            return _permissionOfRoleRepository.GetAll().Where(p => p.IsDeleted == false);
         }
 
         public PermissionOfRole GetByID(Guid ID)
@@ -51,12 +59,12 @@ namespace Capstone.Service
 
         public IEnumerable<PermissionOfRole> GetByPermission(Guid ID)
         {
-            return _permissionOfRoleRepository.GetMany(p => p.IsDelete == false && p.PermissionID == ID);
+            return _permissionOfRoleRepository.GetMany(p => p.IsDeleted == false && p.PermissionID == ID);
         }
 
         public IEnumerable<PermissionOfRole> GetByRole(Guid ID)
         {
-            return _permissionOfRoleRepository.GetMany(p => p.IsDelete == false && p.RoleID == ID);
+            return _permissionOfRoleRepository.GetMany(p => p.IsDeleted == false && p.RoleID == ID);
         }
 
         public void Save()

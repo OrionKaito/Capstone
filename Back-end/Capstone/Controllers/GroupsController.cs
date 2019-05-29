@@ -28,11 +28,13 @@ namespace Capstone.Controllers
             if (!ModelState.IsValid) return BadRequest(ModelState);
             try
             {
+                var nameExist = _groupService.GetByName(model.Name);
+                if (nameExist != null) return BadRequest("Group Name is existed!");
+
                 Group group = new Group();
                 group = _mapper.Map<Group>(model);
                 _groupService.Create(group);
-                _groupService.Save();
-                return StatusCode(201, "Group Created!");
+                return StatusCode(201, group.ID);
             }
             catch (Exception e)
             {
@@ -84,6 +86,9 @@ namespace Capstone.Controllers
             if (!ModelState.IsValid) return BadRequest(ModelState);
             try
             {
+                var nameExist = _groupService.GetByName(model.Name);
+                if (nameExist != null) return BadRequest("Group Name is existed!");
+
                 var groupInDb = _groupService.GetByID(model.ID);
                 if (groupInDb == null) return NotFound("ID not found!");
                 _mapper.Map(model, groupInDb);
@@ -104,7 +109,7 @@ namespace Capstone.Controllers
             {
                 var groupInDb = _groupService.GetByID(ID);
                 if (groupInDb == null) return NotFound("ID not found!");
-                groupInDb.IsDelete = true;
+                groupInDb.IsDeleted = true;
                 _groupService.Save();
                 return Ok("success");
             }

@@ -29,11 +29,13 @@ namespace Capstone.Controllers
             if (!ModelState.IsValid) return BadRequest(ModelState);
             try
             {
+                var checkExist = _roleOfGroupService.CheckExist(model.RoleID, model.GroupID);
+                if (checkExist != null) return BadRequest("Existed!");
+
                 RoleOfGroup roleOfGroup = new RoleOfGroup();
                 roleOfGroup = _mapper.Map<RoleOfGroup>(model);
                 _roleOfGroupService.Create(roleOfGroup);
-                _roleOfGroupService.Save();
-                return StatusCode(201, "Role Of Group is created!");
+                return StatusCode(201, roleOfGroup.ID);
             }
             catch (Exception e)
             {
@@ -127,6 +129,9 @@ namespace Capstone.Controllers
             if (!ModelState.IsValid) return BadRequest(ModelState);
             try
             {
+                var checkExist = _roleOfGroupService.CheckExist(model.RoleID, model.GroupID);
+                if (checkExist != null) return BadRequest("Existed!");
+
                 var roleOfGroupInDb = _roleOfGroupService.GetByID(model.ID);
                 if (roleOfGroupInDb == null) return BadRequest("ID not found!");
                 _mapper.Map(model, roleOfGroupInDb);
@@ -147,7 +152,7 @@ namespace Capstone.Controllers
             {
                 var roleOfGroupInDb = _roleOfGroupService.GetByID(ID);
                 if (roleOfGroupInDb == null) return NotFound("ID not found!");
-                roleOfGroupInDb.IsDelete = true;
+                roleOfGroupInDb.IsDeleted = true;
                 _roleOfGroupService.Save();
                 return Ok("success");
             }

@@ -11,6 +11,6 @@ namespace Capstone.Model
         public Guid ID { get; set; }
         public string Name { get; set; }
 
-        public bool IsDelete { get; set; }
+        public bool IsDeleted { get; set; }
     }
 }

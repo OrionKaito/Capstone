@@ -30,11 +30,13 @@ namespace Capstone.Service
         public void Create(WorkFlow workflow)
         {
             _workFlowRepository.Add(workflow);
+            _unitOfWork.Commit();
         }
 
         public void Delete(WorkFlow workflow)
         {
             _workFlowRepository.Delete(workflow);
+            _unitOfWork.Commit();
         }
 
         public IEnumerable<WorkFlow> GetAll()
@@ -55,6 +57,7 @@ namespace Capstone.Service
         public void Update(WorkFlow workflow)
         {
             _workFlowRepository.Update(workflow);
+            _unitOfWork.Commit();
         }
     }
 }
