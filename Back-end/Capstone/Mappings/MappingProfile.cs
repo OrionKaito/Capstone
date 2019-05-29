@@ -97,6 +97,15 @@ namespace Capstone.Mappings
             CreateMap<UserGroup, UserRoleUM>();
             CreateMap<UserRoleUM, UserRole>();
 
+            //Account
+            CreateMap<User, RegistrationVM>();
+            CreateMap<RegistrationVM, User>();
+
+            CreateMap<User, RegistrationCM>();
+            CreateMap<RegistrationCM, User>();
+
+            CreateMap<User, RegistrationUM>();
+            CreateMap<RegistrationUM, User>();
         }
     }
 }
