@@ -62,6 +62,29 @@ namespace Capstone.Controllers
             }
         }
 
+        // GET: api/Groups/GetByUserID
+        [HttpGet("GetByUserID")]
+        public ActionResult<IEnumerable<string>> GetByUserID(string ID)
+        {
+            try
+            {
+                List<string> result = new List<string>();
+                var data = _groupService.GetByUserID(ID);
+                foreach (var item in data)
+                {
+                    result.Add(item);
+                }
+
+                if (result.Count == 0) return BadRequest("ID not found!");
+
+                return Ok(result);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
+
         // GET: api/Groups/5
         [HttpGet("GetByID")]
         public ActionResult<Group> GetGroup(Guid ID)

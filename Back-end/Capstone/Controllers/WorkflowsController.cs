@@ -73,7 +73,7 @@ namespace Capstone.Controllers
                 {
                     return BadRequest(e.Message);
                 }
-                return CreatedAtRoute("GetWorkflow", workFlow);
+                return StatusCode(201, workFlow.WorkFlowID);
             }
             catch (Exception e)
             {

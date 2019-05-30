@@ -28,6 +28,7 @@ namespace Capstone.Controllers
             _userManager = userManager;
             _emailService = emailService;
             _mapper = mapper;
+            _userService = userService;
         }
 
         [AllowAnonymous]
@@ -103,6 +104,27 @@ namespace Capstone.Controllers
                 {
                     result.Add(_mapper.Map<RegistrationVM>(item));
                 }
+                return Ok(result);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
+
+        [HttpGet("GetAuthorizationByUserID")]
+        public ActionResult<AuthorizationVM> GetAuthorizationByUserID(string ID)
+        {
+            try
+            {
+                Dictionary<string, IEnumerable<string>> data = _userService.GetAuthorizationByUserID(ID);
+                IEnumerable<string> roles = data.GetValueOrDefault("role");
+                IEnumerable<string> groups = data.GetValueOrDefault("group");
+                IEnumerable<string> permissions = data.GetValueOrDefault("permission");
+                AuthorizationVM result = new AuthorizationVM();
+                result.Roles = roles;
+                result.Groups = groups;
+                result.Permissions = permissions;
                 return Ok(result);
             }
             catch (Exception e)
