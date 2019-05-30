@@ -1,5 +1,7 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using Capstone.Service;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
@@ -10,22 +12,30 @@ namespace Capstone.Controllers
     [ApiController]
     public class ValuesController : ControllerBase
     {
+        private readonly IEmailService _emailService;
+
+        public ValuesController(IEmailService emailService)
+        {
+            _emailService = emailService;
+        }
+
         // GET api/values
         [HttpGet]
         [Authorize]
         public ActionResult<IEnumerable<string>> Get()
         {
             var currentUSer = HttpContext.User;
-            var permissions = currentUSer.Claims.FirstOrDefault(c => c.Type == "permissions").Value;
+            var permissions = currentUSer.Claims.FirstOrDefault(c => c.Type == Helper.WebConstant.Permissions).Value;
             var user = currentUSer.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier).Value;
             return new string[] { permissions, user };
         }
 
         // GET api/values/5
-        [HttpGet("{id}")]
-        public ActionResult<string> Get(int id)
+        [HttpGet("SendEmail")]
+        public ActionResult<string> SendEmail()
         {
-            return "value";
+            _emailService.SendMail("orionkaito@gmail.com", "Hello", "Hello world");
+            return "success";
         }
 
         // POST api/values

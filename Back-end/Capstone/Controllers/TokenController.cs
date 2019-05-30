@@ -43,6 +43,11 @@ namespace Capstone.Controllers
                 return BadRequest("Invalid username or password!");
             }
 
+            if (identity.Result.EmailConfirmed == false)
+            {
+                return BadRequest("Please verify your account first!");
+            }
+
             if (identity.Result.IsDeleted == true)
             {
                 return BadRequest("Account is banned!");
@@ -84,7 +89,7 @@ namespace Capstone.Controllers
             var claims = new[]
             {
                 new Claim(JwtRegisteredClaimNames.Sub, user.Id),
-                new Claim("permissions", listPermission),
+                new Claim(Helper.WebConstant.Permissions , listPermission),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
             };
 
