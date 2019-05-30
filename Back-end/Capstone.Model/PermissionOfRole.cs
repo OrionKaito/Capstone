@@ -18,6 +18,6 @@ namespace Capstone.Model
         [ForeignKey("RoleID")]
         public virtual Role Role { get; set; }
 
-        public bool IsDelete { get; set; }
+        public bool IsDeleted { get; set; }
     }
 }

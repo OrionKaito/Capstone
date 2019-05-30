@@ -29,11 +29,13 @@ namespace Capstone.Controllers
             if (!ModelState.IsValid) return BadRequest(ModelState);
             try
             {
+                var checkExist = _permissionOfRoleService.CheckExist(model.PermissionID, model.RoleID);
+                if (checkExist != null) return BadRequest("Existed!");
+
                 PermissionOfRole permissionOfRole = new PermissionOfRole();
                 permissionOfRole = _mapper.Map<PermissionOfRole>(model);
                 _permissionOfRoleService.Create(permissionOfRole);
-                _permissionOfRoleService.Save();
-                return StatusCode(201, "Permission Of Role is created!");
+                return StatusCode(201, permissionOfRole.ID);
             }
             catch (Exception e)
             {
@@ -147,7 +149,7 @@ namespace Capstone.Controllers
             {
                 var permissionOfRoleInDb = _permissionOfRoleService.GetByID(ID);
                 if (permissionOfRoleInDb == null) return NotFound("ID not found!");
-                permissionOfRoleInDb.IsDelete = true;
+                permissionOfRoleInDb.IsDeleted = true;
                 _permissionOfRoleService.Save();
                 return Ok("success");
             }
