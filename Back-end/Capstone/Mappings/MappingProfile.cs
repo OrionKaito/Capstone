@@ -97,15 +97,45 @@ namespace Capstone.Mappings
             CreateMap<UserGroup, UserRoleUM>();
             CreateMap<UserRoleUM, UserRole>();
 
-            //Account
-            CreateMap<User, RegistrationVM>();
-            CreateMap<RegistrationVM, User>();
+            //Request
+            CreateMap<Request, RequestVM>();
+            CreateMap<RequestVM, Request>();
 
-            CreateMap<User, RegistrationCM>();
-            CreateMap<RegistrationCM, User>();
+            CreateMap<Request, RequestCM>();
+            CreateMap<RequestCM, Request>();
 
-            CreateMap<User, RegistrationUM>();
-            CreateMap<RegistrationUM, User>();
+            CreateMap<Request, RequestUM>();
+            CreateMap<RequestUM, Request>();
+
+            //RequestAction
+            CreateMap<RequestAction, RequestActionVM>();
+            CreateMap<RequestActionVM, RequestAction>();
+
+            CreateMap<RequestAction, RequestActionCM>();
+            CreateMap<RequestActionCM, RequestAction>();
+
+            CreateMap<RequestAction, RequestActionUM>();
+            CreateMap<RequestActionUM, RequestAction>();
+
+            //RequestValue
+            CreateMap<RequestValue, RequestValueVM>();
+            CreateMap<RequestValueVM, RequestValue>();
+
+            CreateMap<RequestValue, RequestValueCM>();
+            CreateMap<RequestValueCM, RequestValue>();
+
+            CreateMap<RequestValue, RequestValueUM>();
+            CreateMap<RequestValueUM, RequestValue>();
+
+            //RequestFile
+            CreateMap<RequestFile, RequestFileVM>();
+            CreateMap<RequestFileVM, RequestFile>();
+
+            CreateMap<RequestFile, RequestFileCM>();
+            CreateMap<RequestFileCM, RequestFile>();
+
+            CreateMap<RequestFile, RequestFileUM>();
+            CreateMap<RequestFileUM, RequestFile>();
         }
     }
 }
