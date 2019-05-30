@@ -75,6 +75,21 @@ namespace Capstone
             services.AddTransient<IUserRoleRepository, UserRoleRepository>();
             services.AddTransient<IUserRoleService, UserRoleService>();
 
+            //Request
+            services.AddTransient<IRequestRepository, RequestRepository>();
+            services.AddTransient<IRequestService, RequestService>();
+
+            //RequestAction
+            services.AddTransient<IRequestActionRepository, RequestActionRepository>();
+            services.AddTransient<IRequestActionService, RequestActionService>();
+
+            //RequestValue
+            services.AddTransient<IRequestValueRepository, RequestValueRepository>();
+            services.AddTransient<IRequestValueService, RequestValueService>();
+
+            //RequestFile
+            services.AddTransient<IRequestFileRepository, RequestFileRepository>();
+            services.AddTransient<IRequestFileService, RequestFileService>();
             #endregion
 
             // Auto Mapper Configurations
