@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Capstone.Model;
+using Capstone.Service;
 using Capstone.ViewModel;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -19,12 +20,14 @@ namespace Capstone.Controllers
     public class AccountsController : ControllerBase
     {
         private readonly UserManager<User> _userManager;
+        private readonly IUserService _userService;
         private readonly IMapper _mapper;
 
-        public AccountsController(UserManager<User> userManager, IMapper mapper)
+        public AccountsController(UserManager<User> userManager, IMapper mapper, IUserService userService)
         {
             _userManager = userManager;
             _mapper = mapper;
+            _userService = userService;
         }
 
         [AllowAnonymous]
@@ -62,6 +65,27 @@ namespace Capstone.Controllers
                 {
                     result.Add(_mapper.Map<RegistrationVM>(item));
                 }
+                return Ok(result);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
+
+        [HttpGet("GetAuthorizationByUserID")]
+        public ActionResult<AuthorizationVM> GetAuthorizationByUserID(string ID)
+        {
+            try
+            {
+                Dictionary<string, IEnumerable<string>> data = _userService.GetAuthorizationByUserID(ID);
+                IEnumerable<string> roles = data.GetValueOrDefault("role");
+                IEnumerable<string> groups = data.GetValueOrDefault("group");
+                IEnumerable<string> permissions = data.GetValueOrDefault("permission");
+                AuthorizationVM result = new AuthorizationVM();
+                result.Roles = roles;
+                result.Groups = groups;
+                result.Permissions = permissions;
                 return Ok(result);
             }
             catch (Exception e)

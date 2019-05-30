@@ -106,6 +106,26 @@ namespace Capstone.Mappings
 
             CreateMap<User, RegistrationUM>();
             CreateMap<RegistrationUM, User>();
+
+            //Notification
+            CreateMap<Notification, NotificationVM>();
+            CreateMap<NotificationVM, Notification>();
+
+            CreateMap<Notification, NotificationCM>();
+            CreateMap<NotificationCM, Notification>();
+
+            CreateMap<Notification, NotificationUM>();
+            CreateMap<NotificationUM, Notification>();
+
+            //UserNotification
+            CreateMap<UserNotification, UserNotificationVM>();
+            CreateMap<UserNotificationVM, UserNotification>();
+
+            CreateMap<UserNotification, UserNotificationCM>();
+            CreateMap<UserNotificationCM, UserNotification>();
+
+            CreateMap<UserNotification, UserNotificationUM>();
+            CreateMap<UserNotificationUM, UserNotification>();
         }
     }
 }

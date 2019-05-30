@@ -62,6 +62,29 @@ namespace Capstone.Controllers
             }
         }
 
+        // GET: api/Roles
+        [HttpGet("GetByUserID")]
+        public ActionResult<IEnumerable<string>> GetByUserID(string ID)
+        {
+            try
+            {
+                List<string> result = new List<string>();
+                var data = _roleService.GetByUserID(ID);
+                foreach (var item in data)
+                {
+                    result.Add(item);
+                }
+
+                if (result.Count == 0) return BadRequest("ID not found!");
+
+                return Ok(result);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
+
         // GET: api/Roles/GetByID
         [HttpGet("GetByID")]
         public ActionResult<Role> GetRole(Guid ID)
@@ -84,6 +107,7 @@ namespace Capstone.Controllers
         public IActionResult PutRole(RoleUM model)
         {
             if (!ModelState.IsValid) return BadRequest(ModelState);
+
             try
             {
                 var nameExist = _roleService.GetByName(model.Name);
@@ -91,6 +115,7 @@ namespace Capstone.Controllers
 
                 var roleInDb = _roleService.GetByID(model.ID);
                 if (roleInDb == null) return BadRequest("ID not found!");
+
                 _mapper.Map(model, roleInDb);
                 _roleService.Save();
                 return Ok("success");
@@ -109,6 +134,7 @@ namespace Capstone.Controllers
             {
                 var roleInDb = _roleService.GetByID(ID);
                 if (roleInDb == null) return BadRequest("ID not found!");
+
                 roleInDb.IsDeleted = true;
                 _roleService.Save();
                 return Ok("success");
