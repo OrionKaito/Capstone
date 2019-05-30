@@ -102,7 +102,9 @@ namespace Capstone
             //RequestFile
             services.AddTransient<IRequestFileRepository, RequestFileRepository>();
             services.AddTransient<IRequestFileService, RequestFileService>();
-          
+
+            //Email
+            services.AddTransient<IEmailService, EmailServicce>();
             #endregion
 
             // Auto Mapper Configurations
