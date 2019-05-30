@@ -21,14 +21,15 @@ namespace Capstone.Controllers
     {
         private readonly UserManager<User> _userManager;
         private readonly IEmailService _emailService;
+        private readonly IUserService _userService;
         private readonly IMapper _mapper;
 
-        public AccountsController(UserManager<User> userManager, IEmailService emailService, IMapper mapper)
+        public AccountsController(UserManager<User> userManager, IEmailService emailService, IUserService userService, IMapper mapper)
         {
             _userManager = userManager;
             _emailService = emailService;
-            _mapper = mapper;
             _userService = userService;
+            _mapper = mapper;
         }
 
         [AllowAnonymous]
