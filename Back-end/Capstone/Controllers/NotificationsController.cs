@@ -1,7 +1,9 @@
 ﻿using AutoMapper;
+using Capstone.Helper;
 using Capstone.Model;
 using Capstone.Service;
 using Capstone.ViewModel;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -14,12 +16,22 @@ namespace Capstone.Controllers
     {
         private readonly IMapper _mapper;
         private readonly INotificationService _notificationService;
+        private readonly IUserNotificationService _userNotificationService;
+        private readonly IWorkFlowService _workFlowService;
+        private readonly IRequestService _requestService;
+        private readonly UserManager<User> _userManager;
 
-        public NotificationsController(IMapper mapper, INotificationService notificationService)
+        public NotificationsController(IMapper mapper, INotificationService notificationService, IUserNotificationService userNotificationService,
+            IWorkFlowService workFlowService, IRequestService requestService, UserManager<User> userManager)
         {
             _mapper = mapper;
             _notificationService = notificationService;
+            _userNotificationService = userNotificationService;
+            _workFlowService = workFlowService;
+            _requestService = requestService;
+            _userManager = userManager;
         }
+
 
         // POST: api/Notifications
         [HttpPost]
@@ -76,6 +88,116 @@ namespace Capstone.Controllers
             {
                 return BadRequest(e.Message);
             }
+        }
+
+        // GET: api/UserNotifications
+        [HttpGet("GetNumberOfNotification")]
+        public ActionResult<int> GetNumberOfNotification(string ID)
+        {
+            try
+            {
+                var userInDB = _userManager.FindByIdAsync(ID).Result;
+                if (userInDB == null) return BadRequest("ID not found!");
+
+                int result = _userNotificationService.GetNumberOfNotification(ID);
+                return Ok(result);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
+
+        [HttpGet("GetByUserID")]
+        public ActionResult GetByUserId(string ID)
+        {
+            var userInDB = _userManager.FindByIdAsync(ID).Result;
+            if (userInDB == null) return BadRequest("ID not found!");
+
+            var notification = _userNotificationService.GetByUserID(ID);
+
+            if (notification == null)
+            {
+                return Ok("There are not any notfication yet");
+            }
+
+            var data = new List<NotificationViewModel>();
+            var listUserInRequest = _requestService.GetByUserID(ID);
+
+            foreach (var item in notification)
+            {
+                var notificationInDb = _notificationService.GetByID(item.NotificationID);
+                if (notificationInDb.NotificationType == NotificationType.UpdatedWorkflow)
+                {
+                    var result = new NotificationViewModel
+                    {
+                        Fullname = _userManager.FindByIdAsync(ID).Result.FullName,
+                        EventID = notificationInDb.EventID,
+                        Message = "have update workflow",
+                        NotificationType = notificationInDb.NotificationType
+                    };
+                    data.Add(result);
+                }
+                else if (notificationInDb.NotificationType == NotificationType.AcceptedRequest)
+                {
+                    foreach (var userInRequest in listUserInRequest)
+                    {
+                        var result = new NotificationViewModel
+                        {
+                            Fullname = _userManager.FindByIdAsync(ID).Result.FullName,
+                            EventID = notificationInDb.EventID,
+                            Message = "Your request are accepted",
+                            NotificationType = notificationInDb.NotificationType,
+                            ApproverName = _userManager.FindByIdAsync(userInRequest.UserID).Result.FullName
+                        };
+                        data.Add(result);
+                    }
+                }
+                else if (notificationInDb.NotificationType == NotificationType.ReceivedRequest)
+                {
+                    foreach (var userInRequest in listUserInRequest)
+                    {
+                        var result = new NotificationViewModel
+                        {
+                            Fullname = _userManager.FindByIdAsync(ID).Result.FullName,
+                            EventID = notificationInDb.EventID,
+                            Message = "You received request",
+                            NotificationType = notificationInDb.NotificationType,
+                            ApproverName = _userManager.FindByIdAsync(userInRequest.UserID).Result.FullName
+                        };
+                        data.Add(result);
+                    }
+                }
+                else if (notificationInDb.NotificationType == NotificationType.DeniedRequest)
+                {
+                    foreach (var userInRequest in listUserInRequest)
+                    {
+                        var result = new NotificationViewModel
+                        {
+                            Fullname = _userManager.FindByIdAsync(ID).Result.FullName,
+                            EventID = notificationInDb.EventID,
+                            Message = "Your request are denied",
+                            NotificationType = notificationInDb.NotificationType,
+                            ApproverName = _userManager.FindByIdAsync(userInRequest.UserID).Result.FullName
+                        };
+                        data.Add(result);
+                    }
+                }
+                else
+                {
+                    return NotFound();
+                }
+            }
+
+            var notficications = _userNotificationService.GetByUserID(ID);
+
+            foreach (var item in notficications)
+            {
+                item.IsRead = true;
+            }
+            _notificationService.Save();
+            
+            return Ok(data);
         }
 
         // PUT: api/Notifications/5

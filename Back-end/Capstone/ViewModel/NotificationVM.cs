@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Capstone.Model;
+using System;
 
 namespace Capstone.ViewModel
 {
@@ -6,17 +7,17 @@ namespace Capstone.ViewModel
     {
         public Guid ID { get; set; }
 
-        public Guid WorkFlowID { get; set; }
+        public Guid EventID { get; set; }
 
-        public string Data { get; set; }
+        public string Message { get; set; }
         public DateTime DateTime { get; set; }
     }
 
     public class NotificationCM
     {
-        public Guid WorkFlowID { get; set; }
-
-        public string Data { get; set; }
+        public Guid EventID { get; set; }
+        public NotificationType NotificationType { get; set; }
+        public string Message { get; set; }
         public DateTime DateTime { get; set; }
     }
 
@@ -24,9 +25,18 @@ namespace Capstone.ViewModel
     {
         public Guid ID { get; set; }
 
-        public Guid WorkFlowID { get; set; }
+        public Guid EventID { get; set; }
 
-        public string Data { get; set; }
+        public string Message { get; set; }
         public DateTime DateTime { get; set; }
+    }
+
+    public class NotificationViewModel
+    {
+        public Guid EventID { get; set; }
+        public string Message { get; set; }
+        public string Fullname { get; set; }
+        public NotificationType NotificationType { get; set; }
+        public string ApproverName { get; set; }
     }
 }

@@ -45,6 +45,7 @@ namespace Capstone.Controllers
             {
                 Email = model.Email,
                 UserName = model.Email,
+                FullName = model.FullName,
                 CreateDate = DateTime.Now,
                 DateOfBirth = model.DateOfBirth,
                 IsDeleted = false,
