@@ -83,7 +83,7 @@ namespace Capstone.Controllers
 
         // PUT: api/Usergroups
         [HttpPut]
-        public IActionResult PutUserGroup(UserGroupUM model)
+        public ActionResult PutUserGroup(UserGroupUM model)
         {
             if (!ModelState.IsValid) return BadRequest(ModelState);
             try
