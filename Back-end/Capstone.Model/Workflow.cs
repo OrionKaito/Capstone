@@ -10,5 +10,12 @@ namespace Capstone.Model
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public Guid WorkFlowID { get; set; }
         public string Name { get; set; }
+        public string Description { get; set; }
+
+        public string OwnerID { get; set; }
+        [ForeignKey("UserID")]
+        public virtual User Owner { get; set; }
+
+        public bool IsDeleted { get; set; }
     }
 }

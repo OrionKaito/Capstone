@@ -84,7 +84,7 @@ namespace Capstone.Controllers
                 }
                 else
                 {
-                    return BadRequest("Wrong code! please try again"); 
+                    return BadRequest("Wrong code! please try again");
                 }
 
                 return Ok("Success");
@@ -101,7 +101,7 @@ namespace Capstone.Controllers
             try
             {
                 List<RegistrationVM> result = new List<RegistrationVM>();
-                var users =  _userManager.Users.ToListAsync().Result;
+                var users = _userManager.Users.ToListAsync().Result;
                 foreach (var item in users)
                 {
                     result.Add(_mapper.Map<RegistrationVM>(item));
@@ -169,7 +169,8 @@ namespace Capstone.Controllers
                 if (userInDB.IsDeleted == true)
                 {
                     userInDB.IsDeleted = false;
-                } else
+                }
+                else
                 {
                     userInDB.IsDeleted = true;
                 }
