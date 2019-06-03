@@ -114,6 +114,23 @@ namespace Capstone.Controllers
             }
         }
 
+        [HttpGet("GetProfile")]
+        public ActionResult<IEnumerable<RegistrationVM>> GetProfile()
+        {
+            try
+            {
+                RegistrationVM result = new RegistrationVM();
+                var userId = HttpContext.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier).Value;
+                var user = _userManager.FindByIdAsync(userId).Result;
+                result = _mapper.Map<RegistrationVM>(user);
+                return Ok(result);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
+
         [HttpGet("GetAuthorizationByUserID")]
         public ActionResult<AuthorizationVM> GetAuthorizationByUserID(string ID)
         {
