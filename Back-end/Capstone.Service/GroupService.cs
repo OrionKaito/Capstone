@@ -33,18 +33,16 @@ namespace Capstone.Service
         public void Create(Group group)
         {
             _groupRepository.Add(group);
-            _unitOfWork.Commit();
         }
 
         public void Delete(Group group)
         {
             _groupRepository.Delete(group);
-            _unitOfWork.Commit();
         }
 
         public IEnumerable<Group> GetAll()
         {
-            return _groupRepository.GetAll().Where(g => g.IsDeleted == false);
+            return _groupRepository.GetAll().Where(g => g.IsDelete == false);
         }
 
         public Group GetByID(Guid ID)

@@ -17,6 +17,10 @@ using Swashbuckle.AspNetCore.Swagger;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Hangfire;
+using Hangfire.SqlServer;
+using System;
+using Hangfire.Storage;
 
 namespace Capstone
 {
@@ -32,6 +36,23 @@ namespace Capstone
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            // Add Hangfire services.
+            services.AddHangfire(configuration => configuration
+                .SetDataCompatibilityLevel(CompatibilityLevel.Version_170)
+                .UseSimpleAssemblyNameTypeSerializer()
+                .UseRecommendedSerializerSettings()
+                .UseSqlServerStorage(Configuration.GetConnectionString("CapstoneEntities"), new SqlServerStorageOptions
+                {
+                    CommandBatchMaxTimeout = TimeSpan.FromMinutes(5),
+                    SlidingInvisibilityTimeout = TimeSpan.FromMinutes(5),
+                    QueuePollInterval = TimeSpan.Zero,
+                    UseRecommendedIsolationLevel = true,
+                    UsePageLocksOnDequeue = true,
+                    DisableGlobalLocks = true
+                }));
+
+            // Add the processing server as IHostedService
+            services.AddHangfireServer();
             services.AddDbContext<CapstoneEntities>();
 
             #region DI
@@ -94,6 +115,9 @@ namespace Capstone
             //RequestAction
             services.AddTransient<IRequestActionRepository, RequestActionRepository>();
             services.AddTransient<IRequestActionService, RequestActionService>();
+
+            //Hangfire
+            services.AddTransient<IHangfireService, HangfireService>();
 
             //RequestValue
             services.AddTransient<IRequestValueRepository, RequestValueRepository>();
@@ -166,7 +190,7 @@ namespace Capstone
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IBackgroundJobClient backgroundJobs, IHostingEnvironment env)
         {
             // Enable middleware to serve generated Swagger as a JSON endpoint.
             app.UseSwagger();
@@ -189,6 +213,16 @@ namespace Capstone
                 // the default hsts value is 30 days. you may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
+            app.UseHangfireDashboard();
+            using (var connection = JobStorage.Current.GetConnection())
+            {
+                foreach (var recurringJob in connection.GetRecurringJobs())
+                {
+                    RecurringJob.RemoveIfExists(recurringJob.Id);
+                }
+            }
+
+            backgroundJobs.Schedule<IHangfireService>(u => u.checkAndChange(), TimeSpan.FromMinutes(1));
 
             app.UseHttpsRedirection();
             app.UseMvc();
