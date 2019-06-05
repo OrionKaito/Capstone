@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Capstone.Model;
+using Capstone.Service;
 using Capstone.ViewModel;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -19,11 +20,15 @@ namespace Capstone.Controllers
     public class AccountsController : ControllerBase
     {
         private readonly UserManager<User> _userManager;
+        private readonly IEmailService _emailService;
+        private readonly IUserService _userService;
         private readonly IMapper _mapper;
 
-        public AccountsController(UserManager<User> userManager, IMapper mapper)
+        public AccountsController(UserManager<User> userManager, IEmailService emailService, IUserService userService, IMapper mapper)
         {
             _userManager = userManager;
+            _emailService = emailService;
+            _userService = userService;
             _mapper = mapper;
         }
 
@@ -31,10 +36,7 @@ namespace Capstone.Controllers
         [HttpPost]
         public async Task<IActionResult> Post([FromBody]RegistrationCM model)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
+            if (!ModelState.IsValid) return BadRequest(ModelState);
 
             var userInDB = _userManager.FindByNameAsync(model.Email).Result;
             if (userInDB != null) return BadRequest("Email is existed!");
@@ -43,12 +45,53 @@ namespace Capstone.Controllers
             {
                 Email = model.Email,
                 UserName = model.Email,
+                CreateDate = DateTime.Now,
+                DateOfBirth = model.DateOfBirth,
                 IsDeleted = false,
             };
 
+            Random random = new Random();
+            user.EmailConfirmCode = random.Next(100001, 999999).ToString();
+
             var result = await _userManager.CreateAsync(user, model.Password);
 
-            return new OkObjectResult(user.Id);
+            _emailService.SendMail(user.Email, "Activation Code to Verify Email Address", "Thank you for creating an account with Gigshub"
+                + "\n\nAccount name : "
+                + user.UserName
+                + "\n\nYour account will work but you must verify it by enter this code in our app"
+                + "\n\nYour Activation Code is : "
+                + user.EmailConfirmCode
+                + "\n\nThanks & Regards\nDynamicWorkFlow Team");
+
+            return new OkObjectResult("Account created, please check your email!");
+        }
+
+        [AllowAnonymous]
+        [HttpPost("ConfirmEmail")]
+        public async Task<ActionResult> ConfirmEmail(string code, string email)
+        {
+            try
+            {
+                var userInDB = _userManager.FindByEmailAsync(email).Result;
+
+                if (userInDB == null) return BadRequest("User is not exist");
+
+                if (userInDB.EmailConfirmCode == code)
+                {
+                    userInDB.EmailConfirmed = true;
+                    await _userManager.UpdateAsync(userInDB);
+                }
+                else
+                {
+                    return BadRequest("Wrong code! please try again");
+                }
+
+                return Ok("Success");
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
         }
 
         [HttpGet]
@@ -57,11 +100,32 @@ namespace Capstone.Controllers
             try
             {
                 List<RegistrationVM> result = new List<RegistrationVM>();
-                var users =  _userManager.Users.ToListAsync().Result;
+                var users = _userManager.Users.ToListAsync().Result;
                 foreach (var item in users)
                 {
                     result.Add(_mapper.Map<RegistrationVM>(item));
                 }
+                return Ok(result);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
+
+        [HttpGet("GetAuthorizationByUserID")]
+        public ActionResult<AuthorizationVM> GetAuthorizationByUserID(string ID)
+        {
+            try
+            {
+                Dictionary<string, IEnumerable<string>> data = _userService.GetAuthorizationByUserID(ID);
+                IEnumerable<string> roles = data.GetValueOrDefault("role");
+                IEnumerable<string> groups = data.GetValueOrDefault("group");
+                IEnumerable<string> permissions = data.GetValueOrDefault("permission");
+                AuthorizationVM result = new AuthorizationVM();
+                result.Roles = roles;
+                result.Groups = groups;
+                result.Permissions = permissions;
                 return Ok(result);
             }
             catch (Exception e)
@@ -104,7 +168,8 @@ namespace Capstone.Controllers
                 if (userInDB.IsDeleted == true)
                 {
                     userInDB.IsDeleted = false;
-                } else
+                }
+                else
                 {
                     userInDB.IsDeleted = true;
                 }

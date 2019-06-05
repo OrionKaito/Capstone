@@ -13,7 +13,7 @@ namespace Capstone.Data
         {
         }
 
-        public DbSet<WorkFlow> Workflows { get; set; }
+        public DbSet<WorkFlow> WorkFlows { get; set; }
         public DbSet<ActionType> ActionTypes { get; set; }
         public DbSet<Group> Groups { get; set; }
         public DbSet<UserGroup> UserGroups { get; set; }
@@ -22,6 +22,8 @@ namespace Capstone.Data
         public DbSet<Permission> Permissions { get; set; }
         public DbSet<PermissionOfRole> PermissionOfRoles { get; set; }
         public DbSet<UserRole> UserRoles { get; set; }
+        public DbSet<Notification> Notifications { get; set; }
+        public DbSet<UserNotification> UserNotifications { get; set; }
         public DbSet<Request> Requests { get; set; }
         public DbSet<RequestAction> RequestActions { get; set; }
         public DbSet<RequestValue> RequestValues { get; set; }

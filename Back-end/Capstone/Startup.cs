@@ -96,6 +96,18 @@ namespace Capstone
             services.AddTransient<IUserRoleRepository, UserRoleRepository>();
             services.AddTransient<IUserRoleService, UserRoleService>();
 
+            //Notification
+            services.AddTransient<INotificationRepository, NotificationRepository>();
+            services.AddTransient<INotificationService, NotificationService>();
+
+            //UserNotification
+            services.AddTransient<IUserNotificationRepository, UserNotificationRepository>();
+            services.AddTransient<IUserNotificationService, UserNotificationService>();
+
+            //User
+            services.AddTransient<IUserRepository, UserRepository>();
+            services.AddTransient<IUserService, UserService>();
+          
             //Request
             services.AddTransient<IRequestRepository, RequestRepository>();
             services.AddTransient<IRequestService, RequestService>();
@@ -114,6 +126,9 @@ namespace Capstone
             //RequestFile
             services.AddTransient<IRequestFileRepository, RequestFileRepository>();
             services.AddTransient<IRequestFileService, RequestFileService>();
+
+            //Email
+            services.AddTransient<IEmailService, EmailServicce>();
             #endregion
 
             // Auto Mapper Configurations

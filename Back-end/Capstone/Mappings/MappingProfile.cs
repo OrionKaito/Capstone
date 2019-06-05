@@ -10,6 +10,9 @@ namespace Capstone.Mappings
         {
             CreateMap<User, RegistrationVM>();
             CreateMap<RegistrationVM, User>();
+            
+            CreateMap<User, RegistrationUM>();
+            CreateMap<RegistrationUM, User>();
 
             CreateMap<WorkFlow, WorkflowVM>();
             CreateMap<WorkflowVM, WorkFlow>();
@@ -133,9 +136,29 @@ namespace Capstone.Mappings
 
             CreateMap<RequestFile, RequestFileCM>();
             CreateMap<RequestFileCM, RequestFile>();
-
+            
             CreateMap<RequestFile, RequestFileUM>();
             CreateMap<RequestFileUM, RequestFile>();
+
+            //Notification
+            CreateMap<Notification, NotificationVM>();
+            CreateMap<NotificationVM, Notification>();
+
+            CreateMap<Notification, NotificationCM>();
+            CreateMap<NotificationCM, Notification>();
+
+            CreateMap<Notification, NotificationUM>();
+            CreateMap<NotificationUM, Notification>();
+
+            //UserNotification
+            CreateMap<UserNotification, UserNotificationVM>();
+            CreateMap<UserNotificationVM, UserNotification>();
+
+            CreateMap<UserNotification, UserNotificationCM>();
+            CreateMap<UserNotificationCM, UserNotification>();
+
+            CreateMap<UserNotification, UserNotificationUM>();
+            CreateMap<UserNotificationUM, UserNotification>();
         }
     }
 }
