@@ -36,7 +36,15 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Email"
-                android:inputType="textEmailAddress"/>
+                android:inputType="textEmailAddress"
+                android:textSize="20sp"/>
+            <TextView
+                android:id="@+id/tvErrorLogin"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                android:textColor="@color/red"
+                android:textSize="15sp"/>
         </android.support.design.widget.TextInputLayout>
 
         <!-- Password Label -->
@@ -44,12 +52,14 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:layout_marginBottom="8dp">
+            android:layout_marginBottom="8dp"
+            app:passwordToggleEnabled="true">
 
             <EditText
                 android:id="@+id/input_password"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:textSize="20sp"
                 android:hint="Password"
                 android:inputType="textPassword"/>
         </android.support.design.widget.TextInputLayout>
