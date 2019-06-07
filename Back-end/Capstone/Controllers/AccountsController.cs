@@ -131,6 +131,22 @@ namespace Capstone.Controllers
             }
         }
 
+        [HttpGet("GetAccountByUserID")]
+        public ActionResult<IEnumerable<RegistrationVM>> GetAccountByUserID(string ID)
+        {
+            try
+            {
+                RegistrationVM result = new RegistrationVM();
+                var user = _userManager.FindByIdAsync(ID).Result;
+                result = _mapper.Map<RegistrationVM>(user);
+                return Ok(result);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
+
         [HttpGet("GetAuthorizationByUserID")]
         public ActionResult<AuthorizationVM> GetAuthorizationByUserID(string ID)
         {
