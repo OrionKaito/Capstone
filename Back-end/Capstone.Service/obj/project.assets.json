@@ -4428,11 +4428,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\ChienPLQ\\Documents\\GitHub\\Capstone\\Back-end\\Capstone.Service\\Capstone.Service.csproj",
+      "projectUniqueName": "C:\\Users\\ChienPLQ\\Desktop\\qpi\\New folder\\Project\\Back-end\\Capstone.Service\\Capstone.Service.csproj",
       "projectName": "Capstone.Service",
-      "projectPath": "C:\\Users\\ChienPLQ\\Documents\\GitHub\\Capstone\\Back-end\\Capstone.Service\\Capstone.Service.csproj",
+      "projectPath": "C:\\Users\\ChienPLQ\\Desktop\\qpi\\New folder\\Project\\Back-end\\Capstone.Service\\Capstone.Service.csproj",
       "packagesPath": "C:\\Users\\ChienPLQ\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\ChienPLQ\\Documents\\GitHub\\Capstone\\Back-end\\Capstone.Service\\obj\\",
+      "outputPath": "C:\\Users\\ChienPLQ\\Desktop\\qpi\\New folder\\Project\\Back-end\\Capstone.Service\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
@@ -4451,11 +4451,11 @@
       "frameworks": {
         "netcoreapp2.2": {
           "projectReferences": {
-            "C:\\Users\\ChienPLQ\\Documents\\GitHub\\Capstone\\Back-end\\Capstone.Data\\Capstone.Data.csproj": {
-              "projectPath": "C:\\Users\\ChienPLQ\\Documents\\GitHub\\Capstone\\Back-end\\Capstone.Data\\Capstone.Data.csproj"
+            "C:\\Users\\ChienPLQ\\Desktop\\qpi\\New folder\\Project\\Back-end\\Capstone.Data\\Capstone.Data.csproj": {
+              "projectPath": "C:\\Users\\ChienPLQ\\Desktop\\qpi\\New folder\\Project\\Back-end\\Capstone.Data\\Capstone.Data.csproj"
             },
-            "C:\\Users\\ChienPLQ\\Documents\\GitHub\\Capstone\\Back-end\\Capstone.Model\\Capstone.Model.csproj": {
-              "projectPath": "C:\\Users\\ChienPLQ\\Documents\\GitHub\\Capstone\\Back-end\\Capstone.Model\\Capstone.Model.csproj"
+            "C:\\Users\\ChienPLQ\\Desktop\\qpi\\New folder\\Project\\Back-end\\Capstone.Model\\Capstone.Model.csproj": {
+              "projectPath": "C:\\Users\\ChienPLQ\\Desktop\\qpi\\New folder\\Project\\Back-end\\Capstone.Model\\Capstone.Model.csproj"
             }
           }
         }

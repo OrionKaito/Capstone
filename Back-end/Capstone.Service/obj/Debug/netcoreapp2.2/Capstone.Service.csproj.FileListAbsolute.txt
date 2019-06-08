@@ -12,17 +12,17 @@ D:\Project\C#\Capstone\Capstone\Capstone.Service\obj\Debug\netcoreapp2.2\Capston
 D:\Project\C#\Capstone\Capstone\Capstone.Service\obj\Debug\netcoreapp2.2\Capstone.Service.csproj.CopyComplete
 D:\Project\C#\Capstone\Capstone\Capstone.Service\obj\Debug\netcoreapp2.2\Capstone.Service.dll
 D:\Project\C#\Capstone\Capstone\Capstone.Service\obj\Debug\netcoreapp2.2\Capstone.Service.pdb
-C:\Users\ChienPLQ\Documents\GitHub\Capstone\Back-end\Capstone.Service\bin\Debug\netcoreapp2.2\Capstone.Service.deps.json
-C:\Users\ChienPLQ\Documents\GitHub\Capstone\Back-end\Capstone.Service\bin\Debug\netcoreapp2.2\Capstone.Service.dll
-C:\Users\ChienPLQ\Documents\GitHub\Capstone\Back-end\Capstone.Service\bin\Debug\netcoreapp2.2\Capstone.Service.pdb
-C:\Users\ChienPLQ\Documents\GitHub\Capstone\Back-end\Capstone.Service\bin\Debug\netcoreapp2.2\Capstone.Data.dll
-C:\Users\ChienPLQ\Documents\GitHub\Capstone\Back-end\Capstone.Service\bin\Debug\netcoreapp2.2\Capstone.Model.dll
-C:\Users\ChienPLQ\Documents\GitHub\Capstone\Back-end\Capstone.Service\bin\Debug\netcoreapp2.2\Capstone.Data.pdb
-C:\Users\ChienPLQ\Documents\GitHub\Capstone\Back-end\Capstone.Service\bin\Debug\netcoreapp2.2\Capstone.Model.pdb
-C:\Users\ChienPLQ\Documents\GitHub\Capstone\Back-end\Capstone.Service\obj\Debug\netcoreapp2.2\Capstone.Service.csprojAssemblyReference.cache
-C:\Users\ChienPLQ\Documents\GitHub\Capstone\Back-end\Capstone.Service\obj\Debug\netcoreapp2.2\Capstone.Service.csproj.CoreCompileInputs.cache
-C:\Users\ChienPLQ\Documents\GitHub\Capstone\Back-end\Capstone.Service\obj\Debug\netcoreapp2.2\Capstone.Service.AssemblyInfoInputs.cache
-C:\Users\ChienPLQ\Documents\GitHub\Capstone\Back-end\Capstone.Service\obj\Debug\netcoreapp2.2\Capstone.Service.AssemblyInfo.cs
-C:\Users\ChienPLQ\Documents\GitHub\Capstone\Back-end\Capstone.Service\obj\Debug\netcoreapp2.2\Capstone.Service.csproj.CopyComplete
-C:\Users\ChienPLQ\Documents\GitHub\Capstone\Back-end\Capstone.Service\obj\Debug\netcoreapp2.2\Capstone.Service.dll
-C:\Users\ChienPLQ\Documents\GitHub\Capstone\Back-end\Capstone.Service\obj\Debug\netcoreapp2.2\Capstone.Service.pdb
+C:\Users\ChienPLQ\Desktop\qpi\New folder\Project\Back-end\Capstone.Service\bin\Debug\netcoreapp2.2\Capstone.Service.deps.json
+C:\Users\ChienPLQ\Desktop\qpi\New folder\Project\Back-end\Capstone.Service\bin\Debug\netcoreapp2.2\Capstone.Service.dll
+C:\Users\ChienPLQ\Desktop\qpi\New folder\Project\Back-end\Capstone.Service\bin\Debug\netcoreapp2.2\Capstone.Service.pdb
+C:\Users\ChienPLQ\Desktop\qpi\New folder\Project\Back-end\Capstone.Service\bin\Debug\netcoreapp2.2\Capstone.Data.dll
+C:\Users\ChienPLQ\Desktop\qpi\New folder\Project\Back-end\Capstone.Service\bin\Debug\netcoreapp2.2\Capstone.Model.dll
+C:\Users\ChienPLQ\Desktop\qpi\New folder\Project\Back-end\Capstone.Service\bin\Debug\netcoreapp2.2\Capstone.Data.pdb
+C:\Users\ChienPLQ\Desktop\qpi\New folder\Project\Back-end\Capstone.Service\bin\Debug\netcoreapp2.2\Capstone.Model.pdb
+C:\Users\ChienPLQ\Desktop\qpi\New folder\Project\Back-end\Capstone.Service\obj\Debug\netcoreapp2.2\Capstone.Service.csprojAssemblyReference.cache
+C:\Users\ChienPLQ\Desktop\qpi\New folder\Project\Back-end\Capstone.Service\obj\Debug\netcoreapp2.2\Capstone.Service.csproj.CoreCompileInputs.cache
+C:\Users\ChienPLQ\Desktop\qpi\New folder\Project\Back-end\Capstone.Service\obj\Debug\netcoreapp2.2\Capstone.Service.AssemblyInfoInputs.cache
+C:\Users\ChienPLQ\Desktop\qpi\New folder\Project\Back-end\Capstone.Service\obj\Debug\netcoreapp2.2\Capstone.Service.AssemblyInfo.cs
+C:\Users\ChienPLQ\Desktop\qpi\New folder\Project\Back-end\Capstone.Service\obj\Debug\netcoreapp2.2\Capstone.Service.csproj.CopyComplete
+C:\Users\ChienPLQ\Desktop\qpi\New folder\Project\Back-end\Capstone.Service\obj\Debug\netcoreapp2.2\Capstone.Service.dll
+C:\Users\ChienPLQ\Desktop\qpi\New folder\Project\Back-end\Capstone.Service\obj\Debug\netcoreapp2.2\Capstone.Service.pdb

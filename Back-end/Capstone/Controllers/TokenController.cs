@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System;
+using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
@@ -21,17 +22,19 @@ namespace Capstone.Controllers
         private readonly IConfiguration _config;
         private readonly UserManager<User> _userManager;
         private readonly IPermissionService _permissionService;
+        private readonly IRoleService _roleService;
 
-        public TokenController(IConfiguration config, UserManager<User> userManager, IPermissionService permissionService)
+        public TokenController(IConfiguration config, UserManager<User> userManager, IPermissionService permissionService, IRoleService roleService)
         {
             _config = config;
             _userManager = userManager;
             _permissionService = permissionService;
+            _roleService = roleService;
         }
 
         [AllowAnonymous]
-        [HttpPost]
-        public ActionResult Post([FromBody]CredentialsVM credentials)
+        [HttpPost("User")]
+        public ActionResult PostUser([FromBody]CredentialsVM credentials)
         {
             if (!ModelState.IsValid)
             {
@@ -40,7 +43,80 @@ namespace Capstone.Controllers
 
             var identity = CheckClaimIdentity(credentials.UserName, credentials.Password);
             if (identity.Result == null) {
-                return BadRequest("Invalid username or password.");
+                return BadRequest("Invalid username or password!");
+            }
+
+            IEnumerable<string> listRoleOfUser = _roleService.GetByUserID(identity.Result.Id);
+
+            bool checkUser = false;
+
+            foreach (var item in listRoleOfUser)
+            {
+                if (item.Equals("user"))
+                {
+                    checkUser = true;
+                }
+            }
+
+            if (!checkUser)
+            {
+                return BadRequest("Your role can not access.");
+            }
+
+            if (identity.Result.EmailConfirmed == false)
+            {
+                return BadRequest("Please verify your account first!");
+            }
+
+            if (identity.Result.IsDeleted == true)
+            {
+                return BadRequest("Account is banned!");
+            }
+
+            var tokenString = GenerateJSONWebToken(identity.Result);
+            return Ok(tokenString);
+        }
+
+        [AllowAnonymous]
+        [HttpPost("Admin")]
+        public ActionResult PostAdmin([FromBody]CredentialsVM credentials)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var identity = CheckClaimIdentity(credentials.UserName, credentials.Password);
+            if (identity.Result == null)
+            {
+                return BadRequest("Invalid username or password!");
+            }
+
+            IEnumerable<string> listRoleOfUser = _roleService.GetByUserID(identity.Result.Id);
+
+            bool checkAdmin = false;
+
+            foreach (var item in listRoleOfUser)
+            {
+                if (item.Equals("admin"))
+                {
+                    checkAdmin = true;
+                }
+            }
+
+            if (!checkAdmin)
+            {
+                return BadRequest("Your role can not access.");
+            }
+
+            if (identity.Result.EmailConfirmed == false)
+            {
+                return BadRequest("Please verify your account first!");
+            }
+
+            if (identity.Result.IsDeleted == true)
+            {
+                return BadRequest("Account is banned!");
             }
 
             var tokenString = GenerateJSONWebToken(identity.Result);
@@ -70,6 +146,7 @@ namespace Capstone.Controllers
             var permissions = _permissionService.GetByUserID(user.Id);
 
             string listPermission = "";
+
             foreach (var item in permissions)
             {
                 listPermission = listPermission + " " + item.ToString();
@@ -77,8 +154,8 @@ namespace Capstone.Controllers
 
             var claims = new[]
             {
-                new Claim(JwtRegisteredClaimNames.Sub, user.UserName),
-                new Claim("permissions", listPermission),
+                new Claim(JwtRegisteredClaimNames.Sub, user.Id),
+                new Claim(Helper.WebConstant.Permissions , listPermission),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
             };
 

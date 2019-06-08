@@ -32,6 +32,22 @@ namespace Capstone
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+
+            //fix bug lỗi không chạy dc do "has been blocked by CORS policy: 
+            //Response to preflight request doesn't pass access control check: 
+            //No 'Access-Control-Allow-Origin' header is present on the requested resource."
+            //lý do lỗi: 2 miền khác nhau, chrome tự bảo mật nên k cho vào
+            services.AddCors(options =>
+            {
+                options.AddPolicy("CorsPolicy",
+                    builder => builder.WithOrigins("http://localhost:4200")
+                    .AllowAnyMethod()
+                    .AllowAnyHeader()
+                    .AllowCredentials());
+            });
+
+
+
             services.AddDbContext<CapstoneEntities>();
 
             #region DI
@@ -75,6 +91,18 @@ namespace Capstone
             services.AddTransient<IUserRoleRepository, UserRoleRepository>();
             services.AddTransient<IUserRoleService, UserRoleService>();
 
+            //Notification
+            services.AddTransient<INotificationRepository, NotificationRepository>();
+            services.AddTransient<INotificationService, NotificationService>();
+
+            //UserNotification
+            services.AddTransient<IUserNotificationRepository, UserNotificationRepository>();
+            services.AddTransient<IUserNotificationService, UserNotificationService>();
+
+            //User
+            services.AddTransient<IUserRepository, UserRepository>();
+            services.AddTransient<IUserService, UserService>();
+          
             //Request
             services.AddTransient<IRequestRepository, RequestRepository>();
             services.AddTransient<IRequestService, RequestService>();
@@ -90,6 +118,9 @@ namespace Capstone
             //RequestFile
             services.AddTransient<IRequestFileRepository, RequestFileRepository>();
             services.AddTransient<IRequestFileService, RequestFileService>();
+
+            //Email
+            services.AddTransient<IEmailService, EmailServicce>();
             #endregion
 
             // Auto Mapper Configurations
@@ -153,6 +184,12 @@ namespace Capstone
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
+            //fix bug lỗi không chạy dc do "has been blocked by CORS policy: 
+            //Response to preflight request doesn't pass access control check: 
+            //No 'Access-Control-Allow-Origin' header is present on the requested resource."
+            //lý do lỗi: 2 miền khác nhau, chrome tự bảo mật nên k cho vào
+
+            app.UseCors("CorsPolicy");
             // Enable middleware to serve generated Swagger as a JSON endpoint.
             app.UseSwagger();
             // Enable jwt

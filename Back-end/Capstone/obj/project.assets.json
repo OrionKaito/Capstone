@@ -8352,7 +8352,6 @@
       "path": "runtime.native.system.io.compression/4.3.0",
       "files": [
         ".nupkg.metadata",
-        ".signature.p7s",
         "ThirdPartyNotices.txt",
         "dotnet_library_license.txt",
         "lib/netstandard1.0/_._",
@@ -11559,7 +11558,6 @@
       "path": "system.runtime.serialization.primitives/4.3.0",
       "files": [
         ".nupkg.metadata",
-        ".signature.p7s",
         "ThirdPartyNotices.txt",
         "dotnet_library_license.txt",
         "lib/MonoAndroid10/_._",
@@ -11887,7 +11885,6 @@
       "path": "system.security.cryptography.csp/4.3.0",
       "files": [
         ".nupkg.metadata",
-        ".signature.p7s",
         "ThirdPartyNotices.txt",
         "dotnet_library_license.txt",
         "lib/MonoAndroid10/_._",
@@ -11959,7 +11956,6 @@
       "path": "system.security.cryptography.openssl/4.3.0",
       "files": [
         ".nupkg.metadata",
-        ".signature.p7s",
         "ThirdPartyNotices.txt",
         "dotnet_library_license.txt",
         "lib/netstandard1.6/System.Security.Cryptography.OpenSsl.dll",
@@ -13185,11 +13181,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\ChienPLQ\\Documents\\GitHub\\Capstone\\Back-end\\Capstone\\Capstone.csproj",
+      "projectUniqueName": "C:\\Users\\ChienPLQ\\Desktop\\qpi\\New folder\\Project\\Back-end\\Capstone\\Capstone.csproj",
       "projectName": "Capstone",
-      "projectPath": "C:\\Users\\ChienPLQ\\Documents\\GitHub\\Capstone\\Back-end\\Capstone\\Capstone.csproj",
+      "projectPath": "C:\\Users\\ChienPLQ\\Desktop\\qpi\\New folder\\Project\\Back-end\\Capstone\\Capstone.csproj",
       "packagesPath": "C:\\Users\\ChienPLQ\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\ChienPLQ\\Documents\\GitHub\\Capstone\\Back-end\\Capstone\\obj\\",
+      "outputPath": "C:\\Users\\ChienPLQ\\Desktop\\qpi\\New folder\\Project\\Back-end\\Capstone\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
@@ -13208,14 +13204,14 @@
       "frameworks": {
         "netcoreapp2.2": {
           "projectReferences": {
-            "C:\\Users\\ChienPLQ\\Documents\\GitHub\\Capstone\\Back-end\\Capstone.Data\\Capstone.Data.csproj": {
-              "projectPath": "C:\\Users\\ChienPLQ\\Documents\\GitHub\\Capstone\\Back-end\\Capstone.Data\\Capstone.Data.csproj"
+            "C:\\Users\\ChienPLQ\\Desktop\\qpi\\New folder\\Project\\Back-end\\Capstone.Data\\Capstone.Data.csproj": {
+              "projectPath": "C:\\Users\\ChienPLQ\\Desktop\\qpi\\New folder\\Project\\Back-end\\Capstone.Data\\Capstone.Data.csproj"
             },
-            "C:\\Users\\ChienPLQ\\Documents\\GitHub\\Capstone\\Back-end\\Capstone.Model\\Capstone.Model.csproj": {
-              "projectPath": "C:\\Users\\ChienPLQ\\Documents\\GitHub\\Capstone\\Back-end\\Capstone.Model\\Capstone.Model.csproj"
+            "C:\\Users\\ChienPLQ\\Desktop\\qpi\\New folder\\Project\\Back-end\\Capstone.Model\\Capstone.Model.csproj": {
+              "projectPath": "C:\\Users\\ChienPLQ\\Desktop\\qpi\\New folder\\Project\\Back-end\\Capstone.Model\\Capstone.Model.csproj"
             },
-            "C:\\Users\\ChienPLQ\\Documents\\GitHub\\Capstone\\Back-end\\Capstone.Service\\Capstone.Service.csproj": {
-              "projectPath": "C:\\Users\\ChienPLQ\\Documents\\GitHub\\Capstone\\Back-end\\Capstone.Service\\Capstone.Service.csproj"
+            "C:\\Users\\ChienPLQ\\Desktop\\qpi\\New folder\\Project\\Back-end\\Capstone.Service\\Capstone.Service.csproj": {
+              "projectPath": "C:\\Users\\ChienPLQ\\Desktop\\qpi\\New folder\\Project\\Back-end\\Capstone.Service\\Capstone.Service.csproj"
             }
           }
         }

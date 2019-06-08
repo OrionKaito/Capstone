@@ -1,10 +1,13 @@
 ﻿using AutoMapper;
+using Capstone.Helper;
 using Capstone.Model;
 using Capstone.Service;
 using Capstone.ViewModel;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Security.Claims;
 
 namespace Capstone.Controllers
 {
@@ -44,16 +47,43 @@ namespace Capstone.Controllers
 
         // GET: api/Workflows/5
         [HttpGet("{id}")]
-        public ActionResult<WorkFlow> GetWorkflow(Guid id)
+        public ActionResult<WorkFlow> GetWorkflow(Guid ID)
         {
-            return null;
+            try
+            {
+                var data = _workFlowService.GetByID(ID);
+                if (data == null) return BadRequest(WebConstant.NotFound);
+                WorkflowVM result = _mapper.Map<WorkflowVM>(data);
+                return Ok(result);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
         }
 
         // PUT: api/Workflows/5
         [HttpPut("{id}")]
-        public IActionResult PutWorkflow(Guid id, WorkFlow workflow)
+        public ActionResult PutWorkflow(WorkflowUM model)
         {
-            return null;
+            if (!ModelState.IsValid) return BadRequest(ModelState);
+
+            try
+            {
+                var workFlowInDb = _workFlowService.GetByID(model.WorkFlowID);
+                if (workFlowInDb == null) return BadRequest(WebConstant.NotFound);
+
+                var userID = HttpContext.User.Claims.FirstOrDefault(u => u.Type == ClaimTypes.NameIdentifier).Value;
+                if (workFlowInDb.OwnerID != userID) return BadRequest(WebConstant.AccessDined);
+
+                _mapper.Map<WorkFlow>(model);
+                _workFlowService.Save();
+                return Ok(WebConstant.Success);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
         }
 
         // POST: api/Workflows
@@ -61,20 +91,19 @@ namespace Capstone.Controllers
         public ActionResult<WorkFlow> PostWorkflow(WorkflowCM model)
         {
             if (!ModelState.IsValid) return BadRequest(ModelState);
+
             try
             {
                 WorkFlow workFlow = new WorkFlow();
-                try
-                {
-                    workFlow = _mapper.Map<WorkFlow>(model);
-                    _workFlowService.Create(workFlow);
-                    _workFlowService.Save();
-                }
-                catch (Exception e)
-                {
-                    return BadRequest(e.Message);
-                }
-                return CreatedAtRoute("GetWorkflow", workFlow);
+                if (_workFlowService.GetByName(model.Name) != null) return BadRequest("Workflow" + WebConstant.NameExisted);
+
+                var userID = HttpContext.User.Claims.FirstOrDefault(u => u.Type == ClaimTypes.NameIdentifier).Value;
+
+                workFlow = _mapper.Map<WorkFlow>(model);
+                workFlow.OwnerID = userID;
+                _workFlowService.Create(workFlow);
+
+                return StatusCode(201, workFlow.WorkFlowID);
             }
             catch (Exception e)
             {
@@ -84,14 +113,21 @@ namespace Capstone.Controllers
 
         // DELETE: api/Workflows/5
         [HttpDelete("{id}")]
-        public ActionResult<WorkFlow> DeleteWorkflow(Guid id)
+        public ActionResult DeleteWorkflow(Guid ID)
         {
-            return null;
-        }
+            try
+            {
+                var workFlowInDb = _workFlowService.GetByID(ID);
+                if (workFlowInDb == null) return BadRequest(WebConstant.NotFound);
 
-        //private bool WorkflowExists(Guid id)
-        //{
-        //    return _context.Workflows.Any(e => e.WorkFlowID == id);
-        //}
+                workFlowInDb.IsDeleted = true;
+                _workFlowService.Save();
+                return Ok(WebConstant.Success);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
     }
 }

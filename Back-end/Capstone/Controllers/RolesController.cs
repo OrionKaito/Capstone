@@ -28,11 +28,13 @@ namespace Capstone.Controllers
             if (!ModelState.IsValid) return BadRequest(ModelState);
             try
             {
+                var nameExist = _roleService.GetByName(model.Name);
+                if (nameExist != null) return BadRequest("Role Name is existed!");
+
                 Role role = new Role();
                 role = _mapper.Map<Role>(model);
                 _roleService.Create(role);
-                _roleService.Save();
-                return StatusCode(201, "Role Type Created!");
+                return StatusCode(201, role.ID);
             }
             catch (Exception e)
             {
@@ -52,6 +54,29 @@ namespace Capstone.Controllers
                 {
                     result.Add(_mapper.Map<RoleVM>(item));
                 }
+                return Ok(result);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
+
+        // GET: api/Roles
+        [HttpGet("GetByUserID")]
+        public ActionResult<IEnumerable<string>> GetByUserID(string ID)
+        {
+            try
+            {
+                List<string> result = new List<string>();
+                var data = _roleService.GetByUserID(ID);
+                foreach (var item in data)
+                {
+                    result.Add(item);
+                }
+
+                if (result.Count == 0) return BadRequest("ID not found!");
+
                 return Ok(result);
             }
             catch (Exception e)
@@ -82,10 +107,15 @@ namespace Capstone.Controllers
         public IActionResult PutRole(RoleUM model)
         {
             if (!ModelState.IsValid) return BadRequest(ModelState);
+
             try
             {
+                var nameExist = _roleService.GetByName(model.Name);
+                if (nameExist != null) return BadRequest("Role Name is existed!");
+
                 var roleInDb = _roleService.GetByID(model.ID);
                 if (roleInDb == null) return BadRequest("ID not found!");
+
                 _mapper.Map(model, roleInDb);
                 _roleService.Save();
                 return Ok("success");
@@ -104,7 +134,8 @@ namespace Capstone.Controllers
             {
                 var roleInDb = _roleService.GetByID(ID);
                 if (roleInDb == null) return BadRequest("ID not found!");
-                roleInDb.IsDelete = true;
+
+                roleInDb.IsDeleted = true;
                 _roleService.Save();
                 return Ok("success");
             }

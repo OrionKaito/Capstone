@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Capstone.Data.Migrations
 {
-    public partial class chien280519 : Migration
+    public partial class chien : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -14,7 +14,7 @@ namespace Capstone.Data.Migrations
                 {
                     ID = table.Column<Guid>(nullable: false),
                     Name = table.Column<string>(nullable: true),
-                    IsDelete = table.Column<bool>(nullable: false)
+                    IsDeleted = table.Column<bool>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -55,7 +55,10 @@ namespace Capstone.Data.Migrations
                     LockoutEnabled = table.Column<bool>(nullable: false),
                     AccessFailedCount = table.Column<int>(nullable: false),
                     FullName = table.Column<string>(nullable: true),
-                    IsEnabled = table.Column<bool>(nullable: true)
+                    EmailConfirmCode = table.Column<string>(nullable: true),
+                    DateOfBirth = table.Column<DateTime>(nullable: true),
+                    CreateDate = table.Column<DateTime>(nullable: false),
+                    IsDeleted = table.Column<bool>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -68,11 +71,26 @@ namespace Capstone.Data.Migrations
                 {
                     ID = table.Column<Guid>(nullable: false),
                     Name = table.Column<string>(nullable: true),
-                    IsDelete = table.Column<bool>(nullable: false)
+                    IsDeleted = table.Column<bool>(nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Groups", x => x.ID);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Notifications",
+                columns: table => new
+                {
+                    ID = table.Column<Guid>(nullable: false),
+                    EventID = table.Column<Guid>(nullable: false),
+                    DateTime = table.Column<DateTime>(nullable: false),
+                    NotificationType = table.Column<int>(nullable: false),
+                    IsDeleted = table.Column<bool>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Notifications", x => x.ID);
                 });
 
             migrationBuilder.CreateTable(
@@ -81,7 +99,7 @@ namespace Capstone.Data.Migrations
                 {
                     ID = table.Column<Guid>(nullable: false),
                     Name = table.Column<string>(nullable: true),
-                    IsDelete = table.Column<bool>(nullable: false)
+                    IsDeleted = table.Column<bool>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -117,18 +135,6 @@ namespace Capstone.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Requests",
-                columns: table => new
-                {
-                    ID = table.Column<Guid>(nullable: false),
-                    timeStamp = table.Column<DateTime>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Requests", x => x.ID);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "RequestValues",
                 columns: table => new
                 {
@@ -147,23 +153,11 @@ namespace Capstone.Data.Migrations
                 {
                     ID = table.Column<Guid>(nullable: false),
                     Name = table.Column<string>(nullable: true),
-                    IsDelete = table.Column<bool>(nullable: false)
+                    IsDeleted = table.Column<bool>(nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Roles", x => x.ID);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Workflows",
-                columns: table => new
-                {
-                    WorkFlowID = table.Column<Guid>(nullable: false),
-                    Name = table.Column<string>(nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Workflows", x => x.WorkFlowID);
                 });
 
             migrationBuilder.CreateTable(
@@ -273,13 +267,54 @@ namespace Capstone.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Requests",
+                columns: table => new
+                {
+                    ID = table.Column<Guid>(nullable: false),
+                    timeStamp = table.Column<DateTime>(nullable: false),
+                    UserID = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Requests", x => x.ID);
+                    table.ForeignKey(
+                        name: "FK_Requests_AspNetUsers_UserID",
+                        column: x => x.UserID,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "WorkFlows",
+                columns: table => new
+                {
+                    WorkFlowID = table.Column<Guid>(nullable: false),
+                    Name = table.Column<string>(nullable: true),
+                    Description = table.Column<string>(nullable: true),
+                    OwnerID = table.Column<string>(nullable: true),
+                    UserID = table.Column<string>(nullable: true),
+                    IsDeleted = table.Column<bool>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_WorkFlows", x => x.WorkFlowID);
+                    table.ForeignKey(
+                        name: "FK_WorkFlows_AspNetUsers_UserID",
+                        column: x => x.UserID,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "UserGroups",
                 columns: table => new
                 {
                     ID = table.Column<Guid>(nullable: false),
                     UserId = table.Column<string>(nullable: true),
                     GroupID = table.Column<Guid>(nullable: false),
-                    IsDelete = table.Column<bool>(nullable: false)
+                    IsDeleted = table.Column<bool>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -299,13 +334,40 @@ namespace Capstone.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "UserNotifications",
+                columns: table => new
+                {
+                    ID = table.Column<Guid>(nullable: false),
+                    NotificationID = table.Column<Guid>(nullable: false),
+                    UserID = table.Column<string>(nullable: true),
+                    IsRead = table.Column<bool>(nullable: false),
+                    IsDeleted = table.Column<bool>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_UserNotifications", x => x.ID);
+                    table.ForeignKey(
+                        name: "FK_UserNotifications_Notifications_NotificationID",
+                        column: x => x.NotificationID,
+                        principalTable: "Notifications",
+                        principalColumn: "ID",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_UserNotifications_AspNetUsers_UserID",
+                        column: x => x.UserID,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "PermissionOfRoles",
                 columns: table => new
                 {
                     ID = table.Column<Guid>(nullable: false),
                     PermissionID = table.Column<Guid>(nullable: false),
                     RoleID = table.Column<Guid>(nullable: false),
-                    IsDelete = table.Column<bool>(nullable: false)
+                    IsDeleted = table.Column<bool>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -332,7 +394,7 @@ namespace Capstone.Data.Migrations
                     Name = table.Column<string>(nullable: true),
                     RoleID = table.Column<Guid>(nullable: false),
                     GroupID = table.Column<Guid>(nullable: false),
-                    IsDelete = table.Column<bool>(nullable: false)
+                    IsDeleted = table.Column<bool>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -358,7 +420,7 @@ namespace Capstone.Data.Migrations
                     ID = table.Column<Guid>(nullable: false),
                     UserID = table.Column<string>(nullable: true),
                     RoleID = table.Column<Guid>(nullable: false),
-                    IsDelete = table.Column<bool>(nullable: false)
+                    IsDeleted = table.Column<bool>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -427,6 +489,11 @@ namespace Capstone.Data.Migrations
                 column: "RoleID");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Requests_UserID",
+                table: "Requests",
+                column: "UserID");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_RoleOfGroups_GroupID",
                 table: "RoleOfGroups",
                 column: "GroupID");
@@ -447,6 +514,16 @@ namespace Capstone.Data.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_UserNotifications_NotificationID",
+                table: "UserNotifications",
+                column: "NotificationID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_UserNotifications_UserID",
+                table: "UserNotifications",
+                column: "UserID");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_UserRoles_RoleID",
                 table: "UserRoles",
                 column: "RoleID");
@@ -454,6 +531,11 @@ namespace Capstone.Data.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_UserRoles_UserID",
                 table: "UserRoles",
+                column: "UserID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_WorkFlows_UserID",
+                table: "WorkFlows",
                 column: "UserID");
         }
 
@@ -499,10 +581,13 @@ namespace Capstone.Data.Migrations
                 name: "UserGroups");
 
             migrationBuilder.DropTable(
+                name: "UserNotifications");
+
+            migrationBuilder.DropTable(
                 name: "UserRoles");
 
             migrationBuilder.DropTable(
-                name: "Workflows");
+                name: "WorkFlows");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
@@ -512,6 +597,9 @@ namespace Capstone.Data.Migrations
 
             migrationBuilder.DropTable(
                 name: "Groups");
+
+            migrationBuilder.DropTable(
+                name: "Notifications");
 
             migrationBuilder.DropTable(
                 name: "Roles");

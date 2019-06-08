@@ -10,6 +10,7 @@ namespace Capstone.Service
     {
         IEnumerable<UserGroup> GetByUserID(string ID);
         UserGroup GetByID(Guid ID);
+        UserGroup CheckExist(string UserID, Guid GroupID);
         void Create(UserGroup userGroup);
         void Delete(UserGroup userGroup);
         void Save();
@@ -29,16 +30,18 @@ namespace Capstone.Service
         public void Create(UserGroup userGroup)
         {
             _userGroupRepository.Add(userGroup);
+            _unitOfWork.Commit();
         }
 
         public void Delete(UserGroup userGroup)
         {
             _userGroupRepository.Delete(userGroup);
+            _unitOfWork.Commit();
         }
 
         public IEnumerable<UserGroup> GetByUserID(string ID)
         {
-            return _userGroupRepository.GetMany(u => u.IsDelete == false && u.UserId.Equals(ID));
+            return _userGroupRepository.GetMany(u => u.IsDeleted == false && u.UserId.Equals(ID));
         }
 
         public UserGroup GetByID(Guid ID)
@@ -49,6 +52,11 @@ namespace Capstone.Service
         public void Save()
         {
             _unitOfWork.Commit();
+        }
+
+        public UserGroup CheckExist(string UserID, Guid GroupID)
+        {
+            return _userGroupRepository.CheckExist(UserID, GroupID);
         }
     }
 }

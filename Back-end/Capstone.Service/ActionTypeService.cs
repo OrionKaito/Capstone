@@ -11,6 +11,7 @@ namespace Capstone.Service
     {
         IEnumerable<ActionType> GetAll();
         ActionType GetByID(Guid ID);
+        ActionType GetByName(string Name);
         void Create(ActionType actionType);
         void Delete(ActionType actionType);
         void Save();
@@ -30,21 +31,28 @@ namespace Capstone.Service
         public void Create(ActionType actionType)
         {
             _actionTypeRepository.Add(actionType);
+            _unitOfWork.Commit();
         }
 
         public void Delete(ActionType actionType)
         {
             _actionTypeRepository.Delete(actionType);
+            _unitOfWork.Commit();
         }
 
         public IEnumerable<ActionType> GetAll()
         {
-            return _actionTypeRepository.GetAll().Where(a => a.IsDelete == false);
+            return _actionTypeRepository.GetAll().Where(a => a.IsDeleted == false);
         }
 
         public ActionType GetByID(Guid ID)
         {
             return _actionTypeRepository.GetById(ID);
+        }
+
+        public ActionType GetByName(string Name)
+        {
+            return _actionTypeRepository.GetByName(Name);
         }
 
         public void Save()

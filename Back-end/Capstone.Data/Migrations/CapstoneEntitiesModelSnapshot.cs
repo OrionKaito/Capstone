@@ -24,7 +24,7 @@ namespace Capstone.Data.Migrations
                     b.Property<Guid>("ID")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<bool>("IsDelete");
+                    b.Property<bool>("IsDeleted");
 
                     b.Property<string>("Name");
 
@@ -38,7 +38,7 @@ namespace Capstone.Data.Migrations
                     b.Property<Guid>("ID")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<bool>("IsDelete");
+                    b.Property<bool>("IsDeleted");
 
                     b.Property<string>("Name");
 
@@ -47,12 +47,30 @@ namespace Capstone.Data.Migrations
                     b.ToTable("Groups");
                 });
 
+            modelBuilder.Entity("Capstone.Model.Notification", b =>
+                {
+                    b.Property<Guid>("ID")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<DateTime>("DateTime");
+
+                    b.Property<Guid>("EventID");
+
+                    b.Property<bool>("IsDeleted");
+
+                    b.Property<int>("NotificationType");
+
+                    b.HasKey("ID");
+
+                    b.ToTable("Notifications");
+                });
+
             modelBuilder.Entity("Capstone.Model.Permission", b =>
                 {
                     b.Property<Guid>("ID")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<bool>("IsDelete");
+                    b.Property<bool>("IsDeleted");
 
                     b.Property<string>("Name");
 
@@ -66,7 +84,7 @@ namespace Capstone.Data.Migrations
                     b.Property<Guid>("ID")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<bool>("IsDelete");
+                    b.Property<bool>("IsDeleted");
 
                     b.Property<Guid>("PermissionID");
 
@@ -86,9 +104,13 @@ namespace Capstone.Data.Migrations
                     b.Property<Guid>("ID")
                         .ValueGeneratedOnAdd();
 
+                    b.Property<string>("UserID");
+
                     b.Property<DateTime>("timeStamp");
 
                     b.HasKey("ID");
+
+                    b.HasIndex("UserID");
 
                     b.ToTable("Requests");
                 });
@@ -144,7 +166,7 @@ namespace Capstone.Data.Migrations
                     b.Property<Guid>("ID")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<bool>("IsDelete");
+                    b.Property<bool>("IsDeleted");
 
                     b.Property<string>("Name");
 
@@ -160,7 +182,7 @@ namespace Capstone.Data.Migrations
 
                     b.Property<Guid>("GroupID");
 
-                    b.Property<bool>("IsDelete");
+                    b.Property<bool>("IsDeleted");
 
                     b.Property<string>("Name");
 
@@ -185,14 +207,20 @@ namespace Capstone.Data.Migrations
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken();
 
+                    b.Property<DateTime>("CreateDate");
+
+                    b.Property<DateTime?>("DateOfBirth");
+
                     b.Property<string>("Email")
                         .HasMaxLength(256);
+
+                    b.Property<string>("EmailConfirmCode");
 
                     b.Property<bool>("EmailConfirmed");
 
                     b.Property<string>("FullName");
 
-                    b.Property<bool?>("IsEnabled");
+                    b.Property<bool?>("IsDeleted");
 
                     b.Property<bool>("LockoutEnabled");
 
@@ -237,7 +265,7 @@ namespace Capstone.Data.Migrations
 
                     b.Property<Guid>("GroupID");
 
-                    b.Property<bool>("IsDelete");
+                    b.Property<bool>("IsDeleted");
 
                     b.Property<string>("UserId");
 
@@ -250,12 +278,34 @@ namespace Capstone.Data.Migrations
                     b.ToTable("UserGroups");
                 });
 
+            modelBuilder.Entity("Capstone.Model.UserNotification", b =>
+                {
+                    b.Property<Guid>("ID")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<bool>("IsDeleted");
+
+                    b.Property<bool>("IsRead");
+
+                    b.Property<Guid>("NotificationID");
+
+                    b.Property<string>("UserID");
+
+                    b.HasKey("ID");
+
+                    b.HasIndex("NotificationID");
+
+                    b.HasIndex("UserID");
+
+                    b.ToTable("UserNotifications");
+                });
+
             modelBuilder.Entity("Capstone.Model.UserRole", b =>
                 {
                     b.Property<Guid>("ID")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<bool>("IsDelete");
+                    b.Property<bool>("IsDeleted");
 
                     b.Property<Guid>("RoleID");
 
@@ -275,11 +325,21 @@ namespace Capstone.Data.Migrations
                     b.Property<Guid>("WorkFlowID")
                         .ValueGeneratedOnAdd();
 
+                    b.Property<string>("Description");
+
+                    b.Property<bool>("IsDeleted");
+
                     b.Property<string>("Name");
+
+                    b.Property<string>("OwnerID");
+
+                    b.Property<string>("UserID");
 
                     b.HasKey("WorkFlowID");
 
-                    b.ToTable("Workflows");
+                    b.HasIndex("UserID");
+
+                    b.ToTable("WorkFlows");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -405,6 +465,13 @@ namespace Capstone.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
+            modelBuilder.Entity("Capstone.Model.Request", b =>
+                {
+                    b.HasOne("Capstone.Model.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserID");
+                });
+
             modelBuilder.Entity("Capstone.Model.RoleOfGroup", b =>
                 {
                     b.HasOne("Capstone.Model.Group", "Group")
@@ -430,6 +497,18 @@ namespace Capstone.Data.Migrations
                         .HasForeignKey("UserId");
                 });
 
+            modelBuilder.Entity("Capstone.Model.UserNotification", b =>
+                {
+                    b.HasOne("Capstone.Model.Notification", "Notification")
+                        .WithMany()
+                        .HasForeignKey("NotificationID")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("Capstone.Model.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserID");
+                });
+
             modelBuilder.Entity("Capstone.Model.UserRole", b =>
                 {
                     b.HasOne("Capstone.Model.Role", "Role")
@@ -438,6 +517,13 @@ namespace Capstone.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("Capstone.Model.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserID");
+                });
+
+            modelBuilder.Entity("Capstone.Model.WorkFlow", b =>
+                {
+                    b.HasOne("Capstone.Model.User", "Owner")
                         .WithMany()
                         .HasForeignKey("UserID");
                 });

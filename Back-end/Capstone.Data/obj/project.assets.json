@@ -4556,11 +4556,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\ChienPLQ\\Documents\\GitHub\\Capstone\\Back-end\\Capstone.Data\\Capstone.Data.csproj",
+      "projectUniqueName": "C:\\Users\\ChienPLQ\\Desktop\\qpi\\New folder\\Project\\Back-end\\Capstone.Data\\Capstone.Data.csproj",
       "projectName": "Capstone.Data",
-      "projectPath": "C:\\Users\\ChienPLQ\\Documents\\GitHub\\Capstone\\Back-end\\Capstone.Data\\Capstone.Data.csproj",
+      "projectPath": "C:\\Users\\ChienPLQ\\Desktop\\qpi\\New folder\\Project\\Back-end\\Capstone.Data\\Capstone.Data.csproj",
       "packagesPath": "C:\\Users\\ChienPLQ\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\ChienPLQ\\Documents\\GitHub\\Capstone\\Back-end\\Capstone.Data\\obj\\",
+      "outputPath": "C:\\Users\\ChienPLQ\\Desktop\\qpi\\New folder\\Project\\Back-end\\Capstone.Data\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
@@ -4579,8 +4579,8 @@
       "frameworks": {
         "netcoreapp2.2": {
           "projectReferences": {
-            "C:\\Users\\ChienPLQ\\Documents\\GitHub\\Capstone\\Back-end\\Capstone.Model\\Capstone.Model.csproj": {
-              "projectPath": "C:\\Users\\ChienPLQ\\Documents\\GitHub\\Capstone\\Back-end\\Capstone.Model\\Capstone.Model.csproj"
+            "C:\\Users\\ChienPLQ\\Desktop\\qpi\\New folder\\Project\\Back-end\\Capstone.Model\\Capstone.Model.csproj": {
+              "projectPath": "C:\\Users\\ChienPLQ\\Desktop\\qpi\\New folder\\Project\\Back-end\\Capstone.Model\\Capstone.Model.csproj"
             }
           }
         }

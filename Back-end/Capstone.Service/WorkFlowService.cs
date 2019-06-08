@@ -10,6 +10,7 @@ namespace Capstone.Service
     {
         IEnumerable<WorkFlow> GetAll();
         WorkFlow GetByID(Guid ID);
+        WorkFlow GetByName(string name);
         void Create(WorkFlow workflow);
         void Update(WorkFlow workflow);
         void Delete(WorkFlow workflow);
@@ -30,11 +31,13 @@ namespace Capstone.Service
         public void Create(WorkFlow workflow)
         {
             _workFlowRepository.Add(workflow);
+            _unitOfWork.Commit();
         }
 
         public void Delete(WorkFlow workflow)
         {
             _workFlowRepository.Delete(workflow);
+            _unitOfWork.Commit();
         }
 
         public IEnumerable<WorkFlow> GetAll()
@@ -47,6 +50,11 @@ namespace Capstone.Service
             return _workFlowRepository.GetById(ID);
         }
 
+        public WorkFlow GetByName(string name)
+        {
+            return _workFlowRepository.GetByName(name);
+        }
+
         public void Save()
         {
             _unitOfWork.Commit();
@@ -55,6 +63,7 @@ namespace Capstone.Service
         public void Update(WorkFlow workflow)
         {
             _workFlowRepository.Update(workflow);
+            _unitOfWork.Commit();
         }
     }
 }
