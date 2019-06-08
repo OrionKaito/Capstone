@@ -1,0 +1,116 @@
+<div class="main-content">
+  <div class="container-fluid">
+      <div class="row">
+          <div class="col-md-12">
+              <div class="card">
+                  <div class="card-header card-header-danger">
+                      <h4 class="card-title ">Account list</h4>
+                      <p class="card-category">List of account in the system</p>
+                  </div>
+                  <div class="card-body">
+                      <div class="table-responsive">
+                            
+                          <table class="table">
+                              <thead class=" text-primary">
+                                  <th>
+                                      No.
+                                  </th>
+                                  <th>
+                                      Full name
+                                  </th>
+                                  <th>
+                                      Email
+                                  </th>
+                                  <th>
+                                      Date of birth
+                                  </th>
+                                  <th>
+                                      Ban/Un-ban
+                                  </th>
+                              </thead>
+                              
+                                <tfoot>
+                                            
+                                <tr>
+                                
+                                    <td> <form name="registerForm" (ngSubmit)="register()" #f="ngForm" class="form"><button type="submit"> Add </button></form></td>                                
+                                    <td><input [(ngModel)]="model.fullName"  type="text" placeholder="Full name"></td>
+                                    <td><input [(ngModel)]="model.email" type="text" placeholder="Email"></td>
+                                    <td><input [(ngModel)]="model.dateOfBirth" type="datetime-local"></td>                                  
+                                    <td><input [(ngModel)]="model.password" type="text" placeholder="Password"><input type="text" placeholder="Re-Password"></td>                                  
+                                
+                                </tr>  
+                                
+                            </tfoot>
+                                
+                            
+                              <tbody *ngFor="let user of users | slice:0:10; index as i; trackBy: trackByFn" >
+                                <tr>
+                                    <td>{{i}}</td>                                
+                                    <td>{{user.fullName}}</td>
+                                    <td>{{user.email}}</td>
+                                    <td>{{user.dateOfBirth}}</td>                                  
+                                    <td *ngIf="user.isDelete;  else elseBlock"><button>Un-Ban</button></td>
+                                    <ng-template #elseBlock><button (click)="banOrUnbanAcc(user.email)" id={{user.email}} >Ban</button></ng-template>
+                                </tr>      
+                                </tbody>
+                                
+                          </table>
+                       
+                      </div>
+                  </div>
+              </div>
+          </div>
+          <div class="col-md-12">
+              <div class="card card-plain">
+                  <div class="card-header card-header-danger">
+                      <h4 class="card-title mt-0"> WorkFlow Template</h4>
+                      <p class="card-category"> List of WorkFlow Template in the system.</p>
+                  </div>
+                  <div class="card-body">
+                      <div class="table-responsive">
+                          <table class="table table-hover">
+                              <thead class="">
+                                  <th>
+                                      No.
+                                  </th>
+                                  <th>
+                                      Name
+                                  </th>
+                                  <th>
+                                      Description
+                                  </th>
+                                  <th>
+                                      <button>View</button>
+                                  </th>     
+                                  <th>
+                                    <button>Ban/Un-ban</button>
+                                </th>                             
+                              </thead>
+                              <tbody>
+                                  <tr>
+                                      <td>
+                                          1
+                                      </td>
+                                      <td>
+                                          Dakota Rice
+                                      </td>
+                                      <td>
+                                          Niger
+                                      </td>
+                                      <td>
+                                          Oud-Turnhout
+                                      </td>
+                                      <td>
+                                          $36,738
+                                      </td>
+                                  </tr>                                 
+                              </tbody>
+                          </table>
+                      </div>
+                  </div>
+              </div>
+          </div>
+      </div>
+  </div>
+</div>
