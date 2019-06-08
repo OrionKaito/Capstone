@@ -45,6 +45,7 @@ namespace Capstone.Controllers
             {
                 Email = model.Email,
                 UserName = model.Email,
+                FullName = model.FullName,
                 CreateDate = DateTime.Now,
                 DateOfBirth = model.DateOfBirth,
                 IsDeleted = false,
@@ -105,6 +106,39 @@ namespace Capstone.Controllers
                 {
                     result.Add(_mapper.Map<RegistrationVM>(item));
                 }
+                return Ok(result);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
+
+        [HttpGet("GetProfile")]
+        public ActionResult<IEnumerable<RegistrationVM>> GetProfile()
+        {
+            try
+            {
+                RegistrationVM result = new RegistrationVM();
+                var userId = HttpContext.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier).Value;
+                var user = _userManager.FindByIdAsync(userId).Result;
+                result = _mapper.Map<RegistrationVM>(user);
+                return Ok(result);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
+
+        [HttpGet("GetAccountByUserID")]
+        public ActionResult<IEnumerable<RegistrationVM>> GetAccountByUserID(string ID)
+        {
+            try
+            {
+                RegistrationVM result = new RegistrationVM();
+                var user = _userManager.FindByIdAsync(ID).Result;
+                result = _mapper.Map<RegistrationVM>(user);
                 return Ok(result);
             }
             catch (Exception e)

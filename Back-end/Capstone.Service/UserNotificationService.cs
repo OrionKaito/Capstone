@@ -10,6 +10,8 @@ namespace Capstone.Service
     public interface IUserNotificationService
     {
         IEnumerable<UserNotification> GetAll();
+        IEnumerable<UserNotification> GetByUserID(string ID);
+        int GetNumberOfNotification(string ID);
         UserNotification GetByID(Guid ID);
         void Create(UserNotification userNotification);
         void Delete(UserNotification userNotification);
@@ -25,6 +27,11 @@ namespace Capstone.Service
         {
             _unitOfWork = unitOfWork;
             _userNotificationRepository = userNotificationRepository;
+        }
+
+        public int GetNumberOfNotification(string ID)
+        {
+            return _userNotificationRepository.GetMany(u => u.IsDeleted == false && u.IsRead == false && u.UserID.Equals(ID)).Count();
         }
 
         public void Create(UserNotification userNotification)
@@ -52,6 +59,11 @@ namespace Capstone.Service
         public void Save()
         {
             _unitOfWork.Commit();
+        }
+
+        public IEnumerable<UserNotification> GetByUserID(string ID)
+        {
+            return _userNotificationRepository.GetAll().Where(u => u.IsDeleted == false && u.IsRead == false && u.UserID.Equals(ID));
         }
     }
 }

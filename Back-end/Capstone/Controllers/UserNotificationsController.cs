@@ -2,6 +2,7 @@
 using Capstone.Model;
 using Capstone.Service;
 using Capstone.ViewModel;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -14,12 +15,12 @@ namespace Capstone.Controllers
     {
         private readonly IMapper _mapper;
         private readonly IUserNotificationService _userNotificationService;
-public UserNotificationsController(IMapper mapper, IUserNotificationService userNotificationService)
+
+        public UserNotificationsController(IMapper mapper, IUserNotificationService userNotificationService)
         {
             _mapper = mapper;
             _userNotificationService = userNotificationService;
         }
-
 
         // POST: api/UserNotifications
         [HttpPost]

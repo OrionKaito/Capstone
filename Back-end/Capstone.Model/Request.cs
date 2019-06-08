@@ -12,5 +12,9 @@ namespace Capstone.Model
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public Guid ID { get; set; }
         public DateTime timeStamp { get; set; }
+
+        public string UserID { get; set; }
+        [ForeignKey("UserID")]
+        public User User { get; set; }
     }
 }
