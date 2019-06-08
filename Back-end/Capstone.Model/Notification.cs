@@ -10,12 +10,10 @@ namespace Capstone.Model
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public Guid ID { get; set; }
 
-        public Guid WorkFlowID { get; set; }
-        [ForeignKey("WorkFlowID")]
-        public WorkFlow WorkFlow { get; set; }
+        public Guid EventID { get; set; }
 
-        public string Data { get; set; }
         public DateTime DateTime { get; set; }
+        public NotificationType NotificationType { get; set; }
         public bool IsDeleted { get; set; }
     }
 }

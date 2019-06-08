@@ -26,8 +26,8 @@ namespace Capstone.Controllers
         {
             var currentUSer = HttpContext.User;
             var permissions = currentUSer.Claims.FirstOrDefault(c => c.Type == Helper.WebConstant.Permissions).Value;
-            var user = currentUSer.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier).Value;
-            return new string[] { permissions, user };
+            var userId = currentUSer.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier).Value;
+            return new string[] { permissions, userId };
         }
 
         // GET api/values/5

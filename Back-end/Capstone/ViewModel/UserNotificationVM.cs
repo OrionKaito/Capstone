@@ -17,7 +17,6 @@ namespace Capstone.ViewModel
     {
         public Guid NotificationID { get; set; }
         public string UserID { get; set; }
-        public bool IsRead { get; set; }
     }
 
     public class UserNotificationUM
@@ -25,6 +24,5 @@ namespace Capstone.ViewModel
         public Guid ID { get; set; }
         public Guid NotificationID { get; set; }
         public string UserID { get; set; }
-        public bool IsRead { get; set; }
     }
 }
