@@ -21,8 +21,6 @@
         android:minHeight="?actionBarSize"
         app:tabBackground="@color/white"
         app:tabGravity="fill"
-        app:tabIndicatorColor="@color/blue"
-        app:tabIndicatorHeight="4dp"
         app:tabMode="fixed"
         android:layout_weight="1"></android.support.design.widget.TabLayout>
 </LinearLayout>

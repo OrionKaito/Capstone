@@ -19,4 +19,10 @@ public interface DynamicWorkflowServices {
 
     @GET(ConfigApi.Api.GET_WORKFLOWS)
     Call<ResponseBody> getWorkflows();
+
+    @GET(ConfigApi.Api.GET_NUMBER_NOTIFICATION)
+    Call<ResponseBody> getNumberNotification();
+
+    @GET(ConfigApi.Api.GET_NOTIFCATION)
+    Call<ResponseBody> getNotification();
 }

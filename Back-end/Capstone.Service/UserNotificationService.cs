@@ -11,6 +11,7 @@ namespace Capstone.Service
     {
         IEnumerable<UserNotification> GetAll();
         IEnumerable<UserNotification> GetByUserID(string ID);
+        IEnumerable<UserNotification> GetUnreadNotification(string ID);
         int GetNumberOfNotification(string ID);
         UserNotification GetByID(Guid ID);
         void Create(UserNotification userNotification);
@@ -62,6 +63,11 @@ namespace Capstone.Service
         }
 
         public IEnumerable<UserNotification> GetByUserID(string ID)
+        {
+            return _userNotificationRepository.GetAll().Where(u => u.IsDeleted == false && u.UserID.Equals(ID));
+        }
+
+        public IEnumerable<UserNotification> GetUnreadNotification(string ID)
         {
             return _userNotificationRepository.GetAll().Where(u => u.IsDeleted == false && u.IsRead == false && u.UserID.Equals(ID));
         }

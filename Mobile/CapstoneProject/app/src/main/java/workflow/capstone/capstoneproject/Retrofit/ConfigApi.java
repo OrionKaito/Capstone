@@ -7,5 +7,7 @@ public class ConfigApi {
         String LOGIN = "Token/User";
         String GET_PROFILE = "Accounts/GetProfile";
         String GET_WORKFLOWS = "Workflows";
+        String GET_NUMBER_NOTIFICATION = "Notifications/GetNumberOfNotification";
+        String GET_NOTIFCATION = "Notifications/GetByUserID";
     }
 }

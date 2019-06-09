@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Security.Claims;
 
 namespace Capstone.Controllers
 {
@@ -92,14 +94,15 @@ namespace Capstone.Controllers
 
         // GET: api/UserNotifications
         [HttpGet("GetNumberOfNotification")]
-        public ActionResult<int> GetNumberOfNotification(string ID)
+        public ActionResult<int> GetNumberOfNotification()
         {
             try
             {
-                var userInDB = _userManager.FindByIdAsync(ID).Result;
+                var userId = HttpContext.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier).Value;
+                var userInDB = _userManager.FindByIdAsync(userId).Result;
                 if (userInDB == null) return BadRequest("ID not found!");
 
-                int result = _userNotificationService.GetNumberOfNotification(ID);
+                int result = _userNotificationService.GetNumberOfNotification(userId);
                 return Ok(result);
             }
             catch (Exception e)
@@ -109,12 +112,13 @@ namespace Capstone.Controllers
         }
 
         [HttpGet("GetByUserID")]
-        public ActionResult GetByUserId(string ID)
+        public ActionResult GetByUserId()
         {
-            var userInDB = _userManager.FindByIdAsync(ID).Result;
+            var userId = HttpContext.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier).Value;
+            var userInDB = _userManager.FindByIdAsync(userId).Result;
             if (userInDB == null) return BadRequest("ID not found!");
 
-            var notification = _userNotificationService.GetByUserID(ID);
+            var notification = _userNotificationService.GetByUserID(userId);
 
             if (notification == null)
             {
@@ -122,7 +126,7 @@ namespace Capstone.Controllers
             }
 
             var data = new List<NotificationViewModel>();
-            var listUserInRequest = _requestService.GetByUserID(ID);
+            var listUserInRequest = _requestService.GetByUserID(userId);
 
             foreach (var item in notification)
             {
@@ -131,7 +135,7 @@ namespace Capstone.Controllers
                 {
                     var result = new NotificationViewModel
                     {
-                        Fullname = _userManager.FindByIdAsync(ID).Result.FullName,
+                        Fullname = userInDB.FullName,
                         EventID = notificationInDb.EventID,
                         Message = "have update workflow",
                         NotificationType = notificationInDb.NotificationType
@@ -144,7 +148,7 @@ namespace Capstone.Controllers
                     {
                         var result = new NotificationViewModel
                         {
-                            Fullname = _userManager.FindByIdAsync(ID).Result.FullName,
+                            Fullname = userInDB.FullName,
                             EventID = notificationInDb.EventID,
                             Message = "Your request are accepted",
                             NotificationType = notificationInDb.NotificationType,
@@ -159,7 +163,7 @@ namespace Capstone.Controllers
                     {
                         var result = new NotificationViewModel
                         {
-                            Fullname = _userManager.FindByIdAsync(ID).Result.FullName,
+                            Fullname = userInDB.FullName,
                             EventID = notificationInDb.EventID,
                             Message = "You received request",
                             NotificationType = notificationInDb.NotificationType,
@@ -174,7 +178,7 @@ namespace Capstone.Controllers
                     {
                         var result = new NotificationViewModel
                         {
-                            Fullname = _userManager.FindByIdAsync(ID).Result.FullName,
+                            Fullname = userInDB.FullName,
                             EventID = notificationInDb.EventID,
                             Message = "Your request are denied",
                             NotificationType = notificationInDb.NotificationType,
@@ -189,7 +193,7 @@ namespace Capstone.Controllers
                 }
             }
 
-            var notficications = _userNotificationService.GetByUserID(ID);
+            var notficications = _userNotificationService.GetUnreadNotification(userId);
 
             foreach (var item in notficications)
             {
