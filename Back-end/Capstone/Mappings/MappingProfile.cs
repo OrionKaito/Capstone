@@ -14,11 +14,14 @@ namespace Capstone.Mappings
             CreateMap<User, RegistrationUM>();
             CreateMap<RegistrationUM, User>();
 
-            CreateMap<WorkFlow, WorkflowVM>();
-            CreateMap<WorkflowVM, WorkFlow>();
+            CreateMap<WorkFlowTemplate, WorkFlowTemplateVM>();
+            CreateMap<WorkFlowTemplateVM, WorkFlowTemplate>();
 
-            CreateMap<WorkFlow, WorkflowCM>();
-            CreateMap<WorkflowCM, WorkFlow>();
+            CreateMap<WorkFlowTemplate, WorkFlowTemplateCM>();
+            CreateMap<WorkFlowTemplateCM, WorkFlowTemplate>();
+
+            CreateMap<WorkFlowTemplate, WorkFlowTemplateUM>();
+            CreateMap<WorkFlowTemplateUM, WorkFlowTemplate>();
 
             //ActionType
             CreateMap<ActionType, ActionTypeVM>();

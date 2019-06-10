@@ -4,18 +4,18 @@ using System.Linq;
 
 namespace Capstone.Data.Repositories
 {
-    public interface IWorkFlowRepository : IRepository<WorkFlow>
+    public interface IWorkFlowRepository : IRepository<WorkFlowTemplate>
     {
-        WorkFlow GetByName(string name);
+        WorkFlowTemplate GetByName(string name);
     }
 
-    public class WorkFlowRepository : RepositoryBase<WorkFlow>, IWorkFlowRepository
+    public class WorkFlowRepository : RepositoryBase<WorkFlowTemplate>, IWorkFlowRepository
     {
         public WorkFlowRepository(IDbFactory dbFactory) : base(dbFactory) { }
 
-        public WorkFlow GetByName(string name)
+        public WorkFlowTemplate GetByName(string name)
         {
-            return DbContext.WorkFlows.Where(w => w.Name.Equals(name)).FirstOrDefault();
+            return DbContext.WorkFlowTemplate.Where(w => w.Name.Equals(name)).FirstOrDefault();
         }
     }
 }

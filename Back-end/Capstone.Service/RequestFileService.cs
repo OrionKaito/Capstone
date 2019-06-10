@@ -39,7 +39,7 @@ namespace Capstone.Service
 
         public IEnumerable<RequestFile> GetAll()
         {
-            return _requestFileRepository.GetAll().Where(a => a.isEnable == true);
+            return _requestFileRepository.GetAll().Where(a => a.IsDeleted == false);
         }
 
         public RequestFile GetByID(Guid ID)

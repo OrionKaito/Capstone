@@ -5,8 +5,6 @@ using Capstone.ViewModel;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace Capstone.Controllers
 {
@@ -107,7 +105,7 @@ namespace Capstone.Controllers
             {
                 var requestFileInDb = _requestFileService.GetByID(ID);
                 if (requestFileInDb == null) return BadRequest("ID not found!");
-                requestFileInDb.isEnable = false;
+                requestFileInDb.IsDeleted = true;
                 _requestFileService.Save();
                 return Ok("success");
             }

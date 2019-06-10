@@ -13,7 +13,7 @@ namespace Capstone.Data
         {
         }
 
-        public DbSet<WorkFlow> WorkFlows { get; set; }
+        public DbSet<WorkFlowTemplate> WorkFlowTemplate { get; set; }
         public DbSet<ActionType> ActionTypes { get; set; }
         public DbSet<Group> Groups { get; set; }
         public DbSet<UserGroup> UserGroups { get; set; }
