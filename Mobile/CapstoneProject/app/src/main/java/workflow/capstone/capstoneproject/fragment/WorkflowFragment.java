@@ -2,13 +2,21 @@ package workflow.capstone.capstoneproject.fragment;
 
 
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.ListFragment;
+import android.support.v4.widget.SwipeRefreshLayout;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import workflow.capstone.capstoneproject.R;
@@ -26,6 +34,8 @@ public class WorkflowFragment extends Fragment {
     private WorkflowAdapter workflowAdapter;
     private List<Workflow> workflowList;
     private ListView listView;
+    private SwipeRefreshLayout swipeRefreshLayout;
+    private EditText mEdtSearch;
 
     public WorkflowFragment() {
         // Required empty public constructor
@@ -37,7 +47,14 @@ public class WorkflowFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_workflow, container, false);
+        //load workflow when start app
         loadWorkflows(view);
+
+        //swipe to refresh list workflow
+        swipeRefresh(view);
+
+        //search view
+        initSearchView(view);
         return view;
     }
 
@@ -51,6 +68,7 @@ public class WorkflowFragment extends Fragment {
                 workflowList = workflows;
                 workflowAdapter = new WorkflowAdapter(workflowList, getContext());
                 listView.setAdapter(workflowAdapter);
+                listView.setBackgroundColor(getResources().getColor(R.color.white));
             }
 
             @Override
@@ -58,6 +76,61 @@ public class WorkflowFragment extends Fragment {
 
             }
         });
+    }
+
+    private void swipeRefresh(final View view) {
+        swipeRefreshLayout = view.findViewById(R.id.swipeContainer);
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                new Handler().postDelayed(new Runnable() {
+                    @Override public void run() {
+                        swipeRefreshLayout.setRefreshing(false);
+                        loadWorkflows(view);
+                    }
+                }, 1500);
+            }
+        });
+    }
+
+    private void initSearchView(View view) {
+        mEdtSearch = view.findViewById(R.id.edit_text_search);
+        addTextWatcher(view);
+    }
+
+    private void addTextWatcher(final View view) {
+        mEdtSearch.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                String searchText = mEdtSearch.getText().toString().trim().toLowerCase();
+
+                if (!searchText.isEmpty()) {
+                    List<Workflow> listWorkflow = new ArrayList<>();
+                    for (Workflow workflow : workflowList) {
+                        if (workflow.getName().toLowerCase().contains(searchText)) {
+                            listWorkflow.add(workflow);
+                        }
+                    }
+                    searchWorkflow(listWorkflow);
+                } else {
+                    loadWorkflows(view);
+                }
+            }
+        });
+    }
+
+    private void searchWorkflow(List<Workflow> listWorkflow) {
+        workflowAdapter = new WorkflowAdapter(listWorkflow, getContext());
+        listView.setAdapter(workflowAdapter);
     }
 
 }

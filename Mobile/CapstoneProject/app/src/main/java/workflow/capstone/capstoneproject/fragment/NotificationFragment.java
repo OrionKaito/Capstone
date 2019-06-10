@@ -13,7 +13,6 @@ import java.util.List;
 import workflow.capstone.capstoneproject.R;
 import workflow.capstone.capstoneproject.adapter.NotificationAdapter;
 import workflow.capstone.capstoneproject.entities.Notification;
-import workflow.capstone.capstoneproject.entities.Workflow;
 import workflow.capstone.capstoneproject.repository.CapstoneRepository;
 import workflow.capstone.capstoneproject.repository.CapstoneRepositoryImpl;
 import workflow.capstone.capstoneproject.utils.CallBackData;
@@ -26,6 +25,7 @@ public class NotificationFragment extends Fragment {
     private NotificationAdapter notificationAdapter;
     private List<Notification> notificationList;
     private ListView listView;
+    private boolean areLoadNotification = false;
 
     public NotificationFragment() {
         // Required empty public constructor
@@ -35,18 +35,27 @@ public class NotificationFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_workflow, container, false);
-        loadNotifications(view);
+        View view = inflater.inflate(R.layout.fragment_notification, container, false);
+//        loadNotifications(view);
         return view;
     }
 
-    private void loadNotifications(final View view) {
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        if (isVisibleToUser && !areLoadNotification) {
+            loadNotifications();
+            areLoadNotification = true;
+        }
+    }
+
+    private void loadNotifications() {
         String token = DynamicWorkflowSharedPreferences.getStoreJWT(getContext(), ConstantDataManager.AUTHORIZATION_TOKEN);
         capstoneRepository = new CapstoneRepositoryImpl();
         capstoneRepository.getNotification(token, new CallBackData<List<Notification>>() {
             @Override
             public void onSuccess(List<Notification> notifications) {
-                listView = view.findViewById(R.id.list);
+                listView = getView().findViewById(R.id.list);
                 notificationList = notifications;
                 notificationAdapter = new NotificationAdapter(notificationList, getContext());
                 listView.setAdapter(notificationAdapter);
