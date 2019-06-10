@@ -26,32 +26,32 @@ namespace Capstone.Service
         public void checkAndChange()
         {
 
-            IEnumerable<RequestValue> allRequestValue = _requestValueRepository.GetAll();
+            //IEnumerable<RequestValue> allRequestValue = _requestValueRepository.GetAll();
 
-            DateTime timeNow = DateTime.Now;
-            DateTime timeNow5min = timeNow.AddMinutes(-5);
-            foreach (RequestValue i in allRequestValue)
-            {
+            //DateTime timeNow = DateTime.Now;
+            //DateTime timeNow5min = timeNow.AddMinutes(-5);
+            //foreach (RequestValue i in allRequestValue)
+            //{
                 
-                RequestValue rv = new RequestValue();
-                rv.data = "chien dep trai vkl ha ha ha bonus them nhieu thu nua";
-                rv.ID = new Guid();
-                rv.timeStamp = DateTime.Now;
+            //    RequestValue rv = new RequestValue();
+            //    rv.data = "chien dep trai vkl ha ha ha bonus them nhieu thu nua";
+            //    rv.ID = new Guid();
+            //    rv.timeStamp = DateTime.Now;
 
                 
                 
-                if ((DateTime.Compare(timeNow, i.timeStamp) >0)&& (DateTime.Compare(timeNow5min, i.timeStamp) < 0)) {
+            //    if ((DateTime.Compare(timeNow, i.timeStamp) >0)&& (DateTime.Compare(timeNow5min, i.timeStamp) < 0)) {
 
-                    _requestValueRepository.Add(rv);
+            //        _requestValueRepository.Add(rv);
 
 
-                } else {
-                    rv.data = "chien galang ahihi <3";
-                    _requestValueRepository.Add(rv);
-                }
+            //    } else {
+            //        rv.data = "chien galang ahihi <3";
+            //        _requestValueRepository.Add(rv);
+            //    }
 
-            }
-            Save();
+            //}
+            //Save();
         }
         public void Save()
         {

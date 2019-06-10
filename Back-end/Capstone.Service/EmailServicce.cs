@@ -1,18 +1,19 @@
 ﻿using System.Net;
 using System.Net.Mail;
+using System.Threading.Tasks;
 
 namespace Capstone.Service
 {
     public interface IEmailService
     {
-        void SendMail(string to, string subject, string message);
+        Task SendMail(string to, string subject, string message);
     }
 
     public class EmailServicce : IEmailService
     {
         public EmailServicce() { }
 
-        public void SendMail(string to, string subject, string message)
+        public async Task SendMail(string to, string subject, string message)
         {
             SmtpClient smtp = new SmtpClient();
             smtp.Host = "smtp.gmail.com";

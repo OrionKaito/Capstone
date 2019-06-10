@@ -22,13 +22,16 @@ namespace Capstone.Controllers
         private readonly UserManager<User> _userManager;
         private readonly IEmailService _emailService;
         private readonly IUserService _userService;
+        private readonly IUserRoleService _userRoleService;
         private readonly IMapper _mapper;
 
-        public AccountsController(UserManager<User> userManager, IEmailService emailService, IUserService userService, IMapper mapper)
+        public AccountsController(UserManager<User> userManager, IEmailService emailService,
+            IUserService userService, IUserRoleService userRoleService, IMapper mapper)
         {
             _userManager = userManager;
             _emailService = emailService;
             _userService = userService;
+            _userRoleService = userRoleService;
             _mapper = mapper;
         }
 
@@ -56,13 +59,17 @@ namespace Capstone.Controllers
 
             var result = await _userManager.CreateAsync(user, model.Password);
 
-            _emailService.SendMail(user.Email, "Activation Code to Verify Email Address", "Thank you for creating an account with Gigshub"
+            if (!result.Succeeded) return new BadRequestObjectResult(result.Errors);
+
+            await _emailService.SendMail(user.Email, "Activation Code to Verify Email Address", "Thank you for creating an account with Gigshub"
                 + "\n\nAccount name : "
                 + user.UserName
                 + "\n\nYour account will work but you must verify it by enter this code in our app"
                 + "\n\nYour Activation Code is : "
                 + user.EmailConfirmCode
                 + "\n\nThanks & Regards\nDynamicWorkFlow Team");
+
+            //_userRoleService.Create()
 
             return new OkObjectResult("Account created, please check your email!");
         }
@@ -169,7 +176,7 @@ namespace Capstone.Controllers
         }
 
         [HttpPut]
-        public async Task<ActionResult> PutAccount([FromBody]RegistrationUM model)
+        public async Task<ActionResult> Put([FromBody]RegistrationUM model)
         {
             if (!ModelState.IsValid) return BadRequest(ModelState);
 
@@ -181,8 +188,12 @@ namespace Capstone.Controllers
                 var userInDB = _userManager.FindByIdAsync(userID).Result;
                 if (userInDB == null) return BadRequest("ID not found!");
 
-                userInDB = _mapper.Map<User>(model);
+                userInDB.FullName = model.FullName;
+                userInDB.DateOfBirth = model.DateOfBirth;
                 var result = await _userManager.UpdateAsync(userInDB);
+
+                if (!result.Succeeded) return new BadRequestObjectResult(result.Errors);
+
                 return Ok("success");
             }
             catch (Exception e)
@@ -209,6 +220,9 @@ namespace Capstone.Controllers
                 }
 
                 var result = await _userManager.UpdateAsync(userInDB);
+
+                if (!result.Succeeded) return new BadRequestObjectResult(result.Errors);
+
                 return Ok("success");
             }
             catch (Exception e)

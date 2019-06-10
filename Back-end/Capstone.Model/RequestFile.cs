@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Text;
 
 namespace Capstone.Model
 {
@@ -11,9 +9,14 @@ namespace Capstone.Model
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public Guid ID { get; set; }
-        public String name { get; set; }
-        public String path { get; set; }
-        public DateTime timeStamp { get; set; }
-        public bool isEnable { get; set; }
+        public string Name { get; set; }
+        public string Path { get; set; }
+        public DateTime CreateDate { get; set; }
+
+        public Guid RequestActionID { get; set; }
+        [ForeignKey("RequestActionID")]
+        public RequestAction RequestAction { get; set; }
+
+        public bool IsDeleted { get; set; }
     }
 }
