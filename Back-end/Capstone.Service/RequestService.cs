@@ -14,7 +14,6 @@ namespace Capstone.Service
         IEnumerable<Request> GetByUserID(string ID);
         Request GetByID(Guid ID);
         void Create(Request request);
-        void Delete(Request request);
         void Save();
     }
     public class RequestService : IRequestService
@@ -31,16 +30,12 @@ namespace Capstone.Service
         public void Create(Request request)
         {
             _requestRepository.Add(request);
-        }
-
-        public void Delete(Request request)
-        {
-            _requestRepository.Delete(request);
+            _unitOfWork.Commit();
         }
 
         public IEnumerable<Request> GetAll()
         {
-            return _requestRepository.GetAll();
+            return _requestRepository.GetMany(r => r.IsDeleted == false);
         }
 
         public Request GetByID(Guid ID)
@@ -50,7 +45,7 @@ namespace Capstone.Service
 
         public IEnumerable<Request> GetByUserID(string ID)
         {
-            return _requestRepository.GetMany(r => r.UserID.Equals(ID));
+            return _requestRepository.GetMany(r => r.InitiatorID.Equals(ID));
         }
 
         public void Save()

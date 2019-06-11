@@ -13,12 +13,12 @@ namespace Capstone.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class WorkflowsController : ControllerBase
+    public class WorkflowsTemmplateController : ControllerBase
     {
         private readonly IMapper _mapper;
-        private readonly IWorkFlowService _workFlowService;
+        private readonly IWorkFlowTemplateService _workFlowService;
 
-        public WorkflowsController(IMapper mapper, IWorkFlowService workFlowService)
+        public WorkflowsTemmplateController(IMapper mapper, IWorkFlowTemplateService workFlowService)
         {
             _mapper = mapper;
             _workFlowService = workFlowService;
@@ -26,7 +26,7 @@ namespace Capstone.Controllers
 
         // GET: api/Workflows
         [HttpGet]
-        public ActionResult<IEnumerable<WorkFlowTemplate>> GetWorkflows()
+        public ActionResult<IEnumerable<WorkFlowTemplateVM>> GetWorkflowsTemplate()
         {
             try
             {
@@ -47,7 +47,7 @@ namespace Capstone.Controllers
 
         // GET: api/Workflows/5
         [HttpGet("{id}")]
-        public ActionResult<WorkFlowTemplate> GetWorkflow(Guid ID)
+        public ActionResult<WorkFlowTemplateVM> GetWorkflowTemplate(Guid ID)
         {
             try
             {
@@ -64,7 +64,7 @@ namespace Capstone.Controllers
 
         // PUT: api/Workflows/5
         [HttpPut("{id}")]
-        public ActionResult PutWorkflow(WorkFlowTemplateUM model)
+        public ActionResult PutWorkflowTemplate(WorkFlowTemplateUM model)
         {
             if (!ModelState.IsValid) return BadRequest(ModelState);
 
@@ -88,7 +88,7 @@ namespace Capstone.Controllers
 
         // POST: api/Workflows
         [HttpPost]
-        public ActionResult<WorkFlowTemplate> PostWorkflow(WorkFlowTemplateCM model)
+        public ActionResult<WorkFlowTemplate> PostWorkflowTemplate(WorkFlowTemplateCM model)
         {
             if (!ModelState.IsValid) return BadRequest(ModelState);
 
@@ -113,7 +113,7 @@ namespace Capstone.Controllers
 
         // DELETE: api/Workflows/5
         [HttpDelete("{id}")]
-        public ActionResult DeleteWorkflow(Guid ID)
+        public ActionResult DeleteWorkflowTemplate(Guid ID)
         {
             try
             {

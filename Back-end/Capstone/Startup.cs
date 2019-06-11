@@ -21,6 +21,9 @@ using Hangfire;
 using Hangfire.SqlServer;
 using System;
 using Hangfire.Storage;
+using Microsoft.Extensions.FileProviders;
+using System.IO;
+using Microsoft.AspNetCore.Http;
 
 namespace Capstone
 {
@@ -61,8 +64,8 @@ namespace Capstone
             services.AddTransient<IUnitOfWork, UnitOfWork>();
 
             //WorkFlow
-            services.AddTransient<IWorkFlowRepository, WorkFlowRepository>();
-            services.AddTransient<IWorkFlowService, WorkFlowService>();
+            services.AddTransient<IWorkFlowTemplateRepository, WorkFlowTemplateRepository>();
+            services.AddTransient<IWorkFlowTemplateService, WorkFlowTemplateService>();
 
             //ActionType
             services.AddTransient<IActionTypeRepository, ActionTypeRepository>();
@@ -223,6 +226,13 @@ namespace Capstone
             }
 
             backgroundJobs.Schedule<IHangfireService>(u => u.checkAndChange(), TimeSpan.FromMinutes(1));
+
+            app.UseStaticFiles();
+            app.UseStaticFiles(new StaticFileOptions()
+            {
+                FileProvider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), @"Resources")),
+                RequestPath = new PathString("/Resources")
+            });
 
             app.UseHttpsRedirection();
             app.UseMvc();

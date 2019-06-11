@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Capstone.Helper;
 using Capstone.Model;
 using Capstone.Service;
 using Capstone.ViewModel;
@@ -31,9 +32,10 @@ namespace Capstone.Controllers
             {
                 RequestAction requestAction = new RequestAction();
                 requestAction = _mapper.Map<RequestAction>(model);
+                requestAction.CreateDate = DateTime.Now;
+
                 _requestActionService.Create(requestAction);
-                _requestActionService.Save();
-                return StatusCode(201, "RequestAction Type Created!");
+                return StatusCode(201, requestAction.ID);
             }
             catch (Exception e)
             {
@@ -97,6 +99,23 @@ namespace Capstone.Controllers
             }
         }
 
+        // DELETE: api/RequestActions/5
+        [HttpDelete("{id}")]
+        public ActionResult DeleteRequestActions(Guid ID)
+        {
+            try
+            {
+                var requestActionInDb = _requestActionService.GetByID(ID);
+                if (requestActionInDb == null) return BadRequest(WebConstant.NotFound);
 
+                requestActionInDb.IsDeleted = true;
+                _requestActionService.Save();
+                return Ok(WebConstant.Success);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
     }
 }
