@@ -9,20 +9,19 @@ namespace Capstone.ViewModel
     public class RequestValueVM
     {
         public Guid ID { get; set; }
-        public String data { get; set; }
-        public DateTime timeStamp { get; set; }
+        public string Data { get; set; }
+        public Guid RequestActionID { get; set; }
     }
 
     public class RequestValueCM
     {
-        public String data { get; set; }
-        public DateTime timeStamp { get; set; }
+        public string Data { get; set; }
     }
 
     public class RequestValueUM
     {
         public Guid ID { get; set; }
-        public String data { get; set; }
-        public DateTime timeStamp { get; set; }
+        public string Data { get; set; }
+        public Guid RequestActionID { get; set; }
     }
 }

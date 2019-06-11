@@ -4,18 +4,20 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Capstone.Model
 {
-    public class WorkFlow
+    public class WorkFlowTemplate
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public Guid WorkFlowID { get; set; }
+        public Guid ID { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
+        public string Actor { get; set; }
 
         public string OwnerID { get; set; }
         [ForeignKey("UserID")]
         public virtual User Owner { get; set; }
 
+        public bool IsEnabled { get; set; }
         public bool IsDeleted { get; set; }
     }
 }

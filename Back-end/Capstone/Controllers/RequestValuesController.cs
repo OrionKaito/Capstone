@@ -1,12 +1,11 @@
 ﻿using AutoMapper;
+using Capstone.Helper;
 using Capstone.Model;
 using Capstone.Service;
 using Capstone.ViewModel;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace Capstone.Controllers
 {
@@ -35,7 +34,7 @@ namespace Capstone.Controllers
                 requestValue = _mapper.Map<RequestValue>(model);
                 _requestValueService.Create(requestValue);
                 _requestValueService.Save();
-                return StatusCode(201, "RequestValue Type Created!");
+                return StatusCode(201, requestValue.ID);
             }
             catch (Exception e)
             {
@@ -70,7 +69,7 @@ namespace Capstone.Controllers
             try
             {
                 var rs = _requestValueService.GetByID(ID);
-                if (rs == null) return BadRequest("ID not found!");
+                if (rs == null) return BadRequest(WebConstant.NotFound);
                 RequestValueVM result = _mapper.Map<RequestValueVM>(rs);
                 return Ok(result);
             }
@@ -88,10 +87,10 @@ namespace Capstone.Controllers
             try
             {
                 var requestValueInDb = _requestValueService.GetByID(model.ID);
-                if (requestValueInDb == null) return BadRequest("ID not found!");
+                if (requestValueInDb == null) return BadRequest(WebConstant.NotFound);
                 _mapper.Map(model, requestValueInDb);
                 _requestValueService.Save();
-                return Ok("success");
+                return Ok(WebConstant.Success);
             }
             catch (Exception e)
             {

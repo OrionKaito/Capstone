@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Text;
 
 namespace Capstone.Model
 {
@@ -11,10 +9,17 @@ namespace Capstone.Model
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public Guid ID { get; set; }
-        public DateTime timeStamp { get; set; }
+        public DateTime CreateDate { get; set; }
+        public string Description { get; set; }
 
-        public string UserID { get; set; }
-        [ForeignKey("UserID")]
+        public string InitiatorID { get; set; }
+        [ForeignKey("InitiatorID")]
         public User User { get; set; }
+
+        public Guid WorkFlowTemplateID { get; set; }
+        [ForeignKey("WorkFlowTemplateID")]
+        public WorkFlowTemplate WorkFlowTemplate { get; set; }
+
+        public bool IsDeleted { get; set; }
     }
 }

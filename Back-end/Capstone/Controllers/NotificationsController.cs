@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using Capstone.Helper;
 using Capstone.Model;
 using Capstone.Service;
 using Capstone.ViewModel;
@@ -17,12 +16,12 @@ namespace Capstone.Controllers
         private readonly IMapper _mapper;
         private readonly INotificationService _notificationService;
         private readonly IUserNotificationService _userNotificationService;
-        private readonly IWorkFlowService _workFlowService;
+        private readonly IWorkFlowTemplateService _workFlowService;
         private readonly IRequestService _requestService;
         private readonly UserManager<User> _userManager;
 
         public NotificationsController(IMapper mapper, INotificationService notificationService, IUserNotificationService userNotificationService,
-            IWorkFlowService workFlowService, IRequestService requestService, UserManager<User> userManager)
+            IWorkFlowTemplateService workFlowService, IRequestService requestService, UserManager<User> userManager)
         {
             _mapper = mapper;
             _notificationService = notificationService;
@@ -148,7 +147,7 @@ namespace Capstone.Controllers
                             EventID = notificationInDb.EventID,
                             Message = "Your request are accepted",
                             NotificationType = notificationInDb.NotificationType,
-                            ApproverName = _userManager.FindByIdAsync(userInRequest.UserID).Result.FullName
+                            ApproverName = _userManager.FindByIdAsync(userInRequest.InitiatorID).Result.FullName
                         };
                         data.Add(result);
                     }
@@ -163,7 +162,7 @@ namespace Capstone.Controllers
                             EventID = notificationInDb.EventID,
                             Message = "You received request",
                             NotificationType = notificationInDb.NotificationType,
-                            ApproverName = _userManager.FindByIdAsync(userInRequest.UserID).Result.FullName
+                            ApproverName = _userManager.FindByIdAsync(userInRequest.InitiatorID).Result.FullName
                         };
                         data.Add(result);
                     }
@@ -178,7 +177,7 @@ namespace Capstone.Controllers
                             EventID = notificationInDb.EventID,
                             Message = "Your request are denied",
                             NotificationType = notificationInDb.NotificationType,
-                            ApproverName = _userManager.FindByIdAsync(userInRequest.UserID).Result.FullName
+                            ApproverName = _userManager.FindByIdAsync(userInRequest.InitiatorID).Result.FullName
                         };
                         data.Add(result);
                     }

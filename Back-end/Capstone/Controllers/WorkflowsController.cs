@@ -13,12 +13,12 @@ namespace Capstone.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class WorkflowsController : ControllerBase
+    public class WorkflowsTemmplateController : ControllerBase
     {
         private readonly IMapper _mapper;
-        private readonly IWorkFlowService _workFlowService;
+        private readonly IWorkFlowTemplateService _workFlowService;
 
-        public WorkflowsController(IMapper mapper, IWorkFlowService workFlowService)
+        public WorkflowsTemmplateController(IMapper mapper, IWorkFlowTemplateService workFlowService)
         {
             _mapper = mapper;
             _workFlowService = workFlowService;
@@ -26,16 +26,16 @@ namespace Capstone.Controllers
 
         // GET: api/Workflows
         [HttpGet]
-        public ActionResult<IEnumerable<WorkFlow>> GetWorkflows()
+        public ActionResult<IEnumerable<WorkFlowTemplateVM>> GetWorkflowsTemplate()
         {
             try
             {
-                List<WorkflowVM> result = new List<WorkflowVM>();
-                var workFlow = new WorkflowVM();
+                List<WorkFlowTemplateVM> result = new List<WorkFlowTemplateVM>();
+                var workFlow = new WorkFlowTemplateVM();
                 var data = _workFlowService.GetAll();
                 foreach (var item in data)
                 {
-                    result.Add(_mapper.Map<WorkflowVM>(item));
+                    result.Add(_mapper.Map<WorkFlowTemplateVM>(item));
                 }
                 return Ok(result);
             }
@@ -47,13 +47,13 @@ namespace Capstone.Controllers
 
         // GET: api/Workflows/5
         [HttpGet("{id}")]
-        public ActionResult<WorkFlow> GetWorkflow(Guid ID)
+        public ActionResult<WorkFlowTemplateVM> GetWorkflowTemplate(Guid ID)
         {
             try
             {
                 var data = _workFlowService.GetByID(ID);
                 if (data == null) return BadRequest(WebConstant.NotFound);
-                WorkflowVM result = _mapper.Map<WorkflowVM>(data);
+                WorkFlowTemplateVM result = _mapper.Map<WorkFlowTemplateVM>(data);
                 return Ok(result);
             }
             catch (Exception e)
@@ -64,19 +64,19 @@ namespace Capstone.Controllers
 
         // PUT: api/Workflows/5
         [HttpPut("{id}")]
-        public ActionResult PutWorkflow(WorkflowUM model)
+        public ActionResult PutWorkflowTemplate(WorkFlowTemplateUM model)
         {
             if (!ModelState.IsValid) return BadRequest(ModelState);
 
             try
             {
-                var workFlowInDb = _workFlowService.GetByID(model.WorkFlowID);
+                var workFlowInDb = _workFlowService.GetByID(model.WorkFlowTemplateID);
                 if (workFlowInDb == null) return BadRequest(WebConstant.NotFound);
 
                 var userID = HttpContext.User.Claims.FirstOrDefault(u => u.Type == ClaimTypes.NameIdentifier).Value;
                 if (workFlowInDb.OwnerID != userID) return BadRequest(WebConstant.AccessDined);
 
-                _mapper.Map<WorkFlow>(model);
+                _mapper.Map<WorkFlowTemplate>(model);
                 _workFlowService.Save();
                 return Ok(WebConstant.Success);
             }
@@ -88,22 +88,22 @@ namespace Capstone.Controllers
 
         // POST: api/Workflows
         [HttpPost]
-        public ActionResult<WorkFlow> PostWorkflow(WorkflowCM model)
+        public ActionResult<WorkFlowTemplate> PostWorkflowTemplate(WorkFlowTemplateCM model)
         {
             if (!ModelState.IsValid) return BadRequest(ModelState);
 
             try
             {
-                WorkFlow workFlow = new WorkFlow();
+                WorkFlowTemplate workFlow = new WorkFlowTemplate();
                 if (_workFlowService.GetByName(model.Name) != null) return BadRequest("Workflow" + WebConstant.NameExisted);
 
                 var userID = HttpContext.User.Claims.FirstOrDefault(u => u.Type == ClaimTypes.NameIdentifier).Value;
 
-                workFlow = _mapper.Map<WorkFlow>(model);
+                workFlow = _mapper.Map<WorkFlowTemplate>(model);
                 workFlow.OwnerID = userID;
                 _workFlowService.Create(workFlow);
 
-                return StatusCode(201, workFlow.WorkFlowID);
+                return StatusCode(201, workFlow.WorkFlowTemplateID);
             }
             catch (Exception e)
             {
@@ -113,7 +113,7 @@ namespace Capstone.Controllers
 
         // DELETE: api/Workflows/5
         [HttpDelete("{id}")]
-        public ActionResult DeleteWorkflow(Guid ID)
+        public ActionResult DeleteWorkflowTemplate(Guid ID)
         {
             try
             {
