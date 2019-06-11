@@ -4,14 +4,14 @@ using System.Linq;
 
 namespace Capstone.Data.Repositories
 {
-    public interface IWorkFlowRepository : IRepository<WorkFlowTemplate>
+    public interface IWorkFlowTemplateRepository : IRepository<WorkFlowTemplate>
     {
         WorkFlowTemplate GetByName(string name);
     }
 
-    public class WorkFlowRepository : RepositoryBase<WorkFlowTemplate>, IWorkFlowRepository
+    public class WorkFlowTemplateRepository : RepositoryBase<WorkFlowTemplate>, IWorkFlowTemplateRepository
     {
-        public WorkFlowRepository(IDbFactory dbFactory) : base(dbFactory) { }
+        public WorkFlowTemplateRepository(IDbFactory dbFactory) : base(dbFactory) { }
 
         public WorkFlowTemplate GetByName(string name)
         {

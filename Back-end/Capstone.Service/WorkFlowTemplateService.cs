@@ -7,7 +7,7 @@ using System.Linq;
 
 namespace Capstone.Service
 {
-    public interface IWorkFlowService
+    public interface IWorkFlowTemplateService
     {
         IEnumerable<WorkFlowTemplate> GetAll();
         WorkFlowTemplate GetByID(Guid ID);
@@ -18,42 +18,42 @@ namespace Capstone.Service
         void Save();
     }
 
-    public class WorkFlowService : IWorkFlowService
+    public class WorkFlowTemplateService : IWorkFlowTemplateService
     {
-        private readonly IWorkFlowRepository _workFlowRepository;
+        private readonly IWorkFlowTemplateRepository _workFlowTemplateRepository;
         private readonly IUnitOfWork _unitOfWork;
 
-        public WorkFlowService(IWorkFlowRepository workFlowRepository, IUnitOfWork unitOfWork)
+        public WorkFlowTemplateService(IWorkFlowTemplateRepository workFlowRepository, IUnitOfWork unitOfWork)
         {
-            _workFlowRepository = workFlowRepository;
+            _workFlowTemplateRepository = workFlowRepository;
             _unitOfWork = unitOfWork;
         }
 
         public void Create(WorkFlowTemplate workflow)
         {
-            _workFlowRepository.Add(workflow);
+            _workFlowTemplateRepository.Add(workflow);
             _unitOfWork.Commit();
         }
 
         public void Delete(WorkFlowTemplate workflow)
         {
-            _workFlowRepository.Delete(workflow);
+            _workFlowTemplateRepository.Delete(workflow);
             _unitOfWork.Commit();
         }
 
         public IEnumerable<WorkFlowTemplate> GetAll()
         {
-            return _workFlowRepository.GetAll().Where(w => w.IsDeleted == false && w.IsEnabled == true);
+            return _workFlowTemplateRepository.GetAll().Where(w => w.IsDeleted == false && w.IsEnabled == true);
         }
 
         public WorkFlowTemplate GetByID(Guid ID)
         {
-            return _workFlowRepository.GetById(ID);
+            return _workFlowTemplateRepository.GetById(ID);
         }
 
         public WorkFlowTemplate GetByName(string name)
         {
-            return _workFlowRepository.GetByName(name);
+            return _workFlowTemplateRepository.GetByName(name);
         }
 
         public void Save()
@@ -63,7 +63,7 @@ namespace Capstone.Service
 
         public void Update(WorkFlowTemplate workflow)
         {
-            _workFlowRepository.Update(workflow);
+            _workFlowTemplateRepository.Update(workflow);
             _unitOfWork.Commit();
         }
     }

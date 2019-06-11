@@ -1,10 +1,13 @@
 ﻿using AutoMapper;
+using Capstone.Helper;
 using Capstone.Model;
 using Capstone.Service;
 using Capstone.ViewModel;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Net.Http.Headers;
 
 namespace Capstone.Controllers
 {
@@ -23,17 +26,45 @@ namespace Capstone.Controllers
         }
 
         // POST: api/RequestFiles
-        [HttpPost]
-        public ActionResult<RequestFile> PostRequestFile(RequestFileCM model)
+        [HttpPost, DisableRequestSizeLimit]
+        public ActionResult<RequestFile> PostRequestFile(Guid requestActionID)
         {
-            if (!ModelState.IsValid) return BadRequest(ModelState);
             try
             {
-                RequestFile requestFile = new RequestFile();
-                requestFile = _mapper.Map<RequestFile>(model);
-                _requestFileService.Create(requestFile);
-                _requestFileService.Save();
-                return StatusCode(201, "RequestFile Type Created!");
+                var file = Request.Form.Files[0];
+                var folderName ="Resources";
+                var pathToSave = Path.Combine(Directory.GetCurrentDirectory(), folderName); // đường dẫn tuyệt đối tới folder
+
+                if (!Directory.Exists(pathToSave)) // kiểm tra folder có tồn tại
+                {
+                    Directory.CreateDirectory(pathToSave); 
+                }
+                
+                if (file.Length > 0)
+                {
+                    var fileName = ContentDispositionHeaderValue.Parse(file.ContentDisposition).FileName.Trim('"');
+                    var fullPath = Path.Combine(pathToSave, fileName); // đường dẫn tuyệt đối file
+                    var dbPath = Path.Combine(folderName, fileName); // đường tương đối file
+
+                    using (var stream = new FileStream(fullPath, FileMode.Create))
+                    {
+                        file.CopyTo(stream);
+                    }
+
+                    RequestFile requestFile = new RequestFile
+                    {
+                        CreateDate = DateTime.Now,
+                        Name = fileName,
+                        Path = dbPath,
+                        RequestActionID = requestActionID
+                    };
+
+                    return Ok(new { dbPath });
+                }
+                else
+                {
+                    return BadRequest();
+                }
             }
             catch (Exception e)
             {
@@ -68,7 +99,7 @@ namespace Capstone.Controllers
             try
             {
                 var rs = _requestFileService.GetByID(ID);
-                if (rs == null) return BadRequest("ID not found!");
+                if (rs == null) return BadRequest(WebConstant.NotFound);
                 RequestFileVM result = _mapper.Map<RequestFileVM>(rs);
                 return Ok(result);
             }
@@ -86,10 +117,10 @@ namespace Capstone.Controllers
             try
             {
                 var requestFileInDb = _requestFileService.GetByID(model.ID);
-                if (requestFileInDb == null) return BadRequest("ID not found!");
+                if (requestFileInDb == null) return BadRequest(WebConstant.NotFound);
                 _mapper.Map(model, requestFileInDb);
                 _requestFileService.Save();
-                return Ok("success");
+                return Ok(WebConstant.Success);
             }
             catch (Exception e)
             {
@@ -104,10 +135,10 @@ namespace Capstone.Controllers
             try
             {
                 var requestFileInDb = _requestFileService.GetByID(ID);
-                if (requestFileInDb == null) return BadRequest("ID not found!");
+                if (requestFileInDb == null) return BadRequest(WebConstant.NotFound);
                 requestFileInDb.IsDeleted = true;
                 _requestFileService.Save();
-                return Ok("success");
+                return Ok(WebConstant.Success);
             }
             catch (Exception e)
             {

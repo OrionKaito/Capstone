@@ -8,7 +8,7 @@ namespace Capstone.Model
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public Guid WorkFlowTemplateID { get; set; }
+        public Guid ID { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
         public string Actor { get; set; }

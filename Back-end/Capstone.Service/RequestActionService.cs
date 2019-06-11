@@ -12,7 +12,6 @@ namespace Capstone.Service
         IEnumerable<RequestAction> GetAll();
         RequestAction GetByID(Guid ID);
         void Create(RequestAction requestAction);
-        void Delete(RequestAction requestAction);
         void Save();
     }
     public class RequestActionService : IRequestActionService
@@ -29,11 +28,7 @@ namespace Capstone.Service
         public void Create(RequestAction requestAction)
         {
             _requestActionRepository.Add(requestAction);
-        }
-
-        public void Delete(RequestAction requestAction)
-        {
-            _requestActionRepository.Delete(requestAction);
+            _unitOfWork.Commit();
         }
 
         public IEnumerable<RequestAction> GetAll()
