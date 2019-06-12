@@ -79,7 +79,7 @@ namespace Capstone.Controllers
             try
             {
                 var rs = _notificationService.GetByID(ID);
-                if (rs == null) return NotFound("ID not found!");
+                if (rs == null) return NotFound(WebConstant.NotFound);
 
                 NotificationVM result = _mapper.Map<NotificationVM>(rs);
                 return Ok(result);
@@ -97,7 +97,7 @@ namespace Capstone.Controllers
             try
             {
                 var userInDB = _userManager.FindByIdAsync(ID).Result;
-                if (userInDB == null) return BadRequest("ID not found!");
+                if (userInDB == null) return BadRequest(WebConstant.NotFound);
 
                 int result = _userNotificationService.GetNumberOfNotification(ID);
                 return Ok(result);
@@ -112,13 +112,13 @@ namespace Capstone.Controllers
         public ActionResult GetByUserId(string ID)
         {
             var userInDB = _userManager.FindByIdAsync(ID).Result;
-            if (userInDB == null) return BadRequest("ID not found!");
+            if (userInDB == null) return BadRequest(WebConstant.NotFound);
 
             var notification = _userNotificationService.GetByUserID(ID);
 
             if (notification == null)
             {
-                return Ok("There are not any notfication yet");
+                return Ok(WebConstant.NoNotificationYet);
             }
 
             var data = new List<NotificationViewModel>();
@@ -133,7 +133,7 @@ namespace Capstone.Controllers
                     {
                         Fullname = _userManager.FindByIdAsync(ID).Result.FullName,
                         EventID = notificationInDb.EventID,
-                        Message = "have update workflow",
+                        Message = WebConstant.WorkflowUpdateMessage,
                         NotificationType = notificationInDb.NotificationType
                     };
                     data.Add(result);
@@ -146,7 +146,7 @@ namespace Capstone.Controllers
                         {
                             Fullname = _userManager.FindByIdAsync(ID).Result.FullName,
                             EventID = notificationInDb.EventID,
-                            Message = "Your request are accepted",
+                            Message = WebConstant.AcceptedRequestMessage,
                             NotificationType = notificationInDb.NotificationType,
                             ApproverName = _userManager.FindByIdAsync(userInRequest.UserID).Result.FullName
                         };
@@ -161,7 +161,7 @@ namespace Capstone.Controllers
                         {
                             Fullname = _userManager.FindByIdAsync(ID).Result.FullName,
                             EventID = notificationInDb.EventID,
-                            Message = "You received request",
+                            Message = WebConstant.ReceivedRequestMessage,
                             NotificationType = notificationInDb.NotificationType,
                             ApproverName = _userManager.FindByIdAsync(userInRequest.UserID).Result.FullName
                         };
@@ -176,7 +176,7 @@ namespace Capstone.Controllers
                         {
                             Fullname = _userManager.FindByIdAsync(ID).Result.FullName,
                             EventID = notificationInDb.EventID,
-                            Message = "Your request are denied",
+                            Message = WebConstant.DeniedRequestMessage,
                             NotificationType = notificationInDb.NotificationType,
                             ApproverName = _userManager.FindByIdAsync(userInRequest.UserID).Result.FullName
                         };
@@ -209,11 +209,11 @@ namespace Capstone.Controllers
             try
             {
                 var notificationInDb = _notificationService.GetByID(model.ID);
-                if (notificationInDb == null) return NotFound("ID not found!");
+                if (notificationInDb == null) return NotFound(WebConstant.NotFound);
                 
                 _mapper.Map(model, notificationInDb);
                 _notificationService.Save();
-                return Ok("success");
+                return Ok(WebConstant.Success);
             }
             catch (Exception e)
             {
@@ -228,11 +228,11 @@ namespace Capstone.Controllers
             try
             {
                 var notificationInDb = _notificationService.GetByID(ID);
-                if (notificationInDb == null) return NotFound("ID not found!");
+                if (notificationInDb == null) return NotFound(WebConstant.NotFound);
 
                 notificationInDb.IsDeleted = true;
                 _notificationService.Save();
-                return Ok("success");
+                return Ok(WebConstant.Success);
             }
             catch (Exception e)
             {

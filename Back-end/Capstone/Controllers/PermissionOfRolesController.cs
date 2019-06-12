@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Capstone.Helper;
 using Capstone.Model;
 using Capstone.Service;
 using Capstone.ViewModel;
@@ -71,7 +72,7 @@ namespace Capstone.Controllers
             {
                 List<PermissionOfRoleVM> result = new List<PermissionOfRoleVM>();
                 var data = _permissionOfRoleService.GetByPermission(ID);
-                if (data.Count() == 0) return NotFound("List empty");
+                if (data.Count() == 0) return NotFound(WebConstant.EmptyList);
                 foreach (var item in data)
                 {
                     result.Add(_mapper.Map<PermissionOfRoleVM>(item));
@@ -92,7 +93,7 @@ namespace Capstone.Controllers
             {
                 List<PermissionOfRoleVM> result = new List<PermissionOfRoleVM>();
                 var data = _permissionOfRoleService.GetByRole(ID);
-                if (data.Count() == 0) return NotFound("List empty");
+                if (data.Count() == 0) return NotFound(WebConstant.EmptyList);
                 foreach (var item in data)
                 {
                     result.Add(_mapper.Map<PermissionOfRoleVM>(item));
@@ -112,7 +113,7 @@ namespace Capstone.Controllers
             try
             {
                 var rs = _permissionOfRoleService.GetByID(ID);
-                if (rs == null) return NotFound("ID not found");
+                if (rs == null) return NotFound(WebConstant.NotFound);
                 PermissionOfRoleVM result = _mapper.Map<PermissionOfRoleVM>(rs);
                 return Ok(result);
             }
@@ -130,10 +131,10 @@ namespace Capstone.Controllers
             try
             {
                 var permissionOfRoleInDb = _permissionOfRoleService.GetByID(model.ID);
-                if (permissionOfRoleInDb == null) return BadRequest("ID not found!");
+                if (permissionOfRoleInDb == null) return BadRequest(WebConstant.NotFound);
                 _mapper.Map(model, permissionOfRoleInDb);
                 _permissionOfRoleService.Save();
-                return Ok("success");
+                return Ok(WebConstant.Success);
             }
             catch (Exception e)
             {
@@ -148,10 +149,10 @@ namespace Capstone.Controllers
             try
             {
                 var permissionOfRoleInDb = _permissionOfRoleService.GetByID(ID);
-                if (permissionOfRoleInDb == null) return NotFound("ID not found!");
+                if (permissionOfRoleInDb == null) return NotFound(WebConstant.NotFound);
                 permissionOfRoleInDb.IsDeleted = true;
                 _permissionOfRoleService.Save();
-                return Ok("success");
+                return Ok(WebConstant.Success);
             }
             catch (Exception e)
             {

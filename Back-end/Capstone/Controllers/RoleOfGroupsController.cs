@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Capstone.Helper;
 using Capstone.Model;
 using Capstone.Service;
 using Capstone.ViewModel;
@@ -71,7 +72,7 @@ namespace Capstone.Controllers
             {
                 List<RoleOfGroupVM> result = new List<RoleOfGroupVM>();
                 var data = _roleOfGroupService.GetByGroup(ID);
-                if (data.Count() == 0) return NotFound("List empty");
+                if (data.Count() == 0) return NotFound(WebConstant.EmptyList);
                 foreach (var item in data)
                 {
                     result.Add(_mapper.Map<RoleOfGroupVM>(item));
@@ -92,7 +93,7 @@ namespace Capstone.Controllers
             {
                 List<RoleOfGroupVM> result = new List<RoleOfGroupVM>();
                 var data = _roleOfGroupService.GetByRole(ID);
-                if (data.Count() == 0) return NotFound("List empty");
+                if (data.Count() == 0) return NotFound(WebConstant.EmptyList);
                 foreach (var item in data)
                 {
                     result.Add(_mapper.Map<RoleOfGroupVM>(item));
@@ -112,7 +113,7 @@ namespace Capstone.Controllers
             try
             {
                 var rs = _roleOfGroupService.GetByID(ID);
-                if (rs == null) return NotFound("ID not found");
+                if (rs == null) return NotFound(WebConstant.NotFound);
                 RoleOfGroupVM result = _mapper.Map<RoleOfGroupVM>(rs);
                 return Ok(result);
             }
@@ -133,10 +134,10 @@ namespace Capstone.Controllers
                 if (checkExist != null) return BadRequest("Existed!");
 
                 var roleOfGroupInDb = _roleOfGroupService.GetByID(model.ID);
-                if (roleOfGroupInDb == null) return BadRequest("ID not found!");
+                if (roleOfGroupInDb == null) return BadRequest(WebConstant.NotFound);
                 _mapper.Map(model, roleOfGroupInDb);
                 _roleOfGroupService.Save();
-                return Ok("success");
+                return Ok(WebConstant.Success);
             }
             catch (Exception e)
             {
@@ -151,10 +152,10 @@ namespace Capstone.Controllers
             try
             {
                 var roleOfGroupInDb = _roleOfGroupService.GetByID(ID);
-                if (roleOfGroupInDb == null) return NotFound("ID not found!");
+                if (roleOfGroupInDb == null) return NotFound(WebConstant.NotFound);
                 roleOfGroupInDb.IsDeleted = true;
                 _roleOfGroupService.Save();
-                return Ok("success");
+                return Ok(WebConstant.Success);
             }
             catch (Exception e)
             {
