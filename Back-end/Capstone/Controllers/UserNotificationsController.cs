@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Capstone.Helper;
 using Capstone.Model;
 using Capstone.Service;
 using Capstone.ViewModel;
@@ -68,7 +69,7 @@ namespace Capstone.Controllers
             try
             {
                 var rs = _userNotificationService.GetByID(ID);
-                if (rs == null) return NotFound("ID not found!");
+                if (rs == null) return NotFound(WebConstant.NotFound);
 
                 UserNotificationVM result = _mapper.Map<UserNotificationVM>(rs);
                 return Ok(result);
@@ -88,11 +89,11 @@ namespace Capstone.Controllers
             try
             {
                 var userNotificationInDb = _userNotificationService.GetByID(model.ID);
-                if (userNotificationInDb == null) return NotFound("ID not found!");
+                if (userNotificationInDb == null) return NotFound(WebConstant.NotFound);
 
                 _mapper.Map(model, userNotificationInDb);
                 _userNotificationService.Save();
-                return Ok("success");
+                return Ok(WebConstant.Success);
             }
             catch (Exception e)
             {
@@ -107,11 +108,11 @@ namespace Capstone.Controllers
             try
             {
                 var userNotificationInDb = _userNotificationService.GetByID(ID);
-                if (userNotificationInDb == null) return NotFound("ID not found!");
+                if (userNotificationInDb == null) return NotFound(WebConstant.NotFound);
 
                 userNotificationInDb.IsDeleted = true;
                 _userNotificationService.Save();
-                return Ok("success");
+                return Ok(WebConstant.Success);
             }
             catch (Exception e)
             {

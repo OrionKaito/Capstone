@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Capstone.Helper;
 using Capstone.Model;
 using Capstone.Service;
 using Capstone.ViewModel;
@@ -29,7 +30,7 @@ namespace Capstone.Controllers
             try
             {
                 var nameExist = _groupService.GetByName(model.Name);
-                if (nameExist != null) return BadRequest("Group Name is existed!");
+                if (nameExist != null) return BadRequest("Group" + WebConstant.NameExisted);
 
                 Group group = new Group();
                 group = _mapper.Map<Group>(model);
@@ -75,7 +76,7 @@ namespace Capstone.Controllers
                     result.Add(item);
                 }
 
-                if (result.Count == 0) return BadRequest("ID not found!");
+                if (result.Count == 0) return BadRequest(WebConstant.NotFound);
 
                 return Ok(result);
             }
@@ -92,7 +93,7 @@ namespace Capstone.Controllers
             try
             {
                 var rs = _groupService.GetByID(ID);
-                if (rs == null) return NotFound("ID not found!");
+                if (rs == null) return NotFound(WebConstant.NotFound);
                 GroupVM result = _mapper.Map<GroupVM>(rs);
                 return Ok(result);
             }
@@ -110,13 +111,13 @@ namespace Capstone.Controllers
             try
             {
                 var nameExist = _groupService.GetByName(model.Name);
-                if (nameExist != null) return BadRequest("Group Name is existed!");
+                if (nameExist != null) return BadRequest("Group" + WebConstant.NameExisted);
 
                 var groupInDb = _groupService.GetByID(model.ID);
-                if (groupInDb == null) return NotFound("ID not found!");
+                if (groupInDb == null) return NotFound(WebConstant.NotFound);
                 _mapper.Map(model, groupInDb);
                 _groupService.Save();
-                return Ok("success");
+                return Ok(WebConstant.Success);
             }
             catch (Exception e)
             {
@@ -131,10 +132,10 @@ namespace Capstone.Controllers
             try
             {
                 var groupInDb = _groupService.GetByID(ID);
-                if (groupInDb == null) return NotFound("ID not found!");
+                if (groupInDb == null) return NotFound(WebConstant.NotFound);
                 groupInDb.IsDeleted = true;
                 _groupService.Save();
-                return Ok("success");
+                return Ok(WebConstant.Success);
             }
             catch (Exception e)
             {

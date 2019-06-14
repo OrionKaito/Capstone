@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Capstone.Helper;
 using Capstone.Model;
 using Capstone.Service;
 using Capstone.ViewModel;
@@ -29,7 +30,7 @@ namespace Capstone.Controllers
             try
             {
                 var nameExist = _roleService.GetByName(model.Name);
-                if (nameExist != null) return BadRequest("Role Name is existed!");
+                if (nameExist != null) return BadRequest("Role" + WebConstant.NameExisted);
 
                 Role role = new Role();
                 role = _mapper.Map<Role>(model);
@@ -75,7 +76,7 @@ namespace Capstone.Controllers
                     result.Add(item);
                 }
 
-                if (result.Count == 0) return BadRequest("ID not found!");
+                if (result.Count == 0) return BadRequest(WebConstant.NotFound);
 
                 return Ok(result);
             }
@@ -92,7 +93,7 @@ namespace Capstone.Controllers
             try
             {
                 var rs = _roleService.GetByID(ID);
-                if (rs == null) return BadRequest("ID not found!");
+                if (rs == null) return BadRequest(WebConstant.NotFound);
                 RoleVM result = _mapper.Map<RoleVM>(rs);
                 return Ok(result);
             }
@@ -111,14 +112,14 @@ namespace Capstone.Controllers
             try
             {
                 var nameExist = _roleService.GetByName(model.Name);
-                if (nameExist != null) return BadRequest("Role Name is existed!");
+                if (nameExist != null) return BadRequest("Role" + WebConstant.NameExisted);
 
                 var roleInDb = _roleService.GetByID(model.ID);
-                if (roleInDb == null) return BadRequest("ID not found!");
+                if (roleInDb == null) return BadRequest(WebConstant.NotFound);
 
                 _mapper.Map(model, roleInDb);
                 _roleService.Save();
-                return Ok("success");
+                return Ok(WebConstant.Success);
             }
             catch (Exception e)
             {
@@ -133,11 +134,11 @@ namespace Capstone.Controllers
             try
             {
                 var roleInDb = _roleService.GetByID(ID);
-                if (roleInDb == null) return BadRequest("ID not found!");
+                if (roleInDb == null) return BadRequest(WebConstant.NotFound);
 
                 roleInDb.IsDeleted = true;
                 _roleService.Save();
-                return Ok("success");
+                return Ok(WebConstant.Success);
             }
             catch (Exception e)
             {

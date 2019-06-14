@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Capstone.Helper;
 using Capstone.Model;
 using Capstone.Service;
 using Capstone.ViewModel;
@@ -29,7 +30,7 @@ namespace Capstone.Controllers
             try
             {
                 var nameExist = _permissionService.GetByName(model.Name);
-                if (nameExist != null) return BadRequest("Permission Name is existed!");
+                if (nameExist != null) return BadRequest("Permission" + WebConstant.NameExisted);
 
                 Permission permission = new Permission();
                 permission = _mapper.Map<Permission>(model);
@@ -74,7 +75,7 @@ namespace Capstone.Controllers
                 {
                     result.Add(item);
                 }
-                if (result.Count == 0) return BadRequest("ID not found!");
+                if (result.Count == 0) return BadRequest(WebConstant.NotFound);
                 return Ok(result);
             }
             catch (Exception e)
@@ -90,7 +91,7 @@ namespace Capstone.Controllers
             try
             {
                 var rs = _permissionService.GetByID(ID);
-                if (rs == null) return BadRequest("ID not found!");
+                if (rs == null) return BadRequest(WebConstant.NotFound);
                 PermissionVM result = _mapper.Map<PermissionVM>(rs);
                 return Ok(result);
             }
@@ -108,13 +109,13 @@ namespace Capstone.Controllers
             try
             {
                 var nameExist = _permissionService.GetByName(model.Name);
-                if (nameExist != null) return BadRequest("Permission Name is existed!");
+                if (nameExist != null) return BadRequest("Permission" + WebConstant.NameExisted);
 
                 var permissionInDb = _permissionService.GetByID(model.ID);
-                if (permissionInDb == null) return BadRequest("ID not found!");
+                if (permissionInDb == null) return BadRequest(WebConstant.NotFound);
                 _mapper.Map(model, permissionInDb);
                 _permissionService.Save();
-                return Ok("success");
+                return Ok(WebConstant.Success);
             }
             catch (Exception e)
             {
@@ -129,10 +130,10 @@ namespace Capstone.Controllers
             try
             {
                 var permissionInDb = _permissionService.GetByID(ID);
-                if (permissionInDb == null) return BadRequest("ID not found!");
+                if (permissionInDb == null) return BadRequest(WebConstant.NotFound);
                 permissionInDb.IsDeleted = true;
                 _permissionService.Save();
-                return Ok("success");
+                return Ok(WebConstant.Success);
             }
             catch (Exception e)
             {
