@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Capstone.Helper;
 using Capstone.Model;
 using Capstone.Service;
 using Capstone.ViewModel;
@@ -29,7 +30,7 @@ namespace Capstone.Controllers
             try
             {
                 var nameExist = _actionTypeService.GetByName(model.Name);
-                if (nameExist != null) return BadRequest("ActionType Name is existed!");
+                if (nameExist != null) return BadRequest("ActionType" + WebConstant.NameExisted);
 
                 ActionType actionType = new ActionType();
                 actionType = _mapper.Map<ActionType>(model);
@@ -69,7 +70,7 @@ namespace Capstone.Controllers
             try
             {
                 var rs = _actionTypeService.GetByID(ID);
-                if (rs == null) return NotFound("ID not found!");
+                if (rs == null) return NotFound(WebConstant.NotFound);
                 ActionTypeVM result = _mapper.Map<ActionTypeVM>(rs);
                 return Ok(result);
             }
@@ -87,14 +88,14 @@ namespace Capstone.Controllers
             try
             {
                 var actionTypeInDb = _actionTypeService.GetByID(model.ID);
-                if (actionTypeInDb == null) return NotFound("ID not found!");
+                if (actionTypeInDb == null) return NotFound(WebConstant.NotFound);
 
                 var nameExist = _actionTypeService.GetByName(model.Name);
-                if (nameExist != null) return BadRequest("ActionType Name is existed!");
+                if (nameExist != null) return BadRequest("ActionType" + WebConstant.NameExisted);
 
                 _mapper.Map(model, actionTypeInDb);
                 _actionTypeService.Save();
-                return Ok("success");
+                return Ok(WebConstant.Success);
             }
             catch (Exception e)
             {
@@ -109,10 +110,10 @@ namespace Capstone.Controllers
             try
             {
                 var actionTypeInDb = _actionTypeService.GetByID(ID);
-                if (actionTypeInDb == null) return NotFound("ID not found!");
+                if (actionTypeInDb == null) return NotFound(WebConstant.NotFound);
                 actionTypeInDb.IsDeleted = true;
                 _actionTypeService.Save();
-                return Ok("success");
+                return Ok(WebConstant.Success);
             }
             catch (Exception e)
             {

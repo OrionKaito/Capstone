@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Capstone.Helper;
 using Capstone.Model;
 using Capstone.Service;
 using Capstone.ViewModel;
@@ -51,7 +52,7 @@ namespace Capstone.Controllers
             {
                 List<UserRoleVM> result = new List<UserRoleVM>();
                 var data = _userRoleService.GetByUserID(ID);
-                if (data.Count() == 0) return NotFound("List empty");
+                if (data.Count() == 0) return NotFound(WebConstant.EmptyList);
                 foreach (var item in data)
                 {
                     result.Add(_mapper.Map<UserRoleVM>(item));
@@ -71,7 +72,7 @@ namespace Capstone.Controllers
             try
             {
                 var rs = _userRoleService.GetByID(ID);
-                if (rs == null) return NotFound("ID not found");
+                if (rs == null) return NotFound(WebConstant.NotFound);
                 UserRoleVM result = _mapper.Map<UserRoleVM>(rs);
                 return Ok(result);
             }
@@ -92,10 +93,10 @@ namespace Capstone.Controllers
                 if (checkExist != null) return BadRequest("Existed!");
 
                 var userRoleInDb = _userRoleService.GetByID(model.ID);
-                if (userRoleInDb == null) return BadRequest("ID not found!");
+                if (userRoleInDb == null) return BadRequest(WebConstant.NotFound);
                 _mapper.Map(model, userRoleInDb);
                 _userRoleService.Save();
-                return Ok("success");
+                return Ok(WebConstant.Success);
             }
             catch (Exception e)
             {
@@ -110,10 +111,10 @@ namespace Capstone.Controllers
             try
             {
                 var userRoleInDb = _userRoleService.GetByID(ID);
-                if (userRoleInDb == null) return NotFound("ID not found!");
+                if (userRoleInDb == null) return NotFound(WebConstant.NotFound);
                 userRoleInDb.IsDeleted = true;
                 _userRoleService.Save();
-                return Ok("success");
+                return Ok(WebConstant.Success);
             }
             catch (Exception e)
             {

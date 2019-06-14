@@ -1,4 +1,5 @@
-﻿using Capstone.Model;
+﻿using Capstone.Helper;
+using Capstone.Model;
 using Capstone.Service;
 using Capstone.ViewModel;
 using Microsoft.AspNetCore.Authorization;
@@ -43,7 +44,7 @@ namespace Capstone.Controllers
 
             var identity = CheckClaimIdentity(credentials.UserName, credentials.Password);
             if (identity.Result == null) {
-                return BadRequest("Invalid username or password!");
+                return BadRequest(WebConstant.InvalidUSer);
             }
 
             IEnumerable<string> listRoleOfUser = _roleService.GetByUserID(identity.Result.Id);
@@ -52,7 +53,7 @@ namespace Capstone.Controllers
 
             foreach (var item in listRoleOfUser)
             {
-                if (item.Equals("user"))
+                if (item.Equals(WebConstant.User))
                 {
                     checkUser = true;
                 }
@@ -60,17 +61,17 @@ namespace Capstone.Controllers
 
             if (!checkUser)
             {
-                return BadRequest("Your role can not access.");
+                return BadRequest(WebConstant.AccessDined);
             }
 
             if (identity.Result.EmailConfirmed == false)
             {
-                return BadRequest("Please verify your account first!");
+                return BadRequest(WebConstant.VerifyAccount);
             }
 
             if (identity.Result.IsDeleted == true)
             {
-                return BadRequest("Account is banned!");
+                return BadRequest(WebConstant.BannedAccount);
             }
 
             var tokenString = GenerateJSONWebToken(identity.Result);
@@ -89,7 +90,7 @@ namespace Capstone.Controllers
             var identity = CheckClaimIdentity(credentials.UserName, credentials.Password);
             if (identity.Result == null)
             {
-                return BadRequest("Invalid username or password!");
+                return BadRequest(WebConstant.InvalidUSer);
             }
 
             IEnumerable<string> listRoleOfUser = _roleService.GetByUserID(identity.Result.Id);
@@ -98,7 +99,7 @@ namespace Capstone.Controllers
 
             foreach (var item in listRoleOfUser)
             {
-                if (item.Equals("admin"))
+                if (item.Equals(WebConstant.Admin))
                 {
                     checkAdmin = true;
                 }
@@ -106,17 +107,17 @@ namespace Capstone.Controllers
 
             if (!checkAdmin)
             {
-                return BadRequest("Your role can not access.");
+                return BadRequest(WebConstant.AccessDined);
             }
 
             if (identity.Result.EmailConfirmed == false)
             {
-                return BadRequest("Please verify your account first!");
+                return BadRequest(WebConstant.VerifyAccount);
             }
 
             if (identity.Result.IsDeleted == true)
             {
-                return BadRequest("Account is banned!");
+                return BadRequest(WebConstant.BannedAccount);
             }
 
             var tokenString = GenerateJSONWebToken(identity.Result);

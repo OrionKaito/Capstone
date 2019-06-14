@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Capstone.Helper;
 using Capstone.Model;
 using Capstone.Service;
 using Capstone.ViewModel;
@@ -42,7 +43,7 @@ namespace Capstone.Controllers
             if (!ModelState.IsValid) return BadRequest(ModelState);
 
             var userInDB = _userManager.FindByNameAsync(model.Email).Result;
-            if (userInDB != null) return BadRequest("Email is existed!");
+            if (userInDB != null) return BadRequest(WebConstant.EmailExisted);
 
             var user = new User()
             {
@@ -71,7 +72,7 @@ namespace Capstone.Controllers
 
             //_userRoleService.Create()
 
-            return new OkObjectResult("Account created, please check your email!");
+            return new OkObjectResult(WebConstant.AccountCreated);
         }
 
         [AllowAnonymous]
@@ -82,7 +83,7 @@ namespace Capstone.Controllers
             {
                 var userInDB = _userManager.FindByEmailAsync(email).Result;
 
-                if (userInDB == null) return BadRequest("User is not exist");
+                if (userInDB == null) return BadRequest(WebConstant.UserNotExist);
 
                 if (userInDB.EmailConfirmCode == code)
                 {
@@ -91,10 +92,10 @@ namespace Capstone.Controllers
                 }
                 else
                 {
-                    return BadRequest("Wrong code! please try again");
+                    return BadRequest(WebConstant.WrongCodeConfirm);
                 }
 
-                return Ok("Success");
+                return Ok(WebConstant.Success);
             }
             catch (Exception e)
             {
@@ -186,7 +187,7 @@ namespace Capstone.Controllers
                 var userID = currentUSer.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier).Value;
 
                 var userInDB = _userManager.FindByIdAsync(userID).Result;
-                if (userInDB == null) return BadRequest("ID not found!");
+                if (userInDB == null) return BadRequest(WebConstant.NotFound);
 
                 userInDB.FullName = model.FullName;
                 userInDB.DateOfBirth = model.DateOfBirth;
@@ -194,7 +195,7 @@ namespace Capstone.Controllers
 
                 if (!result.Succeeded) return new BadRequestObjectResult(result.Errors);
 
-                return Ok("success");
+                return Ok(WebConstant.Success);
             }
             catch (Exception e)
             {
@@ -206,7 +207,7 @@ namespace Capstone.Controllers
         public async Task<ActionResult> ToggleBanAccount(string ID)
         {
             var userInDB = _userManager.FindByIdAsync(ID).Result;
-            if (userInDB == null) return BadRequest("ID not found!");
+            if (userInDB == null) return BadRequest(WebConstant.NotFound);
 
             try
             {
@@ -223,7 +224,7 @@ namespace Capstone.Controllers
 
                 if (!result.Succeeded) return new BadRequestObjectResult(result.Errors);
 
-                return Ok("success");
+                return Ok(WebConstant.Success);
             }
             catch (Exception e)
             {
