@@ -1,0 +1,65 @@
+<div class="main-content">
+  <div class="container-fluid">
+      <div class="row">
+          <div class="col-md-12">
+              <div class="card">
+                  <div class="card-header card-header-danger">
+                      <h4 class="card-title ">Account list</h4>
+                      <p class="card-category">List of account in the system</p>
+                  </div>
+                  <div class="card-body">
+                      <div class="table-responsive">
+                            
+                          <table class="table">
+                              <thead class=" text-primary">
+                                  <th>
+                                      No.
+                                  </th>
+                                  <th>
+                                      Full name
+                                  </th>
+                                  <th>
+                                      Email
+                                  </th>
+                                  <th>
+                                      Date of birth
+                                  </th>
+                                  <th>
+                                      Ban/Un-ban
+                                  </th>
+                              </thead>
+                              
+                                <tfoot>
+                                            
+                                <tr>
+                                
+                                    <td> <form name="registerForm" (ngSubmit)="register()" #f="ngForm" class="form"><button type="submit"> Add </button></form></td>                                
+                                    <td><input [(ngModel)]="model.fullName"  type="text" placeholder="Full name"></td>
+                                    <td><input [(ngModel)]="model.email" type="text" placeholder="Email"></td>
+                                    <td><input [(ngModel)]="model.dateOfBirth" type="date" ></td>                                  
+                                    <td><input [(ngModel)]="model.password" type="text" placeholder="Password"><input type="text" placeholder="Re-Password"></td>                                  
+                                
+                                </tr>  
+                                
+                            </tfoot>
+                                
+                            
+                              <tbody *ngFor="let user of users | slice:0:10; index as i; trackBy: trackByFn" >
+                                <tr>
+                                    <td>{{i}}</td>                                
+                                    <td>{{user.fullName}}</td>
+                                    <td>{{user.email}}</td>
+                                    <td>{{user.dateOfBirth | date:'dd.mm.yyyy'}} </td>                                  
+                                    <td *ngIf="user.isDeleted;  else elseBlock"><button  (click)="banOrUnbanAcc(user.id)" id={{user.id}}>UnBan </button></td>
+                                    <!-- <td *ngIf="!user.isDeleted;  else elseBlock"><button  (click)="banOrUnbanAcc(user.id)" id={{user.id}}>Ban</button></td> -->
+                                    <ng-template #elseBlock><button (click)="banOrUnbanAcc(user.id)" id={{user.id}} >Ban</button></ng-template>
+                                </tr>      
+                                </tbody>                       
+                          </table>                      
+                      </div>
+                  </div>
+              </div>
+          </div>
+        </div>
+  </div>
+</div>

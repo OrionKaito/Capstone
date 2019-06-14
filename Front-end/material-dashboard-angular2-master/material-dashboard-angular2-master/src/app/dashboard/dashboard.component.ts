@@ -1,7 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import * as Chartist from 'chartist';
-import { LoadStaffAcountService } from 'app/service/load-staff-acount.service';
-
 
 @Component({
   selector: 'app-dashboard',
@@ -9,8 +7,8 @@ import { LoadStaffAcountService } from 'app/service/load-staff-acount.service';
   styleUrls: ['./dashboard.component.css']
 })
 export class DashboardComponent implements OnInit {
-  users: any= [];
-  constructor(private loadStaffAcountService: LoadStaffAcountService) { }
+
+  constructor() { }
   startAnimationForLineChart(chart){
       let seq: any, delays: any, durations: any;
       seq = 0;
@@ -70,7 +68,7 @@ export class DashboardComponent implements OnInit {
   ngOnInit() {
       /* ----------==========     Daily Sales Chart initialization For Documentation    ==========---------- */
 
-      var dataDailySalesChart: any = {
+      const dataDailySalesChart: any = {
           labels: ['M', 'T', 'W', 'T', 'F', 'S', 'S'],
           series: [
               [12, 17, 7, 17, 23, 18, 38]
@@ -93,7 +91,7 @@ export class DashboardComponent implements OnInit {
 
       /* ----------==========     Completed Tasks Chart initialization    ==========---------- */
 
-      var dataCompletedTasksChart: any = {
+      const dataCompletedTasksChart: any = {
           labels: ['12p', '3p', '6p', '9p', '12p', '3a', '6a', '9a'],
           series: [
               [230, 750, 450, 300, 280, 240, 200, 190]
@@ -147,14 +145,6 @@ export class DashboardComponent implements OnInit {
 
       //start animation for the Emails Subscription Chart
       this.startAnimationForBarChart(websiteViewsChart);
-
-
-      this.loadStaffAcountService.loadStaffData().subscribe(data => {
-        console.log(data);
-        
-        this.users = data;
-      }
-      )
   }
 
 }

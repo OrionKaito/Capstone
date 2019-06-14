@@ -1,0 +1,49 @@
+<div class="main-content">
+  <div class="container-fluid">
+      <div class="row">
+          <div class="col-md-12">
+              <div class="card">
+                  <div class="card-header card-header-danger">
+                      <h4 class="card-title ">Group list</h4>
+                      <p class="card-category">List of all group in the system</p>
+                  </div>
+                  <div class="card-body">
+                      <div class="table-responsive">
+                            
+                          <table class="table">
+                              <thead class=" text-primary">
+                                  <th>
+                                      No.
+                                  </th>
+                                  <th>
+                                      Name of group
+                                  </th>                                 
+                                  <th>
+                                      Delete group
+                                  </th>
+                              </thead>                             
+                                <tfoot>      
+                                <tr>
+                                    <td> <form name="addGroup" (ngSubmit)="addGroup()" #f="ngForm" class="form"><button type="submit"> Add </button></form></td>                                
+                                    <td><input [(ngModel)]="model.name"  type="text" placeholder="Full name"></td>
+                                    <td></td>
+                                </tr>  
+                                
+                            </tfoot>
+                                
+                            
+                              <tbody *ngFor="let groupGet of groupGets | slice:0:10; index as i; trackBy: trackByFn" >
+                                <tr>
+                                    <td>{{i}}</td>                                
+                                    <td>{{groupGet.name}}</td>
+                                    <td><button  (click)="deleteGroup(groupGet.id)" id={{groupGet.id}}>Delete</button></td>                               
+                                </tr>      
+                                </tbody>                       
+                          </table>                      
+                      </div>
+                  </div>
+              </div>
+          </div>
+        </div>
+  </div>
+</div>

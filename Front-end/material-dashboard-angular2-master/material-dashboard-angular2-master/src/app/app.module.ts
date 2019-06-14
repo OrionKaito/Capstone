@@ -3,11 +3,11 @@ import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 import { RouterModule } from '@angular/router';
-import {HttpClientModule } from '@angular/common/http';
 
 
 import { AppRoutingModule } from './app.routing';
 import { ComponentsModule } from './components/components.module';
+
 import { AppComponent } from './app.component';
 
 import { DashboardComponent } from './dashboard/dashboard.component';
@@ -18,7 +18,6 @@ import { IconsComponent } from './icons/icons.component';
 import { MapsComponent } from './maps/maps.component';
 import { NotificationsComponent } from './notifications/notifications.component';
 import { UpgradeComponent } from './upgrade/upgrade.component';
-import { LoginComponent } from './login/login.component';
 import {
   AgmCoreModule
 } from '@agm/core';
@@ -30,7 +29,6 @@ import { AdminLayoutComponent } from './layouts/admin-layout/admin-layout.compon
     FormsModule,
     HttpModule,
     ComponentsModule,
-    HttpClientModule,
     RouterModule,
     AppRoutingModule,
     AgmCoreModule.forRoot({
@@ -40,7 +38,6 @@ import { AdminLayoutComponent } from './layouts/admin-layout/admin-layout.compon
   declarations: [
     AppComponent,
     AdminLayoutComponent,
-    LoginComponent
 
   ],
   providers: [],
