@@ -13,12 +13,12 @@ namespace Capstone.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class WorkflowsTemmplateController : ControllerBase
+    public class WorkflowsTemplateController : ControllerBase
     {
         private readonly IMapper _mapper;
         private readonly IWorkFlowTemplateService _workFlowService;
 
-        public WorkflowsTemmplateController(IMapper mapper, IWorkFlowTemplateService workFlowService)
+        public WorkflowsTemplateController(IMapper mapper, IWorkFlowTemplateService workFlowService)
         {
             _mapper = mapper;
             _workFlowService = workFlowService;
@@ -70,7 +70,7 @@ namespace Capstone.Controllers
 
             try
             {
-                var workFlowInDb = _workFlowService.GetByID(model.WorkFlowTemplateID);
+                var workFlowInDb = _workFlowService.GetByID(model.ID);
                 if (workFlowInDb == null) return BadRequest(WebConstant.NotFound);
 
                 var userID = HttpContext.User.Claims.FirstOrDefault(u => u.Type == ClaimTypes.NameIdentifier).Value;
@@ -88,7 +88,7 @@ namespace Capstone.Controllers
 
         // POST: api/Workflows
         [HttpPost]
-        public ActionResult<WorkFlowTemplate> PostWorkflowTemplate(WorkFlowTemplateCM model)
+        public ActionResult PostWorkflowTemplate(WorkFlowTemplateCM model)
         {
             if (!ModelState.IsValid) return BadRequest(ModelState);
 
@@ -102,8 +102,8 @@ namespace Capstone.Controllers
                 workFlow = _mapper.Map<WorkFlowTemplate>(model);
                 workFlow.OwnerID = userID;
                 _workFlowService.Create(workFlow);
-
-                return StatusCode(201, workFlow.WorkFlowTemplateID);
+                
+                return StatusCode(201, workFlow.ID);
             }
             catch (Exception e)
             {
@@ -122,6 +122,31 @@ namespace Capstone.Controllers
 
                 workFlowInDb.IsDeleted = true;
                 _workFlowService.Save();
+                return Ok(WebConstant.Success);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
+
+        [HttpPut("ToggleEnable")]
+        public ActionResult ToggleEnable(Guid ID)
+        {
+            var workFlowInDb = _workFlowService.GetByID(ID);
+            if (workFlowInDb == null) return BadRequest(WebConstant.NotFound);
+
+            try
+            {
+                if (workFlowInDb.IsEnabled == true)
+                {
+                    workFlowInDb.IsEnabled = false;
+                }
+                else
+                {
+                    workFlowInDb.IsEnabled = true;
+                }
+
                 return Ok(WebConstant.Success);
             }
             catch (Exception e)

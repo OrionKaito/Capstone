@@ -81,23 +81,24 @@ namespace Capstone.Controllers
         }
 
         // PUT: api/RequestActions
-        [HttpPut]
-        public IActionResult PutRequestAction(RequestActionUM model)
-        {
-            if (!ModelState.IsValid) return BadRequest(ModelState);
-            try
-            {
-                var requestActionInDb = _requestActionService.GetByID(model.ID);
-                if (requestActionInDb == null) return BadRequest("ID not found!");
-                _mapper.Map(model, requestActionInDb);
-                _requestActionService.Save();
-                return Ok("success");
-            }
-            catch (Exception e)
-            {
-                return BadRequest(e.Message);
-            }
-        }
+        // Người phê duyệt không có quyền update
+        //[HttpPut]
+        //public IActionResult PutRequestAction(RequestActionUM model)
+        //{
+        //    if (!ModelState.IsValid) return BadRequest(ModelState);
+        //    try
+        //    {
+        //        var requestActionInDb = _requestActionService.GetByID(model.ID);
+        //        if (requestActionInDb == null) return BadRequest("ID not found!");
+        //        _mapper.Map(model, requestActionInDb);
+        //        _requestActionService.Save();
+        //        return Ok("success");
+        //    }
+        //    catch (Exception e)
+        //    {
+        //        return BadRequest(e.Message);
+        //    }
+        //}
 
         // DELETE: api/RequestActions/5
         [HttpDelete("{id}")]

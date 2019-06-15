@@ -13,8 +13,6 @@ namespace Capstone.Service
         WorkFlowTemplate GetByID(Guid ID);
         WorkFlowTemplate GetByName(string name);
         void Create(WorkFlowTemplate workflow);
-        void Update(WorkFlowTemplate workflow);
-        void Delete(WorkFlowTemplate workflow);
         void Save();
     }
 
@@ -35,12 +33,6 @@ namespace Capstone.Service
             _unitOfWork.Commit();
         }
 
-        public void Delete(WorkFlowTemplate workflow)
-        {
-            _workFlowTemplateRepository.Delete(workflow);
-            _unitOfWork.Commit();
-        }
-
         public IEnumerable<WorkFlowTemplate> GetAll()
         {
             return _workFlowTemplateRepository.GetAll().Where(w => w.IsDeleted == false && w.IsEnabled == true);
@@ -58,12 +50,6 @@ namespace Capstone.Service
 
         public void Save()
         {
-            _unitOfWork.Commit();
-        }
-
-        public void Update(WorkFlowTemplate workflow)
-        {
-            _workFlowTemplateRepository.Update(workflow);
             _unitOfWork.Commit();
         }
     }
