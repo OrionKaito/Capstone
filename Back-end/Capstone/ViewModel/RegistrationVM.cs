@@ -7,7 +7,7 @@ namespace Capstone.ViewModel
         public string Email { get; set; }
         public string FullName { get; set; }
         public DateTime? DateOfBirth { get; set; }
-        public bool IsDeleted { get; set; }
+        public Guid ManagerID { get; set; }
     }
 
     public class RegistrationCM
@@ -16,11 +16,13 @@ namespace Capstone.ViewModel
         public string Password { get; set; }
         public string FullName { get; set; }
         public DateTime? DateOfBirth { get; set; }
+        public Guid? ManagerID { get; set; }
     }
 
     public class RegistrationUM
     {
         public string FullName { get; set; }
         public DateTime? DateOfBirth { get; set; }
+        public Guid ManagerID { get; set; }
     }
 }

@@ -23,6 +23,15 @@ namespace Capstone.Mappings
             CreateMap<WorkFlowTemplate, WorkFlowTemplateUM>();
             CreateMap<WorkFlowTemplateUM, WorkFlowTemplate>();
 
+            CreateMap<WorkFlowTemplateAction, WorkFlowTemplateActionVM>();
+            CreateMap<WorkFlowTemplateActionVM, WorkFlowTemplateAction>();
+
+            CreateMap<WorkFlowTemplateAction, WorkFlowTemplateActionCM>();
+            CreateMap<WorkFlowTemplateActionCM, WorkFlowTemplateAction>();
+
+            CreateMap<WorkFlowTemplateAction, WorkFlowTemplateActionUM>();
+            CreateMap<WorkFlowTemplateActionUM, WorkFlowTemplateAction>();
+
             //ActionType
             CreateMap<ActionType, ActionTypeVM>();
             CreateMap<ActionTypeVM, ActionType>();

@@ -52,6 +52,7 @@ namespace Capstone.Controllers
                 FullName = model.FullName,
                 CreateDate = DateTime.Now,
                 DateOfBirth = model.DateOfBirth,
+                ManagerID = model.ManagerID,
                 IsDeleted = false,
             };
 
@@ -81,7 +82,7 @@ namespace Capstone.Controllers
         {
             try
             {
-                var userInDB = _userManager.FindByEmailAsync(email).Result;
+                var userInDB = await _userManager.FindByEmailAsync(email);
 
                 if (userInDB == null) return BadRequest(WebConstant.UserNotExist);
 
@@ -191,6 +192,8 @@ namespace Capstone.Controllers
 
                 userInDB.FullName = model.FullName;
                 userInDB.DateOfBirth = model.DateOfBirth;
+                userInDB.ManagerID = model.ManagerID;
+                userInDB.SecurityStamp = Guid.NewGuid().ToString();
                 var result = await _userManager.UpdateAsync(userInDB);
 
                 if (!result.Succeeded) return new BadRequestObjectResult(result.Errors);
