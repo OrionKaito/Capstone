@@ -15,7 +15,7 @@ namespace Capstone.Data.Repositories
 
         public WorkFlowTemplate GetByName(string name)
         {
-            return DbContext.WorkFlowTemplate.Where(w => w.Name.Equals(name)).FirstOrDefault();
+            return DbContext.WorkFlowTemplates.Where(w => w.Name.Equals(name)).FirstOrDefault();
         }
     }
 }
