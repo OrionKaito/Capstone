@@ -145,5 +145,30 @@ namespace Capstone.Controllers
                 return BadRequest(e.Message);
             }
         }
+
+        [HttpPut("ToggleRole")]
+        public ActionResult ToggleRole(Guid ID)
+        {
+            try
+            {
+                var roleInDb = _roleService.GetByID(ID);
+                if (roleInDb == null) return BadRequest(WebConstant.NotFound);
+
+                if (roleInDb.IsDeleted == false)
+                {
+                    roleInDb.IsDeleted = true;
+                }
+                else
+                {
+                    roleInDb.IsDeleted = false;
+                }
+                _roleService.Save();
+                return Ok(WebConstant.Success);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
     }
 }
