@@ -3,7 +3,9 @@ package workflow.capstone.capstoneproject.entities;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class Notification {
+import java.io.Serializable;
+
+public class Notification implements Serializable {
     @SerializedName("eventID")
     @Expose
     private String eventID;

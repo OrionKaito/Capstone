@@ -46,7 +46,7 @@ public class LoginActivity extends AppCompatActivity {
         inputEmail = findViewById(R.id.input_email);
         inputPassword = findViewById(R.id.input_password);
         btnLogin = findViewById(R.id.btn_login);
-        tvErrorLogin = findViewById(R.id.tvErrorLogin);
+        tvErrorLogin = findViewById(R.id.tv_Error_Login);
     }
 
     private void login() {

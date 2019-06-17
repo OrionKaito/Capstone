@@ -3,12 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".fragment.NotificationFragment"
-    android:id="@+id/notification_fragment">
-
-    <ListView
-        android:id="@+id/list"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"></ListView>
+    tools:context=".fragment.PageOneFragment"
+    android:id="@+id/page_one_fragment">
 
 </FrameLayout>

@@ -16,7 +16,7 @@
             android:text="Approver:"/>
 
         <TextView
-            android:id="@+id/tvApprover"
+            android:id="@+id/tv_Approver"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="2"/>
@@ -34,7 +34,7 @@
             android:text="Message:"/>
 
         <TextView
-            android:id="@+id/tvMessage"
+            android:id="@+id/tv_Message"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="2" />

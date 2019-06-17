@@ -5,11 +5,10 @@ import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
 
-public class Workflow implements Serializable {
-
-    @SerializedName("workFlowID")
+public class WorkflowTemplate implements Serializable {
+    @SerializedName("id")
     @Expose
-    private String workFlowID;
+    private String id;
     @SerializedName("ownerID")
     @Expose
     private String ownerID;
@@ -19,13 +18,16 @@ public class Workflow implements Serializable {
     @SerializedName("description")
     @Expose
     private String description;
+    @SerializedName("permissionToEditID")
+    @Expose
+    private String permissionToEditID;
 
-    public String getWorkFlowID() {
-        return workFlowID;
+    public String getId() {
+        return id;
     }
 
-    public void setWorkFlowID(String workFlowID) {
-        this.workFlowID = workFlowID;
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getOwnerID() {
@@ -50,5 +52,13 @@ public class Workflow implements Serializable {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public String getPermissionToEditID() {
+        return permissionToEditID;
+    }
+
+    public void setPermissionToEditID(String permissionToEditID) {
+        this.permissionToEditID = permissionToEditID;
     }
 }

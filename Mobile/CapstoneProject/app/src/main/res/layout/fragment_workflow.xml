@@ -3,15 +3,15 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".fragment.WorkflowFragment"
     android:focusable="true"
-    android:focusableInTouchMode="true">
+    android:focusableInTouchMode="true"
+    tools:context=".fragment.WorkflowFragment">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:background="@color/white">
+        android:background="@color/white"
+        android:orientation="vertical">
 
         <LinearLayout
             android:id="@+id/linear_layout_open_search_tab"
@@ -48,14 +48,16 @@
             android:orientation="vertical">
 
             <android.support.v4.widget.SwipeRefreshLayout
-                android:id="@+id/swipeContainer"
+                android:id="@+id/swipe_Container"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
                 <ListView
                     android:id="@+id/list"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"></ListView>
+                    android:layout_height="match_parent"
+                    android:divider="#00000000"
+                    android:footerDividersEnabled="false"></ListView>
             </android.support.v4.widget.SwipeRefreshLayout>
         </LinearLayout>
     </LinearLayout>

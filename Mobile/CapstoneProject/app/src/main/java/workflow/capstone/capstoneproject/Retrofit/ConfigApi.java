@@ -1,13 +1,17 @@
 package workflow.capstone.capstoneproject.retrofit;
 
 public class ConfigApi {
-    public static final String BASE_URL = "http://192.168.1.23:8080/api/";
+    public static final String BASE_URL = "http://192.168.1.24:8080/api/";
 
     public interface Api {
         String LOGIN = "Token/User";
         String GET_PROFILE = "Accounts/GetProfile";
-        String GET_WORKFLOWS = "Workflows";
+        String GET_WORKFLOWS = "WorkflowsTemplate";
         String GET_NUMBER_NOTIFICATION = "Notifications/GetNumberOfNotification";
         String GET_NOTIFCATION = "Notifications/GetByUserID";
+        String POST_REQUEST = "Requests";
+        String POST_REQUEST_ACTION = "RequestActions";
+        String POST_REQUEST_FILE = "";
+        String POST_REQUEST_VALUE = "RequestValues";
     }
 }

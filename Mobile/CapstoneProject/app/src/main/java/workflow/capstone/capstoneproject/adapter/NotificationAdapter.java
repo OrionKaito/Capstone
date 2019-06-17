@@ -46,8 +46,8 @@ public class NotificationAdapter extends BaseAdapter {
         if (convertView == null) {
             convertView = layoutInflater.inflate(R.layout.notification_listview, null);
             holder = new ViewHolder();
-            holder.tvApprover = convertView.findViewById(R.id.tvApprover);
-            holder.tvMessage = convertView.findViewById(R.id.tvMessage);
+            holder.tvApprover = convertView.findViewById(R.id.tv_Approver);
+            holder.tvMessage = convertView.findViewById(R.id.tv_Message);
             convertView.setTag(holder);
         } else {
             holder = (ViewHolder) convertView.getTag();

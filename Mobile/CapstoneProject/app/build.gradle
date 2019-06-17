@@ -33,7 +33,4 @@ dependencies {
     implementation 'com.squareup.retrofit2:converter-gson:2.5.0'
     implementation 'com.kaopiz:kprogresshud:1.2.0'
     implementation 'net.yslibrary.keyboardvisibilityevent:keyboardvisibilityevent:2.3.0'
-    implementation 'com.google.firebase:firebase-core:16.0.9'
 }
-
-apply plugin: 'com.google.gms.google-services'

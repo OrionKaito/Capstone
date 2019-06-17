@@ -31,7 +31,7 @@ public class ProfileFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_profile, container, false);
-        btnLogout = view.findViewById(R.id.btnLogout);
+        btnLogout = view.findViewById(R.id.btn_Logout);
         btnLogout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
