@@ -146,7 +146,7 @@ namespace Capstone.Controllers
                 {
                     workFlowInDb.IsEnabled = true;
                 }
-
+                _workFlowService.Save();
                 return Ok(WebConstant.Success);
             }
             catch (Exception e)

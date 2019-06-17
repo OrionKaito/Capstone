@@ -16,6 +16,7 @@ namespace Capstone.ViewModel
     public class RequestValueCM
     {
         public string Data { get; set; }
+        public Guid RequestActionID { get; set; }
     }
 
     public class RequestValueUM
