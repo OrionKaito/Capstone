@@ -46,6 +46,8 @@ namespace Capstone.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            base.OnModelCreating(modelBuilder);
+
             modelBuilder.Entity<User>().ToTable("Users", "dbo");
             modelBuilder.Entity<User>().Ignore(c => c.AccessFailedCount)
                                            .Ignore(c => c.LockoutEnabled)
@@ -71,7 +73,6 @@ namespace Capstone.Data
                 foreignkey.DeleteBehavior = DeleteBehavior.Restrict;
             }
 
-            base.OnModelCreating(modelBuilder);
         }
     }
 }
