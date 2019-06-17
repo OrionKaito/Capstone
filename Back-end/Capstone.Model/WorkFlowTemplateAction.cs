@@ -12,11 +12,15 @@ namespace Capstone.Model
         public string Name { get; set; }
         public string Description { get; set; }
 
+        public Guid WorkFlowTemplateID { get; set; }
+        [ForeignKey("WorkFlowTemplateID")]
+        public virtual WorkFlowTemplate WorkFlowTemplate { get; set; }
+
         public Guid ActionTypeID { get; set; }
         [ForeignKey("ActionTypeID")]
         public virtual ActionType ActionType { get; set; }
 
-        public Guid PermissionToUse { get; set; }
+        public Guid PermissionToUseID { get; set; }
         [ForeignKey("PermissionToUse")]
         public virtual Permission Permission { get; set; }
 
