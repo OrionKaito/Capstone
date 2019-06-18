@@ -4,7 +4,6 @@ using Capstone.Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace Capstone.Service
 {
@@ -13,7 +12,6 @@ namespace Capstone.Service
         IEnumerable<RequestFile> GetAll();
         RequestFile GetByID(Guid ID);
         void Create(RequestFile requestFile);
-        void Delete(RequestFile requestFile);
         void Save();
     }
     public class RequestFileService : IRequestFileService
@@ -30,11 +28,6 @@ namespace Capstone.Service
         public void Create(RequestFile requestFile)
         {
             _requestFileRepository.Add(requestFile);
-        }
-
-        public void Delete(RequestFile requestFile)
-        {
-            _requestFileRepository.Delete(requestFile);
         }
 
         public IEnumerable<RequestFile> GetAll()

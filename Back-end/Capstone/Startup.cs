@@ -5,6 +5,9 @@ using Capstone.Data.Repositories;
 using Capstone.Mappings;
 using Capstone.Model;
 using Capstone.Service;
+using Hangfire;
+using Hangfire.SqlServer;
+using Hangfire.Storage;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -14,16 +17,10 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using Swashbuckle.AspNetCore.Swagger;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Hangfire;
-using Hangfire.SqlServer;
-using System;
-using Hangfire.Storage;
-using Microsoft.Extensions.FileProviders;
-using System.IO;
-using Microsoft.AspNetCore.Http;
 
 namespace Capstone
 {
@@ -71,6 +68,10 @@ namespace Capstone
             services.AddTransient<IWorkFlowTemplateActionRepository, WorkFlowTemplateActionRepository>();
             services.AddTransient<IWorkFlowTemplateActionService, WorkFlowTemplateActionService>();
 
+            //WorkFlowTemplateActionConnection
+            services.AddTransient<IWorkFlowTemplateActionConnectionRepository, WorkFlowTemplateActionConnectionRepository>();
+            services.AddTransient<IWorkFlowTemplateActionConnectionService, WorkFlowTemplateActionConnectionService>();
+
             //ActionType
             services.AddTransient<IActionTypeRepository, ActionTypeRepository>();
             services.AddTransient<IActionTypeService, ActionTypeService>();
@@ -114,7 +115,7 @@ namespace Capstone
             //User
             services.AddTransient<IUserRepository, UserRepository>();
             services.AddTransient<IUserService, UserService>();
-          
+
             //Request
             services.AddTransient<IRequestRepository, RequestRepository>();
             services.AddTransient<IRequestService, RequestService>();
@@ -193,7 +194,7 @@ namespace Capstone
                 { "Bearer", Enumerable.Empty<string>() },
             });
             });
-            
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

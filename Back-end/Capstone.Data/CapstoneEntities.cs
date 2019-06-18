@@ -18,6 +18,7 @@ namespace Capstone.Data
         //WorkFlows
         public DbSet<WorkFlowTemplate> WorkFlowTemplates { get; set; }
         public DbSet<WorkFlowTemplateAction> WorkFlowTemplateActions { get; set; }
+        public DbSet<WorkFlowTemplateActionConnection> WorkFlowTemplateActionConnections { get; set; }
         public DbSet<ActionType> ActionTypes { get; set; }
 
         //Authorizations
