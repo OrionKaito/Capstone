@@ -136,6 +136,11 @@ namespace Capstone
 
             //Email
             services.AddTransient<IEmailService, EmailServicce>();
+
+            //ConnectionType
+            services.AddTransient<IConnectionTypeRepository, ConnectionTypeRepository>();
+            services.AddTransient<IConnectionTypeService, ConnectionTypeService>();
+
             #endregion
 
             // Auto Mapper Configurations

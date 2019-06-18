@@ -171,6 +171,16 @@ namespace Capstone.Mappings
 
             CreateMap<UserNotification, UserNotificationUM>();
             CreateMap<UserNotificationUM, UserNotification>();
+
+            //ConnectionType
+            CreateMap<ConnectionType, ConnectionTypeVM>();
+            CreateMap<ConnectionTypeVM, ConnectionType>();
+
+            CreateMap<ConnectionType, ConnectionTypeCM>();
+            CreateMap<ConnectionTypeCM, ConnectionType>();
+
+            CreateMap<ConnectionType, ConnectionTypeUM>();
+            CreateMap<ConnectionTypeUM, ConnectionType>();
         }
     }
 }
