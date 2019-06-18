@@ -127,7 +127,7 @@ namespace Capstone.Controllers
             foreach (var item in notification)
             {
                 var notificationInDb = _notificationService.GetByID(item.NotificationID);
-                if (notificationInDb.NotificationType == NotificationType.UpdatedWorkflow)
+                if (notificationInDb.NotificationType == NotificationEnum.UpdatedWorkflow)
                 {
                     var result = new NotificationViewModel
                     {
@@ -138,7 +138,7 @@ namespace Capstone.Controllers
                     };
                     data.Add(result);
                 }
-                else if (notificationInDb.NotificationType == NotificationType.AcceptedRequest)
+                else if (notificationInDb.NotificationType == NotificationEnum.AcceptedRequest)
                 {
                     foreach (var userInRequest in listUserInRequest)
                     {
@@ -153,7 +153,7 @@ namespace Capstone.Controllers
                         data.Add(result);
                     }
                 }
-                else if (notificationInDb.NotificationType == NotificationType.ReceivedRequest)
+                else if (notificationInDb.NotificationType == NotificationEnum.ReceivedRequest)
                 {
                     foreach (var userInRequest in listUserInRequest)
                     {
@@ -168,7 +168,7 @@ namespace Capstone.Controllers
                         data.Add(result);
                     }
                 }
-                else if (notificationInDb.NotificationType == NotificationType.DeniedRequest)
+                else if (notificationInDb.NotificationType == NotificationEnum.DeniedRequest)
                 {
                     foreach (var userInRequest in listUserInRequest)
                     {

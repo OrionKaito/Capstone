@@ -1,6 +1,6 @@
 ﻿namespace Capstone.Model
 {
-    public enum NotificationType
+    public enum NotificationEnum
     {
         UpdatedWorkflow = 1,
         ReceivedRequest = 2,
