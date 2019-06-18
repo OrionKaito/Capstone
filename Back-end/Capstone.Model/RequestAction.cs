@@ -9,7 +9,7 @@ namespace Capstone.Model
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public Guid ID { get; set; }
-        public string Status { get; set; }
+        public StatusEnum Status { get; set; }
         public DateTime CreateDate { get; set; }
 
         public Guid RequestID { get; set; }

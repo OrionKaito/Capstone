@@ -51,7 +51,7 @@ namespace Capstone.Controllers
                 {
                     DateTime = DateTime.Now,
                     EventID = request.ID,
-                    NotificationType = NotificationType.ReceivedRequest,
+                    NotificationType = NotificationEnum.ReceivedRequest,
                 };
 
                 _notificationService.Create(notification);
