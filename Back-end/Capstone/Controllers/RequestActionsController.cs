@@ -6,6 +6,8 @@ using Capstone.ViewModel;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Security.Claims;
 
 namespace Capstone.Controllers
 {
@@ -30,9 +32,11 @@ namespace Capstone.Controllers
             if (!ModelState.IsValid) return BadRequest(ModelState);
             try
             {
+                var userId = HttpContext.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier).Value;
                 RequestAction requestAction = new RequestAction();
                 requestAction = _mapper.Map<RequestAction>(model);
                 requestAction.CreateDate = DateTime.Now;
+                requestAction.ActorID = userId;
 
                 _requestActionService.Create(requestAction);
                 return StatusCode(201, requestAction.ID);

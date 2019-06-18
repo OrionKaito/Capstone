@@ -17,7 +17,6 @@ namespace Capstone.ViewModel
     {
         public string Status { get; set; }
         public Guid RequestID { get; set; }
-        public string ActorID { get; set; }
         public Guid NextStepID { get; set; }
     }
 
