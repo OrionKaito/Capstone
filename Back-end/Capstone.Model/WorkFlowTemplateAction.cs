@@ -21,7 +21,7 @@ namespace Capstone.Model
         public virtual ActionType ActionType { get; set; }
 
         public Guid PermissionToUseID { get; set; }
-        [ForeignKey("PermissionToUse")]
+        [ForeignKey("PermissionToUseID")]
         public virtual Permission Permission { get; set; }
 
         public bool IsDeleted { get; set; }
