@@ -16,7 +16,7 @@ namespace Capstone.Service
         void Save();
     }
 
-    class WorkFlowTemplateActionService : IWorkFlowTemplateActionService
+    public class WorkFlowTemplateActionService : IWorkFlowTemplateActionService
     {
         private readonly IWorkFlowTemplateActionRepository _workFlowTemplateActionRepository;
         private readonly IUnitOfWork _unitOfWork;

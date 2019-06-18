@@ -67,6 +67,10 @@ namespace Capstone
             services.AddTransient<IWorkFlowTemplateRepository, WorkFlowTemplateRepository>();
             services.AddTransient<IWorkFlowTemplateService, WorkFlowTemplateService>();
 
+            //WorkFlowAction
+            services.AddTransient<IWorkFlowTemplateActionRepository, WorkFlowTemplateActionRepository>();
+            services.AddTransient<IWorkFlowTemplateActionService, WorkFlowTemplateActionService>();
+
             //ActionType
             services.AddTransient<IActionTypeRepository, ActionTypeRepository>();
             services.AddTransient<IActionTypeService, ActionTypeService>();
@@ -227,12 +231,12 @@ namespace Capstone
 
             backgroundJobs.Schedule<IHangfireService>(u => u.checkAndChange(), TimeSpan.FromMinutes(1));
 
-            app.UseStaticFiles();
-            app.UseStaticFiles(new StaticFileOptions()
-            {
-                FileProvider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), @"Resources")),
-                RequestPath = new PathString("/Resources")
-            });
+            //app.UseStaticFiles();
+            //app.UseStaticFiles(new StaticFileOptions()
+            //{
+            //    FileProvider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), @"Resources")),
+            //    RequestPath = new PathString("/Resources")
+            //});
 
             app.UseHttpsRedirection();
             app.UseMvc();
