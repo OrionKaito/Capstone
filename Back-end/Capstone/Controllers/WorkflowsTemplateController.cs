@@ -26,7 +26,7 @@ namespace Capstone.Controllers
 
         // GET: api/Workflows
         [HttpGet]
-        public ActionResult<IEnumerable<WorkFlowTemplateVM>> GetWorkflowsTemplate()
+        public ActionResult<IEnumerable<WorkFlowTemplateVM>> GetWorkflowsTemplates()
         {
             try
             {
@@ -102,7 +102,7 @@ namespace Capstone.Controllers
                 workFlow = _mapper.Map<WorkFlowTemplate>(model);
                 workFlow.OwnerID = userID;
                 _workFlowService.Create(workFlow);
-                
+
                 return StatusCode(201, workFlow.ID);
             }
             catch (Exception e)
