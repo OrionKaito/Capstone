@@ -16,7 +16,7 @@ namespace Capstone.ViewModel
     public class NotificationCM
     {
         public Guid EventID { get; set; }
-        public NotificationType NotificationType { get; set; }
+        public NotificationEnum NotificationType { get; set; }
         public string Message { get; set; }
         public DateTime DateTime { get; set; }
     }
@@ -36,7 +36,7 @@ namespace Capstone.ViewModel
         public Guid EventID { get; set; }
         public string Message { get; set; }
         public string Fullname { get; set; }
-        public NotificationType NotificationType { get; set; }
+        public NotificationEnum NotificationType { get; set; }
         public string ApproverName { get; set; }
     }
 }

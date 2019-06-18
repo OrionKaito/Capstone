@@ -39,6 +39,9 @@ namespace Capstone.Controllers
                 requestAction.ActorID = userId;
 
                 _requestActionService.Create(requestAction);
+
+                //thêm code chuyển status của request action
+                //
                 return StatusCode(201, requestAction.ID);
             }
             catch (Exception e)
