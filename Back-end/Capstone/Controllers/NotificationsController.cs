@@ -35,7 +35,7 @@ namespace Capstone.Controllers
 
         // POST: api/Notifications
         [HttpPost]
-        public ActionResult<Notification> PostNotification(NotificationCM model)
+        public ActionResult PostNotification(NotificationCM model)
         {
             if (!ModelState.IsValid) return BadRequest(ModelState);
 
@@ -54,7 +54,7 @@ namespace Capstone.Controllers
 
         // GET: api/Notificaions
         [HttpGet]
-        public ActionResult<IEnumerable<Notification>> GetNotifications()
+        public ActionResult<IEnumerable<NotificationVM>> GetNotifications()
         {
             try
             {
@@ -74,7 +74,7 @@ namespace Capstone.Controllers
 
         // GET: api/Notifications/5
         [HttpGet("GetByID")]
-        public ActionResult<Notification> GetNotification(Guid ID)
+        public ActionResult<NotificationVM> GetNotification(Guid ID)
         {
             try
             {

@@ -25,7 +25,7 @@ namespace Capstone.Controllers
 
         //POST: api/PermissionOfRoles
         [HttpPost]
-        public ActionResult<PermissionOfRole> PostPermissionOfRole(PermissionOfRoleCM model)
+        public ActionResult PostPermissionOfRole(PermissionOfRoleCM model)
         {
             if (!ModelState.IsValid) return BadRequest(ModelState);
             try
@@ -46,7 +46,7 @@ namespace Capstone.Controllers
 
         // GET: api/PermissionOfRoles
         [HttpGet]
-        public ActionResult<IEnumerable<PermissionOfRole>> GetPermissionOfRoles()
+        public ActionResult<IEnumerable<PermissionOfRoleVM>> GetPermissionOfRoles()
         {
             try
             {
@@ -66,7 +66,7 @@ namespace Capstone.Controllers
 
         // GET: api/PermissionOfRoles/GetByPermission
         [HttpGet("GetByPermission")]
-        public ActionResult<IEnumerable<PermissionOfRole>> GetByPermission(Guid ID)
+        public ActionResult<IEnumerable<PermissionOfRoleVM>> GetByPermission(Guid ID)
         {
             try
             {
@@ -87,7 +87,7 @@ namespace Capstone.Controllers
 
         // GET: api/PermissionOfRoles/GetByRole
         [HttpGet("GetByRole")]
-        public ActionResult<IEnumerable<PermissionOfRole>> GetByRole(Guid ID)
+        public ActionResult<IEnumerable<PermissionOfRoleVM>> GetByRole(Guid ID)
         {
             try
             {
@@ -108,7 +108,7 @@ namespace Capstone.Controllers
 
         // GET: api/PermissionOfRoles
         [HttpGet("GetByID")]
-        public ActionResult<RoleOfGroup> GetPermissionOfRole(Guid ID)
+        public ActionResult<PermissionOfRoleVM> GetPermissionOfRole(Guid ID)
         {
             try
             {

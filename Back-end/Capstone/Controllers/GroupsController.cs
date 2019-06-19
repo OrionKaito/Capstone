@@ -24,7 +24,7 @@ namespace Capstone.Controllers
 
         // POST: api/Groups
         [HttpPost]
-        public ActionResult<Group> PostGroup(GroupCM model)
+        public ActionResult PostGroup(GroupCM model)
         {
             if (!ModelState.IsValid) return BadRequest(ModelState);
             try
@@ -45,7 +45,7 @@ namespace Capstone.Controllers
 
         // GET: api/Groups
         [HttpGet]
-        public ActionResult<IEnumerable<Group>> GetGroups()
+        public ActionResult<IEnumerable<GroupVM>> GetGroups()
         {
             try
             {
@@ -88,7 +88,7 @@ namespace Capstone.Controllers
 
         // GET: api/Groups/5
         [HttpGet("GetByID")]
-        public ActionResult<Group> GetGroup(Guid ID)
+        public ActionResult<GroupVM> GetGroup(Guid ID)
         {
             try
             {

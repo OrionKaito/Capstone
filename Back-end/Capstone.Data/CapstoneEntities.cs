@@ -20,6 +20,7 @@ namespace Capstone.Data
         public DbSet<WorkFlowTemplateAction> WorkFlowTemplateActions { get; set; }
         public DbSet<WorkFlowTemplateActionConnection> WorkFlowTemplateActionConnections { get; set; }
         public DbSet<ActionType> ActionTypes { get; set; }
+        public DbSet<ConnectionType> ConnectionTypes { get; set; }
 
         //Authorizations
         public DbSet<Group> Groups { get; set; }

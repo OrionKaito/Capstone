@@ -172,8 +172,17 @@ namespace Capstone.Mappings
             CreateMap<UserNotification, UserNotificationUM>();
             CreateMap<UserNotificationUM, UserNotification>();
 
-            //WorkFlowTemplateActionConnection
+            //ConnectionType
+            CreateMap<ConnectionType, ConnectionTypeVM>();
+            CreateMap<ConnectionTypeVM, ConnectionType>();
 
+            CreateMap<ConnectionType, ConnectionTypeCM>();
+            CreateMap<ConnectionTypeCM, ConnectionType>();
+
+            CreateMap<ConnectionType, ConnectionTypeUM>();
+            CreateMap<ConnectionTypeUM, ConnectionType>();
+            
+            //WorkFlowTemplateActionConnection
             CreateMap<WorkFlowTemplateActionConnection, WorkFlowTemplateActionConnectionVM>();
             CreateMap<WorkFlowTemplateActionConnectionVM, WorkFlowTemplateActionConnection>();
 
@@ -182,6 +191,7 @@ namespace Capstone.Mappings
 
             CreateMap<WorkFlowTemplateActionConnection, WorkFlowTemplateActionConnectionUM>();
             CreateMap<WorkFlowTemplateActionConnectionUM, WorkFlowTemplateActionConnection>();
+
         }
     }
 }
