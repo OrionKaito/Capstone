@@ -10,7 +10,7 @@ namespace Capstone.Mappings
         {
             CreateMap<User, RegistrationVM>();
             CreateMap<RegistrationVM, User>();
-            
+
             CreateMap<User, RegistrationUM>();
             CreateMap<RegistrationUM, User>();
 
@@ -148,7 +148,7 @@ namespace Capstone.Mappings
 
             CreateMap<RequestFile, RequestFileCM>();
             CreateMap<RequestFileCM, RequestFile>();
-            
+
             CreateMap<RequestFile, RequestFileUM>();
             CreateMap<RequestFileUM, RequestFile>();
 
@@ -181,6 +181,17 @@ namespace Capstone.Mappings
 
             CreateMap<ConnectionType, ConnectionTypeUM>();
             CreateMap<ConnectionTypeUM, ConnectionType>();
+            
+            //WorkFlowTemplateActionConnection
+            CreateMap<WorkFlowTemplateActionConnection, WorkFlowTemplateActionConnectionVM>();
+            CreateMap<WorkFlowTemplateActionConnectionVM, WorkFlowTemplateActionConnection>();
+
+            CreateMap<WorkFlowTemplateActionConnection, WorkFlowTemplateActionConnectionCM>();
+            CreateMap<WorkFlowTemplateActionConnectionCM, WorkFlowTemplateActionConnection>();
+
+            CreateMap<WorkFlowTemplateActionConnection, WorkFlowTemplateActionConnectionUM>();
+            CreateMap<WorkFlowTemplateActionConnectionUM, WorkFlowTemplateActionConnection>();
+
         }
     }
 }
