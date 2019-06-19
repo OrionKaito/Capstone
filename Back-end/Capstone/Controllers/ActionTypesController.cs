@@ -24,7 +24,7 @@ namespace Capstone.Controllers
 
         // POST: api/ActionTypes
         [HttpPost]
-        public ActionResult<ActionType> PostActionType(ActionTypeCM model)
+        public ActionResult PostActionType(ActionTypeCM model)
         {
             if (!ModelState.IsValid) return BadRequest(ModelState);
             try
@@ -45,7 +45,7 @@ namespace Capstone.Controllers
 
         // GET: api/ActionTypes
         [HttpGet]
-        public ActionResult<IEnumerable<ActionType>> GetActionTypes()
+        public ActionResult<IEnumerable<ActionTypeVM>> GetActionTypes()
         {
             try
             {
@@ -65,7 +65,7 @@ namespace Capstone.Controllers
 
         // GET: api/ActionTypes/5
         [HttpGet("GetByID")]
-        public ActionResult<ActionType> GetActionType(Guid ID)
+        public ActionResult<ActionTypeVM> GetActionType(Guid ID)
         {
             try
             {

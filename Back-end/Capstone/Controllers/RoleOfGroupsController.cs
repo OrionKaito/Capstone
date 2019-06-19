@@ -25,7 +25,7 @@ namespace Capstone.Controllers
 
         // POST: api/RoleOfGroups
         [HttpPost]
-        public ActionResult<RoleOfGroup> PostRoleOfGroup(RoleOfGroupCM model)
+        public ActionResult PostRoleOfGroup(RoleOfGroupCM model)
         {
             if (!ModelState.IsValid) return BadRequest(ModelState);
             try
@@ -46,7 +46,7 @@ namespace Capstone.Controllers
 
         // GET: api/RoleOfGroups
         [HttpGet]
-        public ActionResult<IEnumerable<RoleOfGroup>> GetRoleOfGroups()
+        public ActionResult<IEnumerable<RoleOfGroupVM>> GetRoleOfGroups()
         {
             try
             {
@@ -66,7 +66,7 @@ namespace Capstone.Controllers
 
         // GET: api/RoleOfGroups/GetByGroup
         [HttpGet("GetByGroup")]
-        public ActionResult<IEnumerable<RoleOfGroup>> GetByGroup(Guid ID)
+        public ActionResult<IEnumerable<RoleOfGroupVM>> GetByGroup(Guid ID)
         {
             try
             {
@@ -87,7 +87,7 @@ namespace Capstone.Controllers
 
         // GET: api/RoleOfGroups/GetByRole
         [HttpGet("GetByRole")]
-        public ActionResult<IEnumerable<RoleOfGroup>> GetByRole(Guid ID)
+        public ActionResult<IEnumerable<RoleOfGroupVM>> GetByRole(Guid ID)
         {
             try
             {
@@ -108,7 +108,7 @@ namespace Capstone.Controllers
 
         // GET: api/RoleOfGroups/5
         [HttpGet("GetByID")]
-        public ActionResult<RoleOfGroup> GetRoleOfGroup(Guid ID)
+        public ActionResult<RoleOfGroupVM> GetRoleOfGroup(Guid ID)
         {
             try
             {

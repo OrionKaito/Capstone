@@ -27,7 +27,7 @@ namespace Capstone.Controllers
 
         // POST: api/RequestActions
         [HttpPost]
-        public ActionResult<RequestAction> PostRequestAction(RequestActionCM model)
+        public ActionResult PostRequestAction(RequestActionCM model)
         {
             if (!ModelState.IsValid) return BadRequest(ModelState);
             try
@@ -52,7 +52,7 @@ namespace Capstone.Controllers
 
         // GET: api/RequestActions
         [HttpGet]
-        public ActionResult<IEnumerable<RequestAction>> GetRequestActions()
+        public ActionResult<IEnumerable<RequestActionVM>> GetRequestActions()
         {
             try
             {
@@ -72,7 +72,7 @@ namespace Capstone.Controllers
 
         // GET: api/RequestActions/GetByID
         [HttpGet("GetByID")]
-        public ActionResult<RequestAction> GetRequestAction(Guid ID)
+        public ActionResult<RequestActionVM> GetRequestAction(Guid ID)
         {
             try
             {
