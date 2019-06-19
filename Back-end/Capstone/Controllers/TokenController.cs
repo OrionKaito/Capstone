@@ -43,7 +43,8 @@ namespace Capstone.Controllers
             }
 
             var identity = CheckClaimIdentity(credentials.UserName, credentials.Password);
-            if (identity.Result == null) {
+            if (identity.Result == null)
+            {
                 return BadRequest(WebConstant.InvalidUSer);
             }
 
@@ -124,11 +125,11 @@ namespace Capstone.Controllers
             return Ok(tokenString);
         }
 
-        private async Task<User>CheckClaimIdentity(string username, string password)
+        private async Task<User> CheckClaimIdentity(string username, string password)
         {
             if (string.IsNullOrEmpty(username) || string.IsNullOrEmpty(password))
             {
-                return null; 
+                return null;
             }
 
             //Get user to verify
@@ -156,7 +157,7 @@ namespace Capstone.Controllers
             var claims = new[]
             {
                 new Claim(JwtRegisteredClaimNames.Sub, user.Id),
-                new Claim(Helper.WebConstant.Permissions , listPermission),
+                new Claim(WebConstant.Permissions , listPermission),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
             };
 
