@@ -24,7 +24,7 @@ namespace Capstone.Controllers
 
         // POST: api/Roles
         [HttpPost]
-        public ActionResult<Role> PostRole(RoleCM model)
+        public ActionResult PostRole(RoleCM model)
         {
             if (!ModelState.IsValid) return BadRequest(ModelState);
             try
@@ -45,7 +45,7 @@ namespace Capstone.Controllers
 
         // GET: api/Roles
         [HttpGet]
-        public ActionResult<IEnumerable<Role>> GetRoles()
+        public ActionResult<IEnumerable<RoleVM>> GetRoles()
         {
             try
             {
@@ -88,7 +88,7 @@ namespace Capstone.Controllers
 
         // GET: api/Roles/GetByID
         [HttpGet("GetByID")]
-        public ActionResult<Role> GetRole(Guid ID)
+        public ActionResult<RoleVM> GetRole(Guid ID)
         {
             try
             {

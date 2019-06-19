@@ -27,7 +27,7 @@ namespace Capstone.Controllers
 
         // POST: api/RequestFiles
         [HttpPost, DisableRequestSizeLimit]
-        public ActionResult<RequestFile> PostRequestFile(Guid requestActionID)
+        public ActionResult PostRequestFile(Guid requestActionID)
         {
             try
             {
@@ -74,7 +74,7 @@ namespace Capstone.Controllers
 
         // GET: api/RequestFiles
         [HttpGet]
-        public ActionResult<IEnumerable<RequestFile>> GetRequestFiles()
+        public ActionResult<IEnumerable<RequestFileVM>> GetRequestFiles()
         {
             try
             {
@@ -94,7 +94,7 @@ namespace Capstone.Controllers
 
         // GET: api/RequestFiles/GetByID
         [HttpGet("GetByID")]
-        public ActionResult<RequestFile> GetRequestFile(Guid ID)
+        public ActionResult<RequestFileVM> GetRequestFile(Guid ID)
         {
             try
             {

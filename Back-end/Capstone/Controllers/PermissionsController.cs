@@ -24,7 +24,7 @@ namespace Capstone.Controllers
 
         // POST: api/Permissions
         [HttpPost]
-        public ActionResult<Permission> PostPermission(PermissionCM model)
+        public ActionResult PostPermission(PermissionCM model)
         {
             if (!ModelState.IsValid) return BadRequest(ModelState);
             try
@@ -45,7 +45,7 @@ namespace Capstone.Controllers
 
         // GET: api/Permissions
         [HttpGet]
-        public ActionResult<IEnumerable<Permission>> GetPermissions()
+        public ActionResult<IEnumerable<PermissionVM>> GetPermissions()
         {
             try
             {
@@ -86,7 +86,7 @@ namespace Capstone.Controllers
 
         // GET: api/Permissions/GetByID
         [HttpGet("GetByID")]
-        public ActionResult<Permission> GetPermission(Guid ID)
+        public ActionResult<PermissionVM> GetPermission(Guid ID)
         {
             try
             {

@@ -46,7 +46,7 @@ namespace Capstone.Controllers
 
         // GET: api/UserRoles
         [HttpGet("GetByUserID")]
-        public ActionResult<IEnumerable<UserRole>> GetByUserID(string ID)
+        public ActionResult<IEnumerable<UserRoleVM>> GetByUserID(string ID)
         {
             try
             {
@@ -67,7 +67,7 @@ namespace Capstone.Controllers
 
         // GET: api/UserRoles/5
         [HttpGet]
-        public ActionResult<UserRole> GetUserRole(Guid ID)
+        public ActionResult<UserRoleVM> GetUserRole(Guid ID)
         {
             try
             {
