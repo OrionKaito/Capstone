@@ -7,9 +7,8 @@ namespace Capstone.Model
     public class Request
     {
         [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public Guid ID { get; set; }
-        public DateTime CreateDate { get; set; }
+        public DateTime? CreateDate { get; set; }
         public string Description { get; set; }
 
         public string InitiatorID { get; set; }

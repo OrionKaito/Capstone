@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using Capstone.Helper;
-using Capstone.Model;
 using Capstone.Service;
 using Capstone.ViewModel;
 using Microsoft.AspNetCore.Mvc;
@@ -27,19 +26,19 @@ namespace Capstone.Controllers
 
         // POST: api/RequestFiles
         [HttpPost, DisableRequestSizeLimit]
-        public ActionResult PostRequestFile(Guid requestActionID)
+        public ActionResult PostRequestFile()
         {
             try
             {
                 var file = Request.Form.Files[0];
-                var folderName ="Resources";
+                var folderName = "Resources";
                 var pathToSave = Path.Combine(Directory.GetCurrentDirectory(), folderName); // đường dẫn tuyệt đối tới folder
 
                 if (!Directory.Exists(pathToSave)) // kiểm tra folder có tồn tại
                 {
-                    Directory.CreateDirectory(pathToSave); 
+                    Directory.CreateDirectory(pathToSave);
                 }
-                
+
                 if (file.Length > 0)
                 {
                     var fileName = ContentDispositionHeaderValue.Parse(file.ContentDisposition).FileName.Trim('"');
@@ -50,14 +49,6 @@ namespace Capstone.Controllers
                     {
                         file.CopyTo(stream);
                     }
-
-                    RequestFile requestFile = new RequestFile
-                    {
-                        CreateDate = DateTime.Now,
-                        Name = fileName,
-                        Path = dbPath,
-                        RequestActionID = requestActionID
-                    };
 
                     return Ok(new { dbPath });
                 }

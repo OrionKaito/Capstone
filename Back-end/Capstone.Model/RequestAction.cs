@@ -7,7 +7,6 @@ namespace Capstone.Model
     public class RequestAction
     {
         [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public Guid ID { get; set; }
         public StatusEnum Status { get; set; }
         public DateTime CreateDate { get; set; }

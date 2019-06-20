@@ -9,7 +9,9 @@ namespace Capstone.Model
         public string EmailConfirmCode { get; set; }
         public DateTime? DateOfBirth { get; set; }
         public DateTime CreateDate { get; set; }
-        public Guid? ManagerID { get; set; }
-        public bool? IsDeleted { get; set; }
+
+        public string ManagerID { get; set; }
+
+        public bool IsDeleted { get; set; }
     }
 }

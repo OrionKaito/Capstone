@@ -7,7 +7,6 @@ namespace Capstone.Model
     public class UserRole
     {
         [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public Guid ID { get; set; }
 
         public string UserID { get; set; }

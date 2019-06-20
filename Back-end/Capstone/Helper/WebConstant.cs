@@ -3,6 +3,9 @@
     public class WebConstant
     {
         //Variables
+        public static int DefaultPageRecordCount = 10;
+
+        //Variables's name
         public static string Permissions = "permissions";
         public static string Roles = "roles";
         public static string Groups = "groups";

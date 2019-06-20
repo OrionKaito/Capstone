@@ -58,7 +58,7 @@ namespace Capstone.Service
         public IEnumerable<string> GetByUserID(string ID)
         {
             List<string> listGroupName = new List<string>();
-            var data = _userGroupRepository.GetMany(u => u.IsDeleted == false && u.UserId.Equals(ID));
+            var data = _userGroupRepository.GetMany(u => u.IsDeleted == false && u.UserID.Equals(ID));
             foreach (var item in data)
             {
                 listGroupName.Add(_groupRepository.GetById(item.GroupID).Name);

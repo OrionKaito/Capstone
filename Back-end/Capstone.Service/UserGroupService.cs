@@ -41,7 +41,7 @@ namespace Capstone.Service
 
         public IEnumerable<UserGroup> GetByUserID(string ID)
         {
-            return _userGroupRepository.GetMany(u => u.IsDeleted == false && u.UserId.Equals(ID));
+            return _userGroupRepository.GetMany(u => u.IsDeleted == false && u.UserID.Equals(ID));
         }
 
         public UserGroup GetByID(Guid ID)

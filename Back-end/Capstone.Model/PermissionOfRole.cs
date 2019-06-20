@@ -7,7 +7,6 @@ namespace Capstone.Model
     public class PermissionOfRole
     {
         [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public Guid ID { get; set; }
 
         public Guid PermissionID { get; set; }

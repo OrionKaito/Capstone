@@ -7,7 +7,6 @@ namespace Capstone.Model
     public class WorkFlowTemplateActionConnection
     {
         [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public Guid ID { get; set; }
 
         public Guid FromWorkFlowTemplateActionID { get; set; }
