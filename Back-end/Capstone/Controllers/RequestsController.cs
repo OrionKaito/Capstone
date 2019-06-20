@@ -18,16 +18,31 @@ namespace Capstone.Controllers
     {
         private readonly IMapper _mapper;
         private readonly IRequestService _requestService;
+        private readonly IRequestActionService _requestActionService;
+        private readonly IRequestValueService _requestValueService;
+        private readonly IRequestFileService _requestFileService;
         private readonly INotificationService _notificationService;
         private readonly IUserNotificationService _userNotificationService;
+        private readonly IUserService _userService;
+        private readonly IWorkFlowTemplateActionService _workFlowTemplateActionService;
 
-        public RequestsController(IMapper mapper, IRequestService requestService, 
-            INotificationService notificationService, IUserNotificationService userNotificationService)
+        public RequestsController(IMapper mapper, IRequestService requestService
+            , IRequestActionService requestActionService
+            , IRequestValueService requestValueService
+            , IRequestFileService requestFileService
+            , INotificationService notificationService
+            , IUserNotificationService userNotificationService
+            , IUserService userService, IWorkFlowTemplateActionService workFlowTemplateActionService)
         {
             _mapper = mapper;
             _requestService = requestService;
+            _requestActionService = requestActionService;
+            _requestValueService = requestValueService;
+            _requestFileService = requestFileService;
             _notificationService = notificationService;
             _userNotificationService = userNotificationService;
+            _userService = userService;
+            _workFlowTemplateActionService = workFlowTemplateActionService;
         }
 
         // POST: api/Requests
@@ -38,30 +53,94 @@ namespace Capstone.Controllers
 
             try
             {
+                //Begin transaction
+                _requestService.BeginTransaction();
+
                 var currentUSer = HttpContext.User;
                 var userID = currentUSer.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier).Value;
 
-                Request request = _mapper.Map<Request>(model);
-                request.InitiatorID = userID;
+                //Request
+                Request request = new Request
+                {
+                    InitiatorID = userID,
+                    Description = model.Description,
+                    WorkFlowTemplateID = model.WorkFlowTemplateID,
+                    CreateDate = DateTime.Now,
+                };
 
-                request.CreateDate = DateTime.Now;
                 _requestService.Create(request);
 
+                //RequestAction
+                RequestAction requestAction = new RequestAction
+                {
+                    Status = model.Status,
+                    RequestID = request.ID,
+                    ActorID = userID,
+                    NextStepID = model.NextStepID,
+                    CreateDate = DateTime.Now,
+                };
+
+                _requestActionService.Create(requestAction);
+
+                //RequestValue
+                foreach (var value in model.ActionValues)
+                {
+                    RequestValue requestValue = new RequestValue
+                    {
+                        Key = value.Key,
+                        Value = value.Value,
+                        RequestActionID = requestAction.ID,
+                    };
+
+                    _requestValueService.Create(requestValue);
+                }
+
+                //RequestFile
+                RequestFile requestFile = new RequestFile
+                {
+                    Path = model.ImagePath,
+                    RequestActionID = requestAction.ID,
+                };
+
+                _requestFileService.Create(requestFile);
+                //Notification
                 Notification notification = new Notification
                 {
-                    DateTime = DateTime.Now,
                     EventID = request.ID,
                     NotificationType = NotificationEnum.ReceivedRequest,
+                    CreateDate = DateTime.Now,
+
+                    ID = Guid.NewGuid(),
+                    IsDeleted = false,
                 };
 
                 _notificationService.Create(notification);
 
-                // chỗ này thêm thằng nhận request
+                //UserNotification
+                var workflowTemplateAction = _workFlowTemplateActionService.GetByID(model.NextStepID);
+                var users = _userService.getUsersByPermissionID(workflowTemplateAction.PermissionToUseID);
+
+                if (users != null && users.Any())
+                {
+                    foreach (var user in users)
+                    {
+                        UserNotification userNotification = new UserNotification
+                        {
+                            NotificationID = notification.ID,
+                            UserID = user.Id,
+                        };
+                        _userNotificationService.Create(userNotification);
+                    }
+                }
+
+                //End transaction
+                _requestService.CommitTransaction();
 
                 return StatusCode(201, request.ID);
             }
             catch (Exception e)
             {
+                _requestService.RollBack();
                 return BadRequest(e.Message);
             }
         }
@@ -104,28 +183,29 @@ namespace Capstone.Controllers
         }
 
         // PUT: api/Requests
-        [HttpPut]
-        public IActionResult PutRequest(RequestUM model)
-        {
-            if (!ModelState.IsValid) return BadRequest(ModelState);
+        // Người gửi không có quyền update
+        //[HttpPut]
+        //public IActionResult PutRequest(RequestUM model)
+        //{
+        //    if (!ModelState.IsValid) return BadRequest(ModelState);
 
-            try
-            {
-                var requestInDb = _requestService.GetByID(model.ID);
-                if (requestInDb == null) return BadRequest(WebConstant.NotFound);
-                _mapper.Map(model, requestInDb);
-                _requestService.Save();
-                return Ok(WebConstant.Success);
-            }
-            catch (Exception e)
-            {
-                return BadRequest(e.Message);
-            }
-        }
+        //    try
+        //    {
+        //        var requestInDb = _requestService.GetByID(model.ID);
+        //        if (requestInDb == null) return BadRequest(WebConstant.NotFound);
+        //        _mapper.Map(model, requestInDb);
+        //        _requestService.Save();
+        //        return Ok(WebConstant.Success);
+        //    }
+        //    catch (Exception e)
+        //    {
+        //        return BadRequest(e.Message);
+        //    }
+        //}
 
         // DELETE: api/Requests/5
         [HttpDelete("{id}")]
-        public ActionResult DeleteRequest(Guid ID)
+        public ActionResult DeleteRequest([FromHeader]Guid ID)
         {
             try
             {

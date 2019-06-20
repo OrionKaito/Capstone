@@ -15,6 +15,9 @@ namespace Capstone.Service
         Request GetByID(Guid ID);
         void Create(Request request);
         void Save();
+        void BeginTransaction();
+        void CommitTransaction();
+        void RollBack();
     }
     public class RequestService : IRequestService
     {
@@ -51,6 +54,20 @@ namespace Capstone.Service
         public void Save()
         {
             _unitOfWork.Commit();
+        }
+
+        public void BeginTransaction()
+        {
+            _unitOfWork.BeginTransaction();
+        }
+        public void CommitTransaction()
+        {
+            _unitOfWork.CommitTransaction();
+        }
+
+        public void RollBack()
+        {
+            _unitOfWork.RollBack();
         }
     }
 }

@@ -1,25 +1,22 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using AutoMapper;
+﻿using AutoMapper;
 using Capstone.Helper;
 using Capstone.Model;
 using Capstone.Service;
 using Capstone.ViewModel;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System;
+using System.Collections.Generic;
 
 namespace Capstone.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class ConnectionTypeController : ControllerBase
+    public class ConnectionTypesController : ControllerBase
     {
         private readonly IConnectionTypeService _connectionTypeService;
         private readonly IMapper _mapper;
 
-        public ConnectionTypeController(IConnectionTypeService connectionTypeService, IMapper mapper)
+        public ConnectionTypesController(IConnectionTypeService connectionTypeService, IMapper mapper)
         {
             _connectionTypeService = connectionTypeService;
             _mapper = mapper;
@@ -44,7 +41,7 @@ namespace Capstone.Controllers
                 return BadRequest(e.Message);
             }
         }
-        
+
         [HttpGet]
         public ActionResult<IEnumerable<ConnectionTypeVM>> GetActionTypes()
         {
@@ -63,7 +60,7 @@ namespace Capstone.Controllers
                 return BadRequest(e.Message);
             }
         }
-        
+
         [HttpGet("{id}")]
         public ActionResult<ConnectionTypeVM> GetActionType(Guid ID)
         {
@@ -79,7 +76,7 @@ namespace Capstone.Controllers
                 return BadRequest(e.Message);
             }
         }
-        
+
         [HttpPut]
         public IActionResult PutActionType(ConnectionTypeUM model)
         {
@@ -101,7 +98,7 @@ namespace Capstone.Controllers
                 return BadRequest(e.Message);
             }
         }
-        
+
         [HttpDelete]
         public ActionResult DeleteActionType(Guid ID)
         {

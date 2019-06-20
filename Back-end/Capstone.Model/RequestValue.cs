@@ -4,12 +4,12 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Capstone.Model
 {
-    public  class RequestValue
+    public class RequestValue
     {
         [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public Guid ID { get; set; }
-        public string Data { get; set; }
+        public string Key { get; set; }
+        public string Value { get; set; }
 
         public Guid RequestActionID { get; set; }
         [ForeignKey("RequestActionID")]

@@ -17,7 +17,6 @@ namespace Capstone.ViewModel
     {
         public Guid EventID { get; set; }
         public NotificationEnum NotificationType { get; set; }
-        public string Message { get; set; }
         public DateTime DateTime { get; set; }
     }
 
@@ -27,7 +26,6 @@ namespace Capstone.ViewModel
 
         public Guid EventID { get; set; }
 
-        public string Message { get; set; }
         public DateTime DateTime { get; set; }
     }
 

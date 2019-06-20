@@ -13,12 +13,12 @@ namespace Capstone.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class WorkflowsTemplateController : ControllerBase
+    public class WorkflowsTemplatesController : ControllerBase
     {
         private readonly IMapper _mapper;
         private readonly IWorkFlowTemplateService _workFlowService;
 
-        public WorkflowsTemplateController(IMapper mapper, IWorkFlowTemplateService workFlowService)
+        public WorkflowsTemplatesController(IMapper mapper, IWorkFlowTemplateService workFlowService)
         {
             _mapper = mapper;
             _workFlowService = workFlowService;

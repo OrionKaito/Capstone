@@ -18,7 +18,7 @@ namespace Capstone.Data.Repositories
 
         public UserGroup CheckExist(string UserID, Guid GroupID)
         {
-            return DbContext.UserGroups.Where(u => u.UserId.Equals(UserID) && u.GroupID == GroupID).FirstOrDefault();
+            return DbContext.UserGroups.Where(u => u.UserID.Equals(UserID) && u.GroupID == GroupID).FirstOrDefault();
         }
     }
 }

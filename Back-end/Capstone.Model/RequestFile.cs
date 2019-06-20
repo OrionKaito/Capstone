@@ -7,11 +7,8 @@ namespace Capstone.Model
     public class RequestFile
     {
         [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public Guid ID { get; set; }
-        public string Name { get; set; }
         public string Path { get; set; }
-        public DateTime CreateDate { get; set; }
 
         public Guid RequestActionID { get; set; }
         [ForeignKey("RequestActionID")]

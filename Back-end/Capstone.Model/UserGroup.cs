@@ -7,13 +7,12 @@ namespace Capstone.Model
     public class UserGroup
     {
         [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public Guid ID { get; set; }
-        
-        public string UserId { get; set; }
+
+        public string UserID { get; set; }
         [ForeignKey("UserId")]
         public virtual User User { get; set; }
-        
+
         public Guid GroupID { get; set; }
         [ForeignKey("GroupID")]
         public virtual Group Group { get; set; }

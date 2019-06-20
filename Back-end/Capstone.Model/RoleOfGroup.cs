@@ -7,7 +7,6 @@ namespace Capstone.Model
     public class RoleOfGroup
     {
         [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public Guid ID { get; set; }
         public string Name { get; set; }
 

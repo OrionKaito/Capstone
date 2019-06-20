@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Capstone.Model
+﻿namespace Capstone.Model
 {
     public enum StatusEnum
     {

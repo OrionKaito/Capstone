@@ -267,3 +267,14 @@ __pycache__/
 *.props
 *.props
 *.json
+*.pubxml
+Back-end/Capstone.Data/Migrations/20190620100701_20062019_1.Designer.cs
+Back-end/Capstone.Data/Migrations/20190620100701_20062019_1.cs
+Back-end/Capstone.Data/Migrations/20190620100141_20062019.Designer.cs
+Back-end/Capstone.Data/Migrations/20190620100141_20062019.cs
+Back-end/Capstone.Data/Migrations/20190620135138_20062019_2.cs
+Back-end/Capstone.Data/Migrations/20190620135138_20062019_2.Designer.cs
+Back-end/Capstone.Data/Migrations/CapstoneEntitiesModelSnapshot.cs
+Back-end/Capstone.Data/Migrations/CapstoneEntitiesModelSnapshot.cs
+Back-end/Capstone.Data/Migrations/CapstoneEntitiesModelSnapshot.cs
+*.user
