@@ -10,7 +10,7 @@ namespace Capstone.Model
         public Guid ID { get; set; }
 
         public string UserID { get; set; }
-        [ForeignKey("UserId")]
+        [ForeignKey("UserID")]
         public virtual User User { get; set; }
 
         public Guid GroupID { get; set; }

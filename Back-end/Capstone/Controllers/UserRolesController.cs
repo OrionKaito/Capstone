@@ -30,7 +30,7 @@ namespace Capstone.Controllers
             if (!ModelState.IsValid) return BadRequest(ModelState);
             try
             {
-                var checkExist = _userRoleService.CheckExist(model.UserId, model.RoleID);
+                var checkExist = _userRoleService.CheckExist(model.UserID, model.RoleID);
                 if (checkExist != null) return BadRequest("Existed!");
 
                 UserRole userRole = new UserRole();
@@ -89,7 +89,7 @@ namespace Capstone.Controllers
             if (!ModelState.IsValid) return BadRequest(ModelState);
             try
             {
-                var checkExist = _userRoleService.CheckExist(model.UserId, model.RoleID);
+                var checkExist = _userRoleService.CheckExist(model.UserID, model.RoleID);
                 if (checkExist != null) return BadRequest("Existed!");
 
                 var userRoleInDb = _userRoleService.GetByID(model.ID);
