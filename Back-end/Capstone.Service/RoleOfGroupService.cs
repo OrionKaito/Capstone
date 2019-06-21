@@ -13,7 +13,7 @@ namespace Capstone.Service
         IEnumerable<RoleOfGroup> GetByGroup(Guid ID);
         IEnumerable<RoleOfGroup> GetByRole(Guid ID);
         RoleOfGroup GetByID(Guid ID);
-        RoleOfGroup CheckExist(Guid RoleID, Guid GroupID);
+        //RoleOfGroup CheckExist(Guid RoleID, Guid GroupID);
         void Create(RoleOfGroup rog);
         void Delete(RoleOfGroup rog);
         void Save();
@@ -67,9 +67,9 @@ namespace Capstone.Service
             _unitOfWork.Commit();
         }
 
-        public RoleOfGroup CheckExist(Guid RoleID, Guid GroupID)
-        {
-            return _roleOfGroupRepository.CheckExist(RoleID, GroupID);
-        }
+        //public RoleOfGroup CheckExist(Guid RoleID, Guid GroupID)
+        //{
+        //    return _roleOfGroupRepository.CheckExist(RoleID, GroupID);
+        //}
     }
 }
