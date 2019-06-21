@@ -33,6 +33,7 @@ namespace Capstone.Service
         public void Create(Group group)
         {
             _groupRepository.Add(group);
+            _unitOfWork.Commit();
         }
 
         public void Delete(Group group)

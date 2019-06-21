@@ -57,7 +57,7 @@ namespace Capstone.Controllers
             try
             {
                 //Begin transaction
-                _userService.BeginTransaction();
+                //_userService.BeginTransaction();
 
                 var userInDB = _userManager.FindByNameAsync(model.Email).Result;
                 if (userInDB != null) return BadRequest(WebConstant.EmailExisted);
@@ -71,6 +71,13 @@ namespace Capstone.Controllers
                     ManagerID = model.ManagerID,
                     IsDeleted = false,
                 };
+
+                Random random = new Random();
+                user.EmailConfirmCode = random.Next(100001, 999999).ToString();
+
+                var result = await _userManager.CreateAsync(user, model.Password);
+
+                if (!result.Succeeded) return new BadRequestObjectResult(result.Errors);
 
                 //Role
                 foreach (var roleID in model.RoleIDs)
@@ -95,12 +102,6 @@ namespace Capstone.Controllers
                 }
 
                 //Send mail
-                Random random = new Random();
-                user.EmailConfirmCode = random.Next(100001, 999999).ToString();
-
-                var result = await _userManager.CreateAsync(user, model.Password);
-
-                if (!result.Succeeded) return new BadRequestObjectResult(result.Errors);
 
                 await _emailService.SendMail(user.Email, "Activation Code to Verify Email Address", "Thank you for creating an account with Gigshub"
                     + "\n\nAccount name : "
@@ -111,13 +112,13 @@ namespace Capstone.Controllers
                     + "\n\nThanks & Regards\nDynamicWorkFlow Team");
 
                 //End transaction
-                _userService.CommitTransaction();
+                //_userService.CommitTransaction();
 
                 return new OkObjectResult(WebConstant.AccountCreated);
             }
             catch (Exception e)
             {
-                _userService.RollBack();
+                //_userService.RollBack();
                 return BadRequest(e.Message);
             }
         }
@@ -179,7 +180,7 @@ namespace Capstone.Controllers
                                 .Select(r => new RoleVM
                                 {
                                     ID = r.ID,
-                                    Name = _roleService.GetByID(r.ID).Name,
+                                    Name = _roleService.GetByID(r.RoleID).Name,
                                 }),
                         ManagerID = u.ManagerID
                     });
@@ -198,7 +199,7 @@ namespace Capstone.Controllers
             try
             {
 
-                var users = _userManager.Users
+                var user = _userManager.Users
                     .Where(u => u.Id == ID)
                     .ToList()
                     .Select(u => new RegistrationVM
@@ -217,12 +218,12 @@ namespace Capstone.Controllers
                                 .Select(r => new RoleVM
                                 {
                                     ID = r.ID,
-                                    Name = _roleService.GetByID(r.ID).Name,
+                                    Name = _roleService.GetByID(r.RoleID).Name,
                                 }),
                         ManagerID = u.ManagerID
                     });
 
-                return Ok(users);
+                return Ok(user);
             }
             catch (Exception e)
             {
@@ -237,9 +238,31 @@ namespace Capstone.Controllers
             {
                 RegistrationVM result = new RegistrationVM();
                 var userId = HttpContext.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier).Value;
-                var user = _userManager.FindByIdAsync(userId).Result;
-                result = _mapper.Map<RegistrationVM>(user);
-                return Ok(result);
+                var user = _userManager.Users
+                    .Where(u => u.Id == userId)
+                    .ToList()
+                    .Select(u => new RegistrationVM
+                    {
+                        ID = u.Id,
+                        DateOfBirth = u.DateOfBirth,
+                        Email = u.Email,
+                        FullName = u.FullName,
+                        Groups = _userGroupService.GetByUserID(u.Id)
+                                .Select(g => new GroupVM
+                                {
+                                    ID = g.GroupID,
+                                    Name = _groupService.GetByID(g.GroupID).Name,
+                                }).ToList(),
+                        Roles = _userRoleService.GetByUserID(u.Id)
+                                .Select(r => new RoleVM
+                                {
+                                    ID = r.ID,
+                                    Name = _roleService.GetByID(r.RoleID).Name,
+                                }),
+                        ManagerID = u.ManagerID
+                    });
+
+                return Ok(user);
             }
             catch (Exception e)
             {
