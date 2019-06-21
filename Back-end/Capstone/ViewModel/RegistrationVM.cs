@@ -3,6 +3,12 @@ using System.Collections.Generic;
 
 namespace Capstone.ViewModel
 {
+    public class RegistrationPaginVM
+    {
+        public int TotalPage { get; set; }
+        public IEnumerable<RegistrationVM> Accounts { get; set; }
+    }
+
     public class RegistrationVM
     {
         public string ID { get; set; }

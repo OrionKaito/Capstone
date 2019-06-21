@@ -54,72 +54,75 @@ namespace Capstone.Controllers
         {
             if (!ModelState.IsValid) return BadRequest(ModelState);
 
-            try
+            var userInDB = _userManager.FindByNameAsync(model.Email).Result;
+            if (userInDB != null) return BadRequest(WebConstant.EmailExisted);
+
+            var user = new User()
             {
-                //Begin transaction
-                //_userService.BeginTransaction();
+                Email = model.Email,
+                UserName = model.Email,
+                FullName = model.FullName,
+                DateOfBirth = model.DateOfBirth,
+                ManagerID = model.ManagerID,
+                IsDeleted = false,
+            };
 
-                var userInDB = _userManager.FindByNameAsync(model.Email).Result;
-                if (userInDB != null) return BadRequest(WebConstant.EmailExisted);
+            Random random = new Random();
+            user.EmailConfirmCode = random.Next(100001, 999999).ToString();
 
-                var user = new User()
-                {
-                    Email = model.Email,
-                    UserName = model.Email,
-                    FullName = model.FullName,
-                    DateOfBirth = model.DateOfBirth,
-                    ManagerID = model.ManagerID,
-                    IsDeleted = false,
-                };
+            var result = await _userManager.CreateAsync(user, model.Password);
 
-                Random random = new Random();
-                user.EmailConfirmCode = random.Next(100001, 999999).ToString();
+            if (!result.Succeeded) return new BadRequestObjectResult(result.Errors);
 
-                var result = await _userManager.CreateAsync(user, model.Password);
-
-                if (!result.Succeeded) return new BadRequestObjectResult(result.Errors);
-
-                //Role
-                foreach (var roleID in model.RoleIDs)
-                {
-                    UserRole userRole = new UserRole
-                    {
-                        RoleID = roleID,
-                        UserID = user.Id,
-                    };
-                    _userRoleService.Create(userRole);
-                }
-
-                //Group
-                foreach (var groupID in model.GroupIDs)
-                {
-                    UserGroup userGroup = new UserGroup
-                    {
-                        GroupID = groupID,
-                        UserID = user.Id,
-                    };
-                    _userGroupService.Create(userGroup);
-                }
-
-                //Send mail
-
-                await _emailService.SendMail(user.Email, "Activation Code to Verify Email Address", "Thank you for creating an account with Gigshub"
-                    + "\n\nAccount name : "
-                    + user.UserName
-                    + "\n\nYour account will work but you must verify it by enter this code in our app"
-                    + "\n\nYour Activation Code is : "
-                    + user.EmailConfirmCode
-                    + "\n\nThanks & Regards\nDynamicWorkFlow Team");
-
-                //End transaction
-                //_userService.CommitTransaction();
-
-                return new OkObjectResult(WebConstant.AccountCreated);
-            }
-            catch (Exception e)
+            else
             {
-                //_userService.RollBack();
-                return BadRequest(e.Message);
+                try
+                {
+                    //Begin transaction
+                    _userService.BeginTransaction();
+                    //Role
+                    foreach (var roleID in model.RoleIDs)
+                    {
+                        UserRole userRole = new UserRole
+                        {
+                            RoleID = roleID,
+                            UserID = user.Id,
+                        };
+                        _userRoleService.Create(userRole);
+                    }
+
+                    //Group
+                    foreach (var groupID in model.GroupIDs)
+                    {
+                        UserGroup userGroup = new UserGroup
+                        {
+                            GroupID = groupID,
+                            UserID = user.Id,
+                        };
+                        _userGroupService.Create(userGroup);
+                    }
+
+                    //Send mail
+
+                    await _emailService.SendMail(user.Email, "Activation Code to Verify Email Address", "Thank you for creating an account with Gigshub"
+                        + "\n\nAccount name : "
+                        + user.UserName
+                        + "\n\nYour account will work but you must verify it by enter this code in our app"
+                        + "\n\nYour Activation Code is : "
+                        + user.EmailConfirmCode
+                        + "\n\nThanks & Regards\nDynamicWorkFlow Team");
+
+                    //End transaction
+                    _userService.CommitTransaction();
+
+                    return new OkObjectResult(WebConstant.AccountCreated);
+                }
+                catch (Exception e)
+                {
+                    _userService.RollBack();
+                    await _userManager.DeleteAsync(user);
+                    return BadRequest(e.Message);
+                }
             }
         }
 
@@ -152,7 +155,7 @@ namespace Capstone.Controllers
         }
 
         [HttpGet]
-        public ActionResult<IEnumerable<RegistrationVM>> GetAccountsPagination(int? numberOfPage, int? NumberOfRecord)
+        public ActionResult<RegistrationPaginVM> GetAccountsPagination(int? numberOfPage, int? NumberOfRecord)
         {
             try
             {
@@ -182,10 +185,16 @@ namespace Capstone.Controllers
                                     ID = r.ID,
                                     Name = _roleService.GetByID(r.RoleID).Name,
                                 }),
-                        ManagerID = u.ManagerID
+                        ManagerID = u.ManagerID,
                     });
 
-                return Ok(users);
+                var data = new RegistrationPaginVM
+                {
+                    TotalPage = _userManager.Users.ToListAsync().Result.Count,
+                    Accounts = users,
+                };
+
+                return Ok(data);
             }
             catch (Exception e)
             {
