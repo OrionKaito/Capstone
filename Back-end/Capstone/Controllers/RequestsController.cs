@@ -96,13 +96,16 @@ namespace Capstone.Controllers
                 }
 
                 //RequestFile
-                RequestFile requestFile = new RequestFile
+                foreach (var path in model.ImagePaths)
                 {
-                    Path = model.ImagePath,
-                    RequestActionID = requestAction.ID,
-                };
-
-                _requestFileService.Create(requestFile);
+                    RequestFile requestFile = new RequestFile
+                    {
+                        Path = path,
+                        RequestActionID = requestAction.ID,
+                    };
+                    _requestFileService.Create(requestFile);
+                }
+                
                 //Notification
                 Notification notification = new Notification
                 {
