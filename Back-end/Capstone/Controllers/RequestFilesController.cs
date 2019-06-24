@@ -33,7 +33,7 @@ namespace Capstone.Controllers
             {
                 List<string> listPath = new List<string>();
                 var files = Request.Form.Files;
-                var folderName = "Resources";
+                var folderName = WebConstant.Resources;
                 var pathToSave = Path.Combine(Directory.GetCurrentDirectory(), folderName); // đường dẫn tuyệt đối tới folder
 
                 if (!Directory.Exists(pathToSave)) // kiểm tra folder có tồn tại

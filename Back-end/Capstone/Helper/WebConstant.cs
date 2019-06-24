@@ -9,6 +9,7 @@
         public static string Permissions = "permissions";
         public static string Roles = "roles";
         public static string Groups = "groups";
+        public static string Resources = "Resources";
 
         //Return messages
         public static string Success = "Success.";
@@ -18,6 +19,7 @@
         public static string InvalidUSer = "Invalid username or password!";
         public static string User = "user";
         public static string Admin = "admin";
+        public static string Staff = "staff";
         public static string VerifyAccount = "Please verify your account first!";
         public static string BannedAccount = "Account is banned!";
         public static string NoNotificationYet = "There are not any notfication yet!";
