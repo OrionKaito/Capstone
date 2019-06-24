@@ -2,6 +2,7 @@
 using Capstone.Helper;
 using Capstone.Service;
 using Capstone.ViewModel;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -30,32 +31,43 @@ namespace Capstone.Controllers
         {
             try
             {
-                var file = Request.Form.Files[0];
-                var folderName = "Resources";
+                List<string> listPath = new List<string>();
+                var files = Request.Form.Files;
+                var folderName = WebConstant.Resources;
                 var pathToSave = Path.Combine(Directory.GetCurrentDirectory(), folderName); // đường dẫn tuyệt đối tới folder
 
                 if (!Directory.Exists(pathToSave)) // kiểm tra folder có tồn tại
                 {
                     Directory.CreateDirectory(pathToSave);
                 }
-
-                if (file.Length > 0)
+                if (files.Count > 0 && files != null)
                 {
-                    var fileName = ContentDispositionHeaderValue.Parse(file.ContentDisposition).FileName.Trim('"');
-                    var fullPath = Path.Combine(pathToSave, fileName); // đường dẫn tuyệt đối file
-                    var dbPath = Path.Combine(folderName, fileName); // đường tương đối file
-
-                    using (var stream = new FileStream(fullPath, FileMode.Create))
+                    foreach (IFormFile file in files)
                     {
-                        file.CopyTo(stream);
-                    }
+                        if (file.Length > 0)
+                        {
+                            var fileName = ContentDispositionHeaderValue.Parse(file.ContentDisposition).FileName.Trim('"');
+                            var fullPath = Path.Combine(pathToSave, fileName); // đường dẫn tuyệt đối file
+                            var dbPath = Path.Combine(folderName, fileName); // đường tương đối file
 
-                    return Ok(new { dbPath });
+                            using (var stream = new FileStream(fullPath, FileMode.Create))
+                            {
+                                file.CopyTo(stream);
+                            }
+                            listPath.Add(dbPath);
+                        }
+                        else
+                        {
+                            return BadRequest();
+                        }
+                    }
                 }
                 else
                 {
                     return BadRequest();
                 }
+
+                return Ok(listPath);
             }
             catch (Exception e)
             {

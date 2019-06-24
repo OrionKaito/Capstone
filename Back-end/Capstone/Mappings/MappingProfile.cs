@@ -72,16 +72,6 @@ namespace Capstone.Mappings
             CreateMap<Role, RoleUM>();
             CreateMap<RoleUM, Role>();
 
-            //RoleOfGroup
-            CreateMap<RoleOfGroup, RoleOfGroupVM>();
-            CreateMap<RoleOfGroupVM, RoleOfGroup>();
-
-            CreateMap<RoleOfGroup, RoleOfGroupCM>();
-            CreateMap<RoleOfGroupCM, RoleOfGroup>();
-
-            CreateMap<RoleOfGroup, RoleOfGroupUM>();
-            CreateMap<RoleOfGroupUM, RoleOfGroup>();
-
             //Permission
             CreateMap<Permission, PermissionVM>();
             CreateMap<PermissionVM, Permission>();
@@ -92,15 +82,15 @@ namespace Capstone.Mappings
             CreateMap<Permission, PermissionUM>();
             CreateMap<PermissionUM, Permission>();
 
-            //PermissionOfRole
-            CreateMap<PermissionOfRole, PermissionOfRoleVM>();
-            CreateMap<PermissionOfRoleVM, PermissionOfRole>();
+            //PermissionOfGroup
+            CreateMap<PermissionOfGroup, PermissionOfGroupVM>();
+            CreateMap<PermissionOfGroupVM, PermissionOfGroup>();
 
-            CreateMap<PermissionOfRole, PermissionOfRoleCM>();
-            CreateMap<PermissionOfRoleCM, PermissionOfRole>();
+            CreateMap<PermissionOfGroup, PermissionOfGroupCM>();
+            CreateMap<PermissionOfGroupCM, PermissionOfGroup>();
 
-            CreateMap<PermissionOfRole, PermissionOfRoleUM>();
-            CreateMap<PermissionOfRoleUM, PermissionOfRole>();
+            CreateMap<PermissionOfGroup, PermissionOfGroupUM>();
+            CreateMap<PermissionOfGroupUM, PermissionOfGroup>();
 
             //UserRole
             CreateMap<UserRole, UserRoleVM>();
