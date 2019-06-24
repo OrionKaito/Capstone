@@ -43,7 +43,7 @@ namespace Capstone.Service
 
         public IEnumerable<Group> GetAll()
         {
-            return _groupRepository.GetAll().Where(g => g.IsDeleted == false);
+            return _groupRepository.GetAll();
         }
 
         public Group GetByID(Guid ID)

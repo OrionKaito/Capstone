@@ -39,6 +39,19 @@ namespace Capstone
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            //fix bug lỗi không chạy dc do "has been blocked by CORS policy: 
+            //Response to preflight request doesn't pass access control check: 
+            //No 'Access-Control-Allow-Origin' header is present on the requested resource."
+            //lý do lỗi: 2 miền khác nhau, chrome tự bảo mật nên k cho vào
+            services.AddCors(options =>
+            {
+                options.AddPolicy("CorsPolicy",
+                builder => builder.WithOrigins("http://localhost:4200")
+                .AllowAnyMethod()
+                .AllowAnyHeader()
+                .AllowCredentials());
+            });
+
             // Add Hangfire services.
             services.AddHangfire(configuration => configuration
                 .SetDataCompatibilityLevel(CompatibilityLevel.Version_170)
@@ -205,6 +218,12 @@ namespace Capstone
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IBackgroundJobClient backgroundJobs, IHostingEnvironment env)
         {
+            //fix bug lỗi không chạy dc do "has been blocked by CORS policy: 
+            //Response to preflight request doesn't pass access control check: 
+            //No 'Access-Control-Allow-Origin' header is present on the requested resource." 
+            //lý do lỗi: 2 miền khác nhau, chrome tự bảo mật nên k cho vào 
+            app.UseCors("CorsPolicy");
+
             // Enable middleware to serve generated Swagger as a JSON endpoint.
             app.UseSwagger();
             // Enable jwt

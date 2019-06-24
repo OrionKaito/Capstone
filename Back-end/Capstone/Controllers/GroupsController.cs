@@ -125,15 +125,22 @@ namespace Capstone.Controllers
             }
         }
 
-        // DELETE: api/Groups/5
-        [HttpDelete]
-        public ActionResult DeleteGroup(Guid ID)
+        // PUT: api/Groups/5
+        [HttpPut("ToggleGroup")]
+        public ActionResult ToggleGroup(Guid ID)
         {
             try
             {
                 var groupInDb = _groupService.GetByID(ID);
                 if (groupInDb == null) return NotFound(WebConstant.NotFound);
-                groupInDb.IsDeleted = true;
+                if (groupInDb.IsDeleted == false)
+                {
+                    groupInDb.IsDeleted = true;
+                }
+                else
+                {
+                    groupInDb.IsDeleted = false;
+                }
                 _groupService.Save();
                 return Ok(WebConstant.Success);
             }
