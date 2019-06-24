@@ -91,17 +91,13 @@ namespace Capstone
             services.AddTransient<IRoleRepository, RoleRepository>();
             services.AddTransient<IRoleService, RoleService>();
 
-            //RoleOfGroup
-            services.AddTransient<IRoleOfGroupRepository, RoleOfGroupRepository>();
-            services.AddTransient<IRoleOfGroupService, RoleOfGroupService>();
-
             //Permission
             services.AddTransient<IPermissionRepository, PermissionRepository>();
             services.AddTransient<IPermissionService, PermissionService>();
 
             //PermissionOfRole
-            services.AddTransient<IPermissionOfRoleRepository, PermissionOfRoleRepository>();
-            services.AddTransient<IPermissionOfRoleService, PermissionOfRoleService>();
+            services.AddTransient<IPermissionOfGroupRepository, PermissionOfGroupRepository>();
+            services.AddTransient<IPermissionOfGroupService, PermissionOfGroupService>();
 
             //UserRole
             services.AddTransient<IUserRoleRepository, UserRoleRepository>();

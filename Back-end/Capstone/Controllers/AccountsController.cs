@@ -178,7 +178,7 @@ namespace Capstone.Controllers
                                 {
                                     ID = g.GroupID,
                                     Name = _groupService.GetByID(g.GroupID).Name,
-                                }).ToList(),
+                                }),
                         Roles = _userRoleService.GetByUserID(u.Id)
                                 .Select(r => new RoleVM
                                 {
@@ -186,6 +186,8 @@ namespace Capstone.Controllers
                                     Name = _roleService.GetByID(r.RoleID).Name,
                                 }),
                         ManagerID = u.ManagerID,
+                        ManagerName = u.ManagerID != null ? _userManager.FindByIdAsync(u.ManagerID).Result.FullName : "",
+                        IsDeleted = u.IsDeleted
                     });
 
                 var data = new RegistrationPaginVM
@@ -222,16 +224,17 @@ namespace Capstone.Controllers
                                 {
                                     ID = g.GroupID,
                                     Name = _groupService.GetByID(g.GroupID).Name,
-                                }).ToList(),
+                                }),
                         Roles = _userRoleService.GetByUserID(u.Id)
                                 .Select(r => new RoleVM
                                 {
                                     ID = r.ID,
                                     Name = _roleService.GetByID(r.RoleID).Name,
                                 }),
-                        ManagerID = u.ManagerID
+                        ManagerID = u.ManagerID,
+                        ManagerName = u.ManagerID != null ? _userManager.FindByIdAsync(u.ManagerID).Result.FullName : "",
+                        IsDeleted = u.IsDeleted
                     });
-
                 return Ok(user);
             }
             catch (Exception e)
@@ -261,7 +264,7 @@ namespace Capstone.Controllers
                                 {
                                     ID = g.GroupID,
                                     Name = _groupService.GetByID(g.GroupID).Name,
-                                }).ToList(),
+                                }),
                         Roles = _userRoleService.GetByUserID(u.Id)
                                 .Select(r => new RoleVM
                                 {

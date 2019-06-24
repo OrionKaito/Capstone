@@ -2,23 +2,23 @@
 
 namespace Capstone.ViewModel
 {
-    public class PermissionOfRoleVM
+    public class PermissionOfGroupVM
     {
         public Guid ID { get; set; }
         public Guid PermissionID { get; set; }
-        public Guid RoleID { get; set; }
+        public Guid GroupID { get; set; }
     }
 
-    public class PermissionOfRoleCM
+    public class PermissionOfGroupCM
     {
         public Guid PermissionID { get; set; }
-        public Guid RoleID { get; set; }
+        public Guid GroupID { get; set; }
     }
 
-    public class PermissionOfRoleUM
+    public class PermissionOfGroupUM
     {
         public Guid ID { get; set; }
         public Guid PermissionID { get; set; }
-        public Guid RoleID { get; set; }
+        public Guid GroupID { get; set; }
     }
 }

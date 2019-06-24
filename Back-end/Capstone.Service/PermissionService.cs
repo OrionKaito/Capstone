@@ -21,16 +21,16 @@ namespace Capstone.Service
     public class PermissionService : IPermissionService
     {
         private readonly IPermissionRepository _permissionRepository;
-        private readonly IPermissionOfRoleRepository _permissionOfRoleRepository;
-        private readonly IUserRoleRepository _userRoleRepository;
+        private readonly IPermissionOfGroupRepository _permissionOfGroupRepository;
+        private readonly IUserGroupRepository _userGroupRepository;
         private readonly IUnitOfWork _unitOfWork;
 
-        public PermissionService(IPermissionRepository permissionRepository, IPermissionOfRoleRepository permissionOfRoleRepository,
-            IUserRoleRepository userRoleRepository, IUnitOfWork unitOfWork)
+        public PermissionService(IPermissionRepository permissionRepository, IPermissionOfGroupRepository permissionOfRoleRepository,
+            IUserGroupRepository userGroupRepository, IUnitOfWork unitOfWork)
         {
             _permissionRepository = permissionRepository;
-            _permissionOfRoleRepository = permissionOfRoleRepository;
-            _userRoleRepository = userRoleRepository;
+            _permissionOfGroupRepository = permissionOfRoleRepository;
+            _userGroupRepository = userGroupRepository;
             _unitOfWork = unitOfWork;
         }
 
@@ -64,11 +64,11 @@ namespace Capstone.Service
         public IEnumerable<string> GetByUserID(string ID)
         {
             List<string> listNameOfPermission = new List<string>();
-            var data = _userRoleRepository.GetMany(u => u.IsDeleted == false && u.UserID.Equals(ID));
+            var data = _userGroupRepository.GetMany(u => u.IsDeleted == false && u.UserID.Equals(ID));
             foreach (var item in data)
             {
-                var getByRoleID = _permissionOfRoleRepository.GetMany(p => p.IsDeleted == false && p.RoleID == item.RoleID);
-                foreach (var permissionItem in getByRoleID)
+                var getByGroupID = _permissionOfGroupRepository.GetMany(p => p.IsDeleted == false && p.GroupID == item.GroupID);
+                foreach (var permissionItem in getByGroupID)
                 {
                     listNameOfPermission.Add(_permissionRepository.GetById(permissionItem.PermissionID).Name);
                 }
