@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Capstone.Model
 {
-    public class PermissionOfRole
+    public class PermissionOfGroup
     {
         [Key]
         public Guid ID { get; set; }
@@ -13,9 +13,9 @@ namespace Capstone.Model
         [ForeignKey("PermissionID")]
         public virtual Permission Permission { get; set; }
 
-        public Guid RoleID { get; set; }
-        [ForeignKey("RoleID")]
-        public virtual Role Role { get; set; }
+        public Guid GroupID { get; set; }
+        [ForeignKey("GroupID")]
+        public virtual Role Group { get; set; }
 
         public bool IsDeleted { get; set; }
     }

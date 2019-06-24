@@ -20,8 +20,8 @@ namespace Capstone.Service
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IUserRepository _userRepository;
-        private readonly IPermissionOfRoleRepository _permissionOfRoleRepository;
-        private readonly IUserRoleRepository _userRoleRepository;
+        private readonly IPermissionOfGroupRepository _permissionOfGroupRepository;
+        private readonly IUserGroupRepository _userGroupRepository;
 
         //Sửa lại chỗ này nha Thanh Lộc
         private readonly IPermissionService _permissionService;
@@ -29,16 +29,16 @@ namespace Capstone.Service
         private readonly IGroupService _groupService;
 
         public UserService(IUnitOfWork unitOfWork, IUserRepository userRepository
-            , IPermissionOfRoleRepository permissionOfRoleRepository
-            , IUserRoleRepository userRoleRepository
+            , IPermissionOfGroupRepository permissionOfGroupRepository
+            , IUserGroupRepository userGroupRepository
             , IPermissionService permissionService
             , IRoleService roleService
             , IGroupService groupService)
         {
             _unitOfWork = unitOfWork;
             _userRepository = userRepository;
-            _permissionOfRoleRepository = permissionOfRoleRepository;
-            _userRoleRepository = userRoleRepository;
+            _permissionOfGroupRepository = permissionOfGroupRepository;
+            _userGroupRepository = userGroupRepository;
             _permissionService = permissionService;
             _roleService = roleService;
             _groupService = groupService;
@@ -59,14 +59,14 @@ namespace Capstone.Service
         public IEnumerable<User> getUsersByPermissionID(Guid ID)
         {
             List<User> users = new List<User>();
-            var roles = _permissionOfRoleRepository.GetMany(r => r.PermissionID == ID)
+            var groups = _permissionOfGroupRepository.GetMany(r => r.PermissionID == ID)
                 //.ToList()
-                .Select(r => new Role { ID = r.RoleID })
+                .Select(g => new Role { ID = g.GroupID })
                 .ToList();
 
-            foreach (var role in roles)
+            foreach (var group in groups)
             {
-                var result = _userRoleRepository.GetMany(u => u.RoleID == role.ID).Select(u => new User { Id = u.UserID }).ToList();
+                var result = _userGroupRepository.GetMany(u => u.GroupID == group.ID).Select(u => new User { Id = u.UserID }).ToList();
                 foreach (var data in result)
                 {
                     users.Add(data);
