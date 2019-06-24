@@ -15,7 +15,7 @@ namespace Capstone.Model
 
         public Guid GroupID { get; set; }
         [ForeignKey("GroupID")]
-        public virtual Role Group { get; set; }
+        public virtual Group Group { get; set; }
 
         public bool IsDeleted { get; set; }
     }
