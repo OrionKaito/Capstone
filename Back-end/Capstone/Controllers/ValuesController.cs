@@ -37,6 +37,14 @@ namespace Capstone.Controllers
             return "success";
         }
 
+        // GET api/values/5
+        [HttpPost("CheckConnection")]
+        public ActionResult<string> CheckConnection()
+        {
+            _emailService.SendMail("orionkaito@gmail.com", "Hello", "Hello world");
+            return "success";
+        }
+
         // POST api/values
         [HttpPost]
         public void Post([FromBody] string value)

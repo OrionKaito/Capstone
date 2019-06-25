@@ -48,4 +48,25 @@ namespace Capstone.Service
             _unitOfWork.Commit();
         }
     }
+
+    public class Graph
+    {
+        private int Vertices; //Tổng số đỉnh
+        private List<int>[] adjency; //Các cạnh của các đỉnh
+
+        public Graph(int vertices)
+        {
+            Vertices = vertices;
+            adjency = new List<int>[vertices];
+            for (int i = 0; i < vertices; i++)
+            {
+                adjency[i] = new List<int>();
+            }
+        }
+
+        public void AddEdge(int vertice, int edge)
+        {
+            adjency[vertice].Add(edge);
+        }
+    }
 }
