@@ -54,7 +54,7 @@ namespace Capstone.Controllers
 
             foreach (var item in listRoleOfUser)
             {
-                if (item.Equals(WebConstant.User))
+                if (item.Equals(WebConstant.User) || item.Equals(WebConstant.Staff))
                 {
                     checkUser = true;
                 }

@@ -14,8 +14,8 @@ namespace Capstone.Service
         IEnumerable<PermissionOfGroup> GetByPermission(Guid ID);
         PermissionOfGroup GetByID(Guid ID);
         PermissionOfGroup CheckExist(Guid PermissionID, Guid GroupID);
-        void Create(PermissionOfGroup permissionOfRole);
-        void Delete(PermissionOfGroup permissionOfRole);
+        void Create(PermissionOfGroup permissionOfGroup);
+        void Delete(PermissionOfGroup permissionOfGroup);
         void Save();
     }
 

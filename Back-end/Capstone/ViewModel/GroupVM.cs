@@ -6,6 +6,7 @@ namespace Capstone.ViewModel
     {
         public Guid ID { get; set; }
         public string Name { get; set; }
+        public bool IsDeleted { get; set; }
     }
 
     public class GroupCM

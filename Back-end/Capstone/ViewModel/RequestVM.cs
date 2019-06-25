@@ -28,7 +28,7 @@ namespace Capstone.ViewModel
         public IEnumerable<ActionValue> ActionValues { get; set; }
 
         //Request File
-        public string ImagePath { get; set; }
+        public IEnumerable<string> ImagePaths { get; set; }
     }
 
     public class RequestUM

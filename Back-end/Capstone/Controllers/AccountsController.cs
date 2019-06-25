@@ -186,7 +186,7 @@ namespace Capstone.Controllers
                                     Name = _roleService.GetByID(r.RoleID).Name,
                                 }),
                         ManagerID = u.ManagerID,
-                        ManagerName = u.ManagerID != null ? _userManager.FindByIdAsync(u.ManagerID).Result.FullName : "",
+                        ManagerName = string.IsNullOrEmpty(u.ManagerID) ? "" : _userManager.FindByIdAsync(u.ManagerID).Result.FullName,
                         IsDeleted = u.IsDeleted
                     });
 
@@ -232,7 +232,7 @@ namespace Capstone.Controllers
                                     Name = _roleService.GetByID(r.RoleID).Name,
                                 }),
                         ManagerID = u.ManagerID,
-                        ManagerName = u.ManagerID != null ? _userManager.FindByIdAsync(u.ManagerID).Result.FullName : "",
+                        ManagerName = string.IsNullOrEmpty(u.ManagerID) ? "" : _userManager.FindByIdAsync(u.ManagerID).Result.FullName,
                         IsDeleted = u.IsDeleted
                     });
                 return Ok(user);
