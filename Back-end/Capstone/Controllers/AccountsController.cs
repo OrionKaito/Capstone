@@ -104,7 +104,7 @@ namespace Capstone.Controllers
 
                     //Send mail
 
-                    await _emailService.SendMail(user.Email, "Activation Code to Verify Email Address", "Thank you for creating an account with Gigshub"
+                    await _emailService.SendMail(user.Email, "Activation Code to Verify Email Address", "Thank you for creating an account with DynamicWorkflow"
                         + "\n\nAccount name : "
                         + user.UserName
                         + "\n\nYour account will work but you must verify it by enter this code in our app"
@@ -293,12 +293,98 @@ namespace Capstone.Controllers
                 var userID = currentUSer.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier).Value;
 
                 var userInDB = _userManager.FindByIdAsync(userID).Result;
-                if (userInDB == null) return BadRequest(WebConstant.NotFound);
+                if (userInDB == null) return BadRequest(WebConstant.UserNotExist);
 
                 userInDB.FullName = model.FullName;
                 userInDB.DateOfBirth = model.DateOfBirth;
                 userInDB.ManagerID = model.ManagerID;
                 userInDB.SecurityStamp = Guid.NewGuid().ToString();
+                var result = await _userManager.UpdateAsync(userInDB);
+
+                if (!result.Succeeded) return new BadRequestObjectResult(result.Errors);
+
+                return Ok(WebConstant.Success);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
+
+        [HttpPost("ForgotPassword")]
+        public async Task<IActionResult> ForgotPassword(string email)
+        {
+            try
+            {
+                var userInDB = await _userManager.FindByEmailAsync(email);
+
+                if (userInDB == null) return BadRequest(WebConstant.UserNotExist);
+
+                Random random = new Random();
+                userInDB.EmailConfirmCode = random.Next(100001, 999999).ToString();
+                var result = await _userManager.UpdateAsync(userInDB);
+
+                if (!result.Succeeded) return new BadRequestObjectResult(result.Errors);
+
+                await _emailService.SendMail(email, "Request To Change Password", "Account name : "
+                        + userInDB.UserName
+                        + "\n\nYour Code is : "
+                        + userInDB.EmailConfirmCode
+                + "\n\nThanks & Regards\nDynamicWorkFlow Team");
+
+                return Ok(WebConstant.Success);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
+
+        [HttpPut("ConfirmForgotPassword")]
+        public async Task<ActionResult> ConfirmForgotPassword(string code, string email, string password)
+        {
+            try
+            {
+                var userInDB = await _userManager.FindByEmailAsync(email);
+
+                if (userInDB == null) return BadRequest(WebConstant.UserNotExist);
+
+                if (userInDB.EmailConfirmCode.Equals(code))
+                {
+                    var PasswordHash = new PasswordHasher<string>();
+
+                    userInDB.PasswordHash = PasswordHash.HashPassword(userInDB.UserName, password);
+                    var result = await _userManager.UpdateAsync(userInDB);
+
+                    if (!result.Succeeded) return new BadRequestObjectResult(result.Errors);
+                }
+                else
+                {
+                    return BadRequest(WebConstant.WrongCodeConfirm);
+                }
+
+                return Ok(WebConstant.Success);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
+
+        [HttpPut("ChangePassword")]
+        public async Task<ActionResult> ChangePassword(string password)
+        {
+            try
+            {
+                var currentUser = HttpContext.User;
+                var userID = currentUser.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier).Value;
+
+                var userInDB = _userManager.FindByIdAsync(userID).Result;
+                if (userInDB == null) return BadRequest(WebConstant.UserNotExist);
+
+                var PasswordHash = new PasswordHasher<string>();
+
+                userInDB.PasswordHash = PasswordHash.HashPassword(userInDB.UserName, password);
                 var result = await _userManager.UpdateAsync(userInDB);
 
                 if (!result.Succeeded) return new BadRequestObjectResult(result.Errors);
@@ -323,7 +409,7 @@ namespace Capstone.Controllers
 
                 var userInDB = _userManager.FindByIdAsync(model.ID).Result;
                 if (userInDB == null) return BadRequest(WebConstant.NotFound);
-                
+
                 userInDB.ManagerID = model.ManagerID;
                 userInDB.SecurityStamp = Guid.NewGuid().ToString();
                 var result = await _userManager.UpdateAsync(userInDB);
