@@ -20,6 +20,8 @@ import { CdkTable, CdkTableModule } from '@angular/cdk/table';
 import { AddAccountComponent } from './add-account/add-account.component';
 import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
 import { ToastrModule } from 'ngx-toastr';
+import { ManagePermissionComponent } from './manage-permission/manage-permission.component';
+import { AddPermissionComponent } from './add-permission/add-permission.component';
 
 @NgModule({
   imports: [
@@ -53,9 +55,10 @@ import { ToastrModule } from 'ngx-toastr';
     AppComponent,
     AdminLayoutComponent,
     LoginComponent,
-    AddAccountComponent
+    AddAccountComponent,
+    AddPermissionComponent,
   ],
-  entryComponents:[AddAccountComponent],
+  entryComponents:[AddAccountComponent, AddPermissionComponent],
 
   providers: [],
   bootstrap: [AppComponent]

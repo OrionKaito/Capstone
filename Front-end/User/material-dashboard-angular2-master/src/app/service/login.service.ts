@@ -22,7 +22,7 @@ export class LoginService {
   Login(model : any){  
     debugger;  
      var a =this.Url + "/api/Token/User";  
-   return  this.http.post(a,model,{responseType: 'text'});  
+   return  this.http.post(a,model);  
   }  
   Register(model : any){
    
