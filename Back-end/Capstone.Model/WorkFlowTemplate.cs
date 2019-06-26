@@ -17,7 +17,11 @@ namespace Capstone.Model
 
         public Guid PermissionToEditID { get; set; }
         [ForeignKey("PermissionToEditID")]
-        public virtual Permission Permission { get; set; }
+        public virtual Permission PermissionToEdit { get; set; }
+
+        public Guid PermissionToUseID { get; set; }
+        [ForeignKey("PermissionToUseID")]
+        public virtual Permission PermissionToUse { get; set; }
 
         public bool IsEnabled { get; set; }
         public bool IsDeleted { get; set; }
