@@ -68,5 +68,31 @@ namespace Capstone.Service
         {
             adjency[vertice].Add(edge);
         }
+
+        public string DepthFirstSearch(int index)
+        {
+            string message = "";
+            bool[] visited = new bool[Vertices];
+
+            Stack<int> stack = new Stack<int>();
+            visited[index] = true;
+            stack.Push(index);
+
+            while (stack.Count != 0)
+            {
+                index = stack.Pop();
+                message += "next->" + index + "/n";
+                foreach (int i in adjency[index]) //lấy tất cả các cạnh của đỉnh hiện tại mà chưa visit
+                {
+                    if (!visited[i])
+                    {
+                        visited[i] = true;
+                        stack.Push(i);
+                    }
+                }
+            }
+
+            return message;
+        }
     }
 }
