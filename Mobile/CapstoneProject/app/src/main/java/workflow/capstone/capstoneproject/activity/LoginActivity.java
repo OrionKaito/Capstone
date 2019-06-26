@@ -7,14 +7,15 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatButton;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.Toast;
+import android.widget.TextView;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
 
 import workflow.capstone.capstoneproject.R;
-import workflow.capstone.capstoneproject.Repository.CapstoneRepository;
-import workflow.capstone.capstoneproject.Repository.CapstoneRepositoryImpl;
+import workflow.capstone.capstoneproject.entities.Login;
+import workflow.capstone.capstoneproject.repository.CapstoneRepository;
+import workflow.capstone.capstoneproject.repository.CapstoneRepositoryImpl;
 import workflow.capstone.capstoneproject.utils.CallBackData;
 import workflow.capstone.capstoneproject.utils.ConstantDataManager;
 import workflow.capstone.capstoneproject.utils.DynamicWorkflowSharedPreferences;
@@ -26,6 +27,7 @@ public class LoginActivity extends AppCompatActivity {
     private AppCompatButton btnLogin;
     private CapstoneRepository capstoneRepository;
     private Context context = this;
+    private TextView tvErrorLogin;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,6 +47,7 @@ public class LoginActivity extends AppCompatActivity {
         inputEmail = findViewById(R.id.input_email);
         inputPassword = findViewById(R.id.input_password);
         btnLogin = findViewById(R.id.btn_login);
+        tvErrorLogin = findViewById(R.id.tv_Error_Login);
     }
 
     private void login() {
@@ -54,10 +57,10 @@ public class LoginActivity extends AppCompatActivity {
         fields.put("userName", username);
         fields.put("password", password);
         capstoneRepository = new CapstoneRepositoryImpl();
-        capstoneRepository.login(fields, new CallBackData<String>() {
+        capstoneRepository.login(context, fields, new CallBackData<Login>() {
             @Override
-            public void onSuccess(String s) {
-                DynamicWorkflowSharedPreferences.storeJWT(context, ConstantDataManager.AUTHORIZATION_TOKEN, s);
+            public void onSuccess(Login login) {
+                DynamicWorkflowSharedPreferences.storeJWT(context, ConstantDataManager.AUTHORIZATION_TOKEN, login.getToken());
                 Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                 startActivity(intent);
                 finish();
@@ -65,7 +68,8 @@ public class LoginActivity extends AppCompatActivity {
 
             @Override
             public void onFail(String message) {
-                Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
+                tvErrorLogin.setVisibility(View.VISIBLE);
+                tvErrorLogin.setText(message);
             }
         });
     }
