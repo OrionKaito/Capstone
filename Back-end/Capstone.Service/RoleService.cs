@@ -45,7 +45,7 @@ namespace Capstone.Service
 
         public IEnumerable<Role> GetAll()
         {
-            return _roleRepository.GetAll().Where(r => r.IsDeleted == false);
+            return _roleRepository.GetAll();
         }
 
         public Role GetByID(Guid ID)

@@ -35,7 +35,7 @@ namespace Capstone.Controllers
 
         [AllowAnonymous]
         [HttpPost("User")]
-        public ActionResult PostUser([FromBody]CredentialsVM credentials)
+        public ActionResult<TokenVM> PostUser([FromBody]CredentialsVM credentials)
         {
             if (!ModelState.IsValid)
             {
@@ -54,7 +54,7 @@ namespace Capstone.Controllers
 
             foreach (var item in listRoleOfUser)
             {
-                if (item.Equals(WebConstant.User))
+                if (item.Equals(WebConstant.User) || item.Equals(WebConstant.Staff))
                 {
                     checkUser = true;
                 }
@@ -75,13 +75,29 @@ namespace Capstone.Controllers
                 return BadRequest(WebConstant.BannedAccount);
             }
 
+            bool checkStaff = false;
+
+            foreach (var item in listRoleOfUser)
+            {
+                if (item.Equals(WebConstant.Staff))
+                {
+                    checkStaff = true;
+                }
+            }
+
+            string role = checkStaff == true ? WebConstant.Staff : WebConstant.User;
             var tokenString = GenerateJSONWebToken(identity.Result);
-            return Ok(tokenString);
+            TokenVM tokenVM = new TokenVM
+            {
+                Role = role,
+                Token = tokenString
+            };
+            return Ok(tokenVM);
         }
 
         [AllowAnonymous]
         [HttpPost("Admin")]
-        public ActionResult PostAdmin([FromBody]CredentialsVM credentials)
+        public ActionResult<string> PostAdmin([FromBody]CredentialsVM credentials)
         {
             if (!ModelState.IsValid)
             {

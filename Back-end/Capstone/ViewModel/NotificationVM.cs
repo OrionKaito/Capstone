@@ -10,14 +10,14 @@ namespace Capstone.ViewModel
         public Guid EventID { get; set; }
 
         public string Message { get; set; }
-        public DateTime DateTime { get; set; }
+        public DateTime CreateDate { get; set; }
     }
 
     public class NotificationCM
     {
         public Guid EventID { get; set; }
         public NotificationEnum NotificationType { get; set; }
-        public DateTime DateTime { get; set; }
+        public DateTime CreateDate { get; set; }
     }
 
     public class NotificationUM
@@ -26,7 +26,7 @@ namespace Capstone.ViewModel
 
         public Guid EventID { get; set; }
 
-        public DateTime DateTime { get; set; }
+        public DateTime CreateDate { get; set; }
     }
 
     public class NotificationViewModel

@@ -9,7 +9,6 @@ namespace Capstone.Service
 {
     public interface IUserService
     {
-        Dictionary<string, IEnumerable<string>> GetAuthorizationByUserID(string ID);
         IEnumerable<User> getUsersByPermissionID(Guid ID);
         void BeginTransaction();
         void CommitTransaction();
@@ -20,53 +19,30 @@ namespace Capstone.Service
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IUserRepository _userRepository;
-        private readonly IPermissionOfRoleRepository _permissionOfRoleRepository;
-        private readonly IUserRoleRepository _userRoleRepository;
-
-        //Sửa lại chỗ này nha Thanh Lộc
-        private readonly IPermissionService _permissionService;
-        private readonly IRoleService _roleService;
-        private readonly IGroupService _groupService;
+        private readonly IPermissionOfGroupRepository _permissionOfGroupRepository;
+        private readonly IUserGroupRepository _userGroupRepository;
 
         public UserService(IUnitOfWork unitOfWork, IUserRepository userRepository
-            , IPermissionOfRoleRepository permissionOfRoleRepository
-            , IUserRoleRepository userRoleRepository
-            , IPermissionService permissionService
-            , IRoleService roleService
-            , IGroupService groupService)
+            , IPermissionOfGroupRepository permissionOfGroupRepository
+            , IUserGroupRepository userGroupRepository)
         {
             _unitOfWork = unitOfWork;
             _userRepository = userRepository;
-            _permissionOfRoleRepository = permissionOfRoleRepository;
-            _userRoleRepository = userRoleRepository;
-            _permissionService = permissionService;
-            _roleService = roleService;
-            _groupService = groupService;
-        }
-
-        public Dictionary<string, IEnumerable<string>> GetAuthorizationByUserID(string ID)
-        {
-            Dictionary<string, IEnumerable<string>> data = new Dictionary<string, IEnumerable<string>>();
-            IEnumerable<string> roles = _roleService.GetByUserID(ID);
-            IEnumerable<string> groups = _groupService.GetByUserID(ID);
-            IEnumerable<string> permissions = _permissionService.GetByUserID(ID);
-            data.Add("role", roles);
-            data.Add("group", groups);
-            data.Add("permission", permissions);
-            return data;
+            _permissionOfGroupRepository = permissionOfGroupRepository;
+            _userGroupRepository = userGroupRepository;
         }
 
         public IEnumerable<User> getUsersByPermissionID(Guid ID)
         {
             List<User> users = new List<User>();
-            var roles = _permissionOfRoleRepository.GetMany(r => r.PermissionID == ID)
+            var groups = _permissionOfGroupRepository.GetMany(r => r.PermissionID == ID)
                 //.ToList()
-                .Select(r => new Role { ID = r.RoleID })
+                .Select(g => new Group { ID = g.GroupID })
                 .ToList();
 
-            foreach (var role in roles)
+            foreach (var group in groups)
             {
-                var result = _userRoleRepository.GetMany(u => u.RoleID == role.ID).Select(u => new User { Id = u.UserID }).ToList();
+                var result = _userGroupRepository.GetMany(u => u.GroupID == group.ID).Select(u => new User { Id = u.UserID }).ToList();
                 foreach (var data in result)
                 {
                     users.Add(data);

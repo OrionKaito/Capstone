@@ -16,8 +16,10 @@ namespace Capstone.ViewModel
         public string FullName { get; set; }
         public DateTime? DateOfBirth { get; set; }
         public string ManagerID { get; set; }
+        public string ManagerName { get; set; }
         public IEnumerable<RoleVM> Roles { get; set; }
         public IEnumerable<GroupVM> Groups { get; set; }
+        public bool IsDeleted { get; set; }
     }
 
     public class RegistrationCM
@@ -41,8 +43,6 @@ namespace Capstone.ViewModel
     public class RegistrationByIDUM
     {
         public string ID { get; set; }
-        public string FullName { get; set; }
-        public DateTime? DateOfBirth { get; set; }
         public string ManagerID { get; set; }
         public IEnumerable<Guid> RoleIDs { get; set; }
         public IEnumerable<Guid> GroupIDs { get; set; }
