@@ -17,13 +17,15 @@ namespace Capstone.Controllers
     {
         private readonly IMapper _mapper;
         private readonly IWorkFlowTemplateService _workFlowService;
+        private readonly IPermissionService _permissionService;
 
-        public WorkflowsTemplatesController(IMapper mapper, IWorkFlowTemplateService workFlowService)
+        public WorkflowsTemplatesController(IMapper mapper, IWorkFlowTemplateService workFlowService, IPermissionService permissionService)
         {
             _mapper = mapper;
             _workFlowService = workFlowService;
+            _permissionService = permissionService;
         }
-
+        
         // GET: api/Workflows
         [HttpGet]
         public ActionResult<IEnumerable<WorkFlowTemplateVM>> GetWorkflowsTemplates()
@@ -46,7 +48,7 @@ namespace Capstone.Controllers
         }
 
         // GET: api/Workflows/5
-        [HttpGet("{id}")]
+        [HttpGet("GetByID")]
         public ActionResult<WorkFlowTemplateVM> GetWorkflowTemplate(Guid ID)
         {
             try
@@ -62,8 +64,37 @@ namespace Capstone.Controllers
             }
         }
 
+        // GET: api/Workflows/5
+        [HttpGet("GetUserWorkflow")]
+        public ActionResult<IEnumerable<WorkFlowTemplateVM>> GetUserWorkflow()
+        {
+            try
+            {
+                var userID = HttpContext.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier).Value;
+                var permissionsOfUser = _permissionService.GetByUserID(userID);
+
+                List<WorkFlowTemplateVM> workFlowTemplates = new List<WorkFlowTemplateVM>();
+
+                foreach (var item in permissionsOfUser)
+                {
+                    var workflows = _workFlowService.GetByPermissionToUse(item.ID);
+
+                    foreach (var workflow in workflows)
+                    {
+                        workFlowTemplates.Add(_mapper.Map<WorkFlowTemplateVM>(workflow));
+                    }
+                }
+                
+                return Ok(workFlowTemplates);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
+
         // PUT: api/Workflows/5
-        [HttpPut("{id}")]
+        [HttpPut]
         public ActionResult PutWorkflowTemplate(WorkFlowTemplateUM model)
         {
             if (!ModelState.IsValid) return BadRequest(ModelState);

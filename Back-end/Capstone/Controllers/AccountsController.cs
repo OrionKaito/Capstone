@@ -282,27 +282,6 @@ namespace Capstone.Controllers
             }
         }
 
-        [HttpGet("GetAuthorizationByUserID")]
-        public ActionResult<AuthorizationVM> GetAuthorizationByUserID(string ID)
-        {
-            try
-            {
-                Dictionary<string, IEnumerable<string>> data = _userService.GetAuthorizationByUserID(ID);
-                IEnumerable<string> roles = data.GetValueOrDefault("role");
-                IEnumerable<string> groups = data.GetValueOrDefault("group");
-                IEnumerable<string> permissions = data.GetValueOrDefault("permission");
-                AuthorizationVM result = new AuthorizationVM();
-                result.Roles = roles;
-                result.Groups = groups;
-                result.Permissions = permissions;
-                return Ok(result);
-            }
-            catch (Exception e)
-            {
-                return BadRequest(e.Message);
-            }
-        }
-
         [HttpPut]
         public async Task<ActionResult> PutAccount([FromBody]RegistrationUM model)
         {
@@ -344,9 +323,7 @@ namespace Capstone.Controllers
 
                 var userInDB = _userManager.FindByIdAsync(model.ID).Result;
                 if (userInDB == null) return BadRequest(WebConstant.NotFound);
-
-                userInDB.FullName = model.FullName;
-                userInDB.DateOfBirth = model.DateOfBirth;
+                
                 userInDB.ManagerID = model.ManagerID;
                 userInDB.SecurityStamp = Guid.NewGuid().ToString();
                 var result = await _userManager.UpdateAsync(userInDB);

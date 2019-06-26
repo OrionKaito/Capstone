@@ -65,17 +65,17 @@ namespace Capstone.Controllers
 
         // GET: api/Permissions
         [HttpGet("GetByUserID")]
-        public ActionResult<IEnumerable<string>> GetByUserID(string ID)
+        public ActionResult<IEnumerable<PermissionVM>> GetByUserID(string ID)
         {
             try
             {
-                List<string> result = new List<string>();
+                List<PermissionVM> result = new List<PermissionVM>();
                 var data = _permissionService.GetByUserID(ID);
+                if (data == null) return BadRequest(WebConstant.NotFound);
                 foreach (var item in data)
                 {
-                    result.Add(item);
+                    result.Add(_mapper.Map<PermissionVM>(item));
                 }
-                if (result.Count == 0) return BadRequest(WebConstant.NotFound);
                 return Ok(result);
             }
             catch (Exception e)

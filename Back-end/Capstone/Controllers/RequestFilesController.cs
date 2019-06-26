@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Net.Http.Headers;
 
 namespace Capstone.Controllers
@@ -46,7 +47,12 @@ namespace Capstone.Controllers
                     {
                         if (file.Length > 0)
                         {
-                            var fileName = ContentDispositionHeaderValue.Parse(file.ContentDisposition).FileName.Trim('"');
+                            //var fileName = ContentDispositionHeaderValue.Parse(file.ContentDisposition).FileName.Trim('"');
+                            string fileName = new string(Path.GetFileNameWithoutExtension(file.FileName)
+                                .Take(10)
+                                .ToArray()).Replace(" ", "-");
+                            fileName = fileName + "-" + DateTime.Now.ToString("yyyy-dd-MM--HH-mm-ss") + Path.GetExtension(file.FileName);
+
                             var fullPath = Path.Combine(pathToSave, fileName); // đường dẫn tuyệt đối file
                             var dbPath = Path.Combine(folderName, fileName); // đường tương đối file
 
