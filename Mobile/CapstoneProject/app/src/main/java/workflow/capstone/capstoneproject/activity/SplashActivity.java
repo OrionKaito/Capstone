@@ -1,10 +1,9 @@
 package workflow.capstone.capstoneproject.activity;
 
-import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 
 import workflow.capstone.capstoneproject.R;
 import workflow.capstone.capstoneproject.utils.ConstantDataManager;
