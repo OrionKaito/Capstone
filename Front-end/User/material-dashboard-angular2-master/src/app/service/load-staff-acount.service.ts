@@ -19,6 +19,11 @@ export class LoadStaffAcountService {
     var tokenHeader = new HttpHeaders({'Authorization': token});
     return this.http.get(this.Url + "/api/WorkflowsTemplates", {headers : tokenHeader });
   }
+  loadWFByID(id: string){
+    var token = "Bearer " + localStorage.getItem("token");
+    var tokenHeader = new HttpHeaders({'Authorization': token});
+    return this.http.get(this.Url + "/api/WorkflowsTemplates", {headers : tokenHeader });
+  }
   loadPermissionOfRoleData() {
     return this.http.get(this.Url + "/api/PermissionOfRoles");
   }
@@ -79,6 +84,7 @@ export class LoadStaffAcountService {
   loadUserByID(id) {
     return this.http.get(this.Url + "/api/Accounts/GetAccountByUserID?ID=" + id);
   }
+
 
   loadGroupByID(id) {
     return this.http.get(this.Url + " /api/Groups/GetByID?ID=" + id);

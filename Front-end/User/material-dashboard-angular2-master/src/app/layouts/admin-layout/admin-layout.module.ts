@@ -27,6 +27,7 @@ import { AddAccountComponent } from 'app/add-account/add-account.component';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
 import { ToastrModule } from 'ngx-toastr';
+import { ManagePermissionComponent } from 'app/manage-permission/manage-permission.component';
 
 
 @NgModule({
@@ -56,7 +57,8 @@ import { ToastrModule } from 'ngx-toastr';
   declarations: [
     DashboardComponent,
     UserProfileComponent,
-    TableListComponent
+    TableListComponent,
+    ManagePermissionComponent
   ]
 })
 

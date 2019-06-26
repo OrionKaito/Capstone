@@ -11,7 +11,7 @@ export const ROUTES: RouteInfo[] = [
     { path: '/dashboard', title: 'Dashboard',  icon: 'dashboard', class: '' },
     { path: '/user-profile', title: 'User Profile',  icon:'person', class: '' },
     { path: '/manage-workflow', title: 'Manage WorkFlow',  icon:'content_paste', class: '' },
-
+    { path: '/manage-permission', title: 'Manage Permission',  icon:'content_paste', class: '' },
 ];
 
 @Component({

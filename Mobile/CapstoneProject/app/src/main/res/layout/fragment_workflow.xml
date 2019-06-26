@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:focusable="true"
+    android:focusableInTouchMode="true"
+    tools:context=".fragment.WorkflowFragment">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:id="@+id/linear_layout_open_search_tab"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:background="@color/white"
+            android:orientation="horizontal"
+            android:visibility="visible"
+            android:weightSum="100">
+
+            <EditText
+                android:id="@+id/edit_text_search"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="16dp"
+                android:layout_weight="98"
+                android:background="@drawable/background_edit_text_search"
+                android:drawableLeft="@drawable/ic_search_gray_24dp"
+                android:drawablePadding="5dp"
+                android:gravity="center_vertical"
+                android:hint="@string/search_workflow"
+                android:maxLines="1"
+                android:paddingLeft="8dp"
+                android:paddingTop="5dp"
+                android:paddingBottom="5dp" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="20dp"
+            android:orientation="vertical">
+
+            <android.support.v4.widget.SwipeRefreshLayout
+                android:id="@+id/swipe_Container"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <ListView
+                    android:id="@+id/list"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:divider="#00000000"
+                    android:footerDividersEnabled="false"></ListView>
+            </android.support.v4.widget.SwipeRefreshLayout>
+        </LinearLayout>
+    </LinearLayout>
+
+</FrameLayout>

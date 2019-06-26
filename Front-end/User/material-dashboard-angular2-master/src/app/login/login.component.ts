@@ -11,7 +11,8 @@ import { LoginService } from '../service/login.service';
 export class LoginComponent implements OnInit {    
     
   model : any={};      
-  errorMessage:string;    
+  dataNow: any={};
+  errorMessage: any;    
 
   constructor(private router:Router,private LoginService:LoginService) { }    
     
@@ -26,10 +27,12 @@ export class LoginComponent implements OnInit {
     debugger;    
     this.LoginService.Login(this.model).toPromise().then(    
       data => {    
+        this.dataNow = data;
+        var a =  this.dataNow.token;
         debugger;    
         if(data != "")    
         {     
-          localStorage.setItem('token',data);
+          localStorage.setItem('token',a);
           this.router.navigate(['/dashboard']);
           debugger;    
         }    

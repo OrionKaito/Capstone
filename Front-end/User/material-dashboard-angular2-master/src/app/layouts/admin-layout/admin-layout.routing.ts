@@ -3,6 +3,7 @@ import { Routes } from '@angular/router';
 import { DashboardComponent } from '../../dashboard/dashboard.component';
 import { TableListComponent } from '../../table-list/table-list.component';
 import { UserProfileComponent } from 'app/user-profile/user-profile.component';
+import { ManagePermissionComponent } from 'app/manage-permission/manage-permission.component';
 
 
 export const AdminLayoutRoutes: Routes = [
@@ -50,7 +51,9 @@ export const AdminLayoutRoutes: Routes = [
     // }
     { path: 'dashboard',      component: DashboardComponent },
     { path: 'user-profile',   component: UserProfileComponent },
-    { path: 'manage-workflow',     component: TableListComponent }
-
+    { path: 'manage-workflow',     component: TableListComponent },
+    { path: 'manage-permission',     component: ManagePermissionComponent }
     
 ];
+
+

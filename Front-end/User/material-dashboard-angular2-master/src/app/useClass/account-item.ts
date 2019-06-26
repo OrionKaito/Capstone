@@ -1,6 +1,5 @@
 export class AccountItem {
-    email: string
-    password: string
-    fullName: string
-    dateOfBirth: Date
+    id: string
+    name: string
+    permission: string
 }

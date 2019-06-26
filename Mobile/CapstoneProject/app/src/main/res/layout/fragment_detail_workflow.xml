@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".fragment.DetailWorkflowFragment">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp50"
+                android:background="@color/blue"
+                android:gravity="center_vertical">
+
+                <ImageView
+                    android:id="@+id/img_Back"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/dp10"
+                    android:background="@drawable/ic_left_arrow" />
+            </RelativeLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center_horizontal"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tv_name_of_workflow"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/dp5"
+                    android:textColor="#000"
+                    android:textSize="@dimen/sp26" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dp70"
+                    android:background="@drawable/border"
+                    android:orientation="horizontal"
+                    android:weightSum="10">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginLeft="@dimen/dp10"
+                        android:layout_marginRight="@dimen/dp10"
+                        android:layout_weight="3">
+
+                        <EditText
+                            android:id="@+id/edt_Reason"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_margin="@dimen/dp5"
+                            android:background="@android:color/transparent" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="7"
+                        android:gravity="center">
+
+                        <ImageView
+                            android:id="@+id/img_upload_image"
+                            android:layout_width="@dimen/dp35"
+                            android:layout_height="@dimen/dp35"
+                            android:layout_marginRight="@dimen/dp5"
+                            android:background="@drawable/ic_photo_camera" />
+
+                        <ImageView
+                            android:id="@+id/img_upload_file"
+                            android:layout_width="@dimen/dp35"
+                            android:layout_height="@dimen/dp35"
+                            android:layout_marginLeft="@dimen/dp10"
+                            android:background="@drawable/ic_folder" />
+                    </LinearLayout>
+                </LinearLayout>
+
+                <GridView
+                    android:id="@+id/grid_view_image"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/dp10"
+                    android:numColumns="4"
+                    android:visibility="gone">
+
+                </GridView>
+
+                <TextView
+                    android:id="@+id/tv_upload_success"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+                <Button
+                    android:id="@+id/btn_Send"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Send" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+    </ScrollView>
+
+</FrameLayout>

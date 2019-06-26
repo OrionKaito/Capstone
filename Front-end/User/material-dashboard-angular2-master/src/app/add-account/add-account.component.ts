@@ -15,45 +15,31 @@ export class AddAccountComponent implements OnInit {
   formData = new AccountItem;
   dataGet: any =[];
   recevieData: any
-  inputRole
-  inputGroup
+
+
   createAcc = true; 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data,
     public dialogRef: MatDialogRef<AddAccountComponent>,
     private router:Router, private loadStaffAcountService: LoadStaffAcountService, private LoginService: LoginService) { }
-  roleList: any=[]
+  permissionList: any=[]
   groupList: any=[]
 
   ngOnInit() {
-    this.inputGroup="0";
-    this.inputRole="0";
-    if(this.data != null && this.data != "null") this.createAcc =false;
-    if(!this.createAcc){
-      this.loadStaffAcountService.loadUserByID(this.data).toPromise().then(data => {
-        this.recevieData = data;
-        this.formData.email =this.recevieData.email;
-        this.formData.dateOfBirth =this.recevieData.dateOfBirth;
-        this.formData.fullName =this.recevieData.fullName;
-      })
-      // this.loadStaffAcountService.getGroupbyID(this.data).toPromise().then(data => {
-      //   this.inputGroup= data;    
-      // })     
-  
-      // this.loadStaffAcountService.getRolebyID(this.data).toPromise().then(data => {   
-      //   this.dataGet = data;  
-      //   this.inputRole = this.dataGet[0];
-      // }) 
-    }
     
 
-    
-    this.loadStaffAcountService.loadGroupData().toPromise().then(data => {
-      this.groupList = data;
+    if(this.data != null && this.data != "null") this.createAcc =false;
+    if(!this.createAcc){
+      this.loadStaffAcountService.loadWFByID(this.data).toPromise().then(data => {
+        this.recevieData = data;
+      })
+    }
+    this.loadStaffAcountService.loadPermissionData().toPromise().then(data => {
+      this.permissionList = data;
+      console.log("per:");
+      console.log(this.permissionList);
     })
-    this.loadStaffAcountService.loadRoleData().toPromise().then(data => {
-      this.roleList = data;
-    })
+    this.formData.permission="0";
   }
   onSubmit(){
     if(this.createAcc){

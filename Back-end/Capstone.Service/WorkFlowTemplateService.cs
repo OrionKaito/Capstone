@@ -10,6 +10,7 @@ namespace Capstone.Service
     public interface IWorkFlowTemplateService
     {
         IEnumerable<WorkFlowTemplate> GetAll();
+        IEnumerable<WorkFlowTemplate> GetByPermissionToUse(Guid ID);
         WorkFlowTemplate GetByID(Guid ID);
         WorkFlowTemplate GetByName(string name);
         void Create(WorkFlowTemplate workflow);
@@ -19,11 +20,13 @@ namespace Capstone.Service
     public class WorkFlowTemplateService : IWorkFlowTemplateService
     {
         private readonly IWorkFlowTemplateRepository _workFlowTemplateRepository;
+        private readonly IPermissionRepository _permissionRepository;
         private readonly IUnitOfWork _unitOfWork;
 
-        public WorkFlowTemplateService(IWorkFlowTemplateRepository workFlowRepository, IUnitOfWork unitOfWork)
+        public WorkFlowTemplateService(IWorkFlowTemplateRepository workFlowTemplateRepository, IPermissionRepository permissionRepository, IUnitOfWork unitOfWork)
         {
-            _workFlowTemplateRepository = workFlowRepository;
+            _workFlowTemplateRepository = workFlowTemplateRepository;
+            _permissionRepository = permissionRepository;
             _unitOfWork = unitOfWork;
         }
 
@@ -46,6 +49,11 @@ namespace Capstone.Service
         public WorkFlowTemplate GetByName(string name)
         {
             return _workFlowTemplateRepository.GetByName(name);
+        }
+
+        public IEnumerable<WorkFlowTemplate> GetByPermissionToUse(Guid ID)
+        {
+            return _workFlowTemplateRepository.GetByPermissionToUse(ID);
         }
 
         public void Save()

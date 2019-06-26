@@ -43,8 +43,6 @@ namespace Capstone.ViewModel
     public class RegistrationByIDUM
     {
         public string ID { get; set; }
-        public string FullName { get; set; }
-        public DateTime? DateOfBirth { get; set; }
         public string ManagerID { get; set; }
         public IEnumerable<Guid> RoleIDs { get; set; }
         public IEnumerable<Guid> GroupIDs { get; set; }

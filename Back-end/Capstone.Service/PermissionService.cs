@@ -12,7 +12,7 @@ namespace Capstone.Service
         IEnumerable<Permission> GetAll();
         Permission GetByID(Guid ID);
         Permission GetByName(string Name);
-        IEnumerable<string> GetByUserID(string ID);
+        IEnumerable<Permission> GetByUserID(string ID);
         void Create(Permission permission);
         void Delete(Permission permission);
         void Save();
@@ -61,20 +61,21 @@ namespace Capstone.Service
             return _permissionRepository.GetByName(Name);
         }
 
-        public IEnumerable<string> GetByUserID(string ID)
+        public IEnumerable<Permission> GetByUserID(string ID)
         {
-            List<string> listNameOfPermission = new List<string>();
-            var data = _userGroupRepository.GetMany(u => u.IsDeleted == false && u.UserID.Equals(ID));
-            foreach (var item in data)
+            List<Permission> permissions = new List<Permission>();
+            // lấy group của user
+            var groups = _userGroupRepository.GetMany(u => u.IsDeleted == false && u.UserID.Equals(ID));
+            foreach (var item in groups)
             {
-                var getByGroupID = _permissionOfGroupRepository.GetMany(p => p.IsDeleted == false && p.GroupID == item.GroupID);
-                foreach (var permissionItem in getByGroupID)
+                // lấy permission của group
+                var permissionOfGroup = _permissionOfGroupRepository.GetMany(p => p.IsDeleted == false && p.GroupID == item.GroupID);
+                foreach (var permissionItem in permissionOfGroup)
                 {
-                    listNameOfPermission.Add(_permissionRepository.GetById(permissionItem.PermissionID).Name);
+                    permissions.Add(_permissionRepository.GetById(permissionItem.PermissionID));
                 }
             }
-            
-            return listNameOfPermission;
+            return permissions;
         }
 
         public void Save()
