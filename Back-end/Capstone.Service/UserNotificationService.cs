@@ -63,7 +63,7 @@ namespace Capstone.Service
 
         public IEnumerable<UserNotification> GetByUserID(string ID)
         {
-            return _userNotificationRepository.GetAll().Where(u => u.IsDeleted == false && u.IsRead == false && u.UserID.Equals(ID));
+            return _userNotificationRepository.GetAll().Where(u => u.IsDeleted == false && u.UserID.Equals(ID));
         }
     }
 }

@@ -16,20 +16,13 @@ namespace Capstone.Controllers
     {
         private readonly IMapper _mapper;
         private readonly INotificationService _notificationService;
-        private readonly IUserNotificationService _userNotificationService;
         private readonly IWorkFlowTemplateService _workFlowService;
-        private readonly IRequestService _requestService;
-        private readonly UserManager<User> _userManager;
 
-        public NotificationsController(IMapper mapper, INotificationService notificationService, IUserNotificationService userNotificationService,
-            IWorkFlowTemplateService workFlowService, IRequestService requestService, UserManager<User> userManager)
+        public NotificationsController(IMapper mapper, INotificationService notificationService, IWorkFlowTemplateService workFlowService)
         {
             _mapper = mapper;
             _notificationService = notificationService;
-            _userNotificationService = userNotificationService;
             _workFlowService = workFlowService;
-            _requestService = requestService;
-            _userManager = userManager;
         }
 
 
@@ -88,116 +81,6 @@ namespace Capstone.Controllers
             {
                 return BadRequest(e.Message);
             }
-        }
-
-        // GET: api/UserNotifications
-        [HttpGet("GetNumberOfNotification")]
-        public ActionResult<int> GetNumberOfNotification(string ID)
-        {
-            try
-            {
-                var userInDB = _userManager.FindByIdAsync(ID).Result;
-                if (userInDB == null) return BadRequest(WebConstant.NotFound);
-
-                int result = _userNotificationService.GetNumberOfNotification(ID);
-                return Ok(result);
-            }
-            catch (Exception e)
-            {
-                return BadRequest(e.Message);
-            }
-        }
-
-        [HttpGet("GetByUserID")]
-        public ActionResult GetByUserId(string ID)
-        {
-            var userInDB = _userManager.FindByIdAsync(ID).Result;
-            if (userInDB == null) return BadRequest(WebConstant.NotFound);
-
-            var notification = _userNotificationService.GetByUserID(ID);
-
-            if (notification == null)
-            {
-                return Ok(WebConstant.NoNotificationYet);
-            }
-
-            var data = new List<NotificationViewModel>();
-            var listUserInRequest = _requestService.GetByUserID(ID);
-
-            foreach (var item in notification)
-            {
-                var notificationInDb = _notificationService.GetByID(item.NotificationID);
-                if (notificationInDb.NotificationType == NotificationEnum.UpdatedWorkflow)
-                {
-                    var result = new NotificationViewModel
-                    {
-                        Fullname = _userManager.FindByIdAsync(ID).Result.FullName,
-                        EventID = notificationInDb.EventID,
-                        Message = WebConstant.WorkflowUpdateMessage,
-                        NotificationType = notificationInDb.NotificationType
-                    };
-                    data.Add(result);
-                }
-                else if (notificationInDb.NotificationType == NotificationEnum.AcceptedRequest)
-                {
-                    foreach (var userInRequest in listUserInRequest)
-                    {
-                        var result = new NotificationViewModel
-                        {
-                            Fullname = _userManager.FindByIdAsync(ID).Result.FullName,
-                            EventID = notificationInDb.EventID,
-                            Message = WebConstant.AcceptedRequestMessage,
-                            NotificationType = notificationInDb.NotificationType,
-                            ApproverName = _userManager.FindByIdAsync(userInRequest.InitiatorID).Result.FullName
-                        };
-                        data.Add(result);
-                    }
-                }
-                else if (notificationInDb.NotificationType == NotificationEnum.ReceivedRequest)
-                {
-                    foreach (var userInRequest in listUserInRequest)
-                    {
-                        var result = new NotificationViewModel
-                        {
-                            Fullname = _userManager.FindByIdAsync(ID).Result.FullName,
-                            EventID = notificationInDb.EventID,
-                            Message = WebConstant.ReceivedRequestMessage,
-                            NotificationType = notificationInDb.NotificationType,
-                            ApproverName = _userManager.FindByIdAsync(userInRequest.InitiatorID).Result.FullName
-                        };
-                        data.Add(result);
-                    }
-                }
-                else if (notificationInDb.NotificationType == NotificationEnum.DeniedRequest)
-                {
-                    foreach (var userInRequest in listUserInRequest)
-                    {
-                        var result = new NotificationViewModel
-                        {
-                            Fullname = _userManager.FindByIdAsync(ID).Result.FullName,
-                            EventID = notificationInDb.EventID,
-                            Message = WebConstant.DeniedRequestMessage,
-                            NotificationType = notificationInDb.NotificationType,
-                            ApproverName = _userManager.FindByIdAsync(userInRequest.InitiatorID).Result.FullName
-                        };
-                        data.Add(result);
-                    }
-                }
-                else
-                {
-                    return NotFound();
-                }
-            }
-
-            var notficications = _userNotificationService.GetByUserID(ID);
-
-            foreach (var item in notficications)
-            {
-                item.IsRead = true;
-            }
-            _notificationService.Save();
-            
-            return Ok(data);
         }
 
         // PUT: api/Notifications/5

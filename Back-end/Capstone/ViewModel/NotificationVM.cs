@@ -33,8 +33,9 @@ namespace Capstone.ViewModel
     {
         public Guid EventID { get; set; }
         public string Message { get; set; }
-        public string Fullname { get; set; }
+        public string ActorName { get; set; }
         public NotificationEnum NotificationType { get; set; }
-        public string ApproverName { get; set; }
+        public string NotificationTypeName { get; set; }
+        public bool IsHandled { get; set; }
     }
 }
