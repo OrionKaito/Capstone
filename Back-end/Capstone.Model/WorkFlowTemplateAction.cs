@@ -10,6 +10,9 @@ namespace Capstone.Model
         public Guid ID { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
+        public bool IsApprovedByLineManager { get; set; }
+        public bool IsStart { get; set; }
+        public bool IsEnd { get; set; }
 
         public Guid WorkFlowTemplateID { get; set; }
         [ForeignKey("WorkFlowTemplateID")]

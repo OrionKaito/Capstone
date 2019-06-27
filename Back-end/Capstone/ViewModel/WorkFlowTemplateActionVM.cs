@@ -9,6 +9,9 @@ namespace Capstone.ViewModel
         public string Description { get; set; }
         public Guid ActionTypeID { get; set; }
         public Guid PermissionToUseID { get; set; }
+        public bool IsApprovedByAdmin { get; set; }
+        public bool IsStart { get; set; }
+        public bool IsEnd { get; set; }
     }
 
     public class WorkFlowTemplateActionCM
@@ -18,6 +21,9 @@ namespace Capstone.ViewModel
         public string Description { get; set; }
         public Guid ActionTypeID { get; set; }
         public Guid PermissionToUseID { get; set; }
+        public bool IsApprovedByAdmin { get; set; }
+        public bool IsStart { get; set; }
+        public bool IsEnd { get; set; }
     }
 
     public class WorkFlowTemplateActionUM
@@ -28,5 +34,8 @@ namespace Capstone.ViewModel
         public string Description { get; set; }
         public Guid ActionTypeID { get; set; }
         public Guid PermissionToUseID { get; set; }
+        public bool IsApprovedByAdmin { get; set; }
+        public bool IsStart { get; set; }
+        public bool IsEnd { get; set; }
     }
 }

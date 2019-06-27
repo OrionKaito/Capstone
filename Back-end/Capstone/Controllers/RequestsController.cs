@@ -3,6 +3,7 @@ using Capstone.Helper;
 using Capstone.Model;
 using Capstone.Service;
 using Capstone.ViewModel;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -25,14 +26,19 @@ namespace Capstone.Controllers
         private readonly IUserNotificationService _userNotificationService;
         private readonly IUserService _userService;
         private readonly IWorkFlowTemplateActionService _workFlowTemplateActionService;
+        private readonly UserManager<User> _userManager;
 
-        public RequestsController(IMapper mapper, IRequestService requestService
+        public RequestsController(IMapper mapper
+            , IRequestService requestService
             , IRequestActionService requestActionService
             , IRequestValueService requestValueService
             , IRequestFileService requestFileService
             , INotificationService notificationService
             , IUserNotificationService userNotificationService
-            , IUserService userService, IWorkFlowTemplateActionService workFlowTemplateActionService)
+            , IUserService userService
+            , IWorkFlowTemplateActionService workFlowTemplateActionService
+            , UserManager<User> userManager
+            )
         {
             _mapper = mapper;
             _requestService = requestService;
@@ -43,7 +49,10 @@ namespace Capstone.Controllers
             _userNotificationService = userNotificationService;
             _userService = userService;
             _workFlowTemplateActionService = workFlowTemplateActionService;
+            _userManager = userManager;
         }
+
+
 
         // POST: api/Requests
         [HttpPost]
@@ -56,8 +65,8 @@ namespace Capstone.Controllers
                 //Begin transaction
                 _requestService.BeginTransaction();
 
-                var currentUSer = HttpContext.User;
-                var userID = currentUSer.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier).Value;
+                var currentUser = HttpContext.User;
+                var userID = currentUser.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier).Value;
 
                 //Request
                 Request request = new Request
@@ -105,7 +114,7 @@ namespace Capstone.Controllers
                     };
                     _requestFileService.Create(requestFile);
                 }
-                
+
                 //Notification
                 Notification notification = new Notification
                 {
@@ -121,18 +130,34 @@ namespace Capstone.Controllers
 
                 //UserNotification
                 var workflowTemplateAction = _workFlowTemplateActionService.GetByID(model.NextStepID);
-                var users = _userService.getUsersByPermissionID(workflowTemplateAction.PermissionToUseID);
 
-                if (users != null && users.Any())
+                if (workflowTemplateAction.IsApprovedByLineManager)
                 {
-                    foreach (var user in users)
+                    var user = _userManager.FindByIdAsync(userID).Result;
+
+                    UserNotification userNotification = new UserNotification
                     {
-                        UserNotification userNotification = new UserNotification
+                        NotificationID = notification.ID,
+                        UserID = user.Id,
+                    };
+                    _userNotificationService.Create(userNotification);
+
+                }
+                else
+                {
+                    var users = _userService.getUsersByPermissionID(workflowTemplateAction.PermissionToUseID);
+
+                    if (users != null && users.Any())
+                    {
+                        foreach (var user in users)
                         {
-                            NotificationID = notification.ID,
-                            UserID = user.Id,
-                        };
-                        _userNotificationService.Create(userNotification);
+                            UserNotification userNotification = new UserNotification
+                            {
+                                NotificationID = notification.ID,
+                                UserID = user.Id,
+                            };
+                            _userNotificationService.Create(userNotification);
+                        }
                     }
                 }
 
