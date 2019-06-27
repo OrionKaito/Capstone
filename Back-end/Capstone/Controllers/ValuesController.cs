@@ -1,4 +1,5 @@
 ﻿using Capstone.Service;
+using Capstone.ViewModel;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
@@ -35,6 +36,80 @@ namespace Capstone.Controllers
         {
             _emailService.SendMail("orionkaito@gmail.com", "Hello", "Hello world");
             return "success";
+        }
+
+        // GET api/values/5
+        [HttpPost("CheckConnection")]
+        public ActionResult<string> CheckConnection(CheckConnectionVM model)
+        {
+            var vertices = model.TotalVertice; //Tổng số đỉnh
+            List<int>[] adjency; //Các cạnh của các đỉnh
+
+            adjency = new List<int>[vertices];
+            for (int i = 0; i < vertices; i++)
+            {
+                adjency[i] = new List<int>();
+            }
+
+            foreach (var connection in model.Connections)
+            {
+                adjency[connection.From].Add(connection.To);
+            }
+
+            bool[] visited = new bool[vertices];
+
+            //For DFS use stack
+            Stack<int> stack = new Stack<int>();
+            visited[model.Root] = true;
+            stack.Push(model.Root);
+
+            string message = "";
+
+            for (int i = 0; i < vertices; i++)
+            {
+                message += i + ":[";
+                string str = "";
+                foreach (var k in adjency[i])
+                {
+                    str = str + (k + ",");
+                }
+                str = str.Substring(0, str.Length - 1);
+                str = str + "]\n";
+                message += str;
+            }
+
+            message += "\n";
+
+            while (stack.Count != 0)
+            {
+                var root = stack.Pop();
+                message += "next -> " + root + "\n";
+                foreach (int i in adjency[root]) //lấy tất cả các cạnh của đỉnh hiện tại mà chưa visit
+                {
+                    if (!visited[i])
+                    {
+                        visited[i] = true;
+                        stack.Push(i);
+                    }
+                }
+            }
+
+            //Check vertices that not connect
+
+            for (int i = 0; i < visited.Length; i++)
+            {
+                if (!visited[i])
+                {
+                    message += "Error: \n";
+                    message += i;
+                    foreach (var item in adjency[i])
+                    {
+                        message += "[" + item + "]";
+                    }
+                }
+            }
+
+            return message;
         }
 
         // POST api/values

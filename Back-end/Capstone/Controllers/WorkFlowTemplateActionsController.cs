@@ -90,9 +90,9 @@ namespace Capstone.Controllers
             try
             {
                 WorkFlowTemplateAction workFlowTemplateAction = new WorkFlowTemplateAction();
-                if (_workFlowTemplateActionService.GetByName(model.Name) != null) return BadRequest("WorkflowTemplateAction " 
+                if (_workFlowTemplateActionService.GetByName(model.Name) != null) return BadRequest("WorkflowTemplateAction "
                     + WebConstant.NameExisted);
-                
+
                 workFlowTemplateAction = _mapper.Map<WorkFlowTemplateAction>(model);
                 _workFlowTemplateActionService.Create(workFlowTemplateAction);
 
