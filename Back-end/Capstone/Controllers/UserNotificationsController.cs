@@ -127,7 +127,6 @@ namespace Capstone.Controllers
             }
 
             var data = new List<NotificationViewModel>();
-            //var listUserInRequest = _requestService.GetByUserID(userID);
 
             foreach (var item in notification)
             {
@@ -135,10 +134,11 @@ namespace Capstone.Controllers
                 var request = _requestService.GetByID(notificationInDb.EventID);
 
                 if (notificationInDb.NotificationType == NotificationEnum.UpdatedWorkflow)
-                {
+                { 
+                    //đang làm sai
                     var result = new NotificationViewModel
                     {
-                        ActorName = _userManager.FindByIdAsync(request.InitiatorID).Result.FullName, //đang làm sai
+                        ActorName = _userManager.FindByIdAsync(request.InitiatorID).Result.FullName,
                         EventID = notificationInDb.EventID,
                         Message = WebConstant.WorkflowUpdateMessage,
                         NotificationType = notificationInDb.NotificationType,
