@@ -182,7 +182,7 @@ namespace Capstone.Controllers
                         Roles = _userRoleService.GetByUserID(u.Id)
                                 .Select(r => new RoleVM
                                 {
-                                    ID = r.ID,
+                                    ID = r.RoleID,
                                     Name = _roleService.GetByID(r.RoleID).Name,
                                 }),
                         ManagerID = u.ManagerID,
