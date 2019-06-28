@@ -38,78 +38,136 @@ namespace Capstone.Controllers
             return "success";
         }
 
-        // GET api/values/5
-        [HttpPost("CheckConnection")]
-        public ActionResult<string> CheckConnection(CheckConnectionVM model)
+        [HttpPost("CheckConnectionv2")]
+        public ActionResult<string> CheckConnectionv2(CheckConnectionVM model)
         {
-            var vertices = model.TotalVertice; //Tổng số đỉnh
-            List<int>[] adjency; //Các cạnh của các đỉnh
-
-            adjency = new List<int>[vertices];
-            for (int i = 0; i < vertices; i++)
-            {
-                adjency[i] = new List<int>();
-            }
+            var g = new Graph();
 
             foreach (var connection in model.Connections)
             {
-                adjency[connection.From].Add(connection.To);
+                g.AddEdge(connection.From, connection.To);
             }
 
-            bool[] visited = new bool[vertices];
+            int count = 0;
+            int root = 0;
 
-            //For DFS use stack
-            Stack<int> stack = new Stack<int>();
-            visited[model.Root] = true;
-            stack.Push(model.Root);
+            foreach (var node in model.Nodes)
+            {
+                if (node.IsStart)
+                {
+                    count++;
+                    root = node.NodeName;
+                }
+            }
+
+            if (count > 1)
+            {
+                return Ok("Therer are more than 2 root");
+            }
+
+            g.model = model;
+
+            g.DFSWalkWithStartNode(root);
+            g.PrintNotTravelNode();
+
+            return g.getMessage();
+        }
+
+        public class Graph
+        {
+            public Dictionary<int, HashSet<int>> Adj { get; private set; }
+
+            public HashSet<int> visited { get; private set; }
+
+            public CheckConnectionVM model { get; set; }
 
             string message = "";
+            string errorMessage = "";
 
-            for (int i = 0; i < vertices; i++)
+            public string getMessage()
             {
-                message += i + ":[";
-                string str = "";
-                foreach (var k in adjency[i])
-                {
-                    str = str + (k + ",");
-                }
-                str = str.Substring(0, str.Length - 1);
-                str = str + "]\n";
-                message += str;
+                errorMessage = string.IsNullOrEmpty(errorMessage) ? "\nCheck IsEnd : Success" : "\n Check IsEnd : Error :" + errorMessage;
+                return message + errorMessage;
             }
 
-            message += "\n";
-
-            while (stack.Count != 0)
+            public Graph()
             {
-                var root = stack.Pop();
-                message += "next -> " + root + "\n";
-                foreach (int i in adjency[root]) //lấy tất cả các cạnh của đỉnh hiện tại mà chưa visit
+                Adj = new Dictionary<int, HashSet<int>>();
+                visited = new HashSet<int>();
+            }
+
+            public void AddEdge(int source, int target)
+            {
+                if (Adj.ContainsKey(source))
                 {
-                    if (!visited[i])
+                    try
                     {
-                        visited[i] = true;
-                        stack.Push(i);
+                        Adj[source].Add(target);
+                    }
+                    catch
+                    {
+                        message += "This edge already exists: " + source + " to " + target;
+                    }
+                }
+                else
+                {
+                    var hs = new HashSet<int>();
+                    hs.Add(target);
+                    Adj.Add(source, hs);
+                }
+            }
+
+            public void DFSWalkWithStartNode(int vertex)
+            {
+                // Mark this node as visited
+                visited.Add(vertex);
+                // Stack for DFS
+                var s = new Stack<int>();
+                // Add this node to the stack
+                s.Push(vertex);
+
+                while (s.Count > 0)
+                {
+                    var current = s.Pop();
+                    message += "[" + current + "] => ";
+                    // ADD TO VISITED HERE
+                    if (!visited.Contains(current))
+                    {
+                        visited.Add(current);
+                    }
+                    // Only if the node has a any adj notes
+                    if (Adj.ContainsKey(current))
+                    {
+                        // Iterate through UNVISITED nodes
+                        foreach (int neighbour in Adj[current].Where(a => !visited.Contains(a)))
+                        {
+                            visited.Add(neighbour);
+                            s.Push(neighbour);
+                        }
+                    }
+                    else
+                    {
+                        var isEnd = model.Nodes.Where(x => x.NodeName.Equals(current)).Select(x => x.IsEnd).FirstOrDefault();
+                        if (!isEnd)
+                        {
+                            errorMessage += "This node is not end [" + current + "]";
+                        }
+                    }
+
+                }
+            }
+
+            public void PrintNotTravelNode()
+            {
+                message += "Node can't travel : ";
+                for (int i = 0; i < Adj.Count; i++)
+                {
+                    if (!visited.Contains(Adj.ElementAt(i).Key))
+                    {
+                        message += "[" + Adj.ElementAt(i).Key.ToString() + "] ";
                     }
                 }
             }
-
-            //Check vertices that not connect
-
-            for (int i = 0; i < visited.Length; i++)
-            {
-                if (!visited[i])
-                {
-                    message += "Error: \n";
-                    message += i;
-                    foreach (var item in adjency[i])
-                    {
-                        message += "[" + item + "]";
-                    }
-                }
-            }
-
-            return message;
         }
 
         // POST api/values
