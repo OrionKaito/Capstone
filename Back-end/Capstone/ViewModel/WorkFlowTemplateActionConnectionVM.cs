@@ -25,9 +25,8 @@ namespace Capstone.ViewModel
 
     public class CheckConnectionVM
     {
-        public int TotalVertice { get; set; }
-        public int Root { get; set; }
         public IEnumerable<CheckConnection> Connections { get; set; }
+        public IEnumerable<Node> Nodes { get; set; }
     }
 
     public class CheckConnection
@@ -35,5 +34,12 @@ namespace Capstone.ViewModel
         public int From { get; set; }
         public int To { get; set; }
         public int ConnectionTypeID { get; set; }
+    }
+
+    public class Node
+    {
+        public int NodeName { get; set; }
+        public bool IsStart { get; set; }
+        public bool IsEnd { get; set; }
     }
 }
