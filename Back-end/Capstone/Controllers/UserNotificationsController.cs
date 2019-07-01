@@ -134,7 +134,7 @@ namespace Capstone.Controllers
                 var request = _requestService.GetByID(notificationInDb.EventID);
 
                 if (notificationInDb.NotificationType == NotificationEnum.UpdatedWorkflow)
-                { 
+                {
                     //đang làm sai
                     var result = new NotificationViewModel
                     {
@@ -146,13 +146,13 @@ namespace Capstone.Controllers
                     };
                     data.Add(result);
                 }
-                else if (notificationInDb.NotificationType == NotificationEnum.AcceptedRequest)
+                else if (notificationInDb.NotificationType == NotificationEnum.CompletedRequest)
                 {
                     var result = new NotificationViewModel
                     {
                         ActorName = _userManager.FindByIdAsync(request.InitiatorID).Result.FullName,
                         EventID = notificationInDb.EventID,
-                        Message = WebConstant.AcceptedRequestMessage,
+                        Message = WebConstant.CompletedRequestMessage,
                         NotificationType = notificationInDb.NotificationType,
                         NotificationTypeName = notificationInDb.NotificationType.ToString(),
                         IsHandled = item.IsHandled
@@ -172,19 +172,19 @@ namespace Capstone.Controllers
                     };
                     data.Add(result);
                 }
-                else if (notificationInDb.NotificationType == NotificationEnum.DeniedRequest)
-                {
-                    var result = new NotificationViewModel
-                    {
-                        ActorName = _userManager.FindByIdAsync(request.InitiatorID).Result.FullName,
-                        EventID = notificationInDb.EventID,
-                        Message = WebConstant.DeniedRequestMessage,
-                        NotificationType = notificationInDb.NotificationType,
-                        NotificationTypeName = notificationInDb.NotificationType.ToString(),
-                        IsHandled = item.IsHandled
-                    };
-                    data.Add(result);
-                }
+                //else if (notificationInDb.NotificationType == NotificationEnum.DeniedRequest)
+                //{
+                //    var result = new NotificationViewModel
+                //    {
+                //        ActorName = _userManager.FindByIdAsync(request.InitiatorID).Result.FullName,
+                //        EventID = notificationInDb.EventID,
+                //        Message = WebConstant.DeniedRequestMessage,
+                //        NotificationType = notificationInDb.NotificationType,
+                //        NotificationTypeName = notificationInDb.NotificationType.ToString(),
+                //        IsHandled = item.IsHandled
+                //    };
+                //    data.Add(result);
+                //}
                 else
                 {
                     return NotFound();

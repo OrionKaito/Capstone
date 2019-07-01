@@ -24,9 +24,9 @@
         public static string BannedAccount = "Account is banned!";
         public static string NoNotificationYet = "There are not any notfication yet!";
         public static string WorkflowUpdateMessage = "has update workflow";
-        public static string AcceptedRequestMessage = "Your request are accepted";
-        public static string ReceivedRequestMessage = "You received request";
-        public static string DeniedRequestMessage = "Your request are denied";
+        public static string CompletedRequestMessage = "Your request is completed";
+        public static string ReceivedRequestMessage = "You received a request";
+        public static string DeniedRequestMessage = "Your request is denied";
         public static string WrongCodeConfirm = "Wrong code! please try again";
         public static string UserNotExist = "User is not exist";
         public static string EmailExisted = "Email is existed!";
