@@ -259,6 +259,47 @@ namespace Capstone.Controllers
             }
         }
 
+        [HttpGet("GetRequestHandleForm")]
+        public ActionResult<FormVM> GetRequestHandleForm(Guid ID)
+        {
+            try
+            {
+                List<RequestFormVM> list = new List<RequestFormVM>();
+
+                //get workFlowTemplateAction by workFlowTemplateID
+                var rs = _workFlowTemplateActionService.GetByID(ID);
+                if (rs == null) return BadRequest(WebConstant.NotFound);
+
+                //get actionType by actionTypeID in workFlowTemplateAction
+                var actionType = _actionTypeService.GetByID(rs.ActionTypeID);
+
+                //get list workFlowTemplateActionConnection by workFlowTemplateActionID (nextStepID)
+                var workFlowTemplateActionConnection = _workFlowTemplateActionConnectionService.GetByFromWorkflowTemplateActionID(rs.ID);
+
+                foreach (var item in workFlowTemplateActionConnection)
+                {
+                    list.Add(new RequestFormVM
+                    {
+                        NextStepID = _workFlowTemplateActionService.GetByID(item.ToWorkFlowTemplateActionID).ID,
+                        ConnectionTypeName = _connectionTypeService.GetByID(item.ConnectionTypeID).Name,
+                        ConnectionID = _connectionTypeService.GetByID(item.ConnectionTypeID).ID
+                    });
+                }
+
+                FormVM form = new FormVM
+                {
+                    Connections = list,
+                    ActionType = _mapper.Map<ActionTypeVM>(actionType)
+                };
+
+                return Ok(form);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
+
         // PUT: api/Requests
         // Người gửi không có quyền update
         //[HttpPut]
