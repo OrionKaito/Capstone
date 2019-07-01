@@ -23,7 +23,6 @@ namespace Capstone.ViewModel
         //Request Action
         public Guid NextStepID { get; set; }
         public StatusEnum Status { get; set; }
-        public int MyProperty { get; set; }
 
         //Request Value
         public IEnumerable<ActionValue> ActionValues { get; set; }
