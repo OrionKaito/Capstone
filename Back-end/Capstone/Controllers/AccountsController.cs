@@ -282,8 +282,8 @@ namespace Capstone.Controllers
             }
         }
 
-        [HttpPut]
-        public async Task<ActionResult> PutAccount([FromBody]RegistrationUM model)
+        [HttpPut("UpdateProfile")]
+        public async Task<ActionResult> PutAccount(RegistrationUM model)
         {
             if (!ModelState.IsValid) return BadRequest(ModelState);
 
@@ -297,7 +297,6 @@ namespace Capstone.Controllers
 
                 userInDB.FullName = model.FullName;
                 userInDB.DateOfBirth = model.DateOfBirth;
-                userInDB.ManagerID = model.ManagerID;
                 userInDB.SecurityStamp = Guid.NewGuid().ToString();
                 var result = await _userManager.UpdateAsync(userInDB);
 
