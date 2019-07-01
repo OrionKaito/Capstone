@@ -17,6 +17,7 @@ namespace Capstone.Controllers
     [ApiController]
     public class RequestsController : ControllerBase
     {
+        private readonly IActionTypeService _actionTypeService;
         private readonly IMapper _mapper;
         private readonly IRequestService _requestService;
         private readonly IRequestActionService _requestActionService;
@@ -26,9 +27,12 @@ namespace Capstone.Controllers
         private readonly IUserNotificationService _userNotificationService;
         private readonly IUserService _userService;
         private readonly IWorkFlowTemplateActionService _workFlowTemplateActionService;
+        private readonly IWorkFlowTemplateActionConnectionService _workFlowTemplateActionConnectionService;
+        private readonly IConnectionTypeService _connectionTypeService;
         private readonly UserManager<User> _userManager;
 
-        public RequestsController(IMapper mapper
+        public RequestsController(IActionTypeService actionTypeService
+            , IMapper mapper
             , IRequestService requestService
             , IRequestActionService requestActionService
             , IRequestValueService requestValueService
@@ -37,9 +41,12 @@ namespace Capstone.Controllers
             , IUserNotificationService userNotificationService
             , IUserService userService
             , IWorkFlowTemplateActionService workFlowTemplateActionService
+            , IWorkFlowTemplateActionConnectionService workFlowTemplateActionConnectionService
+            , IConnectionTypeService connectionTypeService
             , UserManager<User> userManager
             )
         {
+            _actionTypeService = actionTypeService;
             _mapper = mapper;
             _requestService = requestService;
             _requestActionService = requestActionService;
@@ -49,6 +56,8 @@ namespace Capstone.Controllers
             _userNotificationService = userNotificationService;
             _userService = userService;
             _workFlowTemplateActionService = workFlowTemplateActionService;
+            _workFlowTemplateActionConnectionService = workFlowTemplateActionConnectionService;
+            _connectionTypeService = connectionTypeService;
             _userManager = userManager;
         }
 
@@ -203,6 +212,46 @@ namespace Capstone.Controllers
                 if (rs == null) return BadRequest(WebConstant.NotFound);
                 RequestVM result = _mapper.Map<RequestVM>(rs);
                 return Ok(result);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
+
+        [HttpGet("GetRequestForm")]
+        public ActionResult<FormVM> GetRequestForm(Guid ID)
+        {
+            try
+            {
+                List<RequestFormVM> list = new List<RequestFormVM>();
+
+                //get workFlowTemplateAction by workFlowTemplateID
+                var rs = _workFlowTemplateActionService.GetByWorkFlowID(ID);
+                if (rs == null) return BadRequest(WebConstant.NotFound);
+               
+                //get actionType by actionTypeID in workFlowTemplateAction
+                var actionType = _actionTypeService.GetByID(rs.ActionTypeID);
+
+                //get list workFlowTemplateActionConnection by workFlowTemplateActionID (nextStepID)
+                var workFlowTemplateActionConnection = _workFlowTemplateActionConnectionService.GetByFromWorkflowTemplateActionID(rs.ID);
+
+                foreach (var item in workFlowTemplateActionConnection)
+                {
+                    list.Add(new RequestFormVM {
+                        NextStepID = _workFlowTemplateActionService.GetByID(item.ToWorkFlowTemplateActionID).ID,
+                        ConnectionTypeName = _connectionTypeService.GetByID(item.ConnectionTypeID).Name,
+                        ConnectionID = _connectionTypeService.GetByID(item.ConnectionTypeID).ID
+                    });
+                }
+
+                FormVM form = new FormVM
+                {
+                    Connections = list,
+                    ActionType = _mapper.Map<ActionTypeVM>(actionType)
+                };
+
+                return Ok(form);
             }
             catch (Exception e)
             {

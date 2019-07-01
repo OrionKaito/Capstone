@@ -37,7 +37,6 @@ namespace Capstone.ViewModel
     {
         public string FullName { get; set; }
         public DateTime? DateOfBirth { get; set; }
-        public string ManagerID { get; set; }
     }
 
     public class RegistrationByIDUM
