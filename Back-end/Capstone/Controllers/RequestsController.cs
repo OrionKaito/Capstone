@@ -91,7 +91,7 @@ namespace Capstone.Controllers
                 //RequestAction
                 RequestAction requestAction = new RequestAction
                 {
-                    Status = model.Status,
+                    Status = StatusEnum.Pending,
                     RequestID = request.ID,
                     ActorID = userID,
                     NextStepID = model.NextStepID,
@@ -127,7 +127,7 @@ namespace Capstone.Controllers
                 //Notification
                 Notification notification = new Notification
                 {
-                    EventID = request.ID,
+                    EventID = model.NextStepID,
                     NotificationType = NotificationEnum.ReceivedRequest,
                     CreateDate = DateTime.Now,
 
@@ -174,6 +174,126 @@ namespace Capstone.Controllers
                 _requestService.CommitTransaction();
 
                 return StatusCode(201, request.ID);
+            }
+            catch (Exception e)
+            {
+                _requestService.RollBack();
+                return BadRequest(e.Message);
+            }
+        }
+
+        [HttpPost("ApproveRequest")]
+        public ActionResult ApproveRequest(RequestApproveCM model)
+        {
+            if (!ModelState.IsValid) return BadRequest(ModelState);
+
+            try
+            {
+                //Begin transaction
+                _requestService.BeginTransaction();
+
+                var currentUser = HttpContext.User;
+                var userID = currentUser.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier).Value;
+
+                //RequestAction
+                RequestAction requestAction = new RequestAction
+                {
+                    Status = model.Status,
+                    RequestID = model.RequestID,
+                    ActorID = userID,
+                    NextStepID = model.NextStepID,
+                    CreateDate = DateTime.Now,
+                };
+
+                //RequestValue
+                foreach (var value in model.ActionValues)
+                {
+                    RequestValue requestValue = new RequestValue
+                    {
+                        Key = value.Key,
+                        Value = value.Value,
+                        RequestActionID = requestAction.ID,
+                    };
+
+                    _requestValueService.Create(requestValue);
+                }
+
+                if (model.NextStepID.HasValue) //If this last step or not
+                {
+                    //Notification
+                    Notification notification = new Notification
+                    {
+                        EventID = model.NextStepID.HasValue ? model.RequestID : model.NextStepID.GetValueOrDefault(),
+                        NotificationType = NotificationEnum.ReceivedRequest,
+                        CreateDate = DateTime.Now,
+
+                        ID = Guid.NewGuid(),
+                        IsDeleted = false,
+                    };
+
+                    _notificationService.Create(notification);
+
+                    //UserNotification
+                    var workflowTemplateAction = _workFlowTemplateActionService.GetByID(model.NextStepID.GetValueOrDefault());
+
+                    if (workflowTemplateAction.IsApprovedByLineManager)
+                    {
+                        var user = _userManager.FindByIdAsync(userID).Result;
+
+                        UserNotification userNotification = new UserNotification
+                        {
+                            NotificationID = notification.ID,
+                            UserID = user.Id,
+                        };
+                        _userNotificationService.Create(userNotification);
+
+                    }
+                    else
+                    {
+                        var users = _userService.getUsersByPermissionID(workflowTemplateAction.PermissionToUseID);
+
+                        if (users != null && users.Any())
+                        {
+                            foreach (var user in users)
+                            {
+                                UserNotification userNotification = new UserNotification
+                                {
+                                    NotificationID = notification.ID,
+                                    UserID = user.Id,
+                                };
+                                _userNotificationService.Create(userNotification);
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    //Notification
+                    Notification notification = new Notification
+                    {
+                        EventID = model.NextStepID.HasValue ? model.RequestID : model.NextStepID.GetValueOrDefault(),
+                        NotificationType = NotificationEnum.CompletedRequest,
+                        CreateDate = DateTime.Now,
+
+                        ID = Guid.NewGuid(),
+                        IsDeleted = false,
+                    };
+
+                    _notificationService.Create(notification);
+
+                    var owner = _requestService.GetByID(model.RequestID).User;
+                    UserNotification userNotification = new UserNotification
+                    {
+                        NotificationID = notification.ID,
+                        UserID = owner.Id,
+                    };
+                    _userNotificationService.Create(userNotification);
+                }
+
+                //End transaction
+                _requestService.CommitTransaction();
+
+                return StatusCode(201, requestAction.ID);
             }
             catch (Exception e)
             {
@@ -229,7 +349,7 @@ namespace Capstone.Controllers
                 //get workFlowTemplateAction by workFlowTemplateID
                 var rs = _workFlowTemplateActionService.GetByWorkFlowID(ID);
                 if (rs == null) return BadRequest(WebConstant.NotFound);
-               
+
                 //get actionType by actionTypeID in workFlowTemplateAction
                 var actionType = _actionTypeService.GetByID(rs.ActionTypeID);
 
@@ -238,7 +358,8 @@ namespace Capstone.Controllers
 
                 foreach (var item in workFlowTemplateActionConnection)
                 {
-                    list.Add(new RequestFormVM {
+                    list.Add(new RequestFormVM
+                    {
                         NextStepID = _workFlowTemplateActionService.GetByID(item.ToWorkFlowTemplateActionID).ID,
                         ConnectionTypeName = _connectionTypeService.GetByID(item.ConnectionTypeID).Name,
                         ConnectionID = _connectionTypeService.GetByID(item.ConnectionTypeID).ID
