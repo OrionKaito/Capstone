@@ -3,13 +3,13 @@ using Capstone.Data.Repositories;
 using Capstone.Model;
 using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace Capstone.Service
 {
     public interface IRequestValueService
     {
         IEnumerable<RequestValue> GetAll();
+        IEnumerable<RequestValue> GetByRequestActionID(Guid ID);
         RequestValue GetByID(Guid ID);
         void Create(RequestValue requestValue);
         void Delete(RequestValue requestValue);
@@ -44,6 +44,11 @@ namespace Capstone.Service
         public RequestValue GetByID(Guid ID)
         {
             return _requestValueRepository.GetById(ID);
+        }
+
+        public IEnumerable<RequestValue> GetByRequestActionID(Guid ID)
+        {
+            return _requestValueRepository.GetMany(r => r.RequestActionID == ID);
         }
 
         public void Save()

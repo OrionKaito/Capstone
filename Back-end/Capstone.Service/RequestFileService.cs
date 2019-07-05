@@ -10,6 +10,7 @@ namespace Capstone.Service
     public interface IRequestFileService
     {
         IEnumerable<RequestFile> GetAll();
+        IEnumerable<RequestFile> GetByRequestActionID(Guid ID);
         RequestFile GetByID(Guid ID);
         void Create(RequestFile requestFile);
         void Save();
@@ -38,6 +39,11 @@ namespace Capstone.Service
         public RequestFile GetByID(Guid ID)
         {
             return _requestFileRepository.GetById(ID);
+        }
+
+        public IEnumerable<RequestFile> GetByRequestActionID(Guid ID)
+        {
+            return _requestFileRepository.GetMany(r => r.RequestActionID == ID);
         }
 
         public void Save()

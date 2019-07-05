@@ -3,14 +3,16 @@ using Capstone.Data.Repositories;
 using Capstone.Model;
 using System;
 using System.Collections.Generic;
-using System.Text;
+using System.Linq;
 
 namespace Capstone.Service
 {
     public interface IRequestActionService
     {
         IEnumerable<RequestAction> GetAll();
+        IEnumerable<RequestAction> GetExceptActorID(string ID);
         RequestAction GetByID(Guid ID);
+        RequestAction GetByActorID(string ID);
         void Create(RequestAction requestAction);
         void Save();
     }
@@ -39,6 +41,16 @@ namespace Capstone.Service
         public RequestAction GetByID(Guid ID)
         {
             return _requestActionRepository.GetById(ID);
+        }
+
+        public RequestAction GetByActorID(string ID)
+        {
+            return _requestActionRepository.GetMany(r => r.ActorID.Equals(ID)).FirstOrDefault();
+        }
+
+        public IEnumerable<RequestAction> GetExceptActorID(string ID)
+        {
+            return _requestActionRepository.GetMany(r => !r.ActorID.Equals(ID));
         }
 
         public void Save()
