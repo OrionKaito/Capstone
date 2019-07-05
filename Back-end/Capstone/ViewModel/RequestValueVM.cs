@@ -8,7 +8,6 @@ namespace Capstone.ViewModel
         public Guid ID { get; set; }
         public string Key { get; set; }
         public string Value { get; set; }
-        public Guid RequestActionID { get; set; }
     }
 
     public class RequestValueCM

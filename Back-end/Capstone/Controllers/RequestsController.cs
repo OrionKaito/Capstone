@@ -127,7 +127,7 @@ namespace Capstone.Controllers
                 //Notification
                 Notification notification = new Notification
                 {
-                    EventID = model.NextStepID,
+                    EventID = requestAction.ID,
                     NotificationType = NotificationEnum.ReceivedRequest,
                     CreateDate = DateTime.Now,
 
@@ -225,7 +225,7 @@ namespace Capstone.Controllers
                     //Notification
                     Notification notification = new Notification
                     {
-                        EventID = model.NextStepID.HasValue ? model.RequestID : model.NextStepID.GetValueOrDefault(),
+                        EventID = requestAction.ID,
                         NotificationType = NotificationEnum.ReceivedRequest,
                         CreateDate = DateTime.Now,
 
@@ -273,7 +273,7 @@ namespace Capstone.Controllers
                     //Notification
                     Notification notification = new Notification
                     {
-                        EventID = model.NextStepID.HasValue ? model.RequestID : model.NextStepID.GetValueOrDefault(),
+                        EventID = requestAction.ID,
                         NotificationType = NotificationEnum.CompletedRequest,
                         CreateDate = DateTime.Now,
 
@@ -342,35 +342,46 @@ namespace Capstone.Controllers
         }
 
         [HttpGet("GetRequestForm")]
-        public ActionResult<FormVM> GetRequestForm(Guid ID)
+        public ActionResult<RequestFormVM> GetRequestForm(Guid workFlowTemplateID)
         {
             try
             {
-                List<RequestFormVM> list = new List<RequestFormVM>();
+                List<ConnectionVM> connections = new List<ConnectionVM>();
 
-                //get workFlowTemplateAction by workFlowTemplateID
-                var rs = _workFlowTemplateActionService.GetByWorkFlowID(ID);
-                if (rs == null) return BadRequest(WebConstant.NotFound);
+                var requestAction = _requestActionService.GetByID(workFlowTemplateID);
+
+                //get workFlowTemplateAction by workFlowTemplateActionID
+                var workFlowTemplateAction = _workFlowTemplateActionService.GetStartByWorkFlowID(workFlowTemplateID);
+                if (workFlowTemplateAction == null) return BadRequest(WebConstant.NotFound);
 
                 //get actionType by actionTypeID in workFlowTemplateAction
-                var actionType = _actionTypeService.GetByID(rs.ActionTypeID);
+                var actionType = _actionTypeService.GetByID(workFlowTemplateAction.ActionTypeID);
 
                 //get list workFlowTemplateActionConnection by workFlowTemplateActionID (nextStepID)
-                var workFlowTemplateActionConnection = _workFlowTemplateActionConnectionService.GetByFromWorkflowTemplateActionID(rs.ID);
+                var workFlowTemplateActionConnection = _workFlowTemplateActionConnectionService
+                    .GetByFromWorkflowTemplateActionID(workFlowTemplateAction.ID);
 
                 foreach (var item in workFlowTemplateActionConnection)
                 {
-                    list.Add(new RequestFormVM
+                    connections.Add(new ConnectionVM
                     {
-                        NextStepID = _workFlowTemplateActionService.GetByID(item.ToWorkFlowTemplateActionID).ID,
-                        ConnectionTypeName = _connectionTypeService.GetByID(item.ConnectionTypeID).Name,
-                        ConnectionID = _connectionTypeService.GetByID(item.ConnectionTypeID).ID
+                        NextStepID = _workFlowTemplateActionService
+                        .GetByID(item.ToWorkFlowTemplateActionID)
+                        .ID,
+
+                        ConnectionTypeName = _connectionTypeService
+                        .GetByID(item.ConnectionTypeID)
+                        .Name,
+
+                        ConnectionID = _connectionTypeService
+                        .GetByID(item.ConnectionTypeID)
+                        .ID
                     });
                 }
 
-                FormVM form = new FormVM
+                RequestFormVM form = new RequestFormVM
                 {
-                    Connections = list,
+                    Connections = connections,
                     ActionType = _mapper.Map<ActionTypeVM>(actionType)
                 };
 
@@ -383,36 +394,101 @@ namespace Capstone.Controllers
         }
 
         [HttpGet("GetRequestHandleForm")]
-        public ActionResult<FormVM> GetRequestHandleForm(Guid ID)
+        public ActionResult<HandleFormVM> GetHandleForm(Guid requestActionID)
         {
             try
             {
-                List<RequestFormVM> list = new List<RequestFormVM>();
+                //** Get Request **//
+                var requestAction = _requestActionService.GetByID(requestActionID);
+                var request = _requestService.GetByID(requestAction.RequestID);
 
-                //get workFlowTemplateAction by workFlowTemplateID
-                var rs = _workFlowTemplateActionService.GetByID(ID);
-                if (rs == null) return BadRequest(WebConstant.NotFound);
+                //** Get User Request Action **//
+                var userAction = _requestActionService.GetByActorID(request.InitiatorID);
 
-                //get actionType by actionTypeID in workFlowTemplateAction
-                var actionType = _actionTypeService.GetByID(rs.ActionTypeID);
+                var requestFiles = _requestFileService.GetByRequestActionID(userAction.ID).Select(r => new RequestFileVM
+                {
+                    ID = r.ID,
+                    Path = r.Path,
+                    IsDeleted = r.IsDeleted,
+                });
 
-                //get list workFlowTemplateActionConnection by workFlowTemplateActionID (nextStepID)
-                var workFlowTemplateActionConnection = _workFlowTemplateActionConnectionService.GetByFromWorkflowTemplateActionID(rs.ID);
+                var userRequestValues = _requestValueService.GetByRequestActionID(userAction.ID).Select(r => new RequestValueVM
+                {
+                    ID = r.ID,
+                    Key = r.Key,
+                    Value = r.Value,
+                });
+
+                UserRequestActionVM userRequestAction = new UserRequestActionVM()
+                {
+                    RequestFiles = requestFiles,
+                    RequestValues = userRequestValues,
+                };
+
+                //** Get List Staff Request Action **//
+                List<StaffRequestActionVM> staffRequestActions = new List<StaffRequestActionVM>();
+                var staffActions = _requestActionService.GetExceptActorID(request.InitiatorID);
+
+                foreach (var staffAction in staffActions)
+                {
+                    var staffRequestValuesss = _requestValueService.GetByRequestActionID(staffAction.ID).Select(r => new RequestValueVM
+                    {
+                        ID = r.ID,
+                        Key = r.Key,
+                        Value = r.Value,
+                    });
+
+                    StaffRequestActionVM staffRequestAction = new StaffRequestActionVM()
+                    {
+                        Name = _userManager.FindByIdAsync(staffAction.ActorID).Result.FullName,
+                        CreateDate = staffAction.CreateDate,
+                        RequestValues = staffRequestValuesss,
+                    };
+
+                    staffRequestActions.Add(staffRequestAction);
+                }
+
+                //** Get Connections && ActionType **//
+                List<ConnectionVM> connections = new List<ConnectionVM>();
+
+                var workFlowTemplateAction = _workFlowTemplateActionService
+                    .GetByID(requestAction.NextStepID.GetValueOrDefault());
+
+                if (workFlowTemplateAction == null) return BadRequest(WebConstant.NotFound);
+
+                //Get actionType by actionTypeID in workFlowTemplateAction
+                var actionType = _actionTypeService
+                    .GetByID(workFlowTemplateAction.ActionTypeID);
+
+                //Get list workFlowTemplateActionConnection by workFlowTemplateActionID (nextStepID)
+                var workFlowTemplateActionConnection = _workFlowTemplateActionConnectionService
+                    .GetByFromWorkflowTemplateActionID(workFlowTemplateAction.ID);
 
                 foreach (var item in workFlowTemplateActionConnection)
                 {
-                    list.Add(new RequestFormVM
+                    connections.Add(new ConnectionVM
                     {
-                        NextStepID = _workFlowTemplateActionService.GetByID(item.ToWorkFlowTemplateActionID).ID,
-                        ConnectionTypeName = _connectionTypeService.GetByID(item.ConnectionTypeID).Name,
-                        ConnectionID = _connectionTypeService.GetByID(item.ConnectionTypeID).ID
+                        NextStepID = _workFlowTemplateActionService
+                        .GetByID(item.ToWorkFlowTemplateActionID)
+                        .ID,
+
+                        ConnectionTypeName = _connectionTypeService
+                        .GetByID(item.ConnectionTypeID)
+                        .Name,
+
+                        ConnectionID = _connectionTypeService
+                        .GetByID(item.ConnectionTypeID)
+                        .ID
                     });
                 }
 
-                FormVM form = new FormVM
+                HandleFormVM form = new HandleFormVM
                 {
-                    Connections = list,
-                    ActionType = _mapper.Map<ActionTypeVM>(actionType)
+                    Connections = connections,
+                    ActionType = _mapper.Map<ActionTypeVM>(actionType),
+                    Request = _mapper.Map<RequestVM>(request),
+                    UserRequestAction = userRequestAction,
+                    StaffRequestActions = staffRequestActions,
                 };
 
                 return Ok(form);

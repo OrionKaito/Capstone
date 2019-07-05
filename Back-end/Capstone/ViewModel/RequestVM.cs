@@ -52,4 +52,46 @@ namespace Capstone.ViewModel
         public string Key { get; set; }
         public string Value { get; set; }
     }
+
+    public class ConnectionVM
+    {
+        public Guid NextStepID { get; set; }
+
+        public Guid ConnectionID { get; set; }
+
+        public string ConnectionTypeName { get; set; }
+    }
+
+    public class RequestFormVM
+    {
+        public IEnumerable<ConnectionVM> Connections { get; set; }
+
+        public ActionTypeVM ActionType { get; set; }
+    }
+
+    public class HandleFormVM
+    {
+        public RequestVM Request { get; set; }
+
+        public UserRequestActionVM UserRequestAction { get; set; }
+
+        public IEnumerable<StaffRequestActionVM> StaffRequestActions { get; set; }
+
+        public IEnumerable<ConnectionVM> Connections { get; set; }
+
+        public ActionTypeVM ActionType { get; set; }
+    }
+
+    public class UserRequestActionVM
+    {
+        public IEnumerable<RequestFileVM> RequestFiles { get; set; }
+        public IEnumerable<RequestValueVM> RequestValues { get; set; }
+    }
+
+    public class StaffRequestActionVM
+    {
+        public string Name { get; set; }
+        public DateTime CreateDate { get; set; }
+        public IEnumerable<RequestValueVM> RequestValues { get; set; }
+    }
 }
