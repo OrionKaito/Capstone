@@ -403,7 +403,7 @@ namespace Capstone.Controllers
                 var request = _requestService.GetByID(requestAction.RequestID);
 
                 //** Get User Request Action **//
-                var userAction = _requestActionService.GetByActorID(request.InitiatorID);
+                var userAction = _requestActionService.GetByActorID(request.InitiatorID, request.ID);
 
                 var requestFiles = _requestFileService.GetByRequestActionID(userAction.ID).Select(r => new RequestFileVM
                 {
