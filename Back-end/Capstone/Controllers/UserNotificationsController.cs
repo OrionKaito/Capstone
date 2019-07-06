@@ -21,15 +21,18 @@ namespace Capstone.Controllers
         private readonly IRequestService _requestService;
         private readonly UserManager<User> _userManager;
         private readonly INotificationService _notificationService;
+        private readonly IRequestActionService _requestActionService;
 
         public UserNotificationsController(IMapper mapper, IUserNotificationService userNotificationService,
-            IRequestService requestService, UserManager<User> userManager, INotificationService notificationService)
+            IRequestService requestService, UserManager<User> userManager, INotificationService notificationService
+            , IRequestActionService requestActionService)
         {
             _mapper = mapper;
             _userNotificationService = userNotificationService;
             _requestService = requestService;
             _userManager = userManager;
             _notificationService = notificationService;
+            _requestActionService = requestActionService;
         }
 
         // POST: api/UserNotifications
@@ -131,7 +134,8 @@ namespace Capstone.Controllers
             foreach (var item in notification)
             {
                 var notificationInDb = _notificationService.GetByID(item.NotificationID);
-                var request = _requestService.GetByID(notificationInDb.EventID);
+                var requestAction = _requestActionService.GetByID(notificationInDb.EventID);
+                var request = _requestService.GetByID(requestAction.RequestID);
 
                 if (notificationInDb.NotificationType == NotificationEnum.UpdatedWorkflow)
                 {
