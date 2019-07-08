@@ -220,7 +220,9 @@ namespace Capstone.Controllers
                     _requestValueService.Create(requestValue);
                 }
 
-                if (model.NextStepID.HasValue) //If this last step or not
+                var nextStep = _workFlowTemplateActionService.GetByID(model.NextStepID);
+
+                if (!nextStep.IsEnd) //If this last step or not
                 {
                     //Notification
                     Notification notification = new Notification
@@ -236,9 +238,8 @@ namespace Capstone.Controllers
                     _notificationService.Create(notification);
 
                     //UserNotification
-                    var workflowTemplateAction = _workFlowTemplateActionService.GetByID(model.NextStepID.GetValueOrDefault());
 
-                    if (workflowTemplateAction.IsApprovedByLineManager)
+                    if (nextStep.IsApprovedByLineManager)
                     {
                         var user = _userManager.FindByIdAsync(userID).Result;
 
@@ -252,7 +253,7 @@ namespace Capstone.Controllers
                     }
                     else
                     {
-                        var users = _userService.getUsersByPermissionID(workflowTemplateAction.PermissionToUseID);
+                        var users = _userService.getUsersByPermissionID(nextStep.PermissionToUseID);
 
                         if (users != null && users.Any())
                         {
