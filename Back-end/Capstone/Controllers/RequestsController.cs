@@ -349,8 +349,6 @@ namespace Capstone.Controllers
             {
                 List<ConnectionVM> connections = new List<ConnectionVM>();
 
-                var requestAction = _requestActionService.GetByID(workFlowTemplateID);
-
                 //get workFlowTemplateAction by workFlowTemplateActionID
                 var workFlowTemplateAction = _workFlowTemplateActionService.GetStartByWorkFlowID(workFlowTemplateID);
                 if (workFlowTemplateAction == null) return BadRequest(WebConstant.NotFound);

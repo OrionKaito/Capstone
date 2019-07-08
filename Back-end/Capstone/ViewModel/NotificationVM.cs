@@ -36,6 +36,7 @@ namespace Capstone.ViewModel
         public string ActorName { get; set; }
         public NotificationEnum NotificationType { get; set; }
         public string NotificationTypeName { get; set; }
+        public DateTime? CreateDate { get; set; }
         public bool IsHandled { get; set; }
     }
 }
