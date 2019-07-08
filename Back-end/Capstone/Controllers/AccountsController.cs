@@ -209,7 +209,6 @@ namespace Capstone.Controllers
         {
             try
             {
-
                 var user = _userManager.Users
                     .Where(u => u.Id == ID)
                     .ToList()
