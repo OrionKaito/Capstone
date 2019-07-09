@@ -41,58 +41,64 @@ namespace Capstone.Controllers
             {
                 return BadRequest(ModelState);
             }
-
-            var identity = CheckClaimIdentity(credentials.UserName, credentials.Password);
-            if (identity.Result == null)
+            try
             {
-                return BadRequest(WebConstant.InvalidUSer);
-            }
-
-            IEnumerable<string> listRoleOfUser = _roleService.GetByUserID(identity.Result.Id);
-
-            bool checkUser = false;
-
-            foreach (var item in listRoleOfUser)
-            {
-                if (item.Equals(WebConstant.User) || item.Equals(WebConstant.Staff))
+                var identity = CheckClaimIdentity(credentials.UserName, credentials.Password);
+                if (identity.Result == null)
                 {
-                    checkUser = true;
+                    return BadRequest(WebConstant.InvalidUSer);
                 }
-            }
 
-            if (!checkUser)
-            {
-                return BadRequest(WebConstant.AccessDined);
-            }
+                IEnumerable<string> listRoleOfUser = _roleService.GetByUserID(identity.Result.Id);
 
-            if (identity.Result.EmailConfirmed == false)
-            {
-                return BadRequest(WebConstant.VerifyAccount);
-            }
+                bool checkUser = false;
 
-            if (identity.Result.IsDeleted == true)
-            {
-                return BadRequest(WebConstant.BannedAccount);
-            }
-
-            bool checkStaff = false;
-
-            foreach (var item in listRoleOfUser)
-            {
-                if (item.Equals(WebConstant.Staff))
+                foreach (var item in listRoleOfUser)
                 {
-                    checkStaff = true;
+                    if (item.Equals(WebConstant.User) || item.Equals(WebConstant.Staff))
+                    {
+                        checkUser = true;
+                    }
                 }
-            }
 
-            string role = checkStaff == true ? WebConstant.Staff : WebConstant.User;
-            var tokenString = GenerateJSONWebToken(identity.Result);
-            TokenVM tokenVM = new TokenVM
+                if (!checkUser)
+                {
+                    return BadRequest(WebConstant.AccessDined);
+                }
+
+                if (identity.Result.EmailConfirmed == false)
+                {
+                    return BadRequest(WebConstant.VerifyAccount);
+                }
+
+                if (identity.Result.IsDeleted == true)
+                {
+                    return BadRequest(WebConstant.BannedAccount);
+                }
+
+                bool checkStaff = false;
+
+                foreach (var item in listRoleOfUser)
+                {
+                    if (item.Equals(WebConstant.Staff))
+                    {
+                        checkStaff = true;
+                    }
+                }
+
+                string role = checkStaff == true ? WebConstant.Staff : WebConstant.User;
+                var tokenString = GenerateJSONWebToken(identity.Result);
+                TokenVM tokenVM = new TokenVM
+                {
+                    Role = role,
+                    Token = tokenString
+                };
+                return Ok(tokenVM);
+            }
+            catch (Exception e)
             {
-                Role = role,
-                Token = tokenString
-            };
-            return Ok(tokenVM);
+                return BadRequest(e.Message);
+            }
         }
 
         [AllowAnonymous]
@@ -103,42 +109,48 @@ namespace Capstone.Controllers
             {
                 return BadRequest(ModelState);
             }
-
-            var identity = CheckClaimIdentity(credentials.UserName, credentials.Password);
-            if (identity.Result == null)
+            try
             {
-                return BadRequest(WebConstant.InvalidUSer);
-            }
-
-            IEnumerable<string> listRoleOfUser = _roleService.GetByUserID(identity.Result.Id);
-
-            bool checkAdmin = false;
-
-            foreach (var item in listRoleOfUser)
-            {
-                if (item.Equals(WebConstant.Admin))
+                var identity = CheckClaimIdentity(credentials.UserName, credentials.Password);
+                if (identity.Result == null)
                 {
-                    checkAdmin = true;
+                    return BadRequest(WebConstant.InvalidUSer);
                 }
-            }
 
-            if (!checkAdmin)
+                IEnumerable<string> listRoleOfUser = _roleService.GetByUserID(identity.Result.Id);
+
+                bool checkAdmin = false;
+
+                foreach (var item in listRoleOfUser)
+                {
+                    if (item.Equals(WebConstant.Admin))
+                    {
+                        checkAdmin = true;
+                    }
+                }
+
+                if (!checkAdmin)
+                {
+                    return BadRequest(WebConstant.AccessDined);
+                }
+
+                if (identity.Result.EmailConfirmed == false)
+                {
+                    return BadRequest(WebConstant.VerifyAccount);
+                }
+
+                if (identity.Result.IsDeleted == true)
+                {
+                    return BadRequest(WebConstant.BannedAccount);
+                }
+
+                var tokenString = GenerateJSONWebToken(identity.Result);
+                return Ok(tokenString);
+            }
+            catch (Exception e)
             {
-                return BadRequest(WebConstant.AccessDined);
+                return BadRequest(e.Message);
             }
-
-            if (identity.Result.EmailConfirmed == false)
-            {
-                return BadRequest(WebConstant.VerifyAccount);
-            }
-
-            if (identity.Result.IsDeleted == true)
-            {
-                return BadRequest(WebConstant.BannedAccount);
-            }
-
-            var tokenString = GenerateJSONWebToken(identity.Result);
-            return Ok(tokenString);
         }
 
         private async Task<User> CheckClaimIdentity(string username, string password)

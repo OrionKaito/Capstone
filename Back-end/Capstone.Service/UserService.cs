@@ -9,7 +9,7 @@ namespace Capstone.Service
 {
     public interface IUserService
     {
-        IEnumerable<User> getUsersByPermissionID(Guid ID);
+        IEnumerable<User> getUsersByPermissionID(Guid? ID);
         void BeginTransaction();
         void CommitTransaction();
         void RollBack();
@@ -32,7 +32,7 @@ namespace Capstone.Service
             _userGroupRepository = userGroupRepository;
         }
 
-        public IEnumerable<User> getUsersByPermissionID(Guid ID)
+        public IEnumerable<User> getUsersByPermissionID(Guid? ID)
         {
             List<User> users = new List<User>();
             var groups = _permissionOfGroupRepository.GetMany(r => r.PermissionID == ID)
