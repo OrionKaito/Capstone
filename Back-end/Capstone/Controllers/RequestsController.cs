@@ -428,7 +428,11 @@ namespace Capstone.Controllers
 
                 //** Get List Staff Request Action **//
                 List<StaffRequestActionVM> staffRequestActions = new List<StaffRequestActionVM>();
-                var staffActions = _requestActionService.GetExceptActorID(request.InitiatorID);
+                var staffActions = _requestActionService.GetExceptActorIDAndRequestID(request.InitiatorID, request.ID);
+
+                ///
+                /// BUGGGGGGGGGGGGGGGGGGGGGGGGGG
+                /// //gGUBAsdasdasd
 
                 foreach (var staffAction in staffActions)
                 {
