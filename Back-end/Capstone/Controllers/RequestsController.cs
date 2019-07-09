@@ -241,12 +241,13 @@ namespace Capstone.Controllers
 
                     if (nextStep.IsApprovedByLineManager)
                     {
-                        var user = _userManager.FindByIdAsync(userID).Result;
+                        var ownerID = _requestService.GetByID(model.RequestID).InitiatorID;
+                        var managerID = _userManager.FindByIdAsync(ownerID).Result.ManagerID;
 
                         UserNotification userNotification = new UserNotification
                         {
                             NotificationID = notification.ID,
-                            UserID = user.Id,
+                            UserID = managerID,
                         };
                         _userNotificationService.Create(userNotification);
 
