@@ -22,11 +22,35 @@ import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
 import { ToastrModule } from 'ngx-toastr';
 import { ManagePermissionComponent } from './manage-permission/manage-permission.component';
 import { AddPermissionComponent } from './add-permission/add-permission.component';
+import * as firebase from "firebase/app";
+import { AngularFireModule } from '@angular/fire';
+import { AngularFirestoreModule } from '@angular/fire/firestore';
+import { AngularFireStorageModule } from '@angular/fire/storage';
+import { AngularFireAuthModule } from '@angular/fire/auth';
+import { DropzoneDirective } from './dropzone.directive';
+import { UploadTaskComponent } from './upload-task/upload-task.component';
 
+import { AddNewRequestComponent } from './add-new-request/add-new-request.component';
+import { HandleRequestComponent } from './handle-request/handle-request.component';
+import { AddHandleRequestComponent } from './add-handle-request/add-handle-request.component';
+
+const config = {
+  apiKey: "AIzaSyCBhMb1lO_1ioNypRrHS4I1q9sYxJ2thcs",
+    authDomain: "capstonedinamicworkflow.firebaseapp.com",
+    databaseURL: "https://capstonedinamicworkflow.firebaseio.com",
+    projectId: "capstonedinamicworkflow",
+    storageBucket: "capstonedinamicworkflow.appspot.com",
+    messagingSenderId: "1002298812738",
+    appId: "1:1002298812738:web:3979cfb21aa67003"
+};
 @NgModule({
   imports: [
     NgMultiSelectDropDownModule.forRoot(),
     ToastrModule.forRoot(),
+    AngularFireModule.initializeApp(config),
+    AngularFirestoreModule, // firestore
+    AngularFireAuthModule, // auth
+    AngularFireStorageModule, // storage
     BrowserAnimationsModule,
     CommonModule,
     MatIconModule,
@@ -46,6 +70,8 @@ import { AddPermissionComponent } from './add-permission/add-permission.componen
     AgmCoreModule.forRoot({
       apiKey: 'YOUR_GOOGLE_MAPS_API_KEY'
     })
+
+
   ],
   exports: [
     MatPaginatorModule,
@@ -57,8 +83,12 @@ import { AddPermissionComponent } from './add-permission/add-permission.componen
     LoginComponent,
     AddAccountComponent,
     AddPermissionComponent,
+    AddNewRequestComponent,
+    DropzoneDirective,
+    UploadTaskComponent,
+    AddHandleRequestComponent
   ],
-  entryComponents:[AddAccountComponent, AddPermissionComponent],
+  entryComponents:[AddAccountComponent, AddPermissionComponent, AddNewRequestComponent, AddHandleRequestComponent ],
 
   providers: [],
   bootstrap: [AppComponent]

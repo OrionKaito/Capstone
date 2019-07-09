@@ -4,6 +4,7 @@ import { AddGroupIdName } from 'app/useClass/add-group-id-name';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
 import { Router } from '@angular/router';
 import { LoadStaffAcountService } from 'app/service/load-staff-acount.service';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-add-group',
@@ -17,7 +18,7 @@ export class AddGroupComponent implements OnInit {
   saveData: any;
   formDataEdit = new AddGroupIdName();
   constructor(@Inject(MAT_DIALOG_DATA) public data,
-  public dialogRef: MatDialogRef<AddGroupComponent>,
+  public dialogRef: MatDialogRef<AddGroupComponent>, private toastr: ToastrService,
   private router:Router, private loadStaffAcountService: LoadStaffAcountService) { }
 
   ngOnInit() {
@@ -34,9 +35,9 @@ export class AddGroupComponent implements OnInit {
       this.loadStaffAcountService.addGroup(this.formData).toPromise().then(    
         resp => {    
           console.log(resp.toString())   ;  
-          location.reload();
+         
         });    
-        
+      
     } else {
       this.formDataEdit.name =this.formData.name;
       this.formDataEdit.id =this.data;
@@ -44,7 +45,7 @@ export class AddGroupComponent implements OnInit {
         resp => {    
           console.log(resp.toString())   ;
           debugger;   
-          location.reload();
+       
           if(resp !="")    
           {                   
             debugger;          
@@ -54,6 +55,8 @@ export class AddGroupComponent implements OnInit {
           }    
         }); 
     }
+    this.toastr.success('Success! ' , '' );
+    this.dialogRef.close();
   }
 
 

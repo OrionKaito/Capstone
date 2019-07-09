@@ -2,59 +2,74 @@
 <h4 *ngIf="!createAcc" class="dispaly-4">Edit Account</h4>
 <hr>
 <form #form="ngForm" autocomplete="off" (submit)="onSubmit()">
-    <div class="form-row">
-      <div class="form-group col-md-6">
-        <label>Email</label>
-        <!-- <div class="input-group">
+  <div class="form-row">
+    <div class="form-group col-md-6">
+      <label>Email</label>
+      <!-- <div class="input-group">
           <div class="input-group-prepend">
             <div class="input-group-text"></div>
           </div> -->
-          <input *ngIf="createAcc" name="email" type="email" [(ngModel)]="formData.email" class="form-control">
-          <input *ngIf="!createAcc" name="email" type="email" [(ngModel)]="formData.email" readonly class="form-control">
-        <!-- </div> -->
-      </div>
-      <div class="form-group col-md-6">
-        <label>Full name</label>
-        <input name="fullName" *ngIf="createAcc" [(ngModel)]="formData.fullName" class="form-control"
-        (keyup)="updateTotal()">
-        <input name="fullName" *ngIf="!createAcc" readonly [(ngModel)]="formData.fullName" class="form-control"
-        (keyup)="updateTotal()">
-      </div>
+      <input *ngIf="createAcc" name="email" type="email" [(ngModel)]="formData.email" class="form-control">
+      <input *ngIf="!createAcc" name="email" type="email" [(ngModel)]="formData.email" readonly class="form-control">
+      <!-- </div> -->
     </div>
-    <div class="form-row" *ngIf="createAcc">
-      <div class="form-group col-md-6">
-        <label>Password</label>
-        <input name="password" [(ngModel)]="formData.password" class="form-control">
-      </div>
-      <div class="form-group col-md-6">
-        <label>Re-Password</label>
-        <input name="RePassword" [(ngModel)]="rePassword" class="form-control">
-      </div>
-    </div>    
+    <div class="form-group col-md-6">
+      <label>Full name</label>
+      <input name="fullName" *ngIf="createAcc" [(ngModel)]="formData.fullName" class="form-control"
+        (keyup)="updateTotal()">
+      <input name="fullName" *ngIf="!createAcc" readonly [(ngModel)]="formData.fullName" class="form-control"
+        (keyup)="updateTotal()">
+    </div>
+  </div>
+  <div class="form-row" *ngIf="createAcc">
+    <div class="form-group col-md-6">
+      <label>Password</label>
+      <input name="password" [(ngModel)]="formData.password" class="form-control">
+    </div>
+    <div class="form-group col-md-6">
+      <label>Re-Password</label>
+      <input name="RePassword" [(ngModel)]="rePassword" class="form-control">
+    </div>
+  </div>
   <div *ngIf="createAcc" class="form-group">
     <label>Date of birth</label>
-    <input name="dateOfBirth" type="datetime-local" [(ngModel)]="formData.dateOfBirth" class="form-control" >
+    <input name="dateOfBirth" type="date" [(ngModel)]="formData.dateOfBirth" class="form-control">
   </div>
   <div class="form-row">
     <div class="form-group col-md-6">
       <label>Role</label>
-    <select name="role"  [(ngModel)]="inputRole" class="form-control">
-      <option value="0">-Select-</option>
-      <option *ngFor="let item of roleList" value="{{item.id}}">{{item.name}}</option>
-    </select>
+      <select name="role" #role="ngModel" [(ngModel)]="formData.roleIDs"  class="form-control">
+        <option value="0">-Select-</option>
+        <option *ngFor="let item of roleList" value="{{item.id}}">{{item.name}}</option>
+      </select>
     </div>
     <div class="form-group col-md-6">
       <label>Group</label>
-      <select name="group" [(ngModel)]="inputGroup" class="form-control">
-        <!-- [class.is-invalid]="!isValid && formData.group==0" -->
-      <option value="0">-Select-</option>
-      <option *ngFor="let item of groupList" value="{{item.id}}">{{item.name}}</option>
+      <select name="group" [(ngModel)]="formData.groupIDs" class="form-control">
+        <option value="0">-Select-</option>
+        <option *ngFor="let item of groupList" value="{{item.id}}">{{item.name}}</option>
       </select>
-    </div>
-  </div>    
-  
+      <!-- <angular2-multiselect
+      name="group" 
+      [(ngModel)]="inputGroup"
+      [data]="groupList" 
+      [settings]="dropdownSettings"
+      (onselect)="onItemSelect()"
+      (onSelectAll)="onSelectAll()">
+      </angular2-multiselect>
+       -->
+    </div>  
+  </div>
+  <div class="form-group">
+    <label>Manage of user</label>
+    <select name="group" [(ngModel)]="formData.manageID" class="form-control">
+      <option value="0">-Select-</option>
+      <option *ngFor="let item of manageList" value="{{item.id}}">{{item.fullName}}</option>
+    </select>  
+  </div>
   <div class="form-group">
     <button type="submit" class="btn btn-dark"><i class="fa fa-database"></i> Submit</button>
-    <button type="button" class="btn btn-outline-dark ml-1" [mat-dialog-close]><i class="fa fa-close"></i> Close</button>
+    <button type="button" class="btn btn-outline-dark ml-1" [mat-dialog-close]><i class="fa fa-close"></i>
+      Close</button>
   </div>
 </form>

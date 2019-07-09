@@ -58,6 +58,18 @@ export class LoadStaffAcountService {
   loadGroupData() {
     return this.http.get(this.Url + "/api/Groups");
   }
+  loadWorkflowForUserData(){
+    var token = "Bearer " + localStorage.getItem("token");
+    var tokenHeader = new HttpHeaders({'Authorization': token});
+    return this.http.get(this.Url + "/api/WorkflowsTemplates/GetUserWorkflow", {headers : tokenHeader });
+  }
+
+  loadHandlingRequest(){
+    var token = "Bearer " + localStorage.getItem("token");
+    var tokenHeader = new HttpHeaders({'Authorization': token});
+    return this.http.get(this.Url + "/api/UserNotifications/GetNotificationByUserId", {headers : tokenHeader });
+  }
+
   loadPermissionData() {
     return this.http.get(this.Url + "/api/Permissions");
   }
@@ -75,6 +87,14 @@ export class LoadStaffAcountService {
 
   }
 
+  getRequestForm(id){
+    return this.http.get(this.Url + "/api/Requests/GetRequestForm?workFlowTemplateID=" + id);
+  }
+  getHandleForm(id){
+    return this.http.get(this.Url + "/api/Requests/GetRequestHandleForm?requestActionID=" + id);
+  }
+
+
   getRolebyID(id) {
     return this.http.get(this.Url + "/api/Roles/GetByUserID?ID=" + id, { responseType: 'json' });
   }
@@ -89,6 +109,11 @@ export class LoadStaffAcountService {
   loadGroupByID(id) {
     return this.http.get(this.Url + " /api/Groups/GetByID?ID=" + id);
 
+  }
+  sendReq(req){
+    var token = "Bearer " + localStorage.getItem("token");
+    var tokenHeader = new HttpHeaders({'Authorization': token});
+    return this.http.post(this.Url + "/api/Requests", req, {headers : tokenHeader });
   }
 
 }

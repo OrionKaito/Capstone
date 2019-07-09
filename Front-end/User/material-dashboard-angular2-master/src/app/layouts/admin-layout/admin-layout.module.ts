@@ -28,10 +28,31 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
 import { ToastrModule } from 'ngx-toastr';
 import { ManagePermissionComponent } from 'app/manage-permission/manage-permission.component';
+import { AngularFireModule } from '@angular/fire';
+import { AngularFirestoreModule } from '@angular/fire/firestore';
+import { AngularFireStorageModule } from '@angular/fire/storage';
+import { AngularFireAuthModule } from '@angular/fire/auth';
 
+import { UploadTaskComponent } from 'app/upload-task/upload-task.component';
+import { WorkflowOfUserComponent } from 'app/workflow-of-user/workflow-of-user.component';
+import { HandleRequestComponent } from 'app/handle-request/handle-request.component';
+
+const config = {
+  apiKey: "AIzaSyCBhMb1lO_1ioNypRrHS4I1q9sYxJ2thcs",
+    authDomain: "capstonedinamicworkflow.firebaseapp.com",
+    databaseURL: "https://capstonedinamicworkflow.firebaseio.com",
+    projectId: "capstonedinamicworkflow",
+    storageBucket: "capstonedinamicworkflow.appspot.com",
+    messagingSenderId: "1002298812738",
+    appId: "1:1002298812738:web:3979cfb21aa67003"
+};
 
 @NgModule({
   imports: [
+    AngularFireModule.initializeApp(config),
+    AngularFirestoreModule, // firestore
+    AngularFireAuthModule, // auth
+    AngularFireStorageModule, // storage
     NgMultiSelectDropDownModule.forRoot(),
     ToastrModule.forRoot(),
     CommonModule,
@@ -58,7 +79,9 @@ import { ManagePermissionComponent } from 'app/manage-permission/manage-permissi
     DashboardComponent,
     UserProfileComponent,
     TableListComponent,
-    ManagePermissionComponent
+    ManagePermissionComponent,
+    WorkflowOfUserComponent,
+    HandleRequestComponent
   ]
 })
 

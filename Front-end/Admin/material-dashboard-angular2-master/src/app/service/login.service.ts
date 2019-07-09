@@ -44,8 +44,8 @@ export class LoginService {
   }
 
   BanOrUnbanAcc(id: string){
-    const headers = new HttpHeaders({ 'Content-Type': 'application/json'}); 
-    return this.http.put(this.Url + "/api/Accounts/ToggleBanAccount?ID=" +id, {"ID": id},{ headers: headers });
+    const headers = new HttpHeaders({ 'Content-Type': 'application/json'});
+    return this.http.put(this.Url + "/api/Accounts/ToggleBanAccount?ID=" +id, {headers: headers });
   }
  
 }  

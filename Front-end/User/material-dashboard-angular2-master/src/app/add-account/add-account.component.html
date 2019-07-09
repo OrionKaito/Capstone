@@ -1,10 +1,10 @@
-<h4 *ngIf="createAcc" class="dispaly-4">Add new Account</h4>
-<h4 *ngIf="!createAcc" class="dispaly-4">Edit Account</h4>
+<h4 *ngIf="createAcc" class="dispaly-4">Add new Workflow</h4>
+<h4 *ngIf="!createAcc" class="dispaly-4">Edit Workflow</h4>
 <hr>
 <form #form="ngForm" autocomplete="off" (submit)="onSubmit()">
 
   
-  <div *ngIf="createAcc" class="form-group">
+  <div class="form-group">
     <label>Name of Workflow</label>
     <input name="name" type="text" [(ngModel)]="formData.name" class="form-control" >
   </div>

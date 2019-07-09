@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { LoadStaffAcountService } from 'app/service/load-staff-acount.service';
 import { AddRole } from 'app/useClass/add-role';
 import { AddRoleIdName } from 'app/useClass/add-role-id-name';
+import { ToastrService } from 'ngx-toastr';
 
 
 @Component({
@@ -17,7 +18,7 @@ export class AddRoleComponent implements OnInit {
   saveData: any;
   formDataEdit = new AddRoleIdName();
   constructor(@Inject(MAT_DIALOG_DATA) public data,
-  public dialogRef: MatDialogRef<AddRoleComponent>,
+  public dialogRef: MatDialogRef<AddRoleComponent>, private toastr: ToastrService,
   private router:Router, private loadStaffAcountService: LoadStaffAcountService) { }
 
   ngOnInit() {
@@ -35,22 +36,22 @@ export class AddRoleComponent implements OnInit {
       
       this.loadStaffAcountService.addRole(this.formData).toPromise().then(    
         resp => {    
-          console.log(resp.toString())   ;  
-         
+          console.log(resp.toString())   ;           
         });    
 
-        this.dialogRef.close();
+        // this.dialogRef.close();
 
     } else {
       this.formDataEdit.name =this.formData.name;
       this.formDataEdit.id =this.data;
-      this.loadStaffAcountService.editRole(this.formDataEdit).toPromise().then(    
+      this.loadStaffAcountService.editRole(this.formDataEdit).subscribe(    
         resp => {    
           console.log(resp.toString())   ;
           debugger;   
           
           if(resp !="")    
           {                   
+            
             debugger;          
           }    
           else{    
@@ -58,8 +59,10 @@ export class AddRoleComponent implements OnInit {
           }    
         }); 
 
-        this.dialogRef.close();    
+        // this.dialogRef.close();    
     }
+    this.toastr.success('Success! ' , '' );
+    this.dialogRef.close();
   }
 
 }

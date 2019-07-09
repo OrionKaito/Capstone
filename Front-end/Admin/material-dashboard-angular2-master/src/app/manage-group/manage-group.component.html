@@ -2,21 +2,31 @@
   <div class="container-fluid">
       <div class="row">
           <div class="col-md-12">
-              <div class="card">
-                  <div class="card-header card-header-danger">
-                      <h4 class="card-title ">Group list</h4>
-                      <p class="card-category">List of all group in the system</p>
-                  </div>
-                  <div class="card-body">
+              <div class="card"><div class="card-header card-header-danger">
+                    <div class="hal-div">
+                        <h4 class="card-title ">Group list</h4>
+                        <p class="card-category">List of Group in the system</p>
+                    </div>
+                    <div class="hal2-div">
                         <div class="search-div">
-                                <button (click)="AddOrEditItem(null)" mat-raised-button><mat-icon>add</mat-icon></button>Create
+
                                 <mat-form-field class="search-form-field" floatLabel="never">
-                                    <input matInput [(ngModel)]="searchKey" placeholder="Search" autocomplete="off" (keyup)="applyFilter()">
-                                    <button mat-button matSuffix mat-icon-button aria-label="Clear" *ngIf="searchKey" (click)="onSearchClear()">
-                                        <mat-icon>close</mat-icon>
-                                    </button>
-                                </mat-form-field>
-                            </div>
+                                        <input matInput [(ngModel)]="searchKey" placeholder="Search" autocomplete="off" (keyup)="applyFilter()">
+                                        <button mat-button matSuffix mat-icon-button aria-label="Clear" *ngIf="searchKey" (click)="onSearchClear()">
+                                            <mat-icon>close</mat-icon>
+                                        </button>
+                                    </mat-form-field>
+
+                        </div>
+
+                    </div>
+                    <div class="hal3-div">
+                            <button (click)="AddOrEditItem(null)" mat-raised-button><mat-icon>add</mat-icon></button>Create
+                    </div>
+                </div>
+                  
+                  <div class="card-body">
+                       
                       <div class="table-responsive">
                         <mat-table [dataSource] ="listData" matSort>
                             <ng-container matColumnDef="groupName">
@@ -27,10 +37,10 @@
                                     <mat-header-cell *matHeaderCellDef></mat-header-cell>
                                     <mat-cell *matCellDef="let element">
                                             <td *ngIf="element.isDeleted;  else elseBlock">
-                                                <button (click)="banOrUnbanAcc(element.id)" mat-icon-button color="primary" matTooltip="Un-Ban Group">
-                                                    <mat-icon id="element.id">check_circle_outline</mat-icon>
+                                                <button (click)="banOrUnbanAcc(element.id)" mat-icon-button  color="warn" matTooltip="De-Active Group">
+                                                    <mat-icon id="element.id">block</mat-icon>
                                                 </button></td>
-                                            <ng-template  #elseBlock><button (click)="banOrUnbanAcc(element.id)" mat-icon-button color="warn" matTooltip="Ban Group"><mat-icon id="element.id">block</mat-icon></button></ng-template>
+                                            <ng-template  #elseBlock><button (click)="banOrUnbanAcc(element.id)" mat-icon-button color="primary" matTooltip="Active Group"><mat-icon id="element.id">check_circle_outline</mat-icon></button></ng-template>
                                             <button (click)="AddOrEditItem(element.id)" mat-icon-button matTooltip="Edit Group">
                                                 <mat-icon id="element.id">border_color</mat-icon>
                                             </button>

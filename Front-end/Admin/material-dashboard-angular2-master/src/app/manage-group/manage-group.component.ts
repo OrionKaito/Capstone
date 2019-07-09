@@ -3,6 +3,7 @@ import { LoadStaffAcountService } from 'app/service/load-staff-acount.service';
 import { Router } from '@angular/router';
 import { MatTableDataSource, MatSort, MatPaginator, MatDialog, MatDialogConfig, MatDialogActions } from '@angular/material';
 import { AddGroupComponent } from 'app/add-group/add-group.component';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-manage-group',
@@ -19,7 +20,7 @@ export class ManageGroupComponent implements OnInit {
   displayedColumns: string[] =['groupName', "isDeleted" ];
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild(MatPaginator) paginator: MatPaginator;
-  constructor(private router:Router, private dialog:MatDialog, private loadStaffAcountService: LoadStaffAcountService) { }
+  constructor(private router:Router, private toastr: ToastrService, private dialog:MatDialog, private loadStaffAcountService: LoadStaffAcountService) { }
 
   ngOnInit() { 
     this.callAll();
@@ -36,14 +37,18 @@ export class ManageGroupComponent implements OnInit {
     debugger;
      this.loadStaffAcountService.deleteGroup(id).subscribe(
        data=>{
+        this.listData = new MatTableDataSource();
          console.log(data);   
-              
+         this.callAll()             
        },
        err=>{
+        this.listData = new MatTableDataSource();
+        this.callAll()
        console.log(err);
      }
        )
-       location.reload(); 
+       this.toastr.success("Success!")
+     
    
  };
  onSearchClear(){
@@ -60,6 +65,7 @@ AddOrEditItem(id:string){
   dialogConfig.width = "50%";
   dialogConfig.data = id;
   this.dialog.open(AddGroupComponent, dialogConfig).afterClosed().subscribe(res => {
+    this.callAll();
     console.log(res);
   });
 }
