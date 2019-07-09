@@ -406,13 +406,10 @@ namespace Capstone.Controllers
                 //** Get User Request Action **//
                 var userAction = _requestActionService.GetByActorID(request.InitiatorID, request.ID);
 
-                var folderName = WebConstant.Resources;
-                var realPath = Path.Combine(Directory.GetCurrentDirectory(), folderName); // đường dẫn tuyệt đối tới folder
-
                 var requestFiles = _requestFileService.GetByRequestActionID(userAction.ID).Select(r => new RequestFileVM
                 {
                     ID = r.ID,
-                    Path = Path.Combine(realPath, r.Path),
+                    Path = r.Path,
                     IsDeleted = r.IsDeleted,
                 });
 
