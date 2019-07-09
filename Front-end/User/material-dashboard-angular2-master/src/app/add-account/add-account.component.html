@@ -2,8 +2,6 @@
 <h4 *ngIf="!createAcc" class="dispaly-4">Edit Workflow</h4>
 <hr>
 <form #form="ngForm" autocomplete="off" (submit)="onSubmit()">
-
-  
   <div class="form-group">
     <label>Name of Workflow</label>
     <input name="name" type="text" [(ngModel)]="formData.name" class="form-control" >
