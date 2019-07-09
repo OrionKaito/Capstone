@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Security.Claims;
 
@@ -155,7 +156,7 @@ namespace Capstone.Controllers
                 else
                 {
                     var users = _userService.getUsersByPermissionID(workflowTemplateAction.PermissionToUseID.GetValueOrDefault());
-                    
+
                     if (users != null && users.Any())
                     {
                         foreach (var user in users)
@@ -405,10 +406,13 @@ namespace Capstone.Controllers
                 //** Get User Request Action **//
                 var userAction = _requestActionService.GetByActorID(request.InitiatorID, request.ID);
 
+                var folderName = WebConstant.Resources;
+                var realPath = Path.Combine(Directory.GetCurrentDirectory(), folderName); // đường dẫn tuyệt đối tới folder
+
                 var requestFiles = _requestFileService.GetByRequestActionID(userAction.ID).Select(r => new RequestFileVM
                 {
                     ID = r.ID,
-                    Path = r.Path,
+                    Path = Path.Combine(realPath, r.Path),
                     IsDeleted = r.IsDeleted,
                 });
 
