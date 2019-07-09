@@ -22,7 +22,7 @@ namespace Capstone.Model
         [ForeignKey("ActionTypeID")]
         public virtual ActionType ActionType { get; set; }
 
-        public Guid PermissionToUseID { get; set; }
+        public Guid? PermissionToUseID { get; set; }
         [ForeignKey("PermissionToUseID")]
         public virtual Permission Permission { get; set; }
 
