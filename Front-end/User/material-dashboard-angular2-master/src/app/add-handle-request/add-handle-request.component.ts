@@ -10,7 +10,10 @@ import { LoadStaffAcountService } from 'app/service/load-staff-acount.service';
   styleUrls: ['./add-handle-request.component.scss']
 })
 export class AddHandleRequestComponent implements OnInit {
-
+  requestHandle: any;
+  cmtHandle: any;
+  requestActionHandleFile: any;
+  requestActionHandleValue: any;
   saveData: any;
   buttons: any = [];
   formKey: any;
@@ -53,6 +56,11 @@ export class AddHandleRequestComponent implements OnInit {
     this.loadStaffAcountService.getHandleForm(this.workFlowTemplateID).toPromise().then(res => {
       this.saveData = res;
       this.buttons = this.saveData.connections;
+      this.requestHandle = this.saveData.request;
+      this.requestActionHandleFile = this.saveData.userRequestAction.requestFiles;
+      this.requestActionHandleValue = this.saveData.userRequestAction.requestValues;
+      this.cmtHandle = this.saveData.staffRequestActions;
+
     })
 
   }
