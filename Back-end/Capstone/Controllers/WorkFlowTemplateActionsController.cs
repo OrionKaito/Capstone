@@ -89,6 +89,11 @@ namespace Capstone.Controllers
 
             try
             {
+                if (!model.IsApprovedByLineManager && model.PermissionToUseID == null)
+                {
+                    return BadRequest();
+                }
+
                 WorkFlowTemplateAction workFlowTemplateAction = new WorkFlowTemplateAction();
                 if (_workFlowTemplateActionService.GetByName(model.Name) != null) return BadRequest("WorkflowTemplateAction "
                     + WebConstant.NameExisted);
