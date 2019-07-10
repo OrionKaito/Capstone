@@ -90,8 +90,10 @@ namespace Capstone.ViewModel
 
     public class StaffRequestActionVM
     {
-        public string Name { get; set; }
+        public string FullName { get; set; }
+        public string UserName { get; set; }
         public DateTime CreateDate { get; set; }
+        public string Status { get; set; }
         public IEnumerable<RequestValueVM> RequestValues { get; set; }
     }
 
@@ -104,7 +106,8 @@ namespace Capstone.ViewModel
 
     public class RequestResultStaffActionVM
     {
-        public string Name { get; set; }
+        public string FullName { get; set; }
+        public string UserName { get; set; }
         public DateTime CreateDate { get; set; }
         public string Status { get; set; }
         //public IEnumerable<RequestValueVM> RequestValues { get; set; } // có cho user coi comment hay không ?

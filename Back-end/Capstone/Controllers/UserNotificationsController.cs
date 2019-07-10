@@ -188,29 +188,7 @@ namespace Capstone.Controllers
                             return NotFound();
                         }
                     }
-                    //else if (notificationInDb.NotificationType == NotificationEnum.DeniedRequest)
-                    //{
-                    //    var result = new NotificationViewModel
-                    //    {
-                    //        ActorName = _userManager.FindByIdAsync(request.InitiatorID).Result.FullName,
-                    //        EventID = notificationInDb.EventID,
-                    //        Message = WebConstant.DeniedRequestMessage,
-                    //        NotificationType = notificationInDb.NotificationType,
-                    //        NotificationTypeName = notificationInDb.NotificationType.ToString(),
-                    //        IsHandled = item.IsHandled
-                    //    };
-                    //    data.Add(result);
-                    //}
-
                 }
-
-                //var notficications = _userNotificationService.GetByUserID(userID);
-
-                //foreach (var item in notficications)
-                //{
-                //    item.IsRead = true;
-                //}
-                //_notificationService.Save();
 
                 return Ok(data);
             }
