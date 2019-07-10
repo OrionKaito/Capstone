@@ -7,7 +7,6 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Security.Claims;
 
@@ -30,6 +29,7 @@ namespace Capstone.Controllers
         private readonly IWorkFlowTemplateActionService _workFlowTemplateActionService;
         private readonly IWorkFlowTemplateActionConnectionService _workFlowTemplateActionConnectionService;
         private readonly IConnectionTypeService _connectionTypeService;
+        private readonly IWorkFlowTemplateService _workFlowTemplateService;
         private readonly UserManager<User> _userManager;
 
         public RequestsController(IActionTypeService actionTypeService
@@ -45,6 +45,7 @@ namespace Capstone.Controllers
             , IWorkFlowTemplateActionConnectionService workFlowTemplateActionConnectionService
             , IConnectionTypeService connectionTypeService
             , UserManager<User> userManager
+            , IWorkFlowTemplateService workFlowTemplateService
             )
         {
             _actionTypeService = actionTypeService;
@@ -60,6 +61,7 @@ namespace Capstone.Controllers
             _workFlowTemplateActionConnectionService = workFlowTemplateActionConnectionService;
             _connectionTypeService = connectionTypeService;
             _userManager = userManager;
+            _workFlowTemplateService = workFlowTemplateService;
         }
 
 
@@ -336,6 +338,41 @@ namespace Capstone.Controllers
                 var rs = _requestService.GetByID(ID);
                 if (rs == null) return BadRequest(WebConstant.NotFound);
                 RequestVM result = _mapper.Map<RequestVM>(rs);
+                return Ok(result);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
+
+        [HttpGet("GetByID")]
+        public ActionResult<RequestResultVM> GetRequestResult(Guid requestActionID)
+        {
+            try
+            {
+                var requestAction = _requestActionService.GetByID(requestActionID);
+                var request = _requestService.GetByID(requestAction.RequestID);
+
+                if (request == null) return BadRequest(WebConstant.NotFound);
+
+                var workflow = _workFlowTemplateService.GetByID(request.ID);
+
+                //get list workFlowTemplateActionConnection by workFlowTemplateActionID (nextStepID)
+                var workFlowTemplateActionConnection = _workFlowTemplateActionConnectionService
+                    .GetByFromIDAndToID(requestActionID, requestAction.NextStepID.GetValueOrDefault());
+
+                if (workFlowTemplateActionConnection == null)
+                    return BadRequest("NextStep's ID or RequestAction's " + WebConstant.NotFound);
+
+                RequestResultVM result = new RequestResultVM
+                {
+                    WorkFlowTemplateName = workflow.Name,
+                    Status = _connectionTypeService
+                        .GetByID(workFlowTemplateActionConnection.ConnectionTypeID)
+                        .Name,
+                };
+
                 return Ok(result);
             }
             catch (Exception e)

@@ -94,4 +94,18 @@ namespace Capstone.ViewModel
         public DateTime CreateDate { get; set; }
         public IEnumerable<RequestValueVM> RequestValues { get; set; }
     }
+
+    public class RequestResultVM
+    {
+        public string WorkFlowTemplateName { get; set; }
+        public string Status { get; set; }
+    }
+
+    public class RequestResultStaffActionVM
+    {
+        public string Name { get; set; }
+        public DateTime CreateDate { get; set; }
+        public string Status { get; set; }
+        //public IEnumerable<RequestValueVM> RequestValues { get; set; } // có cho user coi comment hay không ?
+    }
 }
