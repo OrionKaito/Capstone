@@ -25,14 +25,13 @@ import { CdkTableModule } from '@angular/cdk/table';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AddAccountComponent } from 'app/add-account/add-account.component';
 import { BrowserModule } from '@angular/platform-browser';
-import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
 import { ToastrModule } from 'ngx-toastr';
 import { ManagePermissionComponent } from 'app/manage-permission/manage-permission.component';
 import { AngularFireModule } from '@angular/fire';
 import { AngularFirestoreModule } from '@angular/fire/firestore';
 import { AngularFireStorageModule } from '@angular/fire/storage';
 import { AngularFireAuthModule } from '@angular/fire/auth';
-
+import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
 import { UploadTaskComponent } from 'app/upload-task/upload-task.component';
 import { WorkflowOfUserComponent } from 'app/workflow-of-user/workflow-of-user.component';
 import { HandleRequestComponent } from 'app/handle-request/handle-request.component';
@@ -49,11 +48,11 @@ const config = {
 
 @NgModule({
   imports: [
+    NgMultiSelectDropDownModule.forRoot(),
     AngularFireModule.initializeApp(config),
     AngularFirestoreModule, // firestore
     AngularFireAuthModule, // auth
     AngularFireStorageModule, // storage
-    NgMultiSelectDropDownModule.forRoot(),
     ToastrModule.forRoot(),
     CommonModule,
     RouterModule.forChild(AdminLayoutRoutes),
