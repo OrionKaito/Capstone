@@ -7,7 +7,6 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Security.Claims;
 
@@ -30,6 +29,7 @@ namespace Capstone.Controllers
         private readonly IWorkFlowTemplateActionService _workFlowTemplateActionService;
         private readonly IWorkFlowTemplateActionConnectionService _workFlowTemplateActionConnectionService;
         private readonly IConnectionTypeService _connectionTypeService;
+        private readonly IWorkFlowTemplateService _workFlowTemplateService;
         private readonly UserManager<User> _userManager;
 
         public RequestsController(IActionTypeService actionTypeService
@@ -45,6 +45,7 @@ namespace Capstone.Controllers
             , IWorkFlowTemplateActionConnectionService workFlowTemplateActionConnectionService
             , IConnectionTypeService connectionTypeService
             , UserManager<User> userManager
+            , IWorkFlowTemplateService workFlowTemplateService
             )
         {
             _actionTypeService = actionTypeService;
@@ -60,6 +61,7 @@ namespace Capstone.Controllers
             _workFlowTemplateActionConnectionService = workFlowTemplateActionConnectionService;
             _connectionTypeService = connectionTypeService;
             _userManager = userManager;
+            _workFlowTemplateService = workFlowTemplateService;
         }
 
 
@@ -344,6 +346,68 @@ namespace Capstone.Controllers
             }
         }
 
+        [HttpGet("GetByID")]
+        public ActionResult<RequestResultVM> GetRequestResult(Guid requestActionID)
+        {
+            try
+            {
+                //** Get WorkFlowName's Name **//
+                var requestAction = _requestActionService.GetByID(requestActionID);
+                var request = _requestService.GetByID(requestAction.RequestID);
+
+                if (request == null) return BadRequest(WebConstant.NotFound);
+
+                var workflow = _workFlowTemplateService.GetByID(request.ID);
+
+                //** Get Final Status **//
+                var ActionConnection = _workFlowTemplateActionConnectionService
+                    .GetByFromIDAndToID(requestActionID, requestAction.NextStepID.GetValueOrDefault());
+
+                if (ActionConnection == null)
+                    return BadRequest("NextStep's ID or RequestAction's " + WebConstant.NotFound);
+
+                var connectionName = _connectionTypeService
+                        .GetByID(ActionConnection.ConnectionTypeID)
+                        .Name;
+
+                //** Get List Staff Request Action **//
+                List<RequestResultStaffActionVM> staffResult = new List<RequestResultStaffActionVM>();
+                var staffActions = _requestActionService.GetExceptActorIDAndRequestID(request.InitiatorID, request.ID);
+
+                foreach (var staffAction in staffActions)
+                {
+                    var staffActionConnection = _workFlowTemplateActionConnectionService
+                    .GetByFromIDAndToID(staffAction.ID, staffAction.NextStepID.GetValueOrDefault());
+
+                    var staffConnectionName = _connectionTypeService
+                            .GetByID(staffActionConnection.ConnectionTypeID)
+                            .Name;
+
+                    RequestResultStaffActionVM staffRequestAction = new RequestResultStaffActionVM()
+                    {
+                        Name = _userManager.FindByIdAsync(staffAction.ActorID).Result.FullName,
+                        CreateDate = staffAction.CreateDate,
+                        Status = staffConnectionName,
+                    };
+
+                    staffResult.Add(staffRequestAction);
+                }
+
+                RequestResultVM result = new RequestResultVM
+                {
+                    WorkFlowTemplateName = workflow.Name,
+                    Status = connectionName,
+                    StaffResult = staffResult,
+                };
+
+                return Ok(result);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
+
         [HttpGet("GetRequestForm")]
         public ActionResult<RequestFormVM> GetRequestForm(Guid workFlowTemplateID)
         {
@@ -429,10 +493,6 @@ namespace Capstone.Controllers
                 //** Get List Staff Request Action **//
                 List<StaffRequestActionVM> staffRequestActions = new List<StaffRequestActionVM>();
                 var staffActions = _requestActionService.GetExceptActorIDAndRequestID(request.InitiatorID, request.ID);
-
-                ///
-                /// BUGGGGGGGGGGGGGGGGGGGGGGGGGG
-                /// //gGUBAsdasdasd
 
                 foreach (var staffAction in staffActions)
                 {
