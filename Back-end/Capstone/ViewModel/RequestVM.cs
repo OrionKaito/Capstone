@@ -99,6 +99,7 @@ namespace Capstone.ViewModel
     {
         public string WorkFlowTemplateName { get; set; }
         public string Status { get; set; }
+        public IEnumerable<RequestResultStaffActionVM> StaffResult { get; set; }
     }
 
     public class RequestResultStaffActionVM

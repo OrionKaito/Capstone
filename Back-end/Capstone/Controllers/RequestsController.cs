@@ -351,6 +351,7 @@ namespace Capstone.Controllers
         {
             try
             {
+                //** Get WorkFlowName's Name **//
                 var requestAction = _requestActionService.GetByID(requestActionID);
                 var request = _requestService.GetByID(requestAction.RequestID);
 
@@ -358,19 +359,45 @@ namespace Capstone.Controllers
 
                 var workflow = _workFlowTemplateService.GetByID(request.ID);
 
-                //get list workFlowTemplateActionConnection by workFlowTemplateActionID (nextStepID)
-                var workFlowTemplateActionConnection = _workFlowTemplateActionConnectionService
+                //** Get Final Status **//
+                var ActionConnection = _workFlowTemplateActionConnectionService
                     .GetByFromIDAndToID(requestActionID, requestAction.NextStepID.GetValueOrDefault());
 
-                if (workFlowTemplateActionConnection == null)
+                if (ActionConnection == null)
                     return BadRequest("NextStep's ID or RequestAction's " + WebConstant.NotFound);
+
+                var connectionName = _connectionTypeService
+                        .GetByID(ActionConnection.ConnectionTypeID)
+                        .Name;
+
+                //** Get List Staff Request Action **//
+                List<RequestResultStaffActionVM> staffResult = new List<RequestResultStaffActionVM>();
+                var staffActions = _requestActionService.GetExceptActorIDAndRequestID(request.InitiatorID, request.ID);
+
+                foreach (var staffAction in staffActions)
+                {
+                    var staffActionConnection = _workFlowTemplateActionConnectionService
+                    .GetByFromIDAndToID(staffAction.ID, staffAction.NextStepID.GetValueOrDefault());
+
+                    var staffConnectionName = _connectionTypeService
+                            .GetByID(staffActionConnection.ConnectionTypeID)
+                            .Name;
+
+                    RequestResultStaffActionVM staffRequestAction = new RequestResultStaffActionVM()
+                    {
+                        Name = _userManager.FindByIdAsync(staffAction.ActorID).Result.FullName,
+                        CreateDate = staffAction.CreateDate,
+                        Status = staffConnectionName,
+                    };
+
+                    staffResult.Add(staffRequestAction);
+                }
 
                 RequestResultVM result = new RequestResultVM
                 {
                     WorkFlowTemplateName = workflow.Name,
-                    Status = _connectionTypeService
-                        .GetByID(workFlowTemplateActionConnection.ConnectionTypeID)
-                        .Name,
+                    Status = connectionName,
+                    StaffResult = staffResult,
                 };
 
                 return Ok(result);
@@ -466,10 +493,6 @@ namespace Capstone.Controllers
                 //** Get List Staff Request Action **//
                 List<StaffRequestActionVM> staffRequestActions = new List<StaffRequestActionVM>();
                 var staffActions = _requestActionService.GetExceptActorIDAndRequestID(request.InitiatorID, request.ID);
-
-                ///
-                /// BUGGGGGGGGGGGGGGGGGGGGGGGGGG
-                /// //gGUBAsdasdasd
 
                 foreach (var staffAction in staffActions)
                 {
