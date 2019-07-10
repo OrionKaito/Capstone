@@ -547,6 +547,8 @@ namespace Capstone.Controllers
 
                 HandleFormVM form = new HandleFormVM
                 {
+                    InitiatorName = _userManager.FindByIdAsync(request.InitiatorID).Result.FullName,
+                    WorkFlowTemplateName = _workFlowTemplateService.GetByID(request.WorkFlowTemplateID).Name,
                     Connections = connections,
                     ActionType = _mapper.Map<ActionTypeVM>(actionType),
                     Request = _mapper.Map<RequestVM>(request),

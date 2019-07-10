@@ -10,6 +10,7 @@ namespace Capstone.Model
         public Guid EventID { get; set; }
         public DateTime? CreateDate { get; set; }
         public NotificationEnum NotificationType { get; set; }
+        public bool IsHandled { get; set; }
         public bool IsDeleted { get; set; }
     }
 }

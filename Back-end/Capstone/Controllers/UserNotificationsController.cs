@@ -124,73 +124,113 @@ namespace Capstone.Controllers
                 var userInDB = _userManager.FindByIdAsync(userID).Result;
                 if (userInDB == null) return BadRequest(WebConstant.UserNotExist);
 
-                var notification = _userNotificationService.GetByUserIDAndNotificationType(userID, notificationType);
+                List<NotificationViewModel> result = new List<NotificationViewModel>();
+                List<UserNotification> userNotifications = new List<UserNotification>();
 
-                if (notification == null)
+                if (notificationType == NotificationEnum.CompletedRequest || notificationType == NotificationEnum.UpdatedWorkflow)
                 {
-                    return Ok(WebConstant.NoNotificationYet);
+                    userNotifications.AddRange(_userNotificationService.GetByUserIDAndNotificationType(userID, notificationType, false));
                 }
 
-                var data = new List<NotificationViewModel>();
-
-                foreach (var item in notification)
+                else if (notificationType == NotificationEnum.ReceivedRequest)
                 {
-                    var notificationInDb = _notificationService.GetByID(item.NotificationID);
+                    userNotifications.AddRange(_userNotificationService.GetByUserIDAndNotificationType(userID, notificationType, true));
+                }
+
+                else
+                {
+                    return BadRequest("Notification Type Not Found!");
+                }
+
+                if (!userNotifications.Any())
+                {
+                    return Ok(WebConstant.EmptyList);
+                }
+
+                foreach (var userNotification in userNotifications)
+                {
+                    var notificationInDb = _notificationService.GetByID(userNotification.NotificationID);
+
                     var requestAction = _requestActionService.GetByID(notificationInDb.EventID);
+
                     var request = _requestService.GetByID(requestAction.RequestID);
 
-                    if (notificationType == NotificationEnum.CompletedRequest && notificationInDb.NotificationType == NotificationEnum.CompletedRequest)
+                    var notificationVM = new NotificationViewModel
                     {
-                        var result = new NotificationViewModel
-                        {
-                            ActorName = _userManager.FindByIdAsync(request.InitiatorID).Result.FullName,
-                            EventID = notificationInDb.EventID,
-                            Message = WebConstant.CompletedRequestMessage,
-                            NotificationType = notificationInDb.NotificationType,
-                            NotificationTypeName = notificationInDb.NotificationType.ToString(),
-                            CreateDate = notificationInDb.CreateDate,
-                            IsHandled = item.IsHandled
-                        };
-                        data.Add(result);
-                    }
-                    else
-                    {
-                        if (notificationInDb.NotificationType == NotificationEnum.UpdatedWorkflow)
-                        {
-                            //đang làm sai
-                            var result = new NotificationViewModel
-                            {
-                                ActorName = _userManager.FindByIdAsync(request.InitiatorID).Result.FullName,
-                                EventID = notificationInDb.EventID,
-                                Message = WebConstant.WorkflowUpdateMessage,
-                                NotificationType = notificationInDb.NotificationType,
-                                CreateDate = notificationInDb.CreateDate,
-                                NotificationTypeName = "UpdatedWorkflow"
-                            };
-                            data.Add(result);
-                        }
-                        else if (notificationInDb.NotificationType == NotificationEnum.ReceivedRequest)
-                        {
-                            var result = new NotificationViewModel
-                            {
-                                ActorName = _userManager.FindByIdAsync(request.InitiatorID).Result.FullName,
-                                EventID = notificationInDb.EventID,
-                                Message = WebConstant.ReceivedRequestMessage,
-                                NotificationType = notificationInDb.NotificationType,
-                                NotificationTypeName = notificationInDb.NotificationType.ToString(),
-                                CreateDate = notificationInDb.CreateDate,
-                                IsHandled = item.IsHandled
-                            };
-                            data.Add(result);
-                        }
-                        else
-                        {
-                            return NotFound();
-                        }
-                    }
+                        ActorName = _userManager.FindByIdAsync(request.InitiatorID).Result.FullName,
+                        EventID = notificationInDb.EventID,
+                        Message = WebConstant.CompletedRequestMessage,
+                        NotificationType = notificationInDb.NotificationType,
+                        NotificationTypeName = notificationInDb.NotificationType.ToString(),
+                        CreateDate = notificationInDb.CreateDate,
+                        IsHandled = notificationInDb.IsHandled
+                    };
+                    result.Add(notificationVM);
                 }
 
-                return Ok(data);
+                //return Ok(WebConstant.NoNotificationYet);
+
+
+                //var data = new List<NotificationViewModel>();
+
+                //foreach (var item in notification)
+                //{
+                //    var notificationInDb = _notificationService.GetByID(item.NotificationID);
+                //    var requestAction = _requestActionService.GetByID(notificationInDb.EventID);
+                //    var request = _requestService.GetByID(requestAction.RequestID);
+
+                //    if (notificationType == NotificationEnum.CompletedRequest && notificationInDb.NotificationType == NotificationEnum.CompletedRequest)
+                //    {
+                //        var result = new NotificationViewModel
+                //        {
+                //            ActorName = _userManager.FindByIdAsync(request.InitiatorID).Result.FullName,
+                //            EventID = notificationInDb.EventID,
+                //            Message = WebConstant.CompletedRequestMessage,
+                //            NotificationType = notificationInDb.NotificationType,
+                //            NotificationTypeName = notificationInDb.NotificationType.ToString(),
+                //            CreateDate = notificationInDb.CreateDate,
+                //            IsHandled = item.IsHandled
+                //        };
+                //        data.Add(result);
+                //    }
+                //    else
+                //    {
+                //        if (notificationInDb.NotificationType == NotificationEnum.UpdatedWorkflow)
+                //        {
+                //            //đang làm sai
+                //            var result = new NotificationViewModel
+                //            {
+                //                ActorName = _userManager.FindByIdAsync(request.InitiatorID).Result.FullName,
+                //                EventID = notificationInDb.EventID,
+                //                Message = WebConstant.WorkflowUpdateMessage,
+                //                NotificationType = notificationInDb.NotificationType,
+                //                CreateDate = notificationInDb.CreateDate,
+                //                NotificationTypeName = "UpdatedWorkflow"
+                //            };
+                //            data.Add(result);
+                //        }
+                //        else if (notificationInDb.NotificationType == NotificationEnum.ReceivedRequest)
+                //        {
+                //            var result = new NotificationViewModel
+                //            {
+                //                ActorName = _userManager.FindByIdAsync(request.InitiatorID).Result.FullName,
+                //                EventID = notificationInDb.EventID,
+                //                Message = WebConstant.ReceivedRequestMessage,
+                //                NotificationType = notificationInDb.NotificationType,
+                //                NotificationTypeName = notificationInDb.NotificationType.ToString(),
+                //                CreateDate = notificationInDb.CreateDate,
+                //                IsHandled = item.IsHandled
+                //            };
+                //            data.Add(result);
+                //        }
+                //        else
+                //        {
+                //            return NotFound();
+                //        }
+                //    }
+                //}
+
+                return Ok(result);
             }
             catch (Exception e)
             {

@@ -8,9 +8,13 @@ namespace Capstone.ViewModel
     public class RequestVM
     {
         public Guid ID { get; set; }
+
         public string Description { get; set; }
+
         public string InitiatorID { get; set; }
+
         public Guid WorkFlowTemplateID { get; set; }
+
         public DateTime CreateDate { get; set; }
     }
 
@@ -18,6 +22,7 @@ namespace Capstone.ViewModel
     {
         //Request
         public string Description { get; set; }
+
         public Guid WorkFlowTemplateID { get; set; }
 
         //Request Action
@@ -34,7 +39,9 @@ namespace Capstone.ViewModel
     {
         //Request Action
         public Guid RequestID { get; set; }
+
         public StatusEnum Status { get; set; }
+
         public Guid NextStepID { get; set; }
 
         //Request Value
@@ -44,12 +51,14 @@ namespace Capstone.ViewModel
     public class RequestUM
     {
         public Guid ID { get; set; }
+
         public string Description { get; set; }
     }
 
     public class ActionValueVM
     {
         public string Key { get; set; }
+
         public string Value { get; set; }
     }
 
@@ -71,6 +80,10 @@ namespace Capstone.ViewModel
 
     public class HandleFormVM
     {
+        public string InitiatorName { get; set; }
+
+        public string WorkFlowTemplateName { get; set; }
+
         public RequestVM Request { get; set; }
 
         public UserRequestActionVM UserRequestAction { get; set; }
@@ -85,31 +98,40 @@ namespace Capstone.ViewModel
     public class UserRequestActionVM
     {
         public IEnumerable<RequestFileVM> RequestFiles { get; set; }
+
         public IEnumerable<RequestValueVM> RequestValues { get; set; }
     }
 
     public class StaffRequestActionVM
     {
         public string FullName { get; set; }
+
         public string UserName { get; set; }
+
         public DateTime CreateDate { get; set; }
+
         public string Status { get; set; }
+
         public IEnumerable<RequestValueVM> RequestValues { get; set; }
     }
 
     public class RequestResultVM
     {
         public string WorkFlowTemplateName { get; set; }
+
         public string Status { get; set; }
+
         public IEnumerable<RequestResultStaffActionVM> StaffResult { get; set; }
     }
 
     public class RequestResultStaffActionVM
     {
         public string FullName { get; set; }
+
         public string UserName { get; set; }
+
         public DateTime CreateDate { get; set; }
+
         public string Status { get; set; }
-        //public IEnumerable<RequestValueVM> RequestValues { get; set; } // có cho user coi comment hay không ?
     }
 }
