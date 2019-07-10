@@ -114,7 +114,7 @@ namespace Capstone.Controllers
         }
 
         [HttpGet("GetNotificationByUserId")]
-        public ActionResult GetNotificationByUserId()
+        public ActionResult GetNotificationByUserId(NotificationEnum notificationType)
         {
             try
             {
@@ -124,7 +124,7 @@ namespace Capstone.Controllers
                 var userInDB = _userManager.FindByIdAsync(userID).Result;
                 if (userInDB == null) return BadRequest(WebConstant.UserNotExist);
 
-                var notification = _userNotificationService.GetByUserID(userID);
+                var notification = _userNotificationService.GetByUserIDAndNotificationType(userID, notificationType);
 
                 if (notification == null)
                 {
@@ -139,21 +139,7 @@ namespace Capstone.Controllers
                     var requestAction = _requestActionService.GetByID(notificationInDb.EventID);
                     var request = _requestService.GetByID(requestAction.RequestID);
 
-                    if (notificationInDb.NotificationType == NotificationEnum.UpdatedWorkflow)
-                    {
-                        //đang làm sai
-                        var result = new NotificationViewModel
-                        {
-                            ActorName = _userManager.FindByIdAsync(request.InitiatorID).Result.FullName,
-                            EventID = notificationInDb.EventID,
-                            Message = WebConstant.WorkflowUpdateMessage,
-                            NotificationType = notificationInDb.NotificationType,
-                            CreateDate = notificationInDb.CreateDate,
-                            NotificationTypeName = "UpdatedWorkflow"
-                        };
-                        data.Add(result);
-                    }
-                    else if (notificationInDb.NotificationType == NotificationEnum.CompletedRequest)
+                    if (notificationType == NotificationEnum.CompletedRequest && notificationInDb.NotificationType == NotificationEnum.CompletedRequest)
                     {
                         var result = new NotificationViewModel
                         {
@@ -167,19 +153,40 @@ namespace Capstone.Controllers
                         };
                         data.Add(result);
                     }
-                    else if (notificationInDb.NotificationType == NotificationEnum.ReceivedRequest)
+                    else
                     {
-                        var result = new NotificationViewModel
+                        if (notificationInDb.NotificationType == NotificationEnum.UpdatedWorkflow)
                         {
-                            ActorName = _userManager.FindByIdAsync(request.InitiatorID).Result.FullName,
-                            EventID = notificationInDb.EventID,
-                            Message = WebConstant.ReceivedRequestMessage,
-                            NotificationType = notificationInDb.NotificationType,
-                            NotificationTypeName = notificationInDb.NotificationType.ToString(),
-                            CreateDate = notificationInDb.CreateDate,
-                            IsHandled = item.IsHandled
-                        };
-                        data.Add(result);
+                            //đang làm sai
+                            var result = new NotificationViewModel
+                            {
+                                ActorName = _userManager.FindByIdAsync(request.InitiatorID).Result.FullName,
+                                EventID = notificationInDb.EventID,
+                                Message = WebConstant.WorkflowUpdateMessage,
+                                NotificationType = notificationInDb.NotificationType,
+                                CreateDate = notificationInDb.CreateDate,
+                                NotificationTypeName = "UpdatedWorkflow"
+                            };
+                            data.Add(result);
+                        }
+                        else if (notificationInDb.NotificationType == NotificationEnum.ReceivedRequest)
+                        {
+                            var result = new NotificationViewModel
+                            {
+                                ActorName = _userManager.FindByIdAsync(request.InitiatorID).Result.FullName,
+                                EventID = notificationInDb.EventID,
+                                Message = WebConstant.ReceivedRequestMessage,
+                                NotificationType = notificationInDb.NotificationType,
+                                NotificationTypeName = notificationInDb.NotificationType.ToString(),
+                                CreateDate = notificationInDb.CreateDate,
+                                IsHandled = item.IsHandled
+                            };
+                            data.Add(result);
+                        }
+                        else
+                        {
+                            return NotFound();
+                        }
                     }
                     //else if (notificationInDb.NotificationType == NotificationEnum.DeniedRequest)
                     //{
@@ -194,19 +201,16 @@ namespace Capstone.Controllers
                     //    };
                     //    data.Add(result);
                     //}
-                    else
-                    {
-                        return NotFound();
-                    }
+
                 }
 
-                var notficications = _userNotificationService.GetByUserID(userID);
+                //var notficications = _userNotificationService.GetByUserID(userID);
 
-                foreach (var item in notficications)
-                {
-                    item.IsRead = true;
-                }
-                _notificationService.Save();
+                //foreach (var item in notficications)
+                //{
+                //    item.IsRead = true;
+                //}
+                //_notificationService.Save();
 
                 return Ok(data);
             }

@@ -139,14 +139,16 @@ namespace Capstone.Controllers
             }
 
             //Check root && nodes   
-            int count = 0;
+            int countRoot = 0;
+            bool chkConnection = false;
+            string errNode = "";
             int root = 0;
 
             foreach (var node in model.Nodes)
             {
                 if (node.IsStart)
                 {
-                    count++;
+                    countRoot++;
                     root = node.NodeName;
 
                     if (node.IsEnd)
@@ -156,16 +158,24 @@ namespace Capstone.Controllers
                 }
 
                 //Check connection contain node
-                foreach (var connection in model.Connections)
-                {
-                    if (!connection.From.Equals(node.NodeName) && !connection.To.Equals(node.NodeName))
-                    {
-                        return Ok(node.NodeName + " is not has connection!");
-                    }
-                }
+                //    foreach (var connection in model.Connections)
+                //    {
+                //        if (connection.From.Equals(node.NodeName) && connection.To.Equals(node.NodeName))
+                //        {
+                //            chkConnection = true;
+                //        } else
+                //        {
+                //            errNode = node.NodeName.ToString();
+                //        }
+                //    }
             }
 
-            if (count > 1)
+            //if (!chkConnection)
+            //{
+            //    return Ok(errNode + " is not has connection!");
+            //}
+
+            if (countRoot > 1)
             {
                 return Ok("Therer are more than 2 root!");
             }
