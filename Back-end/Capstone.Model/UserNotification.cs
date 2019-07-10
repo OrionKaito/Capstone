@@ -18,7 +18,6 @@ namespace Capstone.Model
         public User User { get; set; }
 
         public bool IsRead { get; set; }
-        public bool IsHandled { get; set; }
         public bool IsDeleted { get; set; }
     }
 }

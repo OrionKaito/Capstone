@@ -10,7 +10,7 @@ namespace Capstone.Service
     public interface IUserNotificationService
     {
         IEnumerable<UserNotification> GetAll();
-        IEnumerable<UserNotification> GetByUserIDAndNotificationType(string ID, NotificationEnum notificationType);
+        IEnumerable<UserNotification> GetByUserIDAndNotificationType(string ID, NotificationEnum notificationType, bool isCheckHandled);
         int GetNumberOfNotification(string ID);
         UserNotification GetByID(Guid ID);
         void Create(UserNotification userNotification);
@@ -64,15 +64,24 @@ namespace Capstone.Service
             _unitOfWork.Commit();
         }
 
-        public IEnumerable<UserNotification> GetByUserIDAndNotificationType(string ID, NotificationEnum notificationType)
+        public IEnumerable<UserNotification> GetByUserIDAndNotificationType(string ID, NotificationEnum notificationType, bool isCheckHandled)
         {
             List<UserNotification> userNotificationList = new List<UserNotification>();
 
-            var notificationList = _notificationRepository.GetByNotificationType(notificationType);
+            List<Notification> notificationList = new List<Notification>();
+
+            if (isCheckHandled)
+            {
+                notificationList.AddRange(_notificationRepository.GetByNotificationTypeAndIsHandled(notificationType));
+            }
+            else
+            {
+                notificationList.AddRange(_notificationRepository.GetByNotificationType(notificationType));
+            }
 
             foreach (var item in notificationList)
             {
-                userNotificationList.Add(_userNotificationRepository.GetMany(u => u.IsDeleted == false 
+                userNotificationList.Add(_userNotificationRepository.GetMany(u => u.IsDeleted == false
                 && u.UserID.Equals(ID) && u.NotificationID == item.ID).FirstOrDefault());
             }
             return userNotificationList;
