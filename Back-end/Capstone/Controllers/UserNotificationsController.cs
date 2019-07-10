@@ -159,7 +159,7 @@ namespace Capstone.Controllers
                     {
                         ActorName = _userManager.FindByIdAsync(request.InitiatorID).Result.FullName,
                         EventID = notificationInDb.EventID,
-                        Message = WebConstant.CompletedRequestMessage,
+                        Message = notificationType == NotificationEnum.CompletedRequest ? WebConstant.CompletedRequestMessage : WebConstant.ReceivedRequestMessage,
                         NotificationType = notificationInDb.NotificationType,
                         NotificationTypeName = notificationInDb.NotificationType.ToString(),
                         CreateDate = notificationInDb.CreateDate,
