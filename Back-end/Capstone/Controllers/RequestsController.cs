@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Security.Claims;
 
@@ -154,7 +155,7 @@ namespace Capstone.Controllers
                 }
                 else
                 {
-                    var users = _userService.getUsersByPermissionID(workflowTemplateAction.PermissionToUseID);
+                    var users = _userService.getUsersByPermissionID(workflowTemplateAction.PermissionToUseID.GetValueOrDefault());
 
                     if (users != null && users.Any())
                     {
@@ -241,19 +242,20 @@ namespace Capstone.Controllers
 
                     if (nextStep.IsApprovedByLineManager)
                     {
-                        var user = _userManager.FindByIdAsync(userID).Result;
+                        var ownerID = _requestService.GetByID(model.RequestID).InitiatorID;
+                        var managerID = _userManager.FindByIdAsync(ownerID).Result.ManagerID;
 
                         UserNotification userNotification = new UserNotification
                         {
                             NotificationID = notification.ID,
-                            UserID = user.Id,
+                            UserID = managerID,
                         };
                         _userNotificationService.Create(userNotification);
 
                     }
                     else
                     {
-                        var users = _userService.getUsersByPermissionID(nextStep.PermissionToUseID);
+                        var users = _userService.getUsersByPermissionID(nextStep.PermissionToUseID.GetValueOrDefault());
 
                         if (users != null && users.Any())
                         {
@@ -284,11 +286,11 @@ namespace Capstone.Controllers
 
                     _notificationService.Create(notification);
 
-                    var owner = _requestService.GetByID(model.RequestID).User;
+                    var ownerID = _requestService.GetByID(model.RequestID).InitiatorID;
                     UserNotification userNotification = new UserNotification
                     {
                         NotificationID = notification.ID,
-                        UserID = owner.Id,
+                        UserID = ownerID,
                     };
                     _userNotificationService.Create(userNotification);
                 }
