@@ -10,7 +10,7 @@ namespace Capstone.Service
     public interface IUserNotificationService
     {
         IEnumerable<UserNotification> GetAll();
-        IEnumerable<UserNotification> GetByUserID(string ID);
+        IEnumerable<UserNotification> GetByUserIDAndNotificationType(string ID, NotificationEnum notificationType);
         int GetNumberOfNotification(string ID);
         UserNotification GetByID(Guid ID);
         void Create(UserNotification userNotification);
@@ -22,11 +22,14 @@ namespace Capstone.Service
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IUserNotificationRepository _userNotificationRepository;
+        private readonly INotificationRepository _notificationRepository;
 
-        public UserNotificationService(IUnitOfWork unitOfWork, IUserNotificationRepository userNotificationRepository)
+        public UserNotificationService(IUnitOfWork unitOfWork, IUserNotificationRepository userNotificationRepository
+            , INotificationRepository notificationRepository)
         {
             _unitOfWork = unitOfWork;
             _userNotificationRepository = userNotificationRepository;
+            _notificationRepository = notificationRepository;
         }
 
         public int GetNumberOfNotification(string ID)
@@ -61,9 +64,18 @@ namespace Capstone.Service
             _unitOfWork.Commit();
         }
 
-        public IEnumerable<UserNotification> GetByUserID(string ID)
+        public IEnumerable<UserNotification> GetByUserIDAndNotificationType(string ID, NotificationEnum notificationType)
         {
-            return _userNotificationRepository.GetAll().Where(u => u.IsDeleted == false && u.UserID.Equals(ID));
+            List<UserNotification> userNotificationList = new List<UserNotification>();
+
+            var notificationList = _notificationRepository.GetByNotificationType(notificationType);
+
+            foreach (var item in notificationList)
+            {
+                userNotificationList.Add(_userNotificationRepository.GetMany(u => u.IsDeleted == false 
+                && u.UserID.Equals(ID) && u.NotificationID == item.ID).FirstOrDefault());
+            }
+            return userNotificationList;
         }
     }
 }

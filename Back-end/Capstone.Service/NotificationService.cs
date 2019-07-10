@@ -11,6 +11,7 @@ namespace Capstone.Service
     {
         IEnumerable<Notification> GetAll();
         Notification GetByID(Guid ID);
+        IEnumerable<Notification> GetByNotificationType(NotificationEnum notificationType);
         void Create(Notification notification);
         void Delete(Notification notification);
         void Save();
@@ -47,6 +48,11 @@ namespace Capstone.Service
         public Notification GetByID(Guid ID)
         {
             return _notificationRepository.GetById(ID);
+        }
+
+        public IEnumerable<Notification> GetByNotificationType(NotificationEnum notificationType)
+        {
+            return _notificationRepository.GetByNotificationType(notificationType);
         }
 
         public void Save()

@@ -10,7 +10,7 @@ namespace Capstone.Service
     public interface IRequestActionService
     {
         IEnumerable<RequestAction> GetAll();
-        IEnumerable<RequestAction> GetExceptActorID(string ID);
+        IEnumerable<RequestAction> GetExceptActorIDAndRequestID(string ID, Guid RequestID);
         RequestAction GetByID(Guid ID);
         RequestAction GetByActorID(string ID, Guid RequestID);
         void Create(RequestAction requestAction);
@@ -48,9 +48,9 @@ namespace Capstone.Service
             return _requestActionRepository.GetMany(r => r.ActorID.Equals(ID) && r.RequestID == RequestID).FirstOrDefault();
         }
 
-        public IEnumerable<RequestAction> GetExceptActorID(string ID)
+        public IEnumerable<RequestAction> GetExceptActorIDAndRequestID(string ID, Guid RequestID)
         {
-            return _requestActionRepository.GetMany(r => !r.ActorID.Equals(ID));
+            return _requestActionRepository.GetMany(r => !r.ActorID.Equals(ID) && r.RequestID == RequestID);
         }
 
         public void Save()
