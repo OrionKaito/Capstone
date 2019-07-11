@@ -192,6 +192,15 @@ namespace Capstone.Controllers
 
             try
             {
+                //Get Notification By RequestActionID
+                var notificationByRequestActionID = _notificationService.GetByRequestActionID(model.RequestActionID);
+
+                //check if IsHandled request
+                if (notificationByRequestActionID.IsHandled == true)
+                {
+                    return BadRequest(WebConstant.RequestIsHandled);
+                }
+
                 //Begin transaction
                 _requestService.BeginTransaction();
 
@@ -296,6 +305,10 @@ namespace Capstone.Controllers
                     };
                     _userNotificationService.Create(userNotification);
                 }
+
+                //set IsHandled
+                notificationByRequestActionID.IsHandled = true;
+                _notificationService.Save();
 
                 //End transaction
                 _requestService.CommitTransaction();
@@ -455,6 +468,12 @@ namespace Capstone.Controllers
         {
             try
             {
+                var notificationByRequestActionID = _notificationService.GetByRequestActionID(requestActionID);
+                if (notificationByRequestActionID.IsHandled == true)
+                {
+                    return BadRequest(WebConstant.RequestIsHandled);
+                }
+
                 //** Get Request **//
                 var requestAction = _requestActionService.GetByID(requestActionID);
                 var request = _requestService.GetByID(requestAction.RequestID);
