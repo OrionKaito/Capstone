@@ -3,6 +3,7 @@ using Capstone.Helper;
 using Capstone.Model;
 using Capstone.Service;
 using Capstone.ViewModel;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -16,11 +17,15 @@ namespace Capstone.Controllers
     {
         private readonly IMapper _mapper;
         private readonly IUserGroupService _userGroupService;
+        private readonly UserManager<User> _userManager;
+        private readonly IGroupService _groupService;
 
-        public UserGroupsController(IMapper mapper, IUserGroupService userGroupService)
+        public UserGroupsController(IMapper mapper, IUserGroupService userGroupService, UserManager<User> userManager, IGroupService groupService)
         {
             _mapper = mapper;
             _userGroupService = userGroupService;
+            _userManager = userManager;
+            _groupService = groupService;
         }
 
         // POST: api/UserGroups
@@ -55,7 +60,14 @@ namespace Capstone.Controllers
                 if (data.Count() == 0) return NotFound(WebConstant.EmptyList);
                 foreach (var item in data)
                 {
-                    result.Add(_mapper.Map<UserGroupVM>(item));
+                    result.Add(new UserGroupVM
+                    {
+                        ID = item.ID,
+                        UserId = item.UserID,
+                        FullName = _userManager.FindByIdAsync(item.UserID).Result.FullName,
+                        GroupID = item.GroupID,
+                        GroupName = _groupService.GetByID(item.GroupID).Name
+                    });
                 }
                 return Ok(result);
             }
@@ -66,14 +78,22 @@ namespace Capstone.Controllers
         }
 
         // GET: api/UserGroups/5
-        [HttpGet]
-        public ActionResult<UserGroupVM> GetUserGroup(Guid ID)
+        [HttpGet("GetByUserGroupID")]
+        public ActionResult<UserGroupVM> GetByUserGroupID(Guid ID)
         {
             try
             {
-                var rs = _userGroupService.GetByID(ID);
-                if (rs == null) return NotFound(WebConstant.NotFound);
-                UserGroupVM result = _mapper.Map<UserGroupVM>(rs);
+                var userGroup = _userGroupService.GetByID(ID);
+                if (userGroup == null) return NotFound(WebConstant.NotFound);
+
+                UserGroupVM result = new UserGroupVM
+                {
+                    ID = userGroup.ID,
+                    UserId = userGroup.UserID,
+                    FullName = _userManager.FindByIdAsync(userGroup.UserID).Result.FullName,
+                    GroupID = userGroup.GroupID,
+                    GroupName = _groupService.GetByID(userGroup.GroupID).Name
+                };
                 return Ok(result);
             }
             catch (Exception e)
@@ -103,7 +123,7 @@ namespace Capstone.Controllers
                 return BadRequest(e.Message);
             }
         }
-        
+
         // DELETE: api/Usergroups
         [HttpDelete]
         public ActionResult DeleteUserGroup(Guid ID)
