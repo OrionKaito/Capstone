@@ -81,8 +81,12 @@ namespace Capstone.Service
 
             foreach (var item in notificationList)
             {
-                userNotificationList.Add(_userNotificationRepository.GetMany(u => u.IsDeleted == false
-                && u.UserID.Equals(ID) && u.NotificationID == item.ID).FirstOrDefault());
+                var userNotification = _userNotificationRepository.GetMany(u => u.IsDeleted == false
+                && u.UserID.Equals(ID) && u.NotificationID == item.ID).FirstOrDefault();
+                if (userNotification != null)
+                {
+                    userNotificationList.Add(userNotification);
+                }
             }
             return userNotificationList;
         }
