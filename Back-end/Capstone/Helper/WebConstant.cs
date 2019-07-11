@@ -32,5 +32,6 @@
         public static string EmailExisted = "Email is existed!";
         public static string AccountCreated = "Account created, please check your email!";
         public static string EmptyList = "List is empty";
+        public static string RequestIsHandled = "This request has been handled.";
     }
 }
