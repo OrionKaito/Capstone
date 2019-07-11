@@ -32,6 +32,8 @@ import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
 import { AddNewRequestComponent } from './add-new-request/add-new-request.component';
 import { HandleRequestComponent } from './handle-request/handle-request.component';
 import { AddHandleRequestComponent } from './add-handle-request/add-handle-request.component';
+import { SetGroupPermissionComponent } from './set-group-permission/set-group-permission.component';
+
 
 const config = {
   apiKey: "AIzaSyCBhMb1lO_1ioNypRrHS4I1q9sYxJ2thcs",
@@ -85,7 +87,8 @@ const config = {
     AddNewRequestComponent,
     DropzoneDirective,
     UploadTaskComponent,
-    AddHandleRequestComponent
+    AddHandleRequestComponent,
+    SetGroupPermissionComponent,
   ],
   entryComponents:[AddAccountComponent, AddPermissionComponent, AddNewRequestComponent, AddHandleRequestComponent ],
 

@@ -3,6 +3,8 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { ToastrService } from 'ngx-toastr';
 import { Router } from '@angular/router';
 import { LoadStaffAcountService } from 'app/service/load-staff-acount.service';
+import { SendRequest } from 'app/useClass/send-request';
+import { ApproveRequest } from 'app/useClass/approve-request';
 
 @Component({
   selector: 'app-add-handle-request',
@@ -10,6 +12,8 @@ import { LoadStaffAcountService } from 'app/service/load-staff-acount.service';
   styleUrls: ['./add-handle-request.component.scss']
 })
 export class AddHandleRequestComponent implements OnInit {
+  listCmt: any = [];
+  cmt;
   requestHandle: any;
   cmtHandle: any;
   requestActionHandleFile: any;
@@ -35,18 +39,20 @@ export class AddHandleRequestComponent implements OnInit {
     this.isHovering = event;
   }
   sendReqNextStep(nextStepID){
-    // this.actionValues.push({ "key": this.formKey, "value": this.formValue})
-    // var mdSendReq = new SendRequest("", this.actionValues, this.listURL, this.workFlowTemplateID, nextStepID);
-    // this.loadStaffAcountService.sendReq(mdSendReq).toPromise().then(data =>{
-    //   this.toastr.success('Success! ' , '' );
-    //   console.log(this.downloadURL);
-    //   console.log("aaaa");
-    //   console.log(this.listURL);
-    //   this.dialogRef.close();
-    // }
-    // )
+    this.listCmt.forEach(element => {
+      this.actionValues.push({ "key": element , "value": element});
+    });
+    var mdSendReq = new ApproveRequest(this.requestHandle.id, nextStepID, this.actionValues );
+    this.loadStaffAcountService.sendReqHandle(mdSendReq).toPromise().then(data =>{
+      this.toastr.success('Success! ' , '' );
+      this.dialogRef.close();
+    }
+    )
   }
-
+  closeForm(){
+    debugger;
+    this.dialogRef.close();
+  }
 
 
 
@@ -63,6 +69,10 @@ export class AddHandleRequestComponent implements OnInit {
 
     })
 
+  }
+  addNewCmt(){
+    var a = new String(this.cmt);
+    this.listCmt.push(a);
   }
 
 

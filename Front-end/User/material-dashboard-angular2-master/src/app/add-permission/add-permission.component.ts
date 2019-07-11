@@ -40,35 +40,30 @@ export class AddPermissionComponent implements OnInit {
         this.formData.name = this.saveData.name;
       })
     }
-    this.loadStaffAcountService.loadGroupData().toPromise().then(res => {
-      this.saveData1 = res;
-      this.dropdownList = [
-        // { item_id: 1, item_text: 'Mumbai' },
-        // { item_id: 2, item_text: 'Bangaluru' },
-        // { item_id: 3, item_text: 'Pune' },
-        // { item_id: 4, item_text: 'Navsari' },
-        // { item_id: 5, item_text: 'New Delhi' }
-      ];
-      this.saveData1.forEach(element => {
-        this.dropdownList.push({ item_id: element.id, item_text: element.name });
-      });
+    // this.loadStaffAcountService.loadGroupData().toPromise().then(res => {
+    //   this.saveData1 = res;
+    //   this.dropdownList = [
+    //   ];
+    //   this.saveData1.forEach(element => {
+    //     this.dropdownList.push({ item_id: element.id, item_text: element.name });
+    //   });
       
-      console.log(this.dropdownList);
-    })
-    this.selectedItems = [
-      // { item_id: 3, item_text: 'Pune' },
-      // { item_id: 4, item_text: 'Navsari' }
-    ];
+    //   console.log(this.dropdownList);
+    // })
+    // this.selectedItems = [
+    //   // { item_id: 3, item_text: 'Pune' },
+    //   // { item_id: 4, item_text: 'Navsari' }
+    // ];
     
-    this.dropdownSettings = {
-      singleSelection: false,
-      idField: 'item_id',
-      textField: 'item_text',
-      selectAllText: 'Select All',
-      unSelectAllText: 'UnSelect All',
-      itemsShowLimit: 3,
-      allowSearchFilter: true
-    };
+    // this.dropdownSettings = {
+    //   singleSelection: false,
+    //   idField: 'item_id',
+    //   textField: 'item_text',
+    //   selectAllText: 'Select All',
+    //   unSelectAllText: 'UnSelect All',
+    //   itemsShowLimit: 3,
+    //   allowSearchFilter: true
+    // };
 
   }
   onItemSelect(item: any) {
