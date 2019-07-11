@@ -95,10 +95,6 @@ export class ManagePermissionComponent implements OnInit {
     });
     this.callAll();
   }
-  EditWFAtTool() {
-
-  }
-
 }
 
  
