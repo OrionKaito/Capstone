@@ -6,7 +6,9 @@ namespace Capstone.ViewModel
     {
         public Guid ID { get; set; }
         public Guid PermissionID { get; set; }
+        public string PermissionName { get; set; }
         public Guid GroupID { get; set; }
+        public string GroupName { get; set; }
     }
 
     public class PermissionOfGroupCM

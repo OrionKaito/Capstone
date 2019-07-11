@@ -6,7 +6,9 @@ namespace Capstone.ViewModel
     {
         public Guid ID { get; set; }
         public string UserID { get; set; }
+        public string FullName { get; set; }
         public Guid RoleID { get; set; }
+        public string RoleName { get; set; }
     }
 
     public class UserRoleCM
