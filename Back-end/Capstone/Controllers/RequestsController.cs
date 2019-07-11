@@ -297,6 +297,10 @@ namespace Capstone.Controllers
                     _userNotificationService.Create(userNotification);
                 }
 
+                var notificationByEventID = _notificationService.GetByRequestActionID(model.RequestActionID);
+                notificationByEventID.IsHandled = true;
+                _notificationService.Save();
+
                 //End transaction
                 _requestService.CommitTransaction();
 
