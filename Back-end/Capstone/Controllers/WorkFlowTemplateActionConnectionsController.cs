@@ -177,7 +177,7 @@ namespace Capstone.Controllers
 
             if (countRoot > 1)
             {
-                return Ok("Therer are more than 2 root!");
+                return BadRequest("Therer are more than 2 root!");
             }
 
             g.model = model;
@@ -256,8 +256,15 @@ namespace Capstone.Controllers
                         // Iterate through UNVISITED nodes
                         foreach (int neighbour in Adj[current].Where(a => !visited.Contains(a)))
                         {
-                            visited.Add(neighbour);
-                            s.Push(neighbour);
+                            if (visited.Contains(neighbour))
+                            {
+                                errorMessage += "This node is not end [" + current + "]";
+                            }
+                            else
+                            {
+                                visited.Add(neighbour);
+                                s.Push(neighbour);
+                            }
                         }
                     }
                     else
