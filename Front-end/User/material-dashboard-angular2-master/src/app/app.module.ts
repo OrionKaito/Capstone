@@ -25,6 +25,10 @@ import { AddPermissionComponent } from './add-permission/add-permission.componen
 import * as firebase from "firebase/app";
 import { AngularFireModule } from '@angular/fire';
 import { AngularFirestoreModule } from '@angular/fire/firestore';
+import { AddNewRequestComponent } from './add-new-request/add-new-request.component';
+import { HandleRequestComponent } from './handle-request/handle-request.component';
+import { AddHandleRequestComponent } from './add-handle-request/add-handle-request.component';
+import { SetGroupPermissionComponent } from './set-group-permission/set-group-permission.component';
 import { AngularFireStorageModule } from '@angular/fire/storage';
 import { AngularFireAuthModule } from '@angular/fire/auth';
 import { DropzoneDirective } from './dropzone.directive';
@@ -84,15 +88,20 @@ const config = {
     AppComponent,
     AdminLayoutComponent,
     LoginComponent,
+    AddNewRequestComponent,
     AddAccountComponent,
     AddPermissionComponent,
     DropzoneDirective,
     EditAccountShapeComponent,
     MenuEditAccountShapeComponent,
+    UploadTaskComponent,
+    AddHandleRequestComponent,
+    SetGroupPermissionComponent,
 
   ],
+  
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
-  entryComponents:[AddAccountComponent, AddPermissionComponent],
+  entryComponents:[AddAccountComponent, AddPermissionComponent, AddNewRequestComponent, AddHandleRequestComponent ],
 
   providers: [],
   bootstrap: [AppComponent]

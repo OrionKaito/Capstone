@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild, HostListener } from '@angular/core';
 // import $ from 'jquery';
-import $ from 'jquery';
+import * as $ from 'jquery';
 import 'jquery-ui/ui/widgets/draggable.js';
 import { MatDialog } from '@angular/material/dialog';
 import { ToastrService } from 'ngx-toastr';
