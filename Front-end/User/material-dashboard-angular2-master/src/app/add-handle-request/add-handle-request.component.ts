@@ -12,6 +12,8 @@ import { ApproveRequest } from 'app/useClass/approve-request';
   styleUrls: ['./add-handle-request.component.scss']
 })
 export class AddHandleRequestComponent implements OnInit {
+  initiatorName;
+  workFlowTemplateName;
   listCmt: any = [];
   cmt;
   requestHandle: any;
@@ -39,6 +41,7 @@ export class AddHandleRequestComponent implements OnInit {
     this.isHovering = event;
   }
   sendReqNextStep(nextStepID){
+
     this.listCmt.forEach(element => {
       this.actionValues.push({ "key": element , "value": element});
     });
@@ -48,7 +51,11 @@ export class AddHandleRequestComponent implements OnInit {
       this.dialogRef.close();
     }
     )
+
+    
+
   }
+
   closeForm(){
     debugger;
     this.dialogRef.close();
@@ -61,6 +68,8 @@ export class AddHandleRequestComponent implements OnInit {
     this.workFlowTemplateID = this.data;
     this.loadStaffAcountService.getHandleForm(this.workFlowTemplateID).toPromise().then(res => {
       this.saveData = res;
+      this.initiatorName = this.saveData.initiatorName;
+      this.workFlowTemplateName = this.saveData.workFlowTemplateName;
       this.buttons = this.saveData.connections;
       this.requestHandle = this.saveData.request;
       this.requestActionHandleFile = this.saveData.userRequestAction.requestFiles;

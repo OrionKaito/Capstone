@@ -1,4 +1,4 @@
-<h4 class="dispaly-4">{{requestHandle.workFlowTemplateID}}
+<h4 class="dispaly-4">{{workFlowTemplateName}}
     <div (click)="closeForm()" class="icon-head-pup">
         <!-- <button type="button" class="btn btn-outline-dark ml-1" [mat-dialog-close]><i class="fa fa-close"></i> Close</button> -->
         <button type="button" [mat-dialog-close] ><i class="fa fa-close"></i>
@@ -6,9 +6,9 @@
     </div>
 </h4>
 <hr>
-<form #form="ngForm" autocomplete="off" (submit)="onSubmit()">
+<form #form="ngForm" autocomplete="off" >
   <div class="form-row">
-    Creater : {{requestHandle.initiatorID}}
+    initiatorName : {{initiatorName}}
   </div>
   <div class="form-row">
     Time : {{requestHandle.createDate | date:'yyyy-MM-dd HH:mm'}} 
@@ -23,6 +23,7 @@
   <div class="form-group">
     <button *ngFor="let item of buttons" id="item.nextStepID" (click)="sendReqNextStep(item.nextStepID)"
       class="btn btn-dark"><i class="fa fa-database"></i> {{item.connectionTypeName}}</button> 
+      <!-- <button id="ádasd"   > adsdasd</button>  -->
       <button type="button" class="btn btn-outline-dark ml-1" [mat-dialog-close]><i class="fa fa-close"></i> Close</button>
   </div>
 
@@ -39,7 +40,7 @@
 </div>
 <div *ngFor="let item of cmtHandle">
     <div *ngFor="let item2 of item.requestValues">
-      <div class="form-row"><strong> {{item.name}} </strong>({{item2.value}}) 
+      <div class="form-row"><strong> {{item.fullName}} </strong>({{item.userName}}) 
          <!-- <label>{{item.createDate  | date:'yyyy-MM-dd HH:mm'}} </label> -->
         </div>
         <div class="form-row">  {{item2.value}}    
