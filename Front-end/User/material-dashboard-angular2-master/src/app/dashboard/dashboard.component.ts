@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import * as Chartist from 'chartist';
 import { LoadStaffAcountService } from 'app/service/load-staff-acount.service';
-import { MessagingService } from 'app/service/messaging.service';
 
 
 @Component({
@@ -10,9 +9,8 @@ import { MessagingService } from 'app/service/messaging.service';
   styleUrls: ['./dashboard.component.css']
 })
 export class DashboardComponent implements OnInit {
-  message;
   users: any= [];
-  constructor(private loadStaffAcountService: LoadStaffAcountService, private messagingService: MessagingService) { }
+  constructor(private loadStaffAcountService: LoadStaffAcountService) { }
   startAnimationForLineChart(chart){
       let seq: any, delays: any, durations: any;
       seq = 0;
@@ -70,13 +68,6 @@ export class DashboardComponent implements OnInit {
       seq2 = 0;
   };
   ngOnInit() {
-    // const userId = 'user001';
-
-    // this.messagingService.requestPermission(userId)
-    // this.messagingService.receiveMessage()
-    // this.message = this.messagingService.currentMessage
-
-
       /* ----------==========     Daily Sales Chart initialization For Documentation    ==========---------- */
 
       var dataDailySalesChart: any = {

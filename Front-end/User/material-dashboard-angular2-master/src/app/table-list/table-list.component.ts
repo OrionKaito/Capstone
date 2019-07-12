@@ -27,20 +27,19 @@ export class TableListComponent implements OnInit {
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild(MatPaginator) paginator: MatPaginator;
   constructor(private toastr: ToastrService, private router: Router, private dialog: MatDialog,
-    private loadStaffAcountService: LoadStaffAcountService, private LoginService: LoginService) { }
+    private loadStaffAcountService: LoadStaffAcountService, private LoginService: LoginService,) { }
 
   ngOnInit() {
     this.callAll();
   }
   callAll() {
-    this.loadStaffAcountService.loadWorkFlow().toPromise().then(data => {
+     this.loadStaffAcountService.loadWorkFlow().toPromise().then(data => {
+       this.users= data;
 
-      this.users = data;
       this.listData = new MatTableDataSource(this.users);
       this.listData.sort = this.sort;
       this.listData.paginator = this.paginator;
-
-    })
+  })
   }
 
   onSearchClear() {
@@ -95,5 +94,13 @@ export class TableListComponent implements OnInit {
   EditWFAtTool() {
 
   }
+
+  public navigateEdit(id) {
+    // navigate qua trang edit với id của User
+    // Mock IdUser
+ var a= "3907939d-e84a-4031-d66e-08d705d897af"
+    this.router.navigate(['edit-account/', a]);
+  }
+
 }
 

@@ -1,5 +1,5 @@
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { NgModule } from '@angular/core';
+import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 import { RouterModule } from '@angular/router';
@@ -15,9 +15,10 @@ import {
 } from '@agm/core';
 import { AdminLayoutComponent } from './layouts/admin-layout/admin-layout.component';
 import { CommonModule } from '@angular/common';
-import { MatTableModule, MatTabsModule, MatIconModule, MatPaginatorModule, MatSortModule, MatDialogModule } from '@angular/material';
+import { MatTableModule, MatTabsModule, MatIconModule, MatPaginatorModule, MatSortModule, MatDialogModule, MatSelectModule, MatFormFieldModule, MatChipsModule } from '@angular/material';
 import { CdkTable, CdkTableModule } from '@angular/cdk/table';
 import { AddAccountComponent } from './add-account/add-account.component';
+import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
 import { ToastrModule } from 'ngx-toastr';
 import { ManagePermissionComponent } from './manage-permission/manage-permission.component';
 import { AddPermissionComponent } from './add-permission/add-permission.component';
@@ -28,12 +29,10 @@ import { AngularFireStorageModule } from '@angular/fire/storage';
 import { AngularFireAuthModule } from '@angular/fire/auth';
 import { DropzoneDirective } from './dropzone.directive';
 import { UploadTaskComponent } from './upload-task/upload-task.component';
-import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
-import { AddNewRequestComponent } from './add-new-request/add-new-request.component';
-import { HandleRequestComponent } from './handle-request/handle-request.component';
-import { AddHandleRequestComponent } from './add-handle-request/add-handle-request.component';
-import { SetGroupPermissionComponent } from './set-group-permission/set-group-permission.component';
-
+import { EditAccountShapeComponent } from './table-list/edit-account-shape/edit-account-shape.component';
+import { MenuEditAccountShapeComponent } from './table-list/edit-account-shape/menu-edit-account-shape/menu-edit-account-shape.component';
+import { MDBBootstrapModule, ButtonsModule, WavesModule,
+  InputsModule, CollapseModule, ModalModule, IconsModule } from 'angular-bootstrap-md';
 
 const config = {
   apiKey: "AIzaSyCBhMb1lO_1ioNypRrHS4I1q9sYxJ2thcs",
@@ -70,7 +69,10 @@ const config = {
     MatTableModule,
     AgmCoreModule.forRoot({
       apiKey: 'YOUR_GOOGLE_MAPS_API_KEY'
-    })
+    }),
+    ButtonsModule, WavesModule, CollapseModule, InputsModule, IconsModule,
+    MatSelectModule, MatFormFieldModule, MatChipsModule,
+    MDBBootstrapModule.forRoot()
 
 
   ],
@@ -84,13 +86,13 @@ const config = {
     LoginComponent,
     AddAccountComponent,
     AddPermissionComponent,
-    AddNewRequestComponent,
     DropzoneDirective,
-    UploadTaskComponent,
-    AddHandleRequestComponent,
-    SetGroupPermissionComponent,
+    EditAccountShapeComponent,
+    MenuEditAccountShapeComponent,
+
   ],
-  entryComponents:[AddAccountComponent, AddPermissionComponent, AddNewRequestComponent, AddHandleRequestComponent ],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA],
+  entryComponents:[AddAccountComponent, AddPermissionComponent],
 
   providers: [],
   bootstrap: [AppComponent]
