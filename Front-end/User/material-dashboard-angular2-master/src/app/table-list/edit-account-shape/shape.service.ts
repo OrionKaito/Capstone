@@ -22,14 +22,14 @@ export class ShapeService {
     public postJsonFile(json) {
       // return this.http.post(this.urlApi + 'post-data-json', json, {headers : this.tokenHeader });
       var send = {
-        "name": "abc",
+        "name": json,
         "data": json
       }
       return this.http.post(this.urlApi + '/api/ActionTypes', send);
     }
 
     public getJsonByUserId(id) {
-      id= "3907939d-e84a-4031-d66e-08d705d897af";
+      id= "c2052087-a290-4b70-9742-08d70789ab22";
       return this.http.get(this.urlApi + '/api/ActionTypes/GetByID?ID=' + id);
 
     }

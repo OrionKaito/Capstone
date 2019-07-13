@@ -21,24 +21,24 @@ export class MenuEditAccountShapeComponent implements OnInit {
       idInput: 'input2',
       idText: ''
     },
-    {
-      class: 'example-box2 peach-gradient',
-      id: '',
-      idInput: 'input3',
-      idText: ''
-    },
-    {
-      class: 'example-box3 blue-gradient',
-      id: '',
-      idInput: 'input4',
-      idText: ''
-    },
-    {
-      class: 'example-box4',
-      id: '',
-      idInput: 'input5',
-      idText: ''
-    },
+    // {
+    //   class: 'example-box2 peach-gradient',
+    //   id: '',
+    //   idInput: 'input3',
+    //   idText: ''
+    // },
+    // {
+    //   class: 'example-box3 blue-gradient',
+    //   id: '',
+    //   idInput: 'input4',
+    //   idText: ''
+    // },
+    // {
+    //   class: 'example-box4',
+    //   id: '',
+    //   idInput: 'input5',
+    //   idText: ''
+    // },
   ];
 
   constructor() { }

@@ -11,6 +11,7 @@ import { ModalDirective } from 'angular-bootstrap-md';
 import { FormControl, FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { ShapeService } from './shape.service';
 import { ActivatedRoute } from '@angular/router';
+import { element } from '@angular/core/src/render3';
 
 @Component({
   selector: 'app-edit-account-shape',
@@ -19,6 +20,8 @@ import { ActivatedRoute } from '@angular/router';
 })
 export class EditAccountShapeComponent implements OnInit {
   @ViewChild('basicModal') public showModalOnClick: ModalDirective;
+
+  properties: any;
 
   public dataModel: any;
 
@@ -67,14 +70,29 @@ export class EditAccountShapeComponent implements OnInit {
   ) { }
   saveActiontype;
   ngOnInit() {
+     this.properties = {name: "",
+    description:"",
+    permissionToUseID:"",
+    isApprovedByLineManager:false,
+    start:false,
+    end:false
+  }
+
+    
+
+
     this.activatedRoute.params.subscribe(item => {
       if (item.id) {
-
+        //load dữ liệu của thằng này kiểu json để show lên lại
         this.shapeService.getJsonByUserId(item.id).toPromise().then(res => {
 
           if (res) {
             this.saveActiontype = res;
+            var b = this.saveActiontype.data;
+            console.log(b);
             var a = JSON.parse(this.saveActiontype.data);
+            console.log(a);
+            // var c = a.json;
             console.log("thu nhat");
             this.addImportEnd(a);
             console.log("ádasd");
@@ -84,23 +102,27 @@ export class EditAccountShapeComponent implements OnInit {
     });
     this.getDropdownList();
   }
-
+  //lấy list permission
   public getDropdownList() {
     this.shapeService.getDropdownList().toPromise().then((res: any) => {
       if (res) {
         this.getListPer = res;
         this.getListPer.forEach(item => {
-          this.listDropdown.push(item.name);
+          this.listDropdown.push(item);
         });
       }
 
     })
   }
-
+  // hình như là để vẽ mũi tên, k chắc lắm, hình như đúng rồi, haha
+  //item này là của menuList1, menuList1 hình như là để chứa các hình
   public dropImageBottom(item) {
+    //lấy id của hình ra, bỏ vô subClass
     this.subClass.push(item.id);
+    //cả đoạn này chỉ để đặt tên cho mũi tên + ghi id  div kết nối
     if (this.subClass.length > 1) {
       let count: any;
+      //mũi tên đầu dặt tên là arrow0
       if (this.listArrow.length <= 0) {
         count = 0;
         this.listClass.push({
@@ -108,6 +130,7 @@ export class EditAccountShapeComponent implements OnInit {
           idArrow: 'arrow' + count
         });
       } else {
+        //những mũi tên tiếp theo nó lấy mũi đầu cắt chuỗi lấy số rồi cộng lên
         const subCount = this.listArrow[this.listArrow.length - 1];
         count = subCount.split('arrow');
         this.listClass.push({
@@ -119,21 +142,32 @@ export class EditAccountShapeComponent implements OnInit {
         });
       }
       // Gọi hàm vẽ mủi tên
+      //(chl) cái tham số bottom này chưa hiểm lắm
       this.draw('bottom');
     }
   }
 
+  //sau khi click hình bên trái thì tạo 1 hình phía bên phải (chl)
   public drop(event) {
     const subEvent = event;
     const count = this.menuList1.length;
+
     // Tạo id động cho từng hình
     subEvent.id = 'a' + count;
-    subEvent.idText = 'form' + count;
-    subEvent.formControlName = 'form' + count;
-    subEvent.dropdown = this.listDropdown;
+    subEvent.name = 'FormName' + count;
+    subEvent.description = 'FormDescription' + count;
+    subEvent.permissionToUseID = "0";
+    subEvent.isApprovedByLineManager = false;
     subEvent.start = true;
     subEvent.end = true;
+
+    //subEvent.idText = 'form' + count;
+    subEvent.formControlName = 'form' + count;
+    // subEvent.dropdown = this.listDropdown;
+
     debugger;
+
+    // thêm vô 2 cái list
     this.menuList1.push(JSON.parse(JSON.stringify(subEvent)));
     this.subMenu.push(JSON.parse(JSON.stringify(subEvent)));
 
@@ -143,7 +177,7 @@ export class EditAccountShapeComponent implements OnInit {
       this.secondFormGroup = this.formBuilder.group(abc);
     }
 
-
+    //hình như thằng ni là thằng để sinh ra
     this.menuList1.forEach(item => {
       this.secondFormGroup.addControl(item.formControlName, new FormControl(''));
     })
@@ -152,6 +186,7 @@ export class EditAccountShapeComponent implements OnInit {
     setTimeout(() => {
       this.initDraw();
     }, 500);
+
     // Show message
     if (this.menuList1.length < 2) {
       this.toastr.info('Di chuyển hình !!', '', { timeOut: 5000 });
@@ -162,6 +197,7 @@ export class EditAccountShapeComponent implements OnInit {
 
   }
 
+  //import json file từ máy
   public importJson(fileList: FileList): void {
     const file = fileList[0];
     if (file.type !== 'application/json') {
@@ -178,29 +214,54 @@ export class EditAccountShapeComponent implements OnInit {
       fileReader.readAsText(file);
     }
   }
-
+  //chuyển file json thành hình
   public addImportEnd(dataImport: any) {
-
+    console.log(JSON.stringify(dataImport));
     this.menuList1 = [];
     this.listArrow = [];
     const subData = [];
-    if (dataImport.length <= 0) {
+    // if (dataImport.length <= 0) {
+    //   this.toastr.error('Lỗi định dạng !!');
+    // } else {
+    //   // this.progress.show();
+    //   //lấy ra thôi, do để json dạng mảng nên ms lấy lenght rồi trừ rắc rối ri
+    //   //cả đoạn này chỉ để check id
+    //   for (let i = 0; i < (dataImport.length - 1); i++) {
+    //     // xem có trùng thằng nào k
+    //     const exitKey = this.isExistImport(subData, dataImport[i].key[0][0].id);
+    //     // nếu k trùng thì push vô list
+    //     if (exitKey === -1) {
+    //       subData.push(dataImport[i].key[0][0]);
+    //     }
+    //     for (let e = 0; e < dataImport[i].option.length; e++) {
+    //       const exitOption = this.isExistImport(subData, dataImport[i].option[e][0].id);
+    //       if (exitOption === -1) {
+    //         subData.push(dataImport[i].option[e][0]);
+    //       }
+    //     }
+    //   }
+    // }
+
+
+    if (dataImport.action.length <= 0) {
       this.toastr.error('Lỗi định dạng !!');
     } else {
       // this.progress.show();
-      for (let i = 0; i < (dataImport.length - 1); i++) {
-        const exitKey = this.isExistImport(subData, dataImport[i].key[0][0].id);
+      //lấy ra thôi, do để json dạng mảng nên ms lấy lenght rồi trừ rắc rối ri
+      //cả đoạn này chỉ để check id
+       for (let i = 0; i < dataImport.action.length ; i++) {
+        // xem có trùng thằng nào k
+        const exitKey = this.isExistImport(subData, dataImport.action[i].id);
+        // nếu k trùng thì push vô list
         if (exitKey === -1) {
-          subData.push(dataImport[i].key[0][0]);
-        }
-        for (let e = 0; e < dataImport[i].option.length; e++) {
-          const exitOption = this.isExistImport(subData, dataImport[i].option[e][0].id);
-          if (exitOption === -1) {
-            subData.push(dataImport[i].option[e][0]);
-          }
+          subData.push(dataImport.action[i]);
         }
       }
     }
+
+
+    // thằng này là lấy chữ form1,2,3 chi đó ra, nhưng chưa hieru lắm để làm j
+    //hình như để gọi thư viện hổ trợ sinh ra
     const abc = {};
     abc[subData[0].formControlName] = [''];
     this.secondFormGroup = this.formBuilder.group(abc);
@@ -210,8 +271,9 @@ export class EditAccountShapeComponent implements OnInit {
       this.secondFormGroup.get(subData[i].formControlName).setValue(subData[i].value);
     }
 
+    //gắn vô 2 bién
     this.menuList1 = subData;
-    this.listClass = dataImport[dataImport.length - 1];
+    this.listClass = dataImport.arrow;
     if (this.menuList1.length <= 0) {
       this.toastr.error('Lỗi định dạng !!');
     } else {
@@ -223,6 +285,8 @@ export class EditAccountShapeComponent implements OnInit {
     }
   }
 
+
+  //xuất file json
   public exportJson() {
     let dataKey: any;
     let dataOption: any;
@@ -232,56 +296,139 @@ export class EditAccountShapeComponent implements OnInit {
     let classKey: any;
     let classOption: any;
 
-    const exportJson = [];
-    for (let i = 0; i < this.listClass.length; i++) {
+    //const exportJson = [];
+    let exportJson : any={action : [], arrow : []};
+
+    // for (let i = 0; i < this.listClass.length; i++) {
+    //   let obj;
+    //   // Lấy value từ id input tag
+    //   // dataKey = $('#' + this.listClass[i].idDiv[0].replace('a', 'form').toString())[0].value;
+    //   const subControl = this.listClass[i].idDiv[0].replace('a', 'form');
+    //   dataKey = this.secondFormGroup.controls[subControl].value;
+    //   positionKey = $('#' + this.listClass[i].idDiv[0]);
+    //   classKey = this.menuList1.filter(item => item.id === this.listClass[i].idDiv[0]);
+    //   classKey[0].positionTop = positionKey.position().top;
+    //   classKey[0].positionLeft = positionKey.position().left;
+    //   classKey[0].value = dataKey;
+    //   // dataOption = $('#' + this.listClass[i].idDiv[1].replace('a', 'form').toString())[0].value;
+    //   const subControlOption = this.listClass[i].idDiv[1].replace('a', 'form');
+    //   dataOption = this.secondFormGroup.controls[subControlOption].value;
+    //   positionOption = $('#' + this.listClass[i].idDiv[1]);
+    //   classOption = this.menuList1.filter(item => item.id === this.listClass[i].idDiv[1]);
+    //   classOption[0].positionTop = positionOption.position().top;
+    //   classOption[0].positionLeft = positionOption.position().left;
+    //   classOption[0].value = dataOption;
+    //   const index = this.isExist(exportJson, dataKey);
+    //   if (index === -1) {
+    //     obj = {
+    //       key: [
+    //         classKey
+    //       ],
+    //       option: [
+    //         classOption
+    //       ]
+    //     };
+    //   } else {
+    //     (exportJson[index].option).push(classOption);
+    //   }
+    //   if (obj) {
+    //     exportJson.push(obj);
+    //   }
+    // }
+
+    // for (let i = 0; i < this.listClass.length; i++) {
+    //   let obj;
+    //   //đổi id từ a thành form thôi
+    //   const subControl = this.listClass[i].idDiv[0].replace('a', 'form');
+    //   // ???(chl)  hình như để lấy value từ input thôi hay là gôm ID lại để check coi  có 2 cái nào trùng nhau k á
+    //   dataKey = this.secondFormGroup.controls[subControl].value;
+    //   // lấy ra id chính thằng đó để lấy vị trí
+    //   positionKey = $('#' + this.listClass[i].idDiv[0]);
+    //   // lọc ra những thằng làm đầu mũi tên
+    //   classKey = this.menuList1.filter(item => item.id === this.listClass[i].idDiv[0]);
+    //   // thêm 2 thuộc tính
+    //   classKey[0].positionTop = positionKey.position().top;
+    //   classKey[0].positionLeft = positionKey.position().left;
+    //   // gắn ngược lại thằng kia để làm gì đây? cảm giác như nó éo làm dc j 
+    //   classKey[0].value = dataKey;
+
+    //   // tương tự cho thằng option
+    //   const subControlOption = this.listClass[i].idDiv[1].replace('a', 'form');
+    //   dataOption = this.secondFormGroup.controls[subControlOption].value;
+    //   positionOption = $('#' + this.listClass[i].idDiv[1]);
+    //   classOption = this.menuList1.filter(item => item.id === this.listClass[i].idDiv[1]);
+    //   classOption[0].positionTop = positionOption.position().top;
+    //   classOption[0].positionLeft = positionOption.position().left;
+    //   classOption[0].value = dataOption;
+
+    //   //đoạn này bắt đầu thêm vô nè
+
+    //   // check id trùng k?
+    //   // mà nó rổng, thì check làm cc j nhỉ?
+    //   //kệ cmn đi
+    //   const index = this.isExist(exportJson, dataKey);
+    //   // đoạn ni thêm cái đầu vô, là mấy cái action á
+    //   if (index === -1) {
+    //     obj = {
+    //       key: [
+    //         classKey
+    //       ],
+    //       option: [
+    //         classOption
+    //       ]
+    //     };
+    //   } else {
+    //     (exportJson[index].option).push(classOption);
+    //   }
+    //   if (obj) {
+    //     exportJson.push(obj);
+    //   }
+
+
+    // }
+
+
+
+
+
+    for (let i = 0; i < this.menuList1.length; i++) {
       let obj;
-      // Lấy value từ id input tag
-      // dataKey = $('#' + this.listClass[i].idDiv[0].replace('a', 'form').toString())[0].value;
-      const subControl = this.listClass[i].idDiv[0].replace('a', 'form');
-      dataKey = this.secondFormGroup.controls[subControl].value;
-      positionKey = $('#' + this.listClass[i].idDiv[0]);
-      classKey = this.menuList1.filter(item => item.id === this.listClass[i].idDiv[0]);
-      classKey[0].positionTop = positionKey.position().top;
-      classKey[0].positionLeft = positionKey.position().left;
-      classKey[0].value = dataKey;
-      // dataOption = $('#' + this.listClass[i].idDiv[1].replace('a', 'form').toString())[0].value;
-      const subControlOption = this.listClass[i].idDiv[1].replace('a', 'form');
-      dataOption = this.secondFormGroup.controls[subControlOption].value;
-      positionOption = $('#' + this.listClass[i].idDiv[1]);
-      classOption = this.menuList1.filter(item => item.id === this.listClass[i].idDiv[1]);
-      classOption[0].positionTop = positionOption.position().top;
-      classOption[0].positionLeft = positionOption.position().left;
-      classOption[0].value = dataOption;
-      const index = this.isExist(exportJson, dataKey);
-      if (index === -1) {
-        obj = {
-          key: [
-            classKey
-          ],
-          option: [
-            classOption
-          ]
-        };
-      } else {
-        (exportJson[index].option).push(classOption);
-      }
-      if (obj) {
-        exportJson.push(obj);
-      }
+
+     
+     
+      positionKey = $('#' + this.menuList1[i].id);
+      // lọc ra những thằng làm đầu mũi tên
+      classKey = this.menuList1[i];
+      // thêm 2 thuộc tính
+      classKey.positionTop = positionKey.position().top;
+      classKey.positionLeft = positionKey.position().left;
+        exportJson.action.push(classKey);
+      
+
+
     }
     if (exportJson.length <= 0) {
       this.toastr.error('Chưa có dữ liệu !!');
-    } else if (dataKey === '' || dataOption === '') {
-      this.toastr.error('Vui lòng nhập dữ liệu !!');
-    } else {
-      exportJson.push(this.listClass);
+    } else
+    // if (dataKey === '' || dataOption === '') {
+    //   this.toastr.error('Vui lòng nhập dữ liệu !!');
+    // } else 
+    {
+      //đẩy mũi tên vô có 1 dòng vậy thôi à?
+      this.listClass.forEach(element=>{
+        exportJson.arrow.push(element);
+      })
+      
+
+      //lưu  lại
       const json = JSON.stringify(exportJson);
       const blob = new Blob([json], { type: 'application/json' });
-      // saveAs(blob, 'data' + this.convertDateFileName(new Date()) + '.json');
+      saveAs(blob, 'data' + this.convertDateFileName(new Date()) + '.json');
+      //đoạn này mình chỉnh sửa để push dc lên server
       const data = {
         json: exportJson
       }
-      var a = JSON.stringify(data);
+      var a = JSON.stringify(exportJson);
       debugger;
       this.shapeService.postJsonFile(a).subscribe((res: any) => {
       }, (err) => {
@@ -319,6 +466,8 @@ export class EditAccountShapeComponent implements OnInit {
     return value.format('_YYYYMMDD' + 'hhmmss');
   }
 
+
+  //hàm này để vẽ, nhưng chưa biết là vẽ gì, là vẽ mũi tên đó à, ahihi
   public draw(location) {
     // Có đủ hai điểm để vẽ mủi tên
     if (this.subClass.length > 1) {
@@ -514,16 +663,16 @@ export class EditAccountShapeComponent implements OnInit {
     const that = this;
     const id = [];
     let subId = '';
+
     // Push từng id riêng biệt cho hình
     for (let i = 0; i < this.menuList1.length; i++) {
-
       id.push('#' + this.menuList1[i].id);
-
     }
     for (let e = 0; e < id.length; e++) {
       (e + 1) === id.length ? subId += id[e] : subId += id[e] + ',';
     }
     //chien: chac la ho tro noi sau khi ve, thêm hình
+    //khi ve thi goi cai thang ve lai
     $(subId).draggable({
       drag: function (event, ui) {
         const idDrag = event.target.id;
@@ -564,6 +713,8 @@ export class EditAccountShapeComponent implements OnInit {
     localStorage.clear();
   }
 
+
+  //cái ni để nhấn nút start vs end
   public startShape(item) {
     this.menuList1.forEach(element => {
       if (element.id === item.id) {
@@ -574,6 +725,14 @@ export class EditAccountShapeComponent implements OnInit {
     });
   }
 
+  showProperties(item) {
+    this.menuList1.forEach(element => {
+      if (element.id === item.id) {
+        this.properties = element;
+      }
+    });
+
+  }
   public endShape(item) {
     this.menuList1.forEach(element => {
       if (element.id === item.id) {
