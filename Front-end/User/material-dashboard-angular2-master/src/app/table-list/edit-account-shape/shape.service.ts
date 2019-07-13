@@ -29,9 +29,8 @@ export class ShapeService {
     }
 
     public getJsonByUserId(id) {
-      id= "c2052087-a290-4b70-9742-08d70789ab22";
+      id= "7397e241-baac-4d6b-d77d-08d707a80d16";
       return this.http.get(this.urlApi + '/api/ActionTypes/GetByID?ID=' + id);
-
     }
 
 }

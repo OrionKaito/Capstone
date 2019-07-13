@@ -22,6 +22,9 @@ export class EditAccountShapeComponent implements OnInit {
   @ViewChild('basicModal') public showModalOnClick: ModalDirective;
 
   properties: any;
+  propertiesArr: any;
+  checkIsAction: boolean;
+  checkIsArrow: boolean;
 
   public dataModel: any;
 
@@ -34,6 +37,7 @@ export class EditAccountShapeComponent implements OnInit {
   public subHeight = 0;
   // Tạo height động cho thẻ svg
   public heightSVG = '100vh';
+
 
   public subClass = [];
   public classQuerySelector = [];
@@ -70,15 +74,19 @@ export class EditAccountShapeComponent implements OnInit {
   ) { }
   saveActiontype;
   ngOnInit() {
-     this.properties = {name: "",
-    description:"",
-    permissionToUseID:"",
-    isApprovedByLineManager:false,
-    start:false,
-    end:false
-  }
+    this.properties = {
+      name: "",
+      description: "",
+      permissionToUseID: "",
+      isApprovedByLineManager: false,
+      start: false,
+      end: false
+    }
+    this.propertiesArr = {
+      name: ""
+    }
 
-    
+
 
 
     this.activatedRoute.params.subscribe(item => {
@@ -127,7 +135,9 @@ export class EditAccountShapeComponent implements OnInit {
         count = 0;
         this.listClass.push({
           idDiv: this.subClass,
-          idArrow: 'arrow' + count
+          idArrow: 'arrow' + count,
+          name: 'arrow' + count
+
         });
       } else {
         //những mũi tên tiếp theo nó lấy mũi đầu cắt chuỗi lấy số rồi cộng lên
@@ -138,7 +148,8 @@ export class EditAccountShapeComponent implements OnInit {
           idDiv: this.subClass,
           // idArrow: 2 điểm có một mủi tên
           // idArrow: 'arrow' + this.listClass.length
-          idArrow: 'arrow' + (+count[1] + 1)
+          idArrow: 'arrow' + (+count[1] + 1),
+          name: 'arrow' + (+count[1] + 1)
         });
       }
       // Gọi hàm vẽ mủi tên
@@ -249,7 +260,7 @@ export class EditAccountShapeComponent implements OnInit {
       // this.progress.show();
       //lấy ra thôi, do để json dạng mảng nên ms lấy lenght rồi trừ rắc rối ri
       //cả đoạn này chỉ để check id
-       for (let i = 0; i < dataImport.action.length ; i++) {
+      for (let i = 0; i < dataImport.action.length; i++) {
         // xem có trùng thằng nào k
         const exitKey = this.isExistImport(subData, dataImport.action[i].id);
         // nếu k trùng thì push vô list
@@ -297,7 +308,7 @@ export class EditAccountShapeComponent implements OnInit {
     let classOption: any;
 
     //const exportJson = [];
-    let exportJson : any={action : [], arrow : []};
+    let exportJson: any = { action: [], arrow: [] };
 
     // for (let i = 0; i < this.listClass.length; i++) {
     //   let obj;
@@ -394,16 +405,16 @@ export class EditAccountShapeComponent implements OnInit {
     for (let i = 0; i < this.menuList1.length; i++) {
       let obj;
 
-     
-     
+
+
       positionKey = $('#' + this.menuList1[i].id);
       // lọc ra những thằng làm đầu mũi tên
       classKey = this.menuList1[i];
       // thêm 2 thuộc tính
       classKey.positionTop = positionKey.position().top;
       classKey.positionLeft = positionKey.position().left;
-        exportJson.action.push(classKey);
-      
+      exportJson.action.push(classKey);
+
 
 
     }
@@ -415,10 +426,10 @@ export class EditAccountShapeComponent implements OnInit {
     // } else 
     {
       //đẩy mũi tên vô có 1 dòng vậy thôi à?
-      this.listClass.forEach(element=>{
+      this.listClass.forEach(element => {
         exportJson.arrow.push(element);
       })
-      
+
 
       //lưu  lại
       const json = JSON.stringify(exportJson);
@@ -694,9 +705,21 @@ export class EditAccountShapeComponent implements OnInit {
   }
 
   public openDialog(item) {
-    localStorage.setItem('arrow', item);
-    this.showModalOnClick.show();
-    this.enableDeleteArrow = true;
+    debugger;
+    this.listClass.forEach(element => {
+      if (element.idArrow === item) {
+        this.propertiesArr = element;
+        this.checkIsAction = false;
+        this.checkIsArrow = true;
+      }
+    });
+    if (localStorage.getItem('arrow') == item) {
+      this.showModalOnClick.show();
+      this.enableDeleteArrow = true;
+    } else {
+      localStorage.setItem('arrow', item);
+    }
+
   }
 
   public clickArrow() {
@@ -726,12 +749,14 @@ export class EditAccountShapeComponent implements OnInit {
   }
 
   showProperties(item) {
+    debugger;
     this.menuList1.forEach(element => {
       if (element.id === item.id) {
         this.properties = element;
+        this.checkIsAction = true;
+        this.checkIsArrow = false;
       }
     });
-
   }
   public endShape(item) {
     this.menuList1.forEach(element => {

@@ -24,34 +24,34 @@
   <div class="botton-left__table">
     Properties
     <table style="width:100% border=1px">
-      <tr>
+      <tr *ngIf="checkIsAction">
         <td>Name</td>
         <td><input name="properties.name" [(ngModel)]="properties.name" type="text"></td>
       </tr>
-      <tr>
+      <tr *ngIf="checkIsAction">
         <td>Description</td>
         <td><input name="properties.description" [(ngModel)]="properties.description" type="text"></td>
       </tr>
-      <tr>
+      <tr *ngIf="checkIsAction">
         <td>Permission</td>
         <td><select name="properties.permissionToUseID" [(ngModel)]="properties.permissionToUseID">
             <option *ngFor="let item of listDropdown" value="item.id">{{item.name}}</option>
           </select></td>
       </tr>
-      <tr>
+      <tr *ngIf="checkIsAction">
         <td colspan="2">Manager Approve <input name="properties.isApprovedByLineManager"
             [(ngModel)]="properties.isApprovedByLineManager" type="checkbox"></td>
 
       </tr>
-      <tr>
+      <tr *ngIf="checkIsAction">
         <td>Start WF <input name="properties.start" [(ngModel)]="properties.start" type="checkbox"></td>
         <td>End WF <input name="properties.end" [(ngModel)]="properties.end" type="checkbox"></td>
       </tr>
-      <!-- <tr>
+      <tr *ngIf="checkIsArrow">
         <td>Name arrow </td>
-        <td><input [(ngModel)]="properties.end" type="text"></td>
+        <td><input name="propertiesArr.name" [(ngModel)]="propertiesArr.name" type="text"></td>
       </tr>
-      <tr>
+      <!-- <tr>
         <td>From </td>
         <td><select>
             <option value="volvo">Volvo</option>
@@ -115,7 +115,7 @@
           </marker>
         </defs>
         <g fill="none" stroke="black" stroke-width="3" marker-end="url(#arrowhead)">
-          <path *ngFor="let item of listArrow" id="{{ item }}" (click)="openDialog(item)" />
+          <path *ngFor="let item of listArrow" id="{{item}}" (click)="openDialog(item)" />
         </g>
       </svg>
 
