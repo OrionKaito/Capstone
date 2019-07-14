@@ -38,7 +38,7 @@ namespace Capstone.Service
 
         public IEnumerable<WorkFlowTemplate> GetAll()
         {
-            return _workFlowTemplateRepository.GetAll().Where(w => w.IsDeleted == false && w.IsEnabled == true);
+            return _workFlowTemplateRepository.GetAll().Where(w => w.IsDeleted == false);
         }
 
         public WorkFlowTemplate GetByID(Guid ID)
