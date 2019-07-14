@@ -37,6 +37,7 @@ import { EditAccountShapeComponent } from './table-list/edit-account-shape/edit-
 import { MenuEditAccountShapeComponent } from './table-list/edit-account-shape/menu-edit-account-shape/menu-edit-account-shape.component';
 import { MDBBootstrapModule, ButtonsModule, WavesModule,
   InputsModule, CollapseModule, ModalModule, IconsModule } from 'angular-bootstrap-md';
+import { AddNewDynamicFormComponent } from './add-new-dynamic-form/add-new-dynamic-form.component';
 
 const config = {
   apiKey: "AIzaSyCBhMb1lO_1ioNypRrHS4I1q9sYxJ2thcs",
@@ -97,11 +98,12 @@ const config = {
     UploadTaskComponent,
     AddHandleRequestComponent,
     SetGroupPermissionComponent,
+    AddNewDynamicFormComponent,
 
   ],
   
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
-  entryComponents:[AddAccountComponent, AddPermissionComponent, AddNewRequestComponent, AddHandleRequestComponent ],
+  entryComponents:[AddAccountComponent, AddNewDynamicFormComponent, AddPermissionComponent, AddNewRequestComponent, AddHandleRequestComponent ],
 
   providers: [],
   bootstrap: [AppComponent]

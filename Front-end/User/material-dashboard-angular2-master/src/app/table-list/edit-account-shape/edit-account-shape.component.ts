@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild, HostListener } from '@angular/core';
 // import $ from 'jquery';
 import * as $ from 'jquery';
 import 'jquery-ui/ui/widgets/draggable.js';
-import { MatDialog } from '@angular/material/dialog';
+import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { ToastrService } from 'ngx-toastr';
 import { saveAs } from 'file-saver';
 import * as moment from 'moment-timezone';
@@ -12,6 +12,7 @@ import { FormControl, FormGroup, FormBuilder, Validators } from '@angular/forms'
 import { ShapeService } from './shape.service';
 import { ActivatedRoute } from '@angular/router';
 import { element } from '@angular/core/src/render3';
+import { AddNewDynamicFormComponent } from 'app/add-new-dynamic-form/add-new-dynamic-form.component';
 
 @Component({
   selector: 'app-edit-account-shape',
@@ -777,5 +778,17 @@ export class EditAccountShapeComponent implements OnInit {
       // this.listArrow.pop();
       // this.listClass.pop();
     }
+  }
+
+  openDinamicForm(id){
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.autoFocus = true;
+    dialogConfig.disableClose = true;
+    dialogConfig.width = "50%";
+    dialogConfig.data = id;
+    this.dialog.open(AddNewDynamicFormComponent, dialogConfig).afterClosed().subscribe(res => {
+      console.log(res);
+    });
+
   }
 }

@@ -51,25 +51,6 @@
         <td>Name arrow </td>
         <td><input name="propertiesArr.name" [(ngModel)]="propertiesArr.name" type="text"></td>
       </tr>
-      <!-- <tr>
-        <td>From </td>
-        <td><select>
-            <option value="volvo">Volvo</option>
-            <option value="saab">Saab</option>
-            <option value="mercedes">Mercedes</option>
-            <option value="audi">Audi</option>
-          </select></td>
-      </tr>
-      <tr>
-        <td>To </td>
-        <td><select>
-            <option value="volvo">Volvo</option>
-            <option value="saab">Saab</option>
-            <option value="mercedes">Mercedes</option>
-            <option value="audi">Audi</option>
-          </select></td>
-      </tr> -->
-
     </table>
 
   </div>
@@ -89,6 +70,7 @@
         <div class="md-form form-sm" id="{{item.idInput}}">
           <input mdbInput type="text" name="item.name" [(ngModel)]="item.name" class="form-control form-control-sm"
             placeholder="input text">
+            <button (click)="openDinamicForm(item.id)"> Edit Form</button>
 
           <!-- <form [formGroup]="secondFormGroup" id="{{item.idText}}">
             <mat-form-field>
