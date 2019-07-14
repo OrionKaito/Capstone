@@ -96,7 +96,7 @@ namespace Capstone.Controllers
 
         // GET: api/UserNotifications
         [HttpGet("GetNumberOfNotification")]
-        public ActionResult<int> GetNumberOfNotification()
+        public ActionResult<int> GetNumberOfNotification(NotificationEnum notificationType)
         {
             try
             {
@@ -106,7 +106,7 @@ namespace Capstone.Controllers
                 var userInDB = _userManager.FindByIdAsync(userID).Result;
                 if (userInDB == null) return BadRequest(WebConstant.UserNotExist);
 
-                int result = _userNotificationService.GetNumberOfNotification(userID);
+                int result = _userNotificationService.GetNumberOfNotification(notificationType, userID);
                 return Ok(result);
             }
             catch (Exception e)
