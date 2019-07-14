@@ -11,7 +11,7 @@ namespace Capstone.Service
     {
         IEnumerable<UserNotification> GetAll();
         IEnumerable<UserNotification> GetByUserIDAndNotificationType(string ID, NotificationEnum notificationType, bool isCheckHandled);
-        int GetNumberOfNotification(string ID);
+        int GetNumberOfNotification(NotificationEnum notificationType, string ID);
         UserNotification GetByID(Guid ID);
         void Create(UserNotification userNotification);
         void Delete(UserNotification userNotification);
@@ -32,9 +32,15 @@ namespace Capstone.Service
             _notificationRepository = notificationRepository;
         }
 
-        public int GetNumberOfNotification(string ID)
+        public int GetNumberOfNotification(NotificationEnum notificationType, string ID)
         {
-            return _userNotificationRepository.GetMany(u => u.IsDeleted == false && u.IsRead == false && u.UserID.Equals(ID)).Count();
+            var notification = _notificationRepository.GetByNotificationTypeAndIsHandled(notificationType);
+            int numberOfNotification = 0;
+            foreach (var item in notification)
+            {
+                numberOfNotification += _userNotificationRepository.GetMany(u => u.IsDeleted == false && u.IsRead == false && u.UserID.Equals(ID) && u.NotificationID == item.ID).Count();
+            }
+            return numberOfNotification;
         }
 
         public void Create(UserNotification userNotification)
@@ -72,11 +78,11 @@ namespace Capstone.Service
 
             if (isCheckHandled)
             {
-                notificationList.AddRange(_notificationRepository.GetByNotificationTypeAndIsHandled(notificationType));
+                notificationList.AddRange(_notificationRepository.GetByNotificationTypeAndIsHandled(notificationType).OrderBy(u => u.CreateDate));
             }
             else
             {
-                notificationList.AddRange(_notificationRepository.GetByNotificationType(notificationType));
+                notificationList.AddRange(_notificationRepository.GetByNotificationType(notificationType).OrderBy(u => u.CreateDate));
             }
 
             foreach (var item in notificationList)
