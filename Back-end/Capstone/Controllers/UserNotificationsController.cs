@@ -22,10 +22,11 @@ namespace Capstone.Controllers
         private readonly UserManager<User> _userManager;
         private readonly INotificationService _notificationService;
         private readonly IRequestActionService _requestActionService;
+        private readonly IWorkFlowTemplateService _workFlowTemplateService;
 
         public UserNotificationsController(IMapper mapper, IUserNotificationService userNotificationService,
             IRequestService requestService, UserManager<User> userManager, INotificationService notificationService
-            , IRequestActionService requestActionService)
+            , IRequestActionService requestActionService, IWorkFlowTemplateService workFlowTemplateService)
         {
             _mapper = mapper;
             _userNotificationService = userNotificationService;
@@ -33,6 +34,7 @@ namespace Capstone.Controllers
             _userManager = userManager;
             _notificationService = notificationService;
             _requestActionService = requestActionService;
+            _workFlowTemplateService = workFlowTemplateService;
         }
 
         // POST: api/UserNotifications
@@ -157,6 +159,7 @@ namespace Capstone.Controllers
 
                     var notificationVM = new NotificationViewModel
                     {
+                        WorkflowName = _workFlowTemplateService.GetByID(request.WorkFlowTemplateID).Name,
                         ActorName = _userManager.FindByIdAsync(request.InitiatorID).Result.FullName,
                         EventID = notificationInDb.EventID,
                         Message = notificationType == NotificationEnum.CompletedRequest ? WebConstant.CompletedRequestMessage : WebConstant.ReceivedRequestMessage,
