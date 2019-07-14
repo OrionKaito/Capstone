@@ -75,6 +75,8 @@ namespace Capstone.ViewModel
 
     public class RequestFormVM
     {
+        public string WorkFlowName { get; set; }
+
         public IEnumerable<ConnectionVM> Connections { get; set; }
 
         public ActionTypeVM ActionType { get; set; }

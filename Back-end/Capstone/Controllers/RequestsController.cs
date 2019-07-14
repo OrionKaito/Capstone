@@ -451,6 +451,7 @@ namespace Capstone.Controllers
 
                 RequestFormVM form = new RequestFormVM
                 {
+                    WorkFlowName = _workFlowTemplateService.GetByID(workFlowTemplateID).Name,
                     Connections = connections,
                     ActionType = _mapper.Map<ActionTypeVM>(actionType)
                 };
