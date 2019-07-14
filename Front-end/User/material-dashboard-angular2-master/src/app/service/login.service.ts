@@ -26,9 +26,16 @@ export class LoginService {
   }  
   Register(model : any){
    
-    
+    debugger;
      var b =this.Url + "/api/Accounts";   
    return this.http.post(b,model,{responseType: 'text'}); 
+  }
+  addNewWF(model : any){
+    var token = "Bearer " + localStorage.getItem("token");
+    var tokenHeader = new HttpHeaders({'Authorization': token});
+    debugger;
+     var b =this.Url + "/api/WorkflowsTemplates";   
+   return this.http.post(b,model,{headers : tokenHeader }); 
   }
 
   getUserProfile(){

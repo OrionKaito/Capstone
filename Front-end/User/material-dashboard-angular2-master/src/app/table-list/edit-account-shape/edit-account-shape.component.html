@@ -35,7 +35,7 @@
       <tr *ngIf="checkIsAction">
         <td>Permission</td>
         <td><select name="properties.permissionToUseID" [(ngModel)]="properties.permissionToUseID">
-            <option *ngFor="let item of listDropdown" value="item.id">{{item.name}}</option>
+            <option *ngFor="let item of listDropdown" value="{{item.id}}">{{item.name}}</option>
           </select></td>
       </tr>
       <tr *ngIf="checkIsAction">
