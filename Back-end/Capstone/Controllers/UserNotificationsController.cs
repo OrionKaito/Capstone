@@ -169,6 +169,8 @@ namespace Capstone.Controllers
                         IsHandled = notificationInDb.IsHandled
                     };
                     result.Add(notificationVM);
+                    userNotification.IsRead = true;
+                    _userNotificationService.Save();
                 }
 
                 //return Ok(WebConstant.NoNotificationYet);
