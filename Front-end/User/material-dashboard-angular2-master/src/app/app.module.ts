@@ -38,6 +38,8 @@ import { MenuEditAccountShapeComponent } from './table-list/edit-account-shape/m
 import { MDBBootstrapModule, ButtonsModule, WavesModule,
   InputsModule, CollapseModule, ModalModule, IconsModule } from 'angular-bootstrap-md';
 import { AddNewDynamicFormComponent } from './add-new-dynamic-form/add-new-dynamic-form.component';
+import { ManagePerGrComponent } from './manage-per-gr/manage-per-gr.component';
+import { AddManagePerGrComponent } from './add-manage-per-gr/add-manage-per-gr.component';
 
 const config = {
   apiKey: "AIzaSyCBhMb1lO_1ioNypRrHS4I1q9sYxJ2thcs",
@@ -99,11 +101,12 @@ const config = {
     AddHandleRequestComponent,
     SetGroupPermissionComponent,
     AddNewDynamicFormComponent,
+    AddManagePerGrComponent,
 
   ],
   
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
-  entryComponents:[AddAccountComponent, AddNewDynamicFormComponent, AddPermissionComponent, AddNewRequestComponent, AddHandleRequestComponent ],
+  entryComponents:[AddAccountComponent, AddNewDynamicFormComponent,AddManagePerGrComponent, AddPermissionComponent, AddNewRequestComponent, AddHandleRequestComponent ],
 
   providers: [],
   bootstrap: [AppComponent]

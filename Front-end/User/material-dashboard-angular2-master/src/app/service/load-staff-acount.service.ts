@@ -69,6 +69,9 @@ export class LoadStaffAcountService {
     var tokenHeader = new HttpHeaders({'Authorization': token});
     return this.http.get(this.Url + "/api/UserNotifications/GetNotificationByUserId?notificationType=2", {headers : tokenHeader });
   }
+  loadPermissionGroupData() {
+    return this.http.get(this.Url + "/api/PermissionOfGroups");
+  }
 
   loadPermissionData() {
     return this.http.get(this.Url + "/api/Permissions");
@@ -85,6 +88,9 @@ export class LoadStaffAcountService {
   loadPermissionByID(id) {
     return this.http.get(this.Url + "/api/Permissions/GetByID?ID=" + id);
 
+  }
+  addPermissionGr(model: any) {
+    return this.http.post(this.Url + "/api/PermissionOfGroups", model);
   }
 
   getRequestForm(id){

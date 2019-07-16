@@ -35,6 +35,7 @@ import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
 import { UploadTaskComponent } from 'app/upload-task/upload-task.component';
 import { WorkflowOfUserComponent } from 'app/workflow-of-user/workflow-of-user.component';
 import { HandleRequestComponent } from 'app/handle-request/handle-request.component';
+import { ManagePerGrComponent } from 'app/manage-per-gr/manage-per-gr.component';
 
 const config = {
   apiKey: "AIzaSyCBhMb1lO_1ioNypRrHS4I1q9sYxJ2thcs",
@@ -80,7 +81,8 @@ const config = {
     TableListComponent,
     ManagePermissionComponent,
     WorkflowOfUserComponent,
-    HandleRequestComponent
+    HandleRequestComponent,
+    ManagePerGrComponent
   ]
 })
 

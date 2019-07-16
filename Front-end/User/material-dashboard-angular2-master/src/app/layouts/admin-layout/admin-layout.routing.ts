@@ -7,6 +7,7 @@ import { ManagePermissionComponent } from 'app/manage-permission/manage-permissi
 
 import { WorkflowOfUserComponent } from 'app/workflow-of-user/workflow-of-user.component';
 import { HandleRequestComponent } from 'app/handle-request/handle-request.component';
+import { ManagePerGrComponent } from 'app/manage-per-gr/manage-per-gr.component';
 
 
 export const AdminLayoutRoutes: Routes = [
@@ -56,7 +57,7 @@ export const AdminLayoutRoutes: Routes = [
     { path: 'user-profile',   component: UserProfileComponent },
     { path: 'manage-workflow',     component: TableListComponent },
     { path: 'manage-permission',     component: ManagePermissionComponent },
-
+    { path: 'manage-per-gr',     component: ManagePerGrComponent },
     { path: 'create-request',     component: WorkflowOfUserComponent },
     { path: 'handle-request',     component: HandleRequestComponent }
 ];
