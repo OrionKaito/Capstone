@@ -8,6 +8,7 @@ namespace Capstone.ViewModel
         public Guid OwnerID { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
+        public string Data { get; set; }
         public Guid PermissionToEditID { get; set; }
         public Guid PermissionToUseID { get; set; }
     }
@@ -16,6 +17,7 @@ namespace Capstone.ViewModel
     {
         public string Name { get; set; }
         public string Description { get; set; }
+        public string Data { get; set; }
         public Guid PermissionToEditID { get; set; }
         public Guid PermissionToUseID { get; set; }
     }
@@ -23,6 +25,7 @@ namespace Capstone.ViewModel
     public class WorkFlowTemplateUM
     {
         public Guid ID { get; set; }
+        public string Data { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
     }

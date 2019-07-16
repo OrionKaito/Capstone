@@ -31,6 +31,7 @@ namespace Capstone.ViewModel
 
     public class NotificationViewModel
     {
+        public string WorkflowName { get; set; }
         public Guid EventID { get; set; }
         public string Message { get; set; }
         public string ActorName { get; set; }

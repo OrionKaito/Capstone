@@ -22,10 +22,11 @@ namespace Capstone.Controllers
         private readonly UserManager<User> _userManager;
         private readonly INotificationService _notificationService;
         private readonly IRequestActionService _requestActionService;
+        private readonly IWorkFlowTemplateService _workFlowTemplateService;
 
         public UserNotificationsController(IMapper mapper, IUserNotificationService userNotificationService,
             IRequestService requestService, UserManager<User> userManager, INotificationService notificationService
-            , IRequestActionService requestActionService)
+            , IRequestActionService requestActionService, IWorkFlowTemplateService workFlowTemplateService)
         {
             _mapper = mapper;
             _userNotificationService = userNotificationService;
@@ -33,6 +34,7 @@ namespace Capstone.Controllers
             _userManager = userManager;
             _notificationService = notificationService;
             _requestActionService = requestActionService;
+            _workFlowTemplateService = workFlowTemplateService;
         }
 
         // POST: api/UserNotifications
@@ -94,7 +96,7 @@ namespace Capstone.Controllers
 
         // GET: api/UserNotifications
         [HttpGet("GetNumberOfNotification")]
-        public ActionResult<int> GetNumberOfNotification()
+        public ActionResult<int> GetNumberOfNotification(NotificationEnum notificationType)
         {
             try
             {
@@ -104,7 +106,7 @@ namespace Capstone.Controllers
                 var userInDB = _userManager.FindByIdAsync(userID).Result;
                 if (userInDB == null) return BadRequest(WebConstant.UserNotExist);
 
-                int result = _userNotificationService.GetNumberOfNotification(userID);
+                int result = _userNotificationService.GetNumberOfNotification(notificationType, userID);
                 return Ok(result);
             }
             catch (Exception e)
@@ -157,6 +159,7 @@ namespace Capstone.Controllers
 
                     var notificationVM = new NotificationViewModel
                     {
+                        WorkflowName = _workFlowTemplateService.GetByID(request.WorkFlowTemplateID).Name,
                         ActorName = _userManager.FindByIdAsync(request.InitiatorID).Result.FullName,
                         EventID = notificationInDb.EventID,
                         Message = notificationType == NotificationEnum.CompletedRequest ? WebConstant.CompletedRequestMessage : WebConstant.ReceivedRequestMessage,
@@ -166,6 +169,8 @@ namespace Capstone.Controllers
                         IsHandled = notificationInDb.IsHandled
                     };
                     result.Add(notificationVM);
+                    userNotification.IsRead = true;
+                    _userNotificationService.Save();
                 }
 
                 //return Ok(WebConstant.NoNotificationYet);

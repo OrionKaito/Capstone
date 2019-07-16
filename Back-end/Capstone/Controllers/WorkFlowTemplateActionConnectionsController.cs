@@ -177,7 +177,7 @@ namespace Capstone.Controllers
 
             if (countRoot > 1)
             {
-                return Ok("Therer are more than 2 root!");
+                return BadRequest("Therer are more than 2 root!");
             }
 
             g.model = model;
@@ -201,8 +201,8 @@ namespace Capstone.Controllers
 
             public string getMessage()
             {
-                errorMessage = string.IsNullOrEmpty(errorMessage) ? "\nCheck IsEnd : Success" : "\n Check IsEnd : Error :" + errorMessage;
-                return message + errorMessage;
+                errorMessage = string.IsNullOrEmpty(errorMessage) ? "Check end node - Success" : "Check end node - Fail : " + errorMessage;
+                return message + "\n" + errorMessage;
             }
 
             public Graph()
@@ -244,7 +244,7 @@ namespace Capstone.Controllers
                 while (s.Count > 0)
                 {
                     var current = s.Pop();
-                    message += "[" + current + "] => ";
+                    message += "[" + current + "]";
                     // ADD TO VISITED HERE
                     if (!visited.Contains(current))
                     {
@@ -253,11 +253,18 @@ namespace Capstone.Controllers
                     // Only if the node has a any adj notes
                     if (Adj.ContainsKey(current))
                     {
+                        bool isEnd = false;
                         // Iterate through UNVISITED nodes
                         foreach (int neighbour in Adj[current].Where(a => !visited.Contains(a)))
                         {
                             visited.Add(neighbour);
                             s.Push(neighbour);
+                            isEnd = true;
+                            //break;
+                        }
+                        if (!isEnd)
+                        {
+                            errorMessage += "This node is not end [" + current + "]";
                         }
                     }
                     else
@@ -274,12 +281,11 @@ namespace Capstone.Controllers
 
             public void PrintNotTravelNode()
             {
-                message += "Node can't travel : ";
                 for (int i = 0; i < Adj.Count; i++)
                 {
                     if (!visited.Contains(Adj.ElementAt(i).Key))
                     {
-                        message += "[" + Adj.ElementAt(i).Key.ToString() + "] ";
+                        message += "\n[" + Adj.ElementAt(i).Key.ToString() + "] can't travel";
                     }
                 }
             }

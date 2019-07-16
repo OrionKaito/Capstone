@@ -40,6 +40,8 @@ namespace Capstone.ViewModel
         //Request Action
         public Guid RequestID { get; set; }
 
+        public Guid RequestActionID { get; set; }
+
         public StatusEnum Status { get; set; }
 
         public Guid NextStepID { get; set; }
@@ -73,6 +75,8 @@ namespace Capstone.ViewModel
 
     public class RequestFormVM
     {
+        public string WorkFlowName { get; set; }
+
         public IEnumerable<ConnectionVM> Connections { get; set; }
 
         public ActionTypeVM ActionType { get; set; }

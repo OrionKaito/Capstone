@@ -16,11 +16,16 @@ namespace Capstone.Controllers
     {
         private readonly IMapper _mapper;
         private readonly IPermissionOfGroupService _permissionOfGroupService;
+        private readonly IPermissionService _permissionService;
+        private readonly IGroupService _groupService;
 
-        public PermissionOfGroupsController(IMapper mapper, IPermissionOfGroupService permissionOfGroupService)
+        public PermissionOfGroupsController(IMapper mapper, IPermissionOfGroupService permissionOfGroupService, IPermissionService permissionService
+            , IGroupService groupService)
         {
             _mapper = mapper;
             _permissionOfGroupService = permissionOfGroupService;
+            _permissionService = permissionService;
+            _groupService = groupService;
         }
 
         //POST: api/PermissionOfGroups
@@ -54,7 +59,13 @@ namespace Capstone.Controllers
                 var data = _permissionOfGroupService.GetAll();
                 foreach (var item in data)
                 {
-                    result.Add(_mapper.Map<PermissionOfGroupVM>(item));
+                    result.Add(new PermissionOfGroupVM {
+                        ID = item.ID,
+                        PermissionID = item.PermissionID,
+                        PermissionName = _permissionService.GetByID(item.PermissionID).Name,
+                        GroupID = item.GroupID,
+                        GroupName = _groupService.GetByID(item.GroupID).Name
+                    });
                 }
                 return Ok(result);
             }
@@ -75,7 +86,14 @@ namespace Capstone.Controllers
                 if (data.Count() == 0) return NotFound(WebConstant.EmptyList);
                 foreach (var item in data)
                 {
-                    result.Add(_mapper.Map<PermissionOfGroupVM>(item));
+                    result.Add(new PermissionOfGroupVM
+                    {
+                        ID = item.ID,
+                        PermissionID = item.PermissionID,
+                        PermissionName = _permissionService.GetByID(item.PermissionID).Name,
+                        GroupID = item.GroupID,
+                        GroupName = _groupService.GetByID(item.GroupID).Name
+                    });
                 }
                 return Ok(result);
             }
@@ -96,7 +114,14 @@ namespace Capstone.Controllers
                 if (data.Count() == 0) return NotFound(WebConstant.EmptyList);
                 foreach (var item in data)
                 {
-                    result.Add(_mapper.Map<PermissionOfGroupVM>(item));
+                    result.Add(new PermissionOfGroupVM
+                    {
+                        ID = item.ID,
+                        PermissionID = item.PermissionID,
+                        PermissionName = _permissionService.GetByID(item.PermissionID).Name,
+                        GroupID = item.GroupID,
+                        GroupName = _groupService.GetByID(item.GroupID).Name
+                    });
                 }
                 return Ok(result);
             }
@@ -112,9 +137,16 @@ namespace Capstone.Controllers
         {
             try
             {
-                var rs = _permissionOfGroupService.GetByID(ID);
-                if (rs == null) return NotFound(WebConstant.NotFound);
-                PermissionOfGroupVM result = _mapper.Map<PermissionOfGroupVM>(rs);
+                var permissionOfGroup = _permissionOfGroupService.GetByID(ID);
+                if (permissionOfGroup == null) return NotFound(WebConstant.NotFound);
+                PermissionOfGroupVM result = new PermissionOfGroupVM
+                {
+                    ID = permissionOfGroup.ID,
+                    PermissionID = permissionOfGroup.PermissionID,
+                    PermissionName = _permissionService.GetByID(permissionOfGroup.PermissionID).Name,
+                    GroupID = permissionOfGroup.GroupID,
+                    GroupName = _groupService.GetByID(permissionOfGroup.GroupID).Name
+                };
                 return Ok(result);
             }
             catch (Exception e)

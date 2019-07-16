@@ -3,6 +3,7 @@ using Capstone.Helper;
 using Capstone.Model;
 using Capstone.Service;
 using Capstone.ViewModel;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -16,11 +17,15 @@ namespace Capstone.Controllers
     {
         private readonly IMapper _mapper;
         private readonly IUserRoleService _userRoleService;
+        private readonly UserManager<User> _userManager;
+        private readonly IRoleService _roleService;
 
-        public UserRolesController(IMapper mapper, IUserRoleService UserRoleService)
+        public UserRolesController(IMapper mapper, IUserRoleService UserRoleService, UserManager<User> userManager, IRoleService roleService)
         {
             _mapper = mapper;
             _userRoleService = UserRoleService;
+            _userManager = userManager;
+            _roleService = roleService;
         }
 
         // POST: api/UserRoles
@@ -55,7 +60,13 @@ namespace Capstone.Controllers
                 if (data.Count() == 0) return NotFound(WebConstant.EmptyList);
                 foreach (var item in data)
                 {
-                    result.Add(_mapper.Map<UserRoleVM>(item));
+                    result.Add(new UserRoleVM {
+                        ID = item.ID,
+                        UserID = item.UserID,
+                        FullName = _userManager.FindByIdAsync(item.UserID).Result.FullName,
+                        RoleID = item.RoleID,
+                        RoleName = _roleService.GetByID(item.RoleID).Name
+                    });
                 }
                 return Ok(result);
             }
@@ -66,14 +77,21 @@ namespace Capstone.Controllers
         }
 
         // GET: api/UserRoles/5
-        [HttpGet]
-        public ActionResult<UserRoleVM> GetUserRole(Guid ID)
+        [HttpGet("GetByUserRoleID")]
+        public ActionResult<UserRoleVM> GetByUserRoleID(Guid ID)
         {
             try
             {
-                var rs = _userRoleService.GetByID(ID);
-                if (rs == null) return NotFound(WebConstant.NotFound);
-                UserRoleVM result = _mapper.Map<UserRoleVM>(rs);
+                var userRole = _userRoleService.GetByID(ID);
+                if (userRole == null) return NotFound(WebConstant.NotFound);
+                UserRoleVM result = new UserRoleVM
+                {
+                    ID = userRole.ID,
+                    UserID = userRole.UserID,
+                    FullName = _userManager.FindByIdAsync(userRole.UserID).Result.FullName,
+                    RoleID = userRole.RoleID,
+                    RoleName = _roleService.GetByID(userRole.RoleID).Name
+                };
                 return Ok(result);
             }
             catch (Exception e)
