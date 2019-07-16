@@ -78,11 +78,11 @@ namespace Capstone.Service
 
             if (isCheckHandled)
             {
-                notificationList.AddRange(_notificationRepository.GetByNotificationTypeAndIsHandled(notificationType).OrderBy(u => u.CreateDate));
+                notificationList.AddRange(_notificationRepository.GetByNotificationTypeAndIsHandled(notificationType).OrderByDescending(u => u.CreateDate));
             }
             else
             {
-                notificationList.AddRange(_notificationRepository.GetByNotificationType(notificationType).OrderBy(u => u.CreateDate));
+                notificationList.AddRange(_notificationRepository.GetByNotificationType(notificationType).OrderByDescending(u => u.CreateDate));
             }
 
             foreach (var item in notificationList)
