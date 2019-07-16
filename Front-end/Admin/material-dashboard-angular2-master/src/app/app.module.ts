@@ -21,12 +21,10 @@ import { AddAccountComponent } from './add-account/add-account.component';
 import { AddRoleComponent } from './add-role/add-role.component';
 import { AddGroupComponent } from './add-group/add-group.component';
 import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
-import { AngularMultiSelectModule } from 'angular2-multiselect-dropdown';
 import { ToastrModule } from 'ngx-toastr';
 
 @NgModule({
   imports: [
-    AngularMultiSelectModule,
     NgMultiSelectDropDownModule.forRoot(),
     ToastrModule.forRoot(),
     BrowserAnimationsModule,

@@ -25,11 +25,15 @@ export class LoginService {
    return  this.http.post(a,model,{responseType: 'text'});  
   }  
   Register(model : any){
-   
-    
      var b =this.Url + "/api/Accounts";   
    return this.http.post(b,model,{responseType: 'text'}); 
   }
+  editAccount(model : any){
+    var token = "Bearer " + localStorage.getItem("token");
+    var tokenHeader = new HttpHeaders({'Authorization': token});
+    var b =this.Url + "/api/Accounts/PutByID?ID=" + model.id;   
+  return this.http.put(b,model,{headers : tokenHeader }); 
+ }
 
   getUserProfile(){
     var token = "Bearer " + localStorage.getItem("token");
