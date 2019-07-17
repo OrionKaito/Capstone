@@ -21,19 +21,22 @@ namespace Capstone.Controllers
         private readonly IConnectionTypeService _connectionTypeService;
         private readonly IWorkFlowTemplateService _workFlowService;
         private readonly IPermissionService _permissionService;
+        private readonly IWorkFlowTemplateActionService _workFlowTemplateActionService;
+        private readonly IWorkFlowTemplateActionConnectionService _workFlowTemplateActionConnectionService;
 
-        public WorkflowsTemplatesController(IMapper mapper, IWorkFlowTemplateService workFlowService, IPermissionService permissionService, IConnectionTypeService connectionTypeService,
-            IWorkFlowTemplateActionService workFlowTemplateActionService,
-             IWorkFlowTemplateActionConnectionService workFlowTemplateActionConnectionService)
+        public WorkflowsTemplatesController(IMapper mapper
+            , IWorkFlowTemplateService workFlowService
+            , IPermissionService permissionService
+            , IWorkFlowTemplateActionService workFlowTemplateActionService
+            , IWorkFlowTemplateActionConnectionService workFlowTemplateActionConnectionService)
         {
             _mapper = mapper;
             _workFlowService = workFlowService;
             _permissionService = permissionService;
             _workFlowTemplateActionService = workFlowTemplateActionService;
-            _connectionTypeService = connectionTypeService;
             _workFlowTemplateActionConnectionService = workFlowTemplateActionConnectionService;
         }
-        
+
         // GET: api/Workflows
         [HttpGet]
         public ActionResult<IEnumerable<WorkFlowTemplateVM>> GetWorkflowsTemplates()
@@ -72,9 +75,8 @@ namespace Capstone.Controllers
             }
         }
 
-        // GET: api/Workflows/5
-        [HttpGet("GetUserWorkflow")]
-        public ActionResult<IEnumerable<WorkFlowTemplateVM>> GetUserWorkflow()
+        [HttpGet("GetWorkflowToUse")]
+        public ActionResult<IEnumerable<WorkFlowTemplateVM>> GetWorkflowToUse()
         {
             try
             {
@@ -92,7 +94,7 @@ namespace Capstone.Controllers
                         workFlowTemplates.Add(_mapper.Map<WorkFlowTemplateVM>(workflow));
                     }
                 }
-                
+
                 return Ok(workFlowTemplates);
             }
             catch (Exception e)
@@ -101,7 +103,34 @@ namespace Capstone.Controllers
             }
         }
 
-        // PUT: api/Workflows/5
+        [HttpGet("GetWorkflowToEdit")]
+        public ActionResult<IEnumerable<WorkFlowTemplateVM>> GetWorkflowToEdit()
+        {
+            try
+            {
+                var userID = HttpContext.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier).Value;
+                var permissionsOfUser = _permissionService.GetByUserID(userID);
+
+                List<WorkFlowTemplateVM> workFlowTemplates = new List<WorkFlowTemplateVM>();
+
+                foreach (var item in permissionsOfUser)
+                {
+                    var workflows = _workFlowService.GetByPermissionToUse(item.ID);
+
+                    foreach (var workflow in workflows)
+                    {
+                        workFlowTemplates.Add(_mapper.Map<WorkFlowTemplateVM>(workflow));
+                    }
+                }
+
+                return Ok(workFlowTemplates);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
+
         [HttpPut]
         public ActionResult PutWorkflowTemplate(WorkFlowTemplateUM model)
         {
@@ -111,9 +140,6 @@ namespace Capstone.Controllers
             {
                 var workFlowInDb = _workFlowService.GetByID(model.ID);
                 if (workFlowInDb == null) return BadRequest(WebConstant.NotFound);
-
-                var userID = HttpContext.User.Claims.FirstOrDefault(u => u.Type == ClaimTypes.NameIdentifier).Value;
-                if (workFlowInDb.OwnerID != userID) return BadRequest(WebConstant.AccessDined);
 
                 _mapper.Map<WorkFlowTemplate>(model);
                 _workFlowService.Save();
@@ -272,6 +298,61 @@ namespace Capstone.Controllers
                 {
                     workFlowInDb.IsEnabled = true;
                 }
+                _workFlowService.Save();
+                return Ok(WebConstant.Success);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
+
+        [HttpPut("SaveWorkflow")]
+        public ActionResult SaveWorkflow(SaveWowkFlowTemplateUM model)
+        {
+            if (!ModelState.IsValid) return BadRequest(ModelState);
+
+            try
+            {
+                _workFlowService.BeginTransaction();
+                var workFlowInDB = _workFlowService.GetByID(model.WorkFlowTemplateID);
+                workFlowInDB.Data = model.Data;
+
+                foreach (var action in model.Actions)
+                {
+                    var workFlowTemplateAction = _mapper.Map<WorkFlowTemplateAction>(action);
+                    workFlowTemplateAction.WorkFlowTemplateID = model.WorkFlowTemplateID;
+                    _workFlowTemplateActionService.Create(workFlowTemplateAction);
+                }
+
+                foreach (var connection in model.Connections)
+                {
+                    var workflowConnection = _mapper.Map<WorkFlowTemplateActionConnection>(connection);
+                    _workFlowTemplateActionConnectionService.Create(workflowConnection);
+                }
+
+                _workFlowService.CommitTransaction();
+
+                return Ok(WebConstant.Success);
+            }
+            catch (Exception e)
+            {
+                _workFlowService.RollBack();
+                return BadRequest(e.Message);
+            }
+        }
+
+        [HttpPut("SaveCraft")]
+        public ActionResult SaveCraft(SaveCraftTemplateUM model)
+        {
+            if (!ModelState.IsValid) return BadRequest(ModelState);
+
+            try
+            {
+                var workFlowInDb = _workFlowService.GetByID(model.ID);
+                if (workFlowInDb == null) return BadRequest(WebConstant.NotFound);
+
+                workFlowInDb.Data = model.Data;
                 _workFlowService.Save();
                 return Ok(WebConstant.Success);
             }
