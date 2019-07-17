@@ -32,6 +32,9 @@ namespace Capstone.Mappings
             CreateMap<WorkFlowTemplateAction, WorkFlowTemplateActionUM>();
             CreateMap<WorkFlowTemplateActionUM, WorkFlowTemplateAction>();
 
+            CreateMap<WorkFlowTemplateAction, WorkFlowActionCM>();
+            CreateMap<WorkFlowActionCM, WorkFlowTemplateAction>();
+
             //ActionType
             CreateMap<ActionType, ActionTypeVM>();
             CreateMap<ActionTypeVM, ActionType>();
@@ -171,7 +174,7 @@ namespace Capstone.Mappings
 
             CreateMap<ConnectionType, ConnectionTypeUM>();
             CreateMap<ConnectionTypeUM, ConnectionType>();
-            
+
             //WorkFlowTemplateActionConnection
             CreateMap<WorkFlowTemplateActionConnection, WorkFlowTemplateActionConnectionVM>();
             CreateMap<WorkFlowTemplateActionConnectionVM, WorkFlowTemplateActionConnection>();
