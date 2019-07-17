@@ -126,5 +126,10 @@ export class LoadStaffAcountService {
     var tokenHeader = new HttpHeaders({'Authorization': token});
     return this.http.post(this.Url + "/api/Requests/ApproveRequest", req, {headers : tokenHeader });
   }
+  upLoadFileToServe(req){
+    var token = "Bearer " + localStorage.getItem("token");
+    var tokenHeader = new HttpHeaders({'Authorization': token});
+    return this.http.post(this.Url + "/api/RequestFiles", req, {headers : tokenHeader });
+  }
 
 }

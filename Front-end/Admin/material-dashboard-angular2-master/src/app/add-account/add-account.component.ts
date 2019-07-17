@@ -140,6 +140,9 @@ export class AddAccountComponent implements OnInit {
       });
       formData1.roleIDs= [];
       formData1.roleIDs= saveIDRole;
+      if(formData1.managerID == "0") {
+        formData1.managerID = "";
+      }
       this.LoginService.Register(formData1).subscribe(
         resp => {
           console.log(resp.toString());

@@ -46,7 +46,7 @@ export class AddAccountComponent implements OnInit {
 
   }
   onSubmit() {
-
+    this.formData.data="";
     //this.formData.dateOfBirth  = this.formData.dateOfBirth.toString() + "T06:08:08-05:00";
     this.LoginService.addNewWF(this.formData).toPromise().then(
       resp => {

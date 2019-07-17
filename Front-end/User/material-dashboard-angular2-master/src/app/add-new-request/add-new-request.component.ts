@@ -45,6 +45,7 @@ export class AddNewRequestComponent implements OnInit {
     this.isHovering = event;
   }
   sendReqNextStep(nextStepID){
+    debugger;
     this.actionValues.push({ "key": this.formKey, "value": this.formValue})
     var mdSendReq = new SendRequest("", this.actionValues, this.listURL, this.workFlowTemplateID, nextStepID);
     this.loadStaffAcountService.sendReq(mdSendReq).toPromise().then(data =>{

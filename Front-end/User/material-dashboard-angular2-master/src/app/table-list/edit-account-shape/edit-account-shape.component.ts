@@ -64,6 +64,7 @@ export class EditAccountShapeComponent implements OnInit {
   public positionTop: any;
   public positionLeft: any;
   public enableDeleteArrow = false;
+  saveIDofWF:any;
 
   getListPer: any;
   constructor(
@@ -92,6 +93,7 @@ export class EditAccountShapeComponent implements OnInit {
 
     this.activatedRoute.params.subscribe(item => {
       if (item.id) {
+        this.saveIDofWF = item.id;
         //load dữ liệu của thằng này kiểu json để show lên lại
         this.shapeService.getJsonByUserId(item.id).toPromise().then(res => {
 
@@ -310,7 +312,7 @@ export class EditAccountShapeComponent implements OnInit {
 
     //const exportJson = [];
     let exportJson: any = { action: [], arrow: [] };
-
+    let exportJson2: any = {workFlowID: String, action: [], arrow: [] };
     // for (let i = 0; i < this.listClass.length; i++) {
     //   let obj;
     //   // Lấy value từ id input tag
@@ -415,7 +417,7 @@ export class EditAccountShapeComponent implements OnInit {
       classKey.positionTop = positionKey.position().top;
       classKey.positionLeft = positionKey.position().left;
       exportJson.action.push(classKey);
-
+      exportJson2.action.push(classKey);
 
 
     }
@@ -429,20 +431,27 @@ export class EditAccountShapeComponent implements OnInit {
       //đẩy mũi tên vô có 1 dòng vậy thôi à?
       this.listClass.forEach(element => {
         exportJson.arrow.push(element);
+        exportJson2.arrow.push(element);
       })
 
-
+      exportJson2.workFlowID= this.saveIDofWF;
       //lưu  lại
-      const json = JSON.stringify(exportJson);
+      const json = JSON.stringify(exportJson2);
       const blob = new Blob([json], { type: 'application/json' });
       saveAs(blob, 'data' + this.convertDateFileName(new Date()) + '.json');
       //đoạn này mình chỉnh sửa để push dc lên server
-      const data = {
-        json: exportJson
-      }
-      var a = JSON.stringify(exportJson);
+      // const data = {
+      //   json: exportJson
+      // }
+      var a = {id: this.saveIDofWF, "data": JSON.stringify(exportJson)};
       debugger;
-      this.shapeService.postJsonFile(a).subscribe((res: any) => {
+      // this.shapeService.postJsonFile(a).subscribe((res: any) => {
+      // }, (err) => {
+      //   console.log(err);
+      // });
+      exportJson2.workFlowID= this.saveIDofWF;
+      var b = {id: this.saveIDofWF, "data": JSON.stringify(exportJson2)};
+      this.shapeService.saveAndACtiveJsonFile(exportJson2).subscribe((res: any) => {
       }, (err) => {
         console.log(err);
       });

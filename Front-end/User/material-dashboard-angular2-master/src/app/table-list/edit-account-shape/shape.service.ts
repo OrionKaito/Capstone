@@ -19,18 +19,21 @@ export class ShapeService {
       return this.http.get(this.urlApi  + "/api/Permissions");
     }
 
-    public postJsonFile(json) {
+    public postJsonFile(json) { 
       // return this.http.post(this.urlApi + 'post-data-json', json, {headers : this.tokenHeader });
-      var send = {
-        "name": json,
-        "data": json
-      }
-      return this.http.post(this.urlApi + '/api/ActionTypes', send);
+      var token = "Bearer " + localStorage.getItem("token");
+      var tokenHeader = new HttpHeaders({'Authorization': token}); 
+      return this.http.put(this.urlApi + '/api/WorkflowsTemplates/drafJson', json , {headers : tokenHeader });
+    }
+    public saveAndACtiveJsonFile(json) { 
+      // return this.http.post(this.urlApi + 'post-data-json', json, {headers : this.tokenHeader });
+      var token = "Bearer " + localStorage.getItem("token");
+      var tokenHeader = new HttpHeaders({'Authorization': token}); 
+      return this.http.put(this.urlApi + '/api/WorkflowsTemplates/saveJson', json , {headers : tokenHeader });
     }
 
-    public getJsonByUserId(id) {
-      id= "7397e241-baac-4d6b-d77d-08d707a80d16";
-      return this.http.get(this.urlApi + '/api/ActionTypes/GetByID?ID=' + id);
+    public getJsonByUserId(id) {   
+      return this.http.get(this.urlApi + '/api/WorkflowsTemplates/GetByID?ID=' + id);
     }
 
 }

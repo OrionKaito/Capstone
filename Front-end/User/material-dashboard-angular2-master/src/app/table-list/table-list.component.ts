@@ -99,8 +99,8 @@ export class TableListComponent implements OnInit {
   public navigateEdit(id) {
     // navigate qua trang edit với id của User
     // Mock IdUser
- var a= "3907939d-e84a-4031-d66e-08d705d897af"
-    this.router.navigate(['edit-account/', a]);
+
+    this.router.navigate(['edit-account/', id]);
   }
 
 }

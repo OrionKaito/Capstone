@@ -16,14 +16,22 @@ namespace Capstone.Controllers
     public class WorkflowsTemplatesController : ControllerBase
     {
         private readonly IMapper _mapper;
+        private readonly IWorkFlowTemplateActionService _workFlowTemplateActionService;
+        private readonly IWorkFlowTemplateActionConnectionService _workFlowTemplateActionConnectionService;
+        private readonly IConnectionTypeService _connectionTypeService;
         private readonly IWorkFlowTemplateService _workFlowService;
         private readonly IPermissionService _permissionService;
 
-        public WorkflowsTemplatesController(IMapper mapper, IWorkFlowTemplateService workFlowService, IPermissionService permissionService)
+        public WorkflowsTemplatesController(IMapper mapper, IWorkFlowTemplateService workFlowService, IPermissionService permissionService, IConnectionTypeService connectionTypeService,
+            IWorkFlowTemplateActionService workFlowTemplateActionService,
+             IWorkFlowTemplateActionConnectionService workFlowTemplateActionConnectionService)
         {
             _mapper = mapper;
             _workFlowService = workFlowService;
             _permissionService = permissionService;
+            _workFlowTemplateActionService = workFlowTemplateActionService;
+            _connectionTypeService = connectionTypeService;
+            _workFlowTemplateActionConnectionService = workFlowTemplateActionConnectionService;
         }
         
         // GET: api/Workflows
@@ -110,6 +118,93 @@ namespace Capstone.Controllers
                 _mapper.Map<WorkFlowTemplate>(model);
                 _workFlowService.Save();
                 return Ok(WebConstant.Success);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
+        [HttpPut("drafJson")]
+        public ActionResult PutDrafJson(WorkFlowTemplateJSON model)
+        {
+            if (!ModelState.IsValid) return BadRequest(ModelState);
+
+            try
+            {
+                var workFlowInDb = _workFlowService.GetByID(model.ID);
+                if (workFlowInDb == null) return BadRequest(WebConstant.NotFound);
+
+                var userID = HttpContext.User.Claims.FirstOrDefault(u => u.Type == ClaimTypes.NameIdentifier).Value;
+                if (workFlowInDb.OwnerID != userID) return BadRequest(WebConstant.AccessDined);
+
+                workFlowInDb.Data = model.Data;
+                _workFlowService.Save();
+                return Ok(WebConstant.Success);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
+        [HttpPut("saveJson")]
+        public ActionResult PutSaveJson(FullWorkFlowTem model)
+        {
+            if (!ModelState.IsValid) return BadRequest(ModelState);
+            try
+            {
+                var saveWFTAId = new Guid[model.action.Length];
+                int saveIndex = 0;
+                foreach (var actionItem in model.action)
+                {
+                    WorkFlowTemplateActionCM thisModel = new WorkFlowTemplateActionCM();
+                    thisModel.WorkFlowTemplateID = model.WorkFlowID;
+                    thisModel.Name = actionItem.name;
+                    thisModel.Description = actionItem.description;
+                    thisModel.IsApprovedByLineManager = actionItem.isApprovedByLineManager;
+                    thisModel.IsStart = actionItem.start;
+                    thisModel.IsEnd = actionItem.end;
+                    thisModel.PermissionToUseID = actionItem.permissionToUseID;
+                    thisModel.ActionTypeID = new Guid("bd363bff-11f5-49eb-67ac-08d709b08fff");
+                    WorkFlowTemplateAction workFlowTemplateAction = new WorkFlowTemplateAction();
+                    // trùng tên kệ cha nó chứ :)))
+                    //if (_workFlowTemplateActionService.GetByName(thisModel.Name) != null) return BadRequest("WorkflowTemplateAction "
+                    //  + WebConstant.NameExisted);
+                    workFlowTemplateAction = _mapper.Map<WorkFlowTemplateAction>(thisModel);
+                    _workFlowTemplateActionService.Create(workFlowTemplateAction);
+
+                    saveWFTAId[saveIndex] = workFlowTemplateAction.ID;
+                    saveIndex++;
+
+
+                }
+
+                foreach (var arrowAction in model.arrow)
+                {
+                    ConnectionTypeCM thisModel = new ConnectionTypeCM();
+                    thisModel.Name = arrowAction.name;
+
+                    ConnectionType connectionType = new ConnectionType();
+                    connectionType = _mapper.Map<ConnectionType>(thisModel);
+                    _connectionTypeService.Create(connectionType);
+
+                    WorkFlowTemplateActionConnectionCM thisConModel = new WorkFlowTemplateActionConnectionCM();
+                    thisConModel.ConnectionTypeID = connectionType.ID;
+                    for (int i = 0; i < model.action.Length; i++)
+                    {
+                        if (arrowAction.idDiv[0].Equals(model.action[i].id))
+                        {
+                            thisConModel.FromWorkFlowTemplateActionID = saveWFTAId[i];
+                        }
+                        if (arrowAction.idDiv[1].Equals(model.action[i].id))
+                        {
+                            thisConModel.ToWorkFlowTemplateActionID = saveWFTAId[i];
+                        }
+                    }
+                    WorkFlowTemplateActionConnection workFlowTemplateActionConnection = new WorkFlowTemplateActionConnection();
+                    workFlowTemplateActionConnection = _mapper.Map<WorkFlowTemplateActionConnection>(thisConModel);
+                    _workFlowTemplateActionConnectionService.Create(workFlowTemplateActionConnection);
+                }
+                return StatusCode(201);
             }
             catch (Exception e)
             {
