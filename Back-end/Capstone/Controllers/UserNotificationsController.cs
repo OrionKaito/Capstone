@@ -160,17 +160,19 @@ namespace Capstone.Controllers
                     var notificationVM = new NotificationViewModel
                     {
                         WorkflowName = _workFlowTemplateService.GetByID(request.WorkFlowTemplateID).Name,
+                        UserNotificationID = userNotification.ID,
                         ActorName = _userManager.FindByIdAsync(request.InitiatorID).Result.FullName,
                         EventID = notificationInDb.EventID,
                         Message = notificationType == NotificationEnum.CompletedRequest ? WebConstant.CompletedRequestMessage : WebConstant.ReceivedRequestMessage,
                         NotificationType = notificationInDb.NotificationType,
                         NotificationTypeName = notificationInDb.NotificationType.ToString(),
                         CreateDate = notificationInDb.CreateDate,
+                        IsRead = userNotification.IsRead,
                         IsHandled = notificationInDb.IsHandled
                     };
                     result.Add(notificationVM);
-                    userNotification.IsRead = true;
-                    _userNotificationService.Save();
+                    //userNotification.IsRead = true;
+                    //_userNotificationService.Save();
                 }
 
                 //return Ok(WebConstant.NoNotificationYet);

@@ -38,7 +38,13 @@ namespace Capstone.Service
             int numberOfNotification = 0;
             foreach (var item in notification)
             {
-                numberOfNotification += _userNotificationRepository.GetMany(u => u.IsDeleted == false && u.IsRead == false && u.UserID.Equals(ID) && u.NotificationID == item.ID).Count();
+                if (notificationType == NotificationEnum.CompletedRequest)
+                {
+                    numberOfNotification += _userNotificationRepository.GetMany(u => u.IsDeleted == false && u.IsRead == false && u.UserID.Equals(ID) && u.NotificationID == item.ID).Count();
+                } else if (notificationType == NotificationEnum.ReceivedRequest)
+                {
+                    numberOfNotification += _userNotificationRepository.GetMany(u => u.IsDeleted == false && u.UserID.Equals(ID) && u.NotificationID == item.ID).Count();
+                }
             }
             return numberOfNotification;
         }
@@ -78,11 +84,11 @@ namespace Capstone.Service
 
             if (isCheckHandled)
             {
-                notificationList.AddRange(_notificationRepository.GetByNotificationTypeAndIsHandled(notificationType).OrderBy(u => u.CreateDate));
+                notificationList.AddRange(_notificationRepository.GetByNotificationTypeAndIsHandled(notificationType).OrderByDescending(u => u.CreateDate));
             }
             else
             {
-                notificationList.AddRange(_notificationRepository.GetByNotificationType(notificationType).OrderBy(u => u.CreateDate));
+                notificationList.AddRange(_notificationRepository.GetByNotificationType(notificationType).OrderByDescending(u => u.CreateDate));
             }
 
             foreach (var item in notificationList)

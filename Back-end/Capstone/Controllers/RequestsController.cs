@@ -360,7 +360,7 @@ namespace Capstone.Controllers
         }
 
         [HttpGet("GetRequestResult")]
-        public ActionResult<RequestResultVM> GetRequestResult(Guid requestActionID)
+        public ActionResult<RequestResultVM> GetRequestResult(Guid requestActionID, Guid userNotificationID)
         {
             try
             {
@@ -368,7 +368,13 @@ namespace Capstone.Controllers
                 var requestAction = _requestActionService.GetByID(requestActionID);
                 var request = _requestService.GetByID(requestAction.RequestID);
 
-                if (request == null) return BadRequest(WebConstant.NotFound);
+                if (request == null) return BadRequest("RequestAction" + WebConstant.NotFound);
+
+                var userNotification = _userNotificationService.GetByID(userNotificationID);
+
+                if (userNotification == null) return BadRequest("UserNotification" + WebConstant.NotFound);
+                userNotification.IsRead = true;
+                _userNotificationService.Save();
 
                 var workflow = _workFlowTemplateService.GetByID(request.WorkFlowTemplateID);
 
