@@ -138,9 +138,6 @@ namespace Capstone.Controllers
                 var workFlowInDb = _workFlowService.GetByID(model.ID);
                 if (workFlowInDb == null) return BadRequest(WebConstant.NotFound);
 
-                var userID = HttpContext.User.Claims.FirstOrDefault(u => u.Type == ClaimTypes.NameIdentifier).Value;
-                if (workFlowInDb.OwnerID != userID) return BadRequest(WebConstant.AccessDined);
-
                 _mapper.Map<WorkFlowTemplate>(model);
                 _workFlowService.Save();
                 return Ok(WebConstant.Success);
@@ -251,6 +248,26 @@ namespace Capstone.Controllers
             catch (Exception e)
             {
                 _workFlowService.RollBack();
+                return BadRequest(e.Message);
+            }
+        }
+
+        [HttpPut("SaveCraft")]
+        public ActionResult SaveCraft(SaveCraftTemplateUM model)
+        {
+            if (!ModelState.IsValid) return BadRequest(ModelState);
+
+            try
+            {
+                var workFlowInDb = _workFlowService.GetByID(model.ID);
+                if (workFlowInDb == null) return BadRequest(WebConstant.NotFound);
+
+                workFlowInDb.Data = model.Data;
+                _workFlowService.Save();
+                return Ok(WebConstant.Success);
+            }
+            catch (Exception e)
+            {
                 return BadRequest(e.Message);
             }
         }
