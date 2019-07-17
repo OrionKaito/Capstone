@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical"
+    tools:context=".fragment.ViewProfileFragment">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp50"
+        android:background="@color/light_blue">
+
+        <ImageView
+            android:id="@+id/img_Back"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/dp24"
+            android:layout_centerVertical="true"
+            android:layout_margin="@dimen/dp12"
+            android:background="@drawable/ic_white_back" />
+
+        <TextView
+            android:id="@+id/tv_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:text="Profile"
+            android:textColor="@color/white"
+            android:textSize="@dimen/sp20" />
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="@dimen/dp20">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:weightSum="10">
+
+            <EditText
+                android:id="@+id/edt_full_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="#00000000"
+                android:text="Fullname"
+                android:textColor="@color/colortext"
+                android:textSize="@dimen/sp20" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="9"
+                android:gravity="center">
+
+                <ImageView
+                    android:id="@+id/img_edit_fullname"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/ic_blue_edit_buttons" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp1"
+            android:layout_marginTop="@dimen/dp15"
+            android:layout_marginBottom="@dimen/dp15"
+            android:background="@color/light_gray" />
+
+        <TextView
+            android:id="@+id/tv_email"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Email"
+            android:textColor="@color/colorhint"
+            android:textSize="@dimen/sp20" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp1"
+            android:layout_marginTop="@dimen/dp15"
+            android:layout_marginBottom="@dimen/dp15"
+            android:background="@color/light_gray" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:weightSum="10">
+
+            <TextView
+                android:id="@+id/tv_birth_day"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="DateOfBirth"
+                android:textColor="@color/colortext"
+                android:textSize="@dimen/sp20" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="9"
+                android:gravity="center">
+
+                <ImageView
+                    android:id="@+id/img_edit_dob"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/ic_calendar" />
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/btn_save"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/dp100"
+        android:layout_marginTop="@dimen/dp15"
+        android:layout_marginRight="@dimen/dp100"
+        android:layout_marginBottom="@dimen/dp15"
+        android:background="@drawable/btn_change"
+        android:gravity="center"
+        android:text="SAVE"
+        android:textColor="@color/white"
+        android:textSize="@dimen/sp18" />
+
+</LinearLayout>
