@@ -38,7 +38,13 @@ namespace Capstone.Service
             int numberOfNotification = 0;
             foreach (var item in notification)
             {
-                numberOfNotification += _userNotificationRepository.GetMany(u => u.IsDeleted == false && u.IsRead == false && u.UserID.Equals(ID) && u.NotificationID == item.ID).Count();
+                if (notificationType == NotificationEnum.CompletedRequest)
+                {
+                    numberOfNotification += _userNotificationRepository.GetMany(u => u.IsDeleted == false && u.IsRead == false && u.UserID.Equals(ID) && u.NotificationID == item.ID).Count();
+                } else if (notificationType == NotificationEnum.ReceivedRequest)
+                {
+                    numberOfNotification += _userNotificationRepository.GetMany(u => u.IsDeleted == false && u.UserID.Equals(ID) && u.NotificationID == item.ID).Count();
+                }
             }
             return numberOfNotification;
         }
