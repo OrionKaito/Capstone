@@ -16,10 +16,11 @@ namespace Capstone.Controllers
     public class WorkflowsTemplatesController : ControllerBase
     {
         private readonly IMapper _mapper;
-        private readonly IWorkFlowTemplateService _workFlowService;
-        private readonly IPermissionService _permissionService;
         private readonly IWorkFlowTemplateActionService _workFlowTemplateActionService;
         private readonly IWorkFlowTemplateActionConnectionService _workFlowTemplateActionConnectionService;
+        private readonly IConnectionTypeService _connectionTypeService;
+        private readonly IWorkFlowTemplateService _workFlowService;
+        private readonly IPermissionService _permissionService;
 
         public WorkflowsTemplatesController(IMapper mapper
             , IWorkFlowTemplateService workFlowService
@@ -112,7 +113,7 @@ namespace Capstone.Controllers
 
                 foreach (var item in permissionsOfUser)
                 {
-                    var workflows = _workFlowService.GetByPermissionToUse(item.ID);
+                    var workflows = _workFlowService.GetByPermissionToEdit(item.ID);
 
                     foreach (var workflow in workflows)
                     {

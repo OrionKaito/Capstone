@@ -1,5 +1,9 @@
 export class AccountItem {
     id: string
     name: string
-    permission: string
+    description: string;
+    data: string;
+    permissionToEditID: string;
+    permissionToUseID: string;
+
 }

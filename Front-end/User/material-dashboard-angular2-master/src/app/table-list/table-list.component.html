@@ -49,10 +49,12 @@
                                             matTooltip="Edit Account">
                                             <mat-icon id="element.id">border_color</mat-icon>
                                         </button>
-                                        <button (click)="EditWFAtTool(element.id)" mat-icon-button
-                                            matTooltip="Edit Account">
-                                            <mat-icon id="element.id">perm_data_setting</mat-icon>
-                                        </button>
+                                        <a (click)="navigateEdit(element.id)">
+                                            <button mat-icon-button
+                                                matTooltip="Edit Account">
+                                                <mat-icon id="element.id">perm_data_setting</mat-icon>
+                                            </button>
+                                        </a>
                                     </mat-cell>
                                 </ng-container>
 

@@ -11,15 +11,16 @@ import { Router } from '@angular/router';
 })
 export class UserProfileComponent implements OnInit {
 userDetail;
+userDetail1;
   constructor(private router: Router , private loginService: LoginService ) { }
 
   ngOnInit() {
     debugger;
-    this.loginService.getUserProfile().subscribe(
+    this.loginService.getUserProfile().toPromise().then(
       resp =>{
         debugger;
-        this.userDetail = resp;
-        console.log("test thư:" + resp.toString());
+        this.userDetail1 = resp;
+        this.userDetail = this.userDetail1[0];
       },
       err => {
         console.log(err);
@@ -27,16 +28,13 @@ userDetail;
     )
   }
   updateProfile(){
-
-    
     this.loginService.updateUserProfile(this.userDetail.fullName,this.userDetail.dateOfBirth).subscribe(
       data=>{
-        console.log(data);       
+        console.log(data);     
       },
       err=>{
         console.log(err);
       }
-
     )
   }
 

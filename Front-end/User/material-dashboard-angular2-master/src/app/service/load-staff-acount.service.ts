@@ -58,6 +58,21 @@ export class LoadStaffAcountService {
   loadGroupData() {
     return this.http.get(this.Url + "/api/Groups");
   }
+  loadWorkflowForUserData(){
+    var token = "Bearer " + localStorage.getItem("token");
+    var tokenHeader = new HttpHeaders({'Authorization': token});
+    return this.http.get(this.Url + "/api/WorkflowsTemplates/GetUserWorkflow", {headers : tokenHeader });
+  }
+
+  loadHandlingRequest(){
+    var token = "Bearer " + localStorage.getItem("token");
+    var tokenHeader = new HttpHeaders({'Authorization': token});
+    return this.http.get(this.Url + "/api/UserNotifications/GetNotificationByUserId?notificationType=2", {headers : tokenHeader });
+  }
+  loadPermissionGroupData() {
+    return this.http.get(this.Url + "/api/PermissionOfGroups");
+  }
+
   loadPermissionData() {
     return this.http.get(this.Url + "/api/Permissions");
   }
@@ -74,6 +89,17 @@ export class LoadStaffAcountService {
     return this.http.get(this.Url + "/api/Permissions/GetByID?ID=" + id);
 
   }
+  addPermissionGr(model: any) {
+    return this.http.post(this.Url + "/api/PermissionOfGroups", model);
+  }
+
+  getRequestForm(id){
+    return this.http.get(this.Url + "/api/Requests/GetRequestForm?workFlowTemplateID=" + id);
+  }
+  getHandleForm(id){
+    return this.http.get(this.Url + "/api/Requests/GetRequestHandleForm?requestActionID=" + id);
+  }
+
 
   getRolebyID(id) {
     return this.http.get(this.Url + "/api/Roles/GetByUserID?ID=" + id, { responseType: 'json' });
@@ -89,6 +115,21 @@ export class LoadStaffAcountService {
   loadGroupByID(id) {
     return this.http.get(this.Url + " /api/Groups/GetByID?ID=" + id);
 
+  }
+  sendReq(req){
+    var token = "Bearer " + localStorage.getItem("token");
+    var tokenHeader = new HttpHeaders({'Authorization': token});
+    return this.http.post(this.Url + "/api/Requests", req, {headers : tokenHeader });
+  }
+  sendReqHandle(req){
+    var token = "Bearer " + localStorage.getItem("token");
+    var tokenHeader = new HttpHeaders({'Authorization': token});
+    return this.http.post(this.Url + "/api/Requests/ApproveRequest", req, {headers : tokenHeader });
+  }
+  upLoadFileToServe(req){
+    var token = "Bearer " + localStorage.getItem("token");
+    var tokenHeader = new HttpHeaders({'Authorization': token});
+    return this.http.post(this.Url + "/api/RequestFiles", req, {headers : tokenHeader });
   }
 
 }

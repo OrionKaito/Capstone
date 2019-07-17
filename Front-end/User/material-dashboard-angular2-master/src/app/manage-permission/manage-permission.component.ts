@@ -14,7 +14,6 @@ import { AddPermissionComponent } from 'app/add-permission/add-permission.compon
   styleUrls: ['./manage-permission.component.scss']
 })
 export class ManagePermissionComponent implements OnInit {
-
   users: any = [];
   dataGet: any = [];
   dataSave: any = [];
@@ -96,10 +95,6 @@ export class ManagePermissionComponent implements OnInit {
     });
     this.callAll();
   }
-  EditWFAtTool() {
-
-  }
-
 }
 
  

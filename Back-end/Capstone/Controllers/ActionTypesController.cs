@@ -5,6 +5,7 @@ using Capstone.Service;
 using Capstone.ViewModel;
 using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 
 namespace Capstone.Controllers
@@ -15,13 +16,24 @@ namespace Capstone.Controllers
     {
         private readonly IMapper _mapper;
         private readonly IActionTypeService _actionTypeService;
+        private readonly IWorkFlowTemplateActionService _workFlowTemplateActionService;
+        private readonly IWorkFlowTemplateActionConnectionService _workFlowTemplateActionConnectionService;
+        private readonly IConnectionTypeService _connectionTypeService;
 
-        public ActionTypesController(IMapper mapper, IActionTypeService actionTypeService)
+        public ActionTypesController(
+            IMapper mapper, 
+            IActionTypeService actionTypeService,
+            IConnectionTypeService connectionTypeService,
+            IWorkFlowTemplateActionService workFlowTemplateActionService,
+             IWorkFlowTemplateActionConnectionService workFlowTemplateActionConnectionService)
         {
             _mapper = mapper;
             _actionTypeService = actionTypeService;
+            _workFlowTemplateActionService = workFlowTemplateActionService;
+            _connectionTypeService = connectionTypeService;
+            _workFlowTemplateActionConnectionService = workFlowTemplateActionConnectionService;
         }
-
+        
         // POST: api/ActionTypes
         [HttpPost]
         public ActionResult PostActionType(ActionTypeCM model)

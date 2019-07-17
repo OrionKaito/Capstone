@@ -25,7 +25,7 @@ export class LoadStaffAcountService {
     return this.http.get(this.Url + "/api/Roles");
   }
   deleteRole(id: string) {
-    return this.http.delete(this.Url + "/api/Roles?ID=" + id);
+    return this.http.put(this.Url + "/api/Roles/ToggleRole?ID=" + id, {"ID": id});
   }
   addRole(model: any) {
     return this.http.post(this.Url + "/api/Roles", model, { responseType: 'text' });
@@ -37,7 +37,7 @@ export class LoadStaffAcountService {
     return this.http.get(this.Url + "/api/Roles/GetByID?ID=" + id);
   }
   deleteGroup(id: string) {
-    return this.http.delete(this.Url + "/api/Groups?ID=" + id);
+    return this.http.put(this.Url + "/api/Groups/ToggleGroup?ID=" + id, {"ID": id});
   }
   addGroup(model: any) {
     return this.http.post(this.Url + "/api/Groups", model, { responseType: 'text' });
@@ -76,7 +76,7 @@ export class LoadStaffAcountService {
   }
 
   loadGroupByID(id) {
-    return this.http.get(this.Url + " /api/Groups/GetByID?ID=" + id);
+    return this.http.get(this.Url + "/api/Groups/GetByID?ID=" + id);
 
   }
 

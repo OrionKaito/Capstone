@@ -1,0 +1,51 @@
+<div class="main-content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header card-header-danger">
+                        <h4 class="card-title ">Waiting request list</h4>
+                        <p class="card-category">List of request waiting for your handling</p>
+                    </div>
+                    <div class="card-body">
+                        <div class="search-div">
+                            <mat-form-field class="search-form-field" floatLabel="never">
+                                <input matInput [(ngModel)]="searchKey" placeholder="Search" autocomplete="off"
+                                    (keyup)="applyFilter()">
+                                <button mat-button matSuffix mat-icon-button aria-label="Clear" *ngIf="searchKey"
+                                    (click)="onSearchClear()">
+                                    <mat-icon>close</mat-icon>
+                                </button>
+                            </mat-form-field>
+                        </div>
+                        <div class="table-responsive">
+
+                            <mat-table [dataSource]="listData" matSort>
+  
+                                <ng-container matColumnDef="name">
+                                    <mat-header-cell *matHeaderCellDef mat-sort-header>Name of request</mat-header-cell>
+                                    <mat-cell *matCellDef="let element"  (click)="CreateRequestOfWF(element.eventID)">{{element.message}} from {{element.actorName}}</mat-cell>
+                                </ng-container>
+                                <ng-container matColumnDef="isDeleted">
+                                    <mat-header-cell *matHeaderCellDef></mat-header-cell>
+                                    <mat-cell *matCellDef="let element">                       
+                                        <button (click)="CreateRequestOfWF(element.eventID)" mat-icon-button
+                                            matTooltip="Full Request Information">
+                                            <mat-icon id="element.id">description</mat-icon>
+                                        </button>          
+                                    </mat-cell>
+                                </ng-container>
+  
+                                <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+                                <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+  
+                            </mat-table>
+                            <mat-paginator [pageSizeOptions]="[5,10,25,100]" [pageSize]="5" showFirstLastButtons>
+                            </mat-paginator>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+  </div>
