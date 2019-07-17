@@ -81,8 +81,6 @@ export class EditAccountShapeComponent implements OnInit {
       description: "",
       permissionToUseID: "",
       isApprovedByLineManager: false,
-      start: false,
-      end: false
     }
     this.propertiesArr = {
       name: ""
@@ -172,8 +170,7 @@ export class EditAccountShapeComponent implements OnInit {
     subEvent.description = 'FormDescription' + count;
     subEvent.permissionToUseID = "0";
     subEvent.isApprovedByLineManager = false;
-    subEvent.start = true;
-    subEvent.end = true;
+
 
     //subEvent.idText = 'form' + count;
     subEvent.formControlName = 'form' + count;

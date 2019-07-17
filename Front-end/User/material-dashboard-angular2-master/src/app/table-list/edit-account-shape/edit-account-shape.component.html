@@ -32,7 +32,7 @@
         <td>Description</td>
         <td><input name="properties.description" [(ngModel)]="properties.description" type="text"></td>
       </tr>
-      <tr *ngIf="checkIsAction">
+      <tr *ngIf="!properties.isApprovedByLineManager">
         <td>Permission</td>
         <td><select name="properties.permissionToUseID" [(ngModel)]="properties.permissionToUseID">
             <option *ngFor="let item of listDropdown" value="{{item.id}}">{{item.name}}</option>
@@ -47,10 +47,10 @@
         <td>Start WF <input name="properties.start" [(ngModel)]="properties.start" type="checkbox"></td>
         <td>End WF <input name="properties.end" [(ngModel)]="properties.end" type="checkbox"></td>
       </tr>
-      <tr *ngIf="checkIsArrow">
+      <!-- <tr *ngIf="checkIsArrow">
         <td>Name arrow </td>
         <td><input name="propertiesArr.name" [(ngModel)]="propertiesArr.name" type="text"></td>
-      </tr>
+      </tr> -->
     </table>
 
   </div>

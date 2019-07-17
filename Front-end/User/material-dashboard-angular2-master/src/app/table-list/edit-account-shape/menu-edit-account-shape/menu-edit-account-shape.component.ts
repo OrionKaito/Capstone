@@ -14,13 +14,25 @@ export class MenuEditAccountShapeComponent implements OnInit {
       id: '',
       idInput: 'input1',
       idText: '',
+      start: true,
+      end: false
     },
     {
       class: 'example-box1 purple-gradient',
       id: '',
       idInput: 'input2',
-      idText: ''
+      idText: '',
+      start: false,
+      end: false
     },
+    {
+      class: 'example-box3 aqua-gradient',
+      id: '',
+      idInput: 'input1',
+      idText: '',
+      start: false,
+      end: true
+    }
     // {
     //   class: 'example-box2 peach-gradient',
     //   id: '',
