@@ -6,6 +6,7 @@ import { Routes, RouterModule } from '@angular/router';
 import { AdminLayoutComponent } from './layouts/admin-layout/admin-layout.component';
 import { LoginComponent } from './login/login.component';
 import { AuthGuard } from './auth/auth.guard';
+import { EditAccountShapeComponent } from './table-list/edit-account-shape/edit-account-shape.component';
 
 const routes: Routes =[
   {    
@@ -22,12 +23,13 @@ const routes: Routes =[
   }, {
     path: '',
     component: AdminLayoutComponent,
-    canActivate: [AuthGuard] ,
+     canActivate: [AuthGuard] ,
     children: [{
       path: '',
       loadChildren: './layouts/admin-layout/admin-layout.module#AdminLayoutModule'
     }]
-  }
+  },
+  { path: 'edit-account/:id',   component: EditAccountShapeComponent },
 ];
 
 @NgModule({

@@ -4,6 +4,7 @@ import { LoadStaffAcountService } from 'app/service/load-staff-acount.service';
 import { element } from '@angular/core/src/render3';
 import { MatTableDataSource, MatSort, MatPaginator, MatDialog, MatDialogConfig } from '@angular/material';
 import { AddRoleComponent } from 'app/add-role/add-role.component';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-manage-role',
@@ -21,7 +22,7 @@ export class ManageRoleComponent implements OnInit {
   displayedColumns: string[] = ['roleName', "isDeleted"];
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild(MatPaginator) paginator: MatPaginator;
-  constructor(private router: Router, private dialog: MatDialog, private loadStaffAcountService: LoadStaffAcountService) { }
+  constructor(private toastr: ToastrService, private router: Router, private dialog: MatDialog, private loadStaffAcountService: LoadStaffAcountService) { }
 
   ngOnInit() {
     this.startAll()
@@ -35,15 +36,24 @@ export class ManageRoleComponent implements OnInit {
     })
   }
   banOrUnbanAcc(id) {
-    this.loadStaffAcountService.deleteRole(id).subscribe(
+    this.loadStaffAcountService.deleteRole(id).toPromise().then(
       data => {
-        console.log(data);
+        this.listData = new MatTableDataSource();
+        console.log("ádasdasd");
+        this.startAll();
+      
       },
       err => {
+        this.listData = new MatTableDataSource();
+        this.startAll();
         console.log(err);
       }
     )
-    location.reload();
+   
+    this.toastr.success("Success!")
+
+    
+    
   };
   onSearchClear() {
     this.searchKey = "";

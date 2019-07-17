@@ -1,0 +1,59 @@
+<h4 class="dispaly-4">Sẽ add thêm tên vô đây </h4>
+<div class="form-row">
+  <div class="form-group col-md-6">
+    <label> Name</label>  
+  </div>
+  <div class="form-group col-md-6">
+    <label>Type</label>  
+  </div>
+</div>
+  <div class="form-row">
+    <div class="form-group col-md-6">
+      <input name="nameHere" type="text" [(ngModel)]="nameHere" class="form-control" >
+    </div>
+    <div class="form-group col-md-6">
+      <select name="propertiesThis"  [(ngModel)]="propertiesThis" class="form-control">
+        <option value="0">-Select-</option>
+        <option value="1">Text only</option>
+        <option value="2">Short Text</option>
+        <option value="3">Long Text</option>
+        <option value="4">File Input</option>
+        <option value="5">Check Box</option>
+       </select>   
+    </div>    
+  </div>
+  <button (click)="addProperties(nameHere,propertiesThis)">Add</button>
+<hr>
+<!-- <form #form="ngForm" autocomplete="off" (submit)="onSubmit()"> -->
+    <div *ngFor="let item of listComboElement" class="form-row" >
+      <div *ngIf="item.textOnly.name" class="form-group col-md-6">
+        <label>{{item.textOnly.name}} </label>
+      </div>
+      <div *ngIf="item.shortText.name" class="form-group col-md-6">
+        <label>{{item.shortText.name}} </label>
+        <input [(ngModel)]="item.shortText.value" type="text" class="shortText-dynamicForm">
+      </div>
+      <div *ngIf="item.longText.name" class="form-group col-md-6">
+        <label>{{item.longText.name}} </label>
+        <input [(ngModel)]="item.longText.value" type="text" class="shortText-dynamicForm">
+      </div>
+      <div *ngIf="item.inputFile.name" class="form-row">
+        <label>{{item.inputFile.name}}</label>
+        <!-- <input [(ngModel)]="item.inputFile.value" type="file" class="file-input"> -->
+        <div class="file">
+          <label class="file-label">
+            <input class="file-input" type="file" multiple="multiple" (change)="onDrop($event.target.files)">
+          </label>
+        </div>
+      </div>
+      <div *ngIf="item.inputCheckbox.name" class="form-group col-md-6">
+        <label>{{item.inputCheckbox.name }}</label>  
+        <input type="file" (change)="onFileChange($event)" />
+      </div>
+    </div>
+  <div class="form-group">
+    <!-- <button *ngFor="let item of buttons" id="item.nextStepID" (click)="sendReqNextStep(item.nextStepID)" class="btn btn-dark"><i class="fa fa-database"></i> {{item.connectionTypeName}}</button> -->
+    <button > Sẽ thêm tên buttton vô đây</button>
+    <input type="file" (change)="onFileChange($event)" />
+  </div>
+<!-- </form>  -->

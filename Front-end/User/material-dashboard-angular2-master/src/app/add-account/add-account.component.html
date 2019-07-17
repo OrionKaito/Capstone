@@ -1,21 +1,31 @@
-<h4 *ngIf="createAcc" class="dispaly-4">Add new Account</h4>
-<h4 *ngIf="!createAcc" class="dispaly-4">Edit Account</h4>
+<h4 *ngIf="createAcc" class="dispaly-4">Add new Workflow</h4>
+<h4 *ngIf="!createAcc" class="dispaly-4">Edit Workflow</h4>
 <hr>
 <form #form="ngForm" autocomplete="off" (submit)="onSubmit()">
-
-  
-  <div *ngIf="createAcc" class="form-group">
+  <div class="form-group">
     <label>Name of Workflow</label>
     <input name="name" type="text" [(ngModel)]="formData.name" class="form-control" >
   </div>
+  <div class="form-group">
+    <label>Description</label>
+    <input name="name" type="text" [(ngModel)]="formData.description" class="form-control" >
+  </div>
   <div class="form-row">
       <label>Permission to edit</label>
-      <select name="permission"  [(ngModel)]="formData.permission" class="form-control">
+      <select name="permission"  [(ngModel)]="formData.permissionToEditID" class="form-control">
       <option value="0">-Select-</option>
       <option *ngFor="let item of permissionList" value="{{item.id}}">{{item.name}}</option>
      </select>
    
-  </div>    
+  </div> 
+  <div class="form-row">
+    <label>Permission to use this Workflow</label>
+    <select name="permission"  [(ngModel)]="formData.permissionToUseID" class="form-control">
+    <option value="0">-Select-</option>
+    <option *ngFor="let item of permissionList" value="{{item.id}}">{{item.name}}</option>
+   </select>
+ 
+</div>    
   
   <div class="form-group">
     <button type="submit" class="btn btn-dark"><i class="fa fa-database"></i> Submit</button>
