@@ -50,4 +50,10 @@ namespace Capstone.ViewModel
         public IEnumerable<WorkFlowActionCM> Actions { get; set; }
         public IEnumerable<WorkFlowTemplateActionConnectionCM> Connections { get; set; }
     }
+
+    public class SaveCraftTemplateUM
+    {
+        public Guid ID { get; set; }
+        public string Data { get; set; }
+    }
 }
