@@ -18,6 +18,13 @@ export class ShapeService {
     public getDropdownList() {
       return this.http.get(this.urlApi  + "/api/Permissions");
     }
+    public getActiontype() {
+      return this.http.get(this.urlApi  + "/api/ActionTypes");
+    }
+    public getConnectionType(){
+      return this.http.get(this.urlApi  + "/api/ConnectionTypes");
+    }
+
 
     public postJsonFile(json) { 
       // return this.http.post(this.urlApi + 'post-data-json', json, {headers : this.tokenHeader });
@@ -34,6 +41,16 @@ export class ShapeService {
 
     public getJsonByUserId(id) {   
       return this.http.get(this.urlApi + '/api/WorkflowsTemplates/GetByID?ID=' + id);
+    }
+    public saveDraf(data){
+      var token = "Bearer " + localStorage.getItem("token");
+      var tokenHeader = new HttpHeaders({'Authorization': token}); 
+      return this.http.put(this.urlApi + '/api/WorkflowsTemplates/SaveCraft', data , {headers : tokenHeader });
+    }
+    public saveWorkFlow(data){
+      var token = "Bearer " + localStorage.getItem("token");
+      var tokenHeader = new HttpHeaders({'Authorization': token}); 
+      return this.http.put(this.urlApi + '/api/WorkflowsTemplates/SaveWorkflow', data , {headers : tokenHeader });
     }
 
 }

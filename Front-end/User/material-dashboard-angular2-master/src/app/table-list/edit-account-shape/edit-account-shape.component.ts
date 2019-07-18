@@ -26,6 +26,8 @@ export class EditAccountShapeComponent implements OnInit {
   propertiesArr: any;
   checkIsAction: boolean;
   checkIsArrow: boolean;
+  listActionType: any = [];
+  listConnectionType: any = [];
 
   public dataModel: any;
 
@@ -67,6 +69,8 @@ export class EditAccountShapeComponent implements OnInit {
   saveIDofWF:any;
 
   getListPer: any;
+  getListCon: any;
+  getListAction: any;
   constructor(
     public toastr: ToastrService,
     public dialog: MatDialog,
@@ -110,6 +114,8 @@ export class EditAccountShapeComponent implements OnInit {
       }
     });
     this.getDropdownList();
+    this.getlistActionType();
+    this.getListConnectionType();
   }
   //lấy list permission
   public getDropdownList() {
@@ -123,6 +129,29 @@ export class EditAccountShapeComponent implements OnInit {
 
     })
   }
+  public getListConnectionType(){
+    this.shapeService.getConnectionType().toPromise().then((res: any) => {
+      if (res) {
+        this.getListCon = res;
+        this.getListCon.forEach(item => {
+          this.listConnectionType.push(item);
+        });
+      }
+
+    })
+  }
+   public getlistActionType(){
+    this.shapeService.getActiontype().toPromise().then((res: any) => {
+      debugger;
+      if (res) {
+        this.getListAction = res;
+        this.getListAction.forEach(item => {
+          this.listActionType.push(item);
+        });
+      }
+
+    })
+   }
   // hình như là để vẽ mũi tên, k chắc lắm, hình như đúng rồi, haha
   //item này là của menuList1, menuList1 hình như là để chứa các hình
   public dropImageBottom(item) {
@@ -170,10 +199,9 @@ export class EditAccountShapeComponent implements OnInit {
     subEvent.description = 'FormDescription' + count;
     subEvent.permissionToUseID = "0";
     subEvent.isApprovedByLineManager = false;
-
-
     //subEvent.idText = 'form' + count;
     subEvent.formControlName = 'form' + count;
+    subEvent.actionTypeID = "0";
     // subEvent.dropdown = this.listDropdown;
 
     debugger;
@@ -448,10 +476,10 @@ export class EditAccountShapeComponent implements OnInit {
       // });
       exportJson2.workFlowID= this.saveIDofWF;
       var b = {id: this.saveIDofWF, "data": JSON.stringify(exportJson2)};
-      this.shapeService.saveAndACtiveJsonFile(exportJson2).subscribe((res: any) => {
-      }, (err) => {
-        console.log(err);
-      });
+      // this.shapeService.saveAndACtiveJsonFile(exportJson2).subscribe((res: any) => {
+      // }, (err) => {
+      //   console.log(err);
+      // });
     }
   }
 
@@ -796,5 +824,106 @@ export class EditAccountShapeComponent implements OnInit {
       console.log(res);
     });
 
+  }
+  saveDraf(){
+    let positionKey: any;
+    let classKey: any;
+
+    //const exportJson = [];
+    let exportJson: any = { action: [], arrow: [] };
+    let exportJson2: any = {workFlowID: String, action: [], arrow: [] };
+
+    for (let i = 0; i < this.menuList1.length; i++) {
+      let obj;
+      positionKey = $('#' + this.menuList1[i].id);
+      // lọc ra những thằng làm đầu mũi tên
+      classKey = this.menuList1[i];
+      // thêm 2 thuộc tính
+      classKey.positionTop = positionKey.position().top;
+      classKey.positionLeft = positionKey.position().left;
+      exportJson.action.push(classKey);
+      exportJson2.action.push(classKey);
+
+
+    }
+    if (exportJson.length <= 0) {
+      this.toastr.error('Chưa có dữ liệu !!');
+    } else
+    {
+      //đẩy mũi tên vô có 1 dòng vậy thôi à?
+      this.listClass.forEach(element => {
+        exportJson.arrow.push(element);
+        exportJson2.arrow.push(element);
+      })
+
+      exportJson2.workFlowID= this.saveIDofWF;
+      //lưu  lại
+      const json = JSON.stringify(exportJson2);
+
+
+      var a = {"id": this.saveIDofWF, "data": JSON.stringify(exportJson)};
+      exportJson2.workFlowID= this.saveIDofWF;
+      var b = {id: this.saveIDofWF, "data": JSON.stringify(exportJson2)};
+
+      this.shapeService.saveDraf(a).subscribe((res: any) => {
+      }, (err) => {
+        console.log(err);
+      });
+    }
+  }
+  saveWorkFlow(){
+    let positionKey: any;
+    let classKey: any;
+
+    //const exportJson = [];
+    let exportJson: any = { action: [], arrow: [] };
+    let exportJson2: any = {workFlowID: String, action: [], arrow: [] };
+
+    for (let i = 0; i < this.menuList1.length; i++) {
+      let obj;
+      positionKey = $('#' + this.menuList1[i].id);
+      // lọc ra những thằng làm đầu mũi tên
+      classKey = this.menuList1[i];
+      // thêm 2 thuộc tính
+      classKey.positionTop = positionKey.position().top;
+      classKey.positionLeft = positionKey.position().left;
+      exportJson.action.push(classKey);
+      exportJson2.action.push(classKey);
+
+
+    }
+    if (exportJson.length <= 0) {
+      this.toastr.error('Chưa có dữ liệu !!');
+    } else
+    {
+      //đẩy mũi tên vô có 1 dòng vậy thôi à?
+      this.listClass.forEach(element => {
+        exportJson.arrow.push(element);
+        exportJson2.arrow.push(element);
+      })
+
+      exportJson2.workFlowID= this.saveIDofWF;
+      //lưu  lại
+      const json = JSON.stringify(exportJson2);
+
+      let b=  {
+        fromWorkFlowTemplateActionID: "",
+        toWorkFlowTemplateActionID: "",
+        connectionTypeID: ""
+      };
+      exportJson.arrow.forEach(element => {
+        b.fromWorkFlowTemplateActionID = element.idDiv[0];
+        b.toWorkFlowTemplateActionID = element.idDiv[1];
+        b.connectionTypeID = element.name;
+      });
+      let a = {"workFlowTemplateID": this.saveIDofWF, "data": JSON.stringify(exportJson),
+       "action": exportJson.action, "connections":b};
+      exportJson2.workFlowID= this.saveIDofWF;
+      debugger;
+      this.shapeService.saveWorkFlow(a).subscribe((res: any) => {
+      }, (err) => {
+        console.log(err);
+      });
+    }
   }
 }
