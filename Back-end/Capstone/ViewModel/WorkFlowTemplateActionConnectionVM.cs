@@ -31,14 +31,14 @@ namespace Capstone.ViewModel
 
     public class CheckConnection
     {
-        public int From { get; set; }
-        public int To { get; set; }
-        public int ConnectionTypeID { get; set; }
+        public Guid From { get; set; }
+        public Guid To { get; set; }
+        public Guid ConnectionTypeID { get; set; }
     }
 
     public class Node
     {
-        public int NodeName { get; set; }
+        public Guid NodeName { get; set; }
         public bool IsStart { get; set; }
         public bool IsEnd { get; set; }
     }

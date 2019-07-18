@@ -142,7 +142,7 @@ namespace Capstone.Controllers
             int countRoot = 0;
             bool chkConnection = false;
             string errNode = "";
-            int root = 0;
+            Guid root = 0;
 
             foreach (var node in model.Nodes)
             {
@@ -190,9 +190,9 @@ namespace Capstone.Controllers
 
         public class Graph
         {
-            public Dictionary<int, HashSet<int>> Adj { get; private set; }
+            public Dictionary<Guid, HashSet<Guid>> Adj { get; private set; }
 
-            public HashSet<int> visited { get; private set; }
+            public HashSet<Guid> visited { get; private set; }
 
             public CheckConnectionVM model { get; set; } // model for check node is end or not
 
@@ -207,11 +207,11 @@ namespace Capstone.Controllers
 
             public Graph()
             {
-                Adj = new Dictionary<int, HashSet<int>>();
-                visited = new HashSet<int>();
+                Adj = new Dictionary<Guid, HashSet<Guid>>();
+                visited = new HashSet<Guid>();
             }
 
-            public void AddEdge(int source, int target)
+            public void AddEdge(Guid source, Guid target)
             {
                 if (Adj.ContainsKey(source))
                 {
@@ -226,18 +226,18 @@ namespace Capstone.Controllers
                 }
                 else
                 {
-                    var hs = new HashSet<int>();
+                    var hs = new HashSet<Guid>();
                     hs.Add(target);
                     Adj.Add(source, hs);
                 }
             }
 
-            public void DFSWalkWithStartNode(int vertex)
+            public void DFSWalkWithStartNode(Guid vertex)
             {
                 // Mark this node as visited
                 visited.Add(vertex);
                 // Stack for DFS
-                var s = new Stack<int>();
+                var s = new Stack<Guid>();
                 // Add this node to the stack
                 s.Push(vertex);
 
@@ -255,7 +255,7 @@ namespace Capstone.Controllers
                     {
                         bool isEnd = false;
                         // Iterate through UNVISITED nodes
-                        foreach (int neighbour in Adj[current].Where(a => !visited.Contains(a)))
+                        foreach (Guid neighbour in Adj[current].Where(a => !visited.Contains(a)))
                         {
                             visited.Add(neighbour);
                             s.Push(neighbour);
