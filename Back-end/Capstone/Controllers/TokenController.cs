@@ -10,6 +10,7 @@ using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
+using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
@@ -31,6 +32,24 @@ namespace Capstone.Controllers
             _userManager = userManager;
             _permissionService = permissionService;
             _roleService = roleService;
+        }
+
+        [HttpGet("GetRole")]
+        public ActionResult<IEnumerable<String>> GetRole()
+        {
+            try
+            {
+                var userId = HttpContext.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier).Value;
+                var userInDb = _userManager.FindByIdAsync(userId).Result;
+                if (userInDb == null) return BadRequest(WebConstant.UserNotExist);
+
+                var roles = _roleService.GetByUserID(userId);
+                return Ok(roles);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
         }
 
         [AllowAnonymous]
