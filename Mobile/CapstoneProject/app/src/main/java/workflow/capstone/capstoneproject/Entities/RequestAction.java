@@ -10,9 +10,11 @@ public class RequestAction implements Serializable {
     @SerializedName("status")
     @Expose
     private int status;
+
     @SerializedName("requestID")
     @Expose
     private String requestID;
+
     @SerializedName("nextStepID")
     @Expose
     private String nextStepID;

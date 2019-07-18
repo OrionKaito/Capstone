@@ -75,6 +75,35 @@ namespace Capstone.Controllers
             }
         }
 
+        // GET: api/PermissionOfGroups
+        [HttpGet("GetPermissionByGroup")]
+        public ActionResult<IEnumerable<PermissionOfGroupViewModel>> GetPermissionByGroup()
+        {
+            try
+            {
+                List<PermissionOfGroupViewModel> result = new List<PermissionOfGroupViewModel>();
+                var groupList = _groupService.GetAll();
+                foreach (var group in groupList)
+                {
+                    result.Add(new PermissionOfGroupViewModel {
+                        GroupID = group.ID,
+                        GroupName = group.Name,
+                        Permissions = _permissionOfGroupService.GetByGroup(group.ID)
+                                        .Select(p => new PermissionsViewModel
+                                        {
+                                            PermissionID = p.PermissionID,
+                                            PermissionName = _permissionService.GetByID(p.PermissionID).Name
+                                        }),
+                    });
+                }
+                return Ok(result);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
+
         // GET: api/PermissionOfGroups/GetByPermission
         [HttpGet("GetByPermission")]
         public ActionResult<IEnumerable<PermissionOfGroupVM>> GetByPermission(Guid ID)

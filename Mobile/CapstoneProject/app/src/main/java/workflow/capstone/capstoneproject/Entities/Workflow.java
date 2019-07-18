@@ -10,12 +10,15 @@ public class Workflow implements Serializable {
     @SerializedName("workFlowID")
     @Expose
     private String workFlowID;
+
     @SerializedName("ownerID")
     @Expose
     private String ownerID;
+
     @SerializedName("name")
     @Expose
     private String name;
+
     @SerializedName("description")
     @Expose
     private String description;

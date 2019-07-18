@@ -3,7 +3,9 @@ package workflow.capstone.capstoneproject.activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
-import android.support.v4.view.ViewPager;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.ImageView;
@@ -12,31 +14,43 @@ import android.widget.TextView;
 import net.yslibrary.android.keyboardvisibilityevent.KeyboardVisibilityEvent;
 import net.yslibrary.android.keyboardvisibilityevent.KeyboardVisibilityEventListener;
 
+import java.util.List;
+
 import workflow.capstone.capstoneproject.R;
-import workflow.capstone.capstoneproject.adapter.TabAdapter;
+import workflow.capstone.capstoneproject.entities.Profile;
+import workflow.capstone.capstoneproject.fragment.ListHandleRequestFragment;
+import workflow.capstone.capstoneproject.fragment.ProfileFragment;
+import workflow.capstone.capstoneproject.fragment.ListCompleteRequestFragment;
 import workflow.capstone.capstoneproject.fragment.WorkflowFragment;
 import workflow.capstone.capstoneproject.repository.CapstoneRepository;
 import workflow.capstone.capstoneproject.repository.CapstoneRepositoryImpl;
 import workflow.capstone.capstoneproject.utils.CallBackData;
 import workflow.capstone.capstoneproject.utils.ConstantDataManager;
 import workflow.capstone.capstoneproject.utils.DynamicWorkflowSharedPreferences;
-import workflow.capstone.capstoneproject.utils.FragmentUtils;
 
 public class MainActivity extends AppCompatActivity {
 
     private Context context = this;
     private CapstoneRepository capstoneRepository;
 
-    private TabLayout tabLayout;
-    private ViewPager viewPager;
-    private TextView badge;
-    private ImageView imageView;
+    public static TabLayout tabLayout;
+    public static TextView notificationBadge;
+    public static TextView taskBadge;
+    public static ImageView imageViewNotification;
+    public static ImageView imageViewTask;
+    private FragmentManager fragmentManager;
+    private FragmentTransaction fragmentTransaction;
+
+    private WorkflowFragment workflowFragment;
+    private ListCompleteRequestFragment listCompleteRequestFragment;
+    private ListHandleRequestFragment listHandleRequestFragment;
+    private ProfileFragment profileFragment;
+    private String token;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        initTabLayout();
         KeyboardVisibilityEvent.setEventListener(this,
                 new KeyboardVisibilityEventListener() {
                     @Override
@@ -44,44 +58,79 @@ public class MainActivity extends AppCompatActivity {
                         tabLayout.setVisibility(isOpen ? View.GONE : View.VISIBLE);
                     }
                 });
+
+        token = DynamicWorkflowSharedPreferences.getStoreJWT(context, ConstantDataManager.AUTHORIZATION_TOKEN);
+
+        initTabLayout();
+        capstoneRepository = new CapstoneRepositoryImpl();
+        capstoneRepository.getProfile(token, new CallBackData<List<Profile>>() {
+            @Override
+            public void onSuccess(List<Profile> listProfile) {
+                Profile profile = listProfile.get(0);
+                DynamicWorkflowSharedPreferences.storeData(context, ConstantDataManager.PROFILE_KEY, ConstantDataManager.PROFILE_NAME, profile);
+            }
+
+            @Override
+            public void onFail(String message) {
+
+            }
+        });
     }
 
     private void initTabLayout() {
-        viewPager = findViewById(R.id.view_Pager);
         tabLayout = findViewById(R.id.tab_Layout);
-        setupViewPager(viewPager);
-        tabLayout.setupWithViewPager(viewPager);
+        workflowFragment = new WorkflowFragment();
+        listCompleteRequestFragment = new ListCompleteRequestFragment();
+        listHandleRequestFragment = new ListHandleRequestFragment();
+        profileFragment = new ProfileFragment();
+        for (int i = 0; i < 4; i++) {
+            tabLayout.addTab(tabLayout.newTab());
+        }
+
         setupTabIcons();
         setOnChangeTab();
-    }
-
-    private void setupViewPager(ViewPager viewPager) {
-        TabAdapter adapter = new TabAdapter(getSupportFragmentManager());
-        viewPager.setAdapter(adapter);
-        viewPager.setOffscreenPageLimit(4);
+        setCurrentTabFragment(0);
     }
 
     private void setupTabIcons() {
         //workflow tab
         tabLayout.getTabAt(0).setIcon(tabIcons[1]);
 
-        //history tab
-        tabLayout.getTabAt(1).setIcon(tabIcons[0]);
-
-        //notification tab
-        tabLayout.getTabAt(2).setCustomView(R.layout.notification_icon_grey);
-        View view = tabLayout.getTabAt(2).getCustomView();
-        imageView = view.findViewById(R.id.notification_icon);
-        imageView.setImageResource(R.drawable.ic_notification_grey);
-        badge = view.findViewById(R.id.notification_badge);
-        String tokenAuthorize = DynamicWorkflowSharedPreferences.getStoreJWT(context, ConstantDataManager.AUTHORIZATION_TOKEN);
+        //handle request tab
+        tabLayout.getTabAt(1).setCustomView(R.layout.task_icon);
+        View taskView = tabLayout.getTabAt(1).getCustomView();
+        imageViewTask = taskView.findViewById(R.id.task_icon);
+        imageViewTask.setImageResource(R.drawable.ic_task_gray);
+        taskBadge = taskView.findViewById(R.id.task_badge);
         capstoneRepository = new CapstoneRepositoryImpl();
-        capstoneRepository.getNumberOfNotification(tokenAuthorize, new CallBackData<String>() {
+        capstoneRepository.getNumberOfNotification(token, 2, new CallBackData<String>() {
             @Override
             public void onSuccess(String s) {
                 if (Integer.parseInt(s) > 0) {
-                    badge.setText(s);
-                    badge.setVisibility(View.VISIBLE);
+                    taskBadge.setText(s);
+                    taskBadge.setVisibility(View.VISIBLE);
+                }
+            }
+
+            @Override
+            public void onFail(String message) {
+
+            }
+        });
+
+        //notification tab
+        tabLayout.getTabAt(2).setCustomView(R.layout.notification_icon);
+        View notificationView = tabLayout.getTabAt(2).getCustomView();
+        imageViewNotification = notificationView.findViewById(R.id.notification_icon);
+        imageViewNotification.setImageResource(R.drawable.ic_notification_grey);
+        notificationBadge = notificationView.findViewById(R.id.notification_badge);
+        capstoneRepository = new CapstoneRepositoryImpl();
+        capstoneRepository.getNumberOfNotification(token, 3, new CallBackData<String>() {
+            @Override
+            public void onSuccess(String s) {
+                if (Integer.parseInt(s) > 0) {
+                    notificationBadge.setText(s);
+                    notificationBadge.setVisibility(View.VISIBLE);
                 }
             }
 
@@ -96,8 +145,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private int[] tabIcons = {
-            R.drawable.ic_history_grey,
-            R.drawable.ic_history_blue,
+            R.drawable.ic_home_gray,
+            R.drawable.ic_home_blue,
             R.drawable.ic_notification_grey,
             R.drawable.ic_notification_blue,
             R.drawable.ic_menu_grey,
@@ -108,24 +157,7 @@ public class MainActivity extends AppCompatActivity {
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
-                int tabIndex = tab.getPosition();
-                switch (tab.getPosition()) {
-                    case 0:
-                        tabLayout.getTabAt(tabIndex).setIcon(tabIcons[1]);
-                        break;
-                    case 1:
-                        tabLayout.getTabAt(tabIndex).setIcon(tabIcons[1]);
-                        break;
-                    case 2:
-                        imageView.setImageResource(R.drawable.ic_notification_blue);
-                        badge.setVisibility(View.INVISIBLE);
-                        break;
-                    case 3:
-                        tabLayout.getTabAt(tabIndex).setIcon(tabIcons[5]);
-                        break;
-                    default:
-                        break;
-                }
+                setCurrentTabFragment(tab.getPosition());
             }
 
             @Override
@@ -134,13 +166,12 @@ public class MainActivity extends AppCompatActivity {
                 switch (tab.getPosition()) {
                     case 0:
                         tabLayout.getTabAt(tabIndex).setIcon(tabIcons[0]);
-                        FragmentUtils.changeFragment(MainActivity.this, R.id.page_one_fragment, new WorkflowFragment());
                         break;
                     case 1:
-                        tabLayout.getTabAt(tabIndex).setIcon(tabIcons[0]);
+                        imageViewTask.setImageResource(R.drawable.ic_task_gray);
                         break;
                     case 2:
-                        imageView.setImageResource(R.drawable.ic_notification_grey);
+                        imageViewNotification.setImageResource(R.drawable.ic_notification_grey);
                         break;
                     case 3:
                         tabLayout.getTabAt(tabIndex).setIcon(tabIcons[4]);
@@ -155,5 +186,72 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
+    }
+
+    private void setCurrentTabFragment(int tabPosition)
+    {
+        switch (tabPosition) {
+            case 0:
+                tabLayout.getTabAt(tabPosition).setIcon(tabIcons[1]);
+                replaceFragment(workflowFragment);
+                break;
+            case 1:
+                imageViewTask.setImageResource(R.drawable.ic_task_blue);
+                capstoneRepository = new CapstoneRepositoryImpl();
+                capstoneRepository.getNumberOfNotification(token, 2, new CallBackData<String>() {
+                    @Override
+                    public void onSuccess(String s) {
+                        if (Integer.parseInt(s) > 0) {
+                            taskBadge.setText(s);
+                            taskBadge.setVisibility(View.VISIBLE);
+                        } else {
+                            taskBadge.setVisibility(View.INVISIBLE);
+                        }
+                    }
+
+                    @Override
+                    public void onFail(String message) {
+
+                    }
+                });
+                replaceFragment(listHandleRequestFragment);
+                break;
+            case 2:
+                imageViewNotification.setImageResource(R.drawable.ic_notification_blue);
+                capstoneRepository = new CapstoneRepositoryImpl();
+                capstoneRepository.getNumberOfNotification(token, 3, new CallBackData<String>() {
+                    @Override
+                    public void onSuccess(String s) {
+                        if (Integer.parseInt(s) > 0) {
+                            notificationBadge.setText(s);
+                            notificationBadge.setVisibility(View.VISIBLE);
+                        }
+                    }
+
+                    @Override
+                    public void onFail(String message) {
+
+                    }
+                });
+                replaceFragment(listCompleteRequestFragment);
+                break;
+            case 3:
+                tabLayout.getTabAt(tabPosition).setIcon(tabIcons[5]);
+                replaceFragment(profileFragment);
+                break;
+            default:
+                break;
+        }
+    }
+
+    private void replaceFragment(Fragment fragment) {
+        FragmentManager fm = MainActivity.this.getSupportFragmentManager();
+        for(int i = 0; i < fm.getBackStackEntryCount(); ++i) {
+            fm.popBackStack();
+        }
+        fragmentManager = MainActivity.this.getSupportFragmentManager();
+        fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.main_frame, fragment);
+        fragmentTransaction.commit();
     }
 }

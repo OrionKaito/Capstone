@@ -18,11 +18,15 @@ import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import workflow.capstone.capstoneproject.entities.DynamicForm.DynamicForm;
-import workflow.capstone.capstoneproject.entities.Login;
-import workflow.capstone.capstoneproject.entities.Notification;
-import workflow.capstone.capstoneproject.entities.Profile;
 import workflow.capstone.capstoneproject.api.Request;
+import workflow.capstone.capstoneproject.api.RequestApprove;
+import workflow.capstone.capstoneproject.api.UpdateProfileModel;
+import workflow.capstone.capstoneproject.entities.RequestForm;
+import workflow.capstone.capstoneproject.entities.HandleRequestForm;
+import workflow.capstone.capstoneproject.entities.Login;
+import workflow.capstone.capstoneproject.entities.Profile;
+import workflow.capstone.capstoneproject.entities.RequestResult;
+import workflow.capstone.capstoneproject.entities.UserNotification;
 import workflow.capstone.capstoneproject.entities.WorkflowTemplate;
 import workflow.capstone.capstoneproject.retrofit.ClientApi;
 import workflow.capstone.capstoneproject.utils.CallBackData;
@@ -36,19 +40,19 @@ public class CapstoneRepositoryImpl implements CapstoneRepository {
         Call<ResponseBody> serviceCall = clientApi.getDynamicWorkflowServices().login(fields);
         Log.e("URL=", clientApi.getDynamicWorkflowServices().login(fields).request().url().toString());
         //show progress bar
-        final KProgressHUD khub = KProgressHUDManager.showProgressBar(context);
+        final KProgressHUD progressHUD = KProgressHUDManager.showProgressBar(context);
 
         serviceCall.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-
                 //close progress bar
-                KProgressHUDManager.dismiss(context, khub);
+                progressHUD.dismiss();
                 if (response != null && response.body() != null) {
                     if (response.code() == 200) {
                         try {
                             String result = response.body().string();
-                            Type type = new TypeToken<Login>() {}.getType();
+                            Type type = new TypeToken<Login>() {
+                            }.getType();
                             Login responseResult = new Gson().fromJson(result, type);
                             if (responseResult == null) {
                                 callBackData.onFail(response.message());
@@ -66,7 +70,7 @@ public class CapstoneRepositoryImpl implements CapstoneRepository {
                             e.printStackTrace();
                         }
                     }
-                } else if(response.code() == 400) {
+                } else if (response.code() == 400) {
                     try {
                         callBackData.onFail(response.errorBody().string());
                     } catch (IOException e) {
@@ -84,7 +88,7 @@ public class CapstoneRepositoryImpl implements CapstoneRepository {
     }
 
     @Override
-    public void getProfile(String token, final CallBackData<Profile> callBackData) {
+    public void getProfile(String token, final CallBackData<List<Profile>> callBackData) {
         Call<ResponseBody> serviceCall = clientApi.getDWServices(token).getProfile();
         Log.e("URL=", clientApi.getDWServices(token).getProfile().request().url().toString());
         serviceCall.enqueue(new Callback<ResponseBody>() {
@@ -94,9 +98,9 @@ public class CapstoneRepositoryImpl implements CapstoneRepository {
                     if (response.code() == 200) {
                         try {
                             String result = response.body().string();
-                            Type type = new TypeToken<Profile>() {
+                            Type type = new TypeToken<List<Profile>>() {
                             }.getType();
-                            Profile responseResult = new Gson().fromJson(result, type);
+                            List<Profile> responseResult = new Gson().fromJson(result, type);
                             if (responseResult == null) {
                                 callBackData.onFail(response.message());
                             }
@@ -109,7 +113,7 @@ public class CapstoneRepositoryImpl implements CapstoneRepository {
                     } else {
                         callBackData.onFail(response.message());
                     }
-                } else if(response.code() == 400) {
+                } else if (response.code() == 400) {
                     callBackData.onFail(response.message());
                 }
             }
@@ -122,9 +126,136 @@ public class CapstoneRepositoryImpl implements CapstoneRepository {
     }
 
     @Override
-    public void getWorkflow(final CallBackData<List<WorkflowTemplate>> callBackData) {
-        Call<ResponseBody> serviceCall = clientApi.getDynamicWorkflowServices().getWorkflow();
-        Log.e("URL=", clientApi.getDynamicWorkflowServices().getWorkflow().request().url().toString());
+    public void updateProfile(Context context, String token, UpdateProfileModel model, final CallBackData<String> callBackData) {
+        Call<ResponseBody> serviceCall = clientApi.getDWServices(token).updateProfile(model);
+        Log.e("URL=", clientApi.getDWServices(token).updateProfile(model).request().url().toString());
+        final KProgressHUD progressHUD = KProgressHUDManager.showProgressBar(context);
+
+        serviceCall.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                progressHUD.dismiss();
+                if (response != null && response.body() != null) {
+                    if (response.code() == 200) {
+                        try {
+                            String result = response.body().string();
+                            Type type = new TypeToken<String>() {
+                            }.getType();
+                            String responseResult = new Gson().fromJson(result, type);
+                            if (responseResult == null) {
+                                callBackData.onFail(response.message());
+                            }
+                            callBackData.onSuccess(responseResult);
+                        } catch (JsonSyntaxException jsonError) {
+                            jsonError.printStackTrace();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    } else {
+                        callBackData.onFail(response.message());
+                    }
+                } else if (response.code() == 400) {
+                    callBackData.onFail(response.message());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                callBackData.onFail(call.toString());
+            }
+        });
+    }
+
+    @Override
+    public void changePassword(Context context, String token, String password, final CallBackData<String> callBackData) {
+        Call<ResponseBody> serviceCall = clientApi.getDWServices(token).changePassword(password);
+        Log.e("URL=", clientApi.getDWServices(token).changePassword(password).request().url().toString());
+        final KProgressHUD progressHUD = KProgressHUDManager.showProgressBar(context);
+
+        serviceCall.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                progressHUD.dismiss();
+                if (response != null && response.body() != null) {
+                    if (response.code() == 200) {
+                        try {
+                            String result = response.body().string();
+                            Type type = new TypeToken<String>() {
+                            }.getType();
+                            String responseResult = new Gson().fromJson(result, type);
+                            if (responseResult == null) {
+                                callBackData.onFail(response.message());
+                            }
+                            callBackData.onSuccess(responseResult);
+                        } catch (JsonSyntaxException jsonError) {
+                            jsonError.printStackTrace();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    } else {
+                        callBackData.onFail(response.message());
+                    }
+                } else if (response.code() == 400) {
+                    callBackData.onFail(response.message());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                callBackData.onFail(call.toString());
+            }
+        });
+    }
+
+    @Override
+    public void verifyAccount(Context context, String code, String email, final CallBackData<String> callBackData) {
+        Call<ResponseBody> serviceCall = clientApi.getDynamicWorkflowServices().verifyAccount(code, email);
+        Log.e("URL=", clientApi.getDynamicWorkflowServices().verifyAccount(code, email).request().url().toString());
+        final KProgressHUD progressHUD = KProgressHUDManager.showProgressBar(context);
+
+        serviceCall.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                progressHUD.dismiss();
+                if (response != null && response.body() != null) {
+                    if (response.code() == 200) {
+                        try {
+                            String result = response.body().string();
+                            Type type = new TypeToken<String>() {
+                            }.getType();
+                            String responseResult = new Gson().fromJson(result, type);
+                            if (responseResult == null) {
+                                callBackData.onFail(response.message());
+                            }
+                            callBackData.onSuccess(responseResult);
+                        } catch (JsonSyntaxException jsonError) {
+                            jsonError.printStackTrace();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    } else {
+                        callBackData.onFail(response.message());
+                    }
+                } else if (response.code() == 400) {
+                    try {
+                        callBackData.onFail(response.errorBody().string());
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                callBackData.onFail(t.getMessage());
+            }
+        });
+    }
+
+    @Override
+    public void getWorkflow(String token, final CallBackData<List<WorkflowTemplate>> callBackData) {
+        Call<ResponseBody> serviceCall = clientApi.getDWServices(token).getWorkflow();
+        Log.e("URL=", clientApi.getDWServices(token).getWorkflow().request().url().toString());
         serviceCall.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
@@ -147,7 +278,7 @@ public class CapstoneRepositoryImpl implements CapstoneRepository {
                     } else {
                         callBackData.onFail(response.message());
                     }
-                } else if(response.code() == 400) {
+                } else if (response.code() == 400) {
                     callBackData.onFail(response.message());
                 }
             }
@@ -160,9 +291,9 @@ public class CapstoneRepositoryImpl implements CapstoneRepository {
     }
 
     @Override
-    public void getNumberOfNotification(String token, final CallBackData<String> callBackData) {
-        Call<ResponseBody> serviceCall = clientApi.getDWServices(token).getNumberNotification();
-        Log.e("URL=", clientApi.getDWServices(token).getNumberNotification().request().url().toString());
+    public void getNumberOfNotification(String token, int notificationType, final CallBackData<String> callBackData) {
+        Call<ResponseBody> serviceCall = clientApi.getDWServices(token).getNumberNotification(notificationType);
+        Log.e("URL=", clientApi.getDWServices(token).getNumberNotification(notificationType).request().url().toString());
         serviceCall.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
@@ -185,7 +316,7 @@ public class CapstoneRepositoryImpl implements CapstoneRepository {
                     } else {
                         callBackData.onFail(response.message());
                     }
-                } else if(response.code() == 400) {
+                } else if (response.code() == 400) {
                     callBackData.onFail(response.message());
                 }
             }
@@ -198,7 +329,7 @@ public class CapstoneRepositoryImpl implements CapstoneRepository {
     }
 
     @Override
-    public void getNotification(String token, final CallBackData<List<Notification>> callBackData) {
+    public void getNotification(String token, final CallBackData<List<UserNotification>> callBackData) {
         Call<ResponseBody> serviceCall = clientApi.getDWServices(token).getNotification();
         Log.e("URL=", clientApi.getDWServices(token).getNotification().request().url().toString());
         serviceCall.enqueue(new Callback<ResponseBody>() {
@@ -208,9 +339,9 @@ public class CapstoneRepositoryImpl implements CapstoneRepository {
                     if (response.code() == 200) {
                         try {
                             String result = response.body().string();
-                            Type type = new TypeToken<List<Notification>>() {
+                            Type type = new TypeToken<List<UserNotification>>() {
                             }.getType();
-                            List<Notification> responseResult = new Gson().fromJson(result, type);
+                            List<UserNotification> responseResult = new Gson().fromJson(result, type);
                             if (responseResult == null) {
                                 callBackData.onFail(response.message());
                             }
@@ -223,7 +354,45 @@ public class CapstoneRepositoryImpl implements CapstoneRepository {
                     } else {
                         callBackData.onFail(response.message());
                     }
-                } else if(response.code() == 400) {
+                } else if (response.code() == 400) {
+                    callBackData.onFail(response.message());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                callBackData.onFail(call.toString());
+            }
+        });
+    }
+
+    @Override
+    public void getNotificationByType(String token, int notificationType, final CallBackData<List<UserNotification>> callBackData) {
+        Call<ResponseBody> serviceCall = clientApi.getDWServices(token).getNotificationByType(notificationType);
+        Log.e("URL=", clientApi.getDWServices(token).getNotificationByType(notificationType).request().url().toString());
+        serviceCall.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                if (response != null && response.body() != null) {
+                    if (response.code() == 200) {
+                        try {
+                            String result = response.body().string();
+                            Type type = new TypeToken<List<UserNotification>>() {
+                            }.getType();
+                            List<UserNotification> responseResult = new Gson().fromJson(result, type);
+                            if (responseResult == null) {
+                                callBackData.onFail(response.message());
+                            }
+                            callBackData.onSuccess(responseResult);
+                        } catch (JsonSyntaxException jsonError) {
+                            jsonError.printStackTrace();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    } else {
+                        callBackData.onFail(response.message());
+                    }
+                } else if (response.code() == 400) {
                     callBackData.onFail(response.message());
                 }
             }
@@ -261,7 +430,7 @@ public class CapstoneRepositoryImpl implements CapstoneRepository {
                     } else {
                         callBackData.onFail(response.message());
                     }
-                } else if(response.code() == 400) {
+                } else if (response.code() == 400) {
                     callBackData.onFail(response.message());
                 }
             }
@@ -299,7 +468,7 @@ public class CapstoneRepositoryImpl implements CapstoneRepository {
                     } else {
                         callBackData.onFail(response.message());
                     }
-                } else if(response.code() == 400) {
+                } else if (response.code() == 400) {
                     callBackData.onFail(response.message());
                 }
             }
@@ -337,7 +506,7 @@ public class CapstoneRepositoryImpl implements CapstoneRepository {
                     } else {
                         callBackData.onFail(response.message());
                     }
-                } else if(response.code() == 400) {
+                } else if (response.code() == 400) {
                     callBackData.onFail(response.message());
                 }
             }
@@ -350,9 +519,9 @@ public class CapstoneRepositoryImpl implements CapstoneRepository {
     }
 
     @Override
-    public void getForm(final CallBackData<DynamicForm> callBackData) {
-        Call<ResponseBody> serviceCall = clientApi.getDynamicWorkflowServices().getForm();
-        Log.e("URL=", clientApi.getDynamicWorkflowServices().getForm().request().url().toString());
+    public void getRequestResult(String token, String requestActionID, String userNotificationID, final CallBackData<RequestResult> callBackData) {
+        Call<ResponseBody> serviceCall = clientApi.getDWServices(token).getRequestResult(requestActionID, userNotificationID);
+        Log.e("URL=", clientApi.getDWServices(token).getRequestResult(requestActionID, userNotificationID).request().url().toString());
         serviceCall.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
@@ -360,9 +529,9 @@ public class CapstoneRepositoryImpl implements CapstoneRepository {
                     if (response.code() == 200) {
                         try {
                             String result = response.body().string();
-                            Type type = new TypeToken<DynamicForm>() {
+                            Type type = new TypeToken<RequestResult>() {
                             }.getType();
-                            DynamicForm responseResult = new Gson().fromJson(result, type);
+                            RequestResult responseResult = new Gson().fromJson(result, type);
                             if (responseResult == null) {
                                 callBackData.onFail(response.message());
                             }
@@ -375,7 +544,7 @@ public class CapstoneRepositoryImpl implements CapstoneRepository {
                     } else {
                         callBackData.onFail(response.message());
                     }
-                } else if(response.code() == 400) {
+                } else if (response.code() == 400) {
                     callBackData.onFail(response.message());
                 }
             }
@@ -383,6 +552,273 @@ public class CapstoneRepositoryImpl implements CapstoneRepository {
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
                 callBackData.onFail(call.toString());
+            }
+        });
+    }
+
+    @Override
+    public void getRequestForm(String token, String workflowTemplateID, final CallBackData<RequestForm> callBackData) {
+        Call<ResponseBody> serviceCall = clientApi.getDWServices(token).getRequestForm(workflowTemplateID);
+        Log.e("URL=", clientApi.getDWServices(token).getRequestForm(workflowTemplateID).request().url().toString());
+        serviceCall.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                if (response != null && response.body() != null) {
+                    if (response.code() == 200) {
+                        try {
+                            String result = response.body().string();
+                            Type type = new TypeToken<RequestForm>() {
+                            }.getType();
+                            RequestForm responseResult = new Gson().fromJson(result, type);
+                            if (responseResult == null) {
+                                callBackData.onFail(response.message());
+                            }
+                            callBackData.onSuccess(responseResult);
+                        } catch (JsonSyntaxException jsonError) {
+                            jsonError.printStackTrace();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    } else {
+                        callBackData.onFail(response.message());
+                    }
+                } else if (response.code() == 400) {
+                    callBackData.onFail(response.message());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                callBackData.onFail(call.toString());
+            }
+        });
+    }
+
+    @Override
+    public void getRequestHandleForm(String token, String requestActionID, final CallBackData<HandleRequestForm> callBackData) {
+        Call<ResponseBody> serviceCall = clientApi.getDWServices(token).getRequestHandleForm(requestActionID);
+        Log.e("URL=", clientApi.getDWServices(token).getRequestHandleForm(requestActionID).request().url().toString());
+        serviceCall.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                if (response != null && response.body() != null) {
+                    if (response.code() == 200) {
+                        try {
+                            String result = response.body().string();
+                            Type type = new TypeToken<HandleRequestForm>() {
+                            }.getType();
+                            HandleRequestForm responseResult = new Gson().fromJson(result, type);
+                            if (responseResult == null) {
+                                callBackData.onFail(response.message());
+                            }
+                            callBackData.onSuccess(responseResult);
+                        } catch (JsonSyntaxException jsonError) {
+                            jsonError.printStackTrace();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    } else {
+                        callBackData.onFail(response.message());
+                    }
+                } else if (response.code() == 400) {
+                    callBackData.onFail(response.message());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                callBackData.onFail(call.toString());
+            }
+        });
+    }
+
+    @Override
+    public void getAccountByUserID(String ID, final CallBackData<List<Profile>> callBackData) {
+        Call<ResponseBody> serviceCall = clientApi.getDynamicWorkflowServices().getAccountByUserID(ID);
+        Log.e("URL=", clientApi.getDynamicWorkflowServices().getAccountByUserID(ID).request().url().toString());
+        serviceCall.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                if (response != null && response.body() != null) {
+                    if (response.code() == 200) {
+                        try {
+                            String result = response.body().string();
+                            Type type = new TypeToken<List<Profile>>() {
+                            }.getType();
+                            List<Profile> responseResult = new Gson().fromJson(result, type);
+                            if (responseResult == null) {
+                                callBackData.onFail(response.message());
+                            }
+                            callBackData.onSuccess(responseResult);
+                        } catch (JsonSyntaxException jsonError) {
+                            jsonError.printStackTrace();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    } else {
+                        callBackData.onFail(response.message());
+                    }
+                } else if (response.code() == 400) {
+                    callBackData.onFail(response.message());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                callBackData.onFail(call.toString());
+            }
+        });
+    }
+
+    @Override
+    public void approveRequest(String token, RequestApprove requestApprove, final CallBackData<String> callBackData) {
+        Call<ResponseBody> serviceCall = clientApi.getDWServices(token).approveRequest(requestApprove);
+        Log.e("URL=", clientApi.getDWServices(token).approveRequest(requestApprove).request().url().toString());
+        serviceCall.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                if (response != null && response.body() != null) {
+                    if (response.code() == 201) {
+                        try {
+                            String result = response.body().string();
+                            Type type = new TypeToken<String>() {
+                            }.getType();
+                            String responseResult = new Gson().fromJson(result, type);
+                            if (responseResult == null) {
+                                callBackData.onFail(response.message());
+                            }
+                            callBackData.onSuccess(responseResult);
+                        } catch (JsonSyntaxException jsonError) {
+                            jsonError.printStackTrace();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    } else {
+                        callBackData.onFail(response.message());
+                    }
+                } else if (response.code() == 400) {
+                    callBackData.onFail(response.message());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                callBackData.onFail(call.toString());
+            }
+        });
+    }
+
+    @Override
+    public void downloadFileWithDynamicUrlSync(String fileUrl, final CallBackData<ResponseBody> callBackData) {
+        Call<ResponseBody> serviceCall = clientApi.getDynamicWorkflowServices().downloadFileWithDynamicUrlSync(fileUrl);
+        Log.e("URL=", clientApi.getDynamicWorkflowServices().downloadFileWithDynamicUrlSync(fileUrl).request().url().toString());
+        serviceCall.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                if (response != null && response.body() != null) {
+                    if (response.code() == 200) {
+                        try {
+                            callBackData.onSuccess(response.body());
+                        } catch (JsonSyntaxException jsonError) {
+                            jsonError.printStackTrace();
+                        }
+                    } else {
+                        callBackData.onFail(response.message());
+                    }
+                } else if (response.code() == 400) {
+                    callBackData.onFail(response.message());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                callBackData.onFail(call.toString());
+            }
+        });
+    }
+
+    @Override
+    public void forgotPassword(Context context, String email, final CallBackData<String> callBackData) {
+        Call<ResponseBody> serviceCall = clientApi.getDynamicWorkflowServices().forgotPassword(email);
+        Log.e("URL=", clientApi.getDynamicWorkflowServices().forgotPassword(email).request().url().toString());
+
+        final KProgressHUD progressHUD = KProgressHUDManager.showProgressBar(context);
+        serviceCall.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                progressHUD.dismiss();
+                if (response != null && response.body() != null) {
+                    if (response.code() == 200) {
+                        try {
+                            String result = response.body().string();
+                            Type type = new TypeToken<String>() {
+                            }.getType();
+                            String responseResult = new Gson().fromJson(result, type);
+                            if (responseResult == null) {
+                                callBackData.onFail(response.message());
+                            }
+                            callBackData.onSuccess(responseResult);
+                        } catch (JsonSyntaxException jsonError) {
+                            jsonError.printStackTrace();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    } else {
+                        callBackData.onFail(response.message());
+                    }
+                } else if (response.code() == 400) {
+                    callBackData.onFail(response.message());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                callBackData.onFail(call.toString());
+            }
+        });
+    }
+
+    @Override
+    public void confirmForgotPassword(Context context, String code, String email, String newPassword, final CallBackData<String> callBackData) {
+        Call<ResponseBody> serviceCall = clientApi.getDynamicWorkflowServices().confirmForgotPassword(code, email, newPassword);
+        Log.e("URL=", clientApi.getDynamicWorkflowServices().confirmForgotPassword(code, email, newPassword).request().url().toString());
+        final KProgressHUD progressHUD = KProgressHUDManager.showProgressBar(context);
+
+        serviceCall.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                progressHUD.dismiss();
+                if (response != null && response.body() != null) {
+                    if (response.code() == 200) {
+                        try {
+                            String result = response.body().string();
+                            Type type = new TypeToken<String>() {
+                            }.getType();
+                            String responseResult = new Gson().fromJson(result, type);
+                            if (responseResult == null) {
+                                callBackData.onFail(response.message());
+                            }
+                            callBackData.onSuccess(responseResult);
+                        } catch (JsonSyntaxException jsonError) {
+                            jsonError.printStackTrace();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    } else {
+                        callBackData.onFail(response.message());
+                    }
+                } else if (response.code() == 400) {
+                    try {
+                        callBackData.onFail(response.errorBody().string());
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                callBackData.onFail(t.getMessage());
             }
         });
     }

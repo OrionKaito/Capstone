@@ -10,6 +10,7 @@ public class Login implements Serializable {
     @SerializedName("token")
     @Expose
     private String token;
+
     @SerializedName("role")
     @Expose
     private String role;

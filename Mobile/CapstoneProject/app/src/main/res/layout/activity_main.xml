@@ -1,31 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
-    tools:context=".activity.MainActivity"
-    android:weightSum="10">
+    android:weightSum="10"
+    tools:context=".activity.MainActivity">
 
-    <android.support.v4.view.ViewPager
-        android:id="@+id/view_Pager"
+    <FrameLayout
+        android:id="@+id/main_frame"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_weight="9"></android.support.v4.view.ViewPager>
+        android:layout_weight="9">
+
+    </FrameLayout>
+
     <View
         android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="#D3D3D3"/>
+        android:layout_height="@dimen/sp1"
+        android:background="@color/colorPrimary" />
 
     <android.support.design.widget.TabLayout
         android:id="@+id/tab_Layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_weight="1"
         android:minHeight="?actionBarSize"
         app:tabBackground="@color/white"
         app:tabGravity="fill"
-        app:tabMode="fixed"
-        android:layout_weight="1"
-        app:tabIndicatorHeight="0dp"></android.support.design.widget.TabLayout>
+        app:tabIndicatorHeight="0dp"
+        app:tabMode="fixed"></android.support.design.widget.TabLayout>
 </LinearLayout>

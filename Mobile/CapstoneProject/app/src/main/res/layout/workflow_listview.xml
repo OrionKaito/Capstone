@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/white"
     android:orientation="vertical">
 
     <LinearLayout
@@ -12,29 +13,46 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/name" />
+            android:text="@string/workflow_name"
+            android:textColor="@color/colortext"
+            android:textSize="@dimen/sp17" />
 
         <TextView
-            android:id="@+id/tv_Workflow_Name"
+            android:id="@+id/tv_workflow_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/dp3" />
+            android:layout_marginLeft="@dimen/dp3"
+            android:textColor="@color/colortext"
+            android:textSize="@dimen/sp17" />
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:paddingTop="@dimen/dp5">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/description" />
+            android:text="@string/description"
+            android:textColor="@color/colortext"
+            android:textSize="@dimen/sp17" />
 
         <TextView
-            android:id="@+id/tv_Workflow_Des"
+            android:id="@+id/tv_workflow_des"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/dp3" />
+            android:layout_marginLeft="@dimen/dp3"
+            android:textColor="@color/colortext"
+            android:textSize="@dimen/sp17" />
     </LinearLayout>
+    <View
+        android:id="@+id/line_view"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp1"
+        android:layout_marginTop="@dimen/dp5"
+        android:layout_marginBottom="@dimen/dp5"
+        android:background="@color/light_gray"
+        android:visibility="gone"/>
 </LinearLayout>
