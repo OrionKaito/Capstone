@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace Capstone.ViewModel
 {
@@ -22,5 +23,18 @@ namespace Capstone.ViewModel
         public Guid ID { get; set; }
         public Guid PermissionID { get; set; }
         public Guid GroupID { get; set; }
+    }
+
+    public class PermissionOfGroupViewModel
+    {
+        public Guid GroupID { get; set; }
+        public string GroupName { get; set; }
+        public IEnumerable<PermissionsViewModel> Permissions { get; set; }
+    }
+
+    public class PermissionsViewModel
+    {
+        public Guid PermissionID { get; set; }
+        public string PermissionName { get; set; }
     }
 }

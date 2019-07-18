@@ -5,19 +5,14 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import workflow.capstone.capstoneproject.fragment.NotificationFragment;
-import workflow.capstone.capstoneproject.fragment.PageOneFragment;
+import workflow.capstone.capstoneproject.fragment.ListHandleRequestFragment;
 import workflow.capstone.capstoneproject.fragment.ProfileFragment;
-import workflow.capstone.capstoneproject.fragment.RequestHistoryFragment;
+import workflow.capstone.capstoneproject.fragment.ListCompleteRequestFragment;
+import workflow.capstone.capstoneproject.fragment.WorkflowFragment;
 
 public class TabAdapter extends FragmentPagerAdapter {
 
     private static final int NUM_ITEMS = 4;
-
-    private List<Fragment> fragmentList = new ArrayList<>();
 
     public TabAdapter(FragmentManager fm) {
         super(fm);
@@ -26,11 +21,11 @@ public class TabAdapter extends FragmentPagerAdapter {
     @Override
     public Fragment getItem(int position) {
         if (position == 0) {
-            return new PageOneFragment();
+            return new WorkflowFragment();
         } else if (position == 1) {
-            return new RequestHistoryFragment();
+            return new ListCompleteRequestFragment();
         } else if (position == 2) {
-            return new NotificationFragment();
+            return new ListHandleRequestFragment();
         } else {
             return new ProfileFragment();
         }
@@ -45,10 +40,5 @@ public class TabAdapter extends FragmentPagerAdapter {
     public int getItemPosition(@NonNull Object object) {
         notifyDataSetChanged();
         return POSITION_NONE;
-    }
-
-    public void addFragment(Fragment fragment) {
-        fragmentList.add(fragment);
-        notifyDataSetChanged();
     }
 }

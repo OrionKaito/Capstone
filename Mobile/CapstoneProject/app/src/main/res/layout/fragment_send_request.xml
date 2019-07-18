@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical"
+    tools:context=".fragment.SendRequestFragment">
+
+    <!--<ScrollView-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="match_parent">-->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp50"
+            android:background="@color/light_blue">
+
+            <ImageView
+                android:id="@+id/img_Back"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/dp24"
+                android:layout_centerVertical="true"
+                android:layout_margin="@dimen/dp12"
+                android:background="@drawable/ic_white_back" />
+
+        </RelativeLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center_horizontal"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp20"
+                android:gravity="center_vertical"
+                android:weightSum="10">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/dp10"
+                    android:layout_weight="7"
+                    android:text="Workflow Name"
+                    android:textColor="@color/colorAccent"
+                    android:textSize="@dimen/sp15" />
+
+                <TextView
+                    android:id="@+id/tv_name_of_workflow"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/dp5"
+                    android:layout_marginRight="@dimen/dp10"
+                    android:layout_weight="3"
+                    android:textColor="@color/colortext"
+                    android:textSize="@dimen/sp20" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp10"
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:weightSum="10">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/dp10"
+                    android:layout_weight="7"
+                    android:text="Message"
+                    android:textColor="@color/colorAccent"
+                    android:textSize="@dimen/sp15" />
+
+                <EditText
+                    android:padding="@dimen/dp7"
+                    android:id="@+id/edt_Reason"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="@dimen/dp10"
+                    android:layout_weight="3"
+                    android:background="@drawable/border_radius"
+                    android:gravity="top"
+                    android:inputType="textMultiLine"
+                    android:maxLines="8"
+                    android:minLines="8"
+                    android:scrollbars="vertical"
+                    android:textColor="@color/colortext"
+                    android:textSize="@dimen/sp18" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/dp5"
+                android:gravity="center"
+                android:weightSum="10">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="3" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="7">
+
+                    <ImageView
+                        android:id="@+id/img_upload_image"
+                        android:layout_width="@dimen/dp35"
+                        android:layout_height="@dimen/dp35"
+                        android:layout_marginRight="@dimen/dp15"
+                        android:background="@drawable/ic_photo_camera" />
+
+                    <ImageView
+                        android:id="@+id/img_upload_file"
+                        android:layout_width="@dimen/dp35"
+                        android:layout_height="@dimen/dp35"
+                        android:layout_marginLeft="@dimen/dp10"
+                        android:layout_marginRight="@dimen/dp50"
+                        android:background="@drawable/ic_folder" />
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:weightSum="10">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="3"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/tv_attachment"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/dp10"
+                        android:layout_marginTop="@dimen/dp15"
+                        android:text="Attachment"
+                        android:textColor="@color/colorAccent"
+                        android:textSize="@dimen/sp18"
+                        android:visibility="gone" />
+
+                    <ListView
+                        android:id="@+id/list_file_name"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_margin="@dimen/dp10"
+                        android:layout_weight="3"
+                        android:divider="#00000000"
+                        android:footerDividersEnabled="false"
+                        android:visibility="visible">
+
+                    </ListView>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/ln_button"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginBottom="@dimen/dp15"
+                    android:layout_weight="7"
+                    android:gravity="center"
+                    android:orientation="horizontal">
+
+                    <!--<Button-->
+                    <!--android:id="@+id/btn_Send"-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:background="@drawable/btn_login"-->
+                    <!--android:gravity="center"-->
+                    <!--android:text="Send"-->
+                    <!--android:textColor="@color/white"-->
+                    <!--android:textSize="@dimen/sp18" />-->
+
+                    <!--<Button-->
+                    <!--android:id="@+id/btn_r"-->
+                    <!--android:layout_width="@dimen/dp150"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:layout_marginTop="@dimen/dp20"-->
+                    <!--android:layout_marginBottom="@dimen/dp20"-->
+                    <!--android:background="@drawable/btn_login"-->
+                    <!--android:gravity="center"-->
+                    <!--android:text="Send"-->
+                    <!--android:textColor="@color/white"-->
+                    <!--android:textSize="@dimen/sp18" />-->
+                </LinearLayout>
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </LinearLayout>
+    <!--</ScrollView>-->
+
+</ScrollView>
