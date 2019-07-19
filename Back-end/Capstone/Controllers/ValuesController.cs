@@ -33,7 +33,54 @@ namespace Capstone.Controllers
         [HttpGet("SendEmail")]
         public ActionResult<string> SendEmail()
         {
-            _emailService.SendMail("orionkaito@gmail.com", "Hello", "Hello world");
+            var template = "<style type=\"text/css\"> " +
+                " body,html,.body { background: #f3f3f3 !important; } " +
+                ".container.header { background: #f3f3f3;} " +
+                ".body-border {border-top: 8px solid #663399;}" +
+                "</style> <spacer size=\"16\"></spacer>" +
+                "<container class=\"header\">" +
+                "<row>" +
+                "<columns>" +
+                "<center>" +
+                "<h1 class=\"text - center\">Welcome to Dynamic WorkFlow</h1>" +
+                "</center>" +
+                "<center>" +
+                "<menu class=\"text - center\">" +
+                //"<item href=\"#\">About</item>" +
+                //"<item href=\"#\">Course List</item>" +
+                //"<item href=\"#\">Campus Map</item>" +
+                //"<item href=\"#\">Contact</item>" +
+                "</menu>" +
+                "</center>" +
+                "</columns>" +
+                "</row>" +
+                "</container>" +
+                "<container class=\"body-border\">" +
+                "<row>" +
+                "<columns>" +
+                "<spacer size=\"32\">" +
+                "</spacer>" +
+                "<center>" +
+                "<img src=\"https://doc-0s-as-docs.googleusercontent.com/docs/securesc/ha0ro937gcuc7l7deffksulhg5h7mbp1/2ffhedil82jau06t0e75110nq4svhlj0/1563501600000/05868357909278580689/*/1jrVKFISjf1cXIk3-tg9XoYCcgkRL-Dgm\">" +
+                "</center>" +
+                "<spacer size=\"16\">" +
+                "</spacer>" +
+                "<h4>Just one more step.</h4>" +
+                "<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Atque culpa vel architecto, perspiciatis eius cum autem quidem, sunt consequuntur, impedit dolor vitae illum nobis sint nihil aliquid? Assumenda, amet, officia.</p>" +
+                "<center>" +
+                "<menu>" +
+                "<item href=\"#\">dynamicworkflow.com</item> " +
+                "<item href=\"#\">Facebook</item> " +
+                "<item href=\"#\">Twitter</item> " +
+                "<item href=\"#\">(408)-555-0123</item>" +
+                "</menu>" +
+                "</center>" +
+                "</columns>" +
+                "</row>" +
+                "<spacer size=\"16\"></spacer>" +
+                "</container>";
+            var test = "<h1>This is h1 </h1>";
+            _emailService.SendMail("orionkaito@gmail.com", "Hello", template);
             return "success";
         }
         // POST api/values

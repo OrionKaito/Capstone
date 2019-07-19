@@ -24,6 +24,7 @@ namespace Capstone.Service
             MailMessage msg = new MailMessage();
             msg.Subject = subject;
             msg.Body = message;
+            msg.IsBodyHtml = true;
             msg.To.Add(to);
             msg.From = new MailAddress("DynamicWorkFlow Team <dynamicworkflowteam@gmail.com>");
             smtp.Send(msg);
