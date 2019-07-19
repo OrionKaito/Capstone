@@ -104,13 +104,56 @@ namespace Capstone.Controllers
 
                     //Send mail
 
-                    await _emailService.SendMail(user.Email, "Activation Code to Verify Email Address", "Thank you for creating an account with DynamicWorkflow"
-                        + "\n\nAccount name : "
-                        + user.UserName
-                        + "\n\nYour account will work but you must verify it by enter this code in our app"
-                        + "\n\nYour Activation Code is : "
-                        + user.EmailConfirmCode
-                        + "\n\nThanks & Regards\nDynamicWorkFlow Team");
+                    var message = "<style type=\"text/css\"> " +
+                    " body,html,.body { background: #f3f3f3 !important; } " +
+                    ".container.header { background: #f3f3f3;} " +
+                    ".body-border {border-top: 8px solid #663399;}" +
+                    "</style> <spacer size=\"16\"></spacer>" +
+                    "<container class=\"header\">" +
+                    "<row>" +
+                    "<columns>" +
+                    "<center>" +
+                    "<h1 class=\"text - center\">Welcome to Dynamic WorkFlow</h1>" +
+                    "</center>" +
+                    "<center>" +
+                    "<menu class=\"text - center\">" +
+                    "</menu>" +
+                    "</center>" +
+                    "</columns>" +
+                    "</row>" +
+                    "</container>" +
+                    "<container class=\"body-border\">" +
+                    "<row>" +
+                    "<columns>" +
+                    "<spacer size=\"32\">" +
+                    "</spacer>" +
+                    "<center>" +
+                    "<img src=\"https://doc-0s-as-docs.googleusercontent.com/docs/securesc/ha0ro937gcuc7l7deffksulhg5h7mbp1/2ffhedil82jau06t0e75110nq4svhlj0/1563501600000/05868357909278580689/*/1jrVKFISjf1cXIk3-tg9XoYCcgkRL-Dgm\">" +
+                    "</center>" +
+                    "<spacer size=\"16\">" +
+                    "</spacer>" +
+                    "<h4>Thank you for creating an account with DynamicWorkflow.</h4>" +
+                    "Account name : " +
+                    user.UserName +
+                    "<p>Your account will work but you must verify it by enter this code in our app</p>" +
+                    "<h1>Your Activation Code is : " +
+                    "<span style=\"color: blue\">" + user.EmailConfirmCode + "</span>" +
+                    "</h1>" +
+                    "Thanks & Regards\nDynamicWorkFlow Team" +
+                    "<center>" +
+                    "<menu>" +
+                    "<item href=\"#\">dynamicworkflow.com</item> " +
+                    "<item href=\"#\">Facebook</item> " +
+                    "<item href=\"#\">Twitter</item> " +
+                    "<item href=\"#\">(408)-555-0123</item>" +
+                    "</menu>" +
+                    "</center>" +
+                    "</columns>" +
+                    "</row>" +
+                    "<spacer size=\"16\"></spacer>" +
+                    "</container>";
+
+                    await _emailService.SendMail(user.Email, "Activation Code to Verify Email Address", message);
 
                     //End transaction
                     _userService.CommitTransaction();
