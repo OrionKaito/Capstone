@@ -142,7 +142,7 @@ namespace Capstone.Controllers
             int countRoot = 0;
             bool chkConnection = false;
             string errNode = "";
-            Guid root = 0;
+            Guid root = new Guid();
 
             foreach (var node in model.Nodes)
             {
