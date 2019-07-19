@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { LoginService } from '../service/login.service';
+import { ROUTES } from 'app/components/sidebar/sidebar.component';
 
 
 @Component({
@@ -31,28 +32,29 @@ export class LoginComponent implements OnInit {
       data => {
         if (data.status == 200) {
           this.dataNow = data.body;
-          var a = this.dataNow.token;
-          debugger;
+          
+            var a = this.dataNow.token;
+            debugger;
 
-          localStorage.setItem('token', a);
-          this.router.navigate(['/dashboard']);
-          debugger;
-        } else if (data.status == 400) {
-          this.dataNow = data.body;
-          if(this.dataNow == "Invalid username or password!"){
-            this.wrongPass = "Invalid username or password!";
-          } else if(this.dataNow == "Please verify your account first!"){
+            localStorage.setItem('token', a);
+            this.router.navigate(['/dashboard']);
+            debugger;
+          } else if (0) {
+            this.dataNow = data.body;
+            if (this.dataNow == "Invalid username or password!") {
+              this.wrongPass = "Invalid username or password!";
+            } else if (this.dataNow == "Please verify your account first!") {
 
-          }else if(this.dataNow == "Account is banned!"){
-            this.wrongPass = "Account is banned!";
+            } else if (this.dataNow == "Account is banned!") {
+              this.wrongPass = "Account is banned!";
+            }
+
           }
 
-        }
-
-      },
-      error => {
-        this.errorMessage = error.message;
-      });
+        },
+        error => {
+          this.errorMessage = error.message;
+        });
 
   };
 }

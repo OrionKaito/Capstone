@@ -2,8 +2,9 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
-import { RouterModule } from '@angular/router';
 import {HttpClientModule } from '@angular/common/http';
+import { RouterModule } from '@angular/router';
+
 import { BrowserModule } from '@angular/platform-browser';
 
 import { AppRoutingModule } from './app.routing';
@@ -66,8 +67,9 @@ const config = {
     MatSortModule,
     FormsModule,
     HttpModule,
-    ComponentsModule,
     HttpClientModule,
+    ComponentsModule,
+   
     MatDialogModule,
     RouterModule,
     AppRoutingModule,

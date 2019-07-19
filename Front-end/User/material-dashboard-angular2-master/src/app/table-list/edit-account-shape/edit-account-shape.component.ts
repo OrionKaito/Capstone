@@ -926,4 +926,69 @@ export class EditAccountShapeComponent implements OnInit {
       });
     }
   }
+  checkConnection(){
+    debugger;
+    let positionKey: any;
+    let classKey: any;
+
+    //const exportJson = [];
+    let exportJson: any = { action: [], arrow: [] };
+    let exportJson2: any = {workFlowID: String, action: [], arrow: [] };
+
+    for (let i = 0; i < this.menuList1.length; i++) {
+      let obj;
+      positionKey = $('#' + this.menuList1[i].id);
+      // lọc ra những thằng làm đầu mũi tên
+      classKey = this.menuList1[i];
+      // thêm 2 thuộc tính
+      classKey.positionTop = positionKey.position().top;
+      classKey.positionLeft = positionKey.position().left;
+      exportJson.action.push(classKey);
+      exportJson2.action.push(classKey);
+
+
+    }
+    if (exportJson.length <= 0) {
+      this.toastr.error('Chưa có dữ liệu !!');
+    } else
+    {
+      //đẩy mũi tên vô có 1 dòng vậy thôi à?
+      this.listClass.forEach(element => {
+        exportJson.arrow.push(element);
+        exportJson2.arrow.push(element);
+      })
+
+      exportJson2.workFlowID= this.saveIDofWF;
+      //lưu  lại
+      const json = JSON.stringify(exportJson2);
+      let connections: any= [];
+      
+      exportJson.arrow.forEach(element => {
+        let b=  {
+          from: "",
+          to: "",
+          connectionTypeID: ""
+        };
+        b.from = element.idDiv[0];
+        b.to = element.idDiv[1];
+        b.connectionTypeID = element.name;
+        connections.push(b);
+      });
+      let nodes: any=[];
+      exportJson.action.forEach(element => {
+        let a = {nodeName: element.id, isStart: element.isStart, isEnd: element.isEnd};
+        nodes.push(a);
+      });
+
+      let a = {"connections":connections,"nodes": nodes};
+      exportJson2.workFlowID= this.saveIDofWF;
+      debugger;
+      this.shapeService.checkConnectionWF(a).subscribe((res: any) => {
+        this.toastr.success("Success " + res );
+      }, (err) => {
+        console.log(err);
+
+      });
+    }
+  }
 }

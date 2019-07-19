@@ -52,5 +52,11 @@ export class ShapeService {
       var tokenHeader = new HttpHeaders({'Authorization': token}); 
       return this.http.put(this.urlApi + '/api/WorkflowsTemplates/SaveWorkflow', data , {headers : tokenHeader });
     }
+    public checkConnectionWF(data){
+      var token = "Bearer " + localStorage.getItem("token");
+      var tokenHeader = new HttpHeaders({'Authorization': token}); 
+      return this.http.put(this.urlApi + '/api/WorkFlowTemplateActionConnections/CheckConnectionv2', data , {headers : tokenHeader });
+    }
+    
 
 }

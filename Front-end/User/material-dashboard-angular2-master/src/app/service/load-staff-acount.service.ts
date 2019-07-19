@@ -11,6 +11,16 @@ export class LoadStaffAcountService {
     this.Url = 'https://localhost:44359';
     this.token = localStorage.getItem('token');
   }
+  checkRole(){
+    var token = "Bearer " + localStorage.getItem("token");
+    var tokenHeader = new HttpHeaders({'Authorization': token});
+    return this.http.get(this.Url + "", {headers : tokenHeader });
+  }
+  getRoleByToken(){
+    var token = "Bearer " + localStorage.getItem("token");
+    var tokenHeader = new HttpHeaders({'Authorization': token});
+    return this.http.get(this.Url + "", {headers : tokenHeader });
+  }
   loadStaffData() {
     return this.http.get(this.Url + "/api/Accounts");
   }

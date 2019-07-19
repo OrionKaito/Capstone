@@ -16,6 +16,7 @@ export class ManagePerGrComponent implements OnInit {
   users: any = [];
   dataGet: any = [];
   dataSave: any = [];
+  listGrPer: any=[];
   roleData: string
   groupData: string
   searchKey: string;
@@ -36,7 +37,18 @@ export class ManagePerGrComponent implements OnInit {
   callAll() {
     this.loadStaffAcountService.loadPermissionGroupData().toPromise().then(data => {
       this.users = data;
-      this.listData = new MatTableDataSource(this.users);
+     
+      this.users.forEach(element => {
+        let saveListPerToString="";
+        element.permission.forEach(element => {
+          saveListPerToString =  saveListPerToString + element.name+", ";
+        });
+        saveListPerToString.substring(0, saveListPerToString.length-2)
+        this.listGrPer.push({nameGr: element.name, namePer: saveListPerToString});
+      });
+
+      this.listData = new MatTableDataSource(this.listGrPer);
+
       this.listData.sort = this.sort;
       this.listData.paginator = this.paginator;
 
