@@ -27,7 +27,7 @@ export class LoadStaffAcountService {
   loadWorkFlow(){
     var token = "Bearer " + localStorage.getItem("token");
     var tokenHeader = new HttpHeaders({'Authorization': token});
-    return this.http.get(this.Url + "/api/WorkflowsTemplates", {headers : tokenHeader });
+    return this.http.get(this.Url + "/api/WorkflowsTemplates/GetWorkflowToEdit", {headers : tokenHeader });
   }
   loadWFByID(id: string){
     var token = "Bearer " + localStorage.getItem("token");
@@ -71,7 +71,7 @@ export class LoadStaffAcountService {
   loadWorkflowForUserData(){
     var token = "Bearer " + localStorage.getItem("token");
     var tokenHeader = new HttpHeaders({'Authorization': token});
-    return this.http.get(this.Url + "/api/WorkflowsTemplates/GetUserWorkflow", {headers : tokenHeader });
+    return this.http.get(this.Url + "/api/WorkflowsTemplates/GetWorkflowToUse", {headers : tokenHeader });
   }
 
   loadHandlingRequest(){
@@ -80,7 +80,7 @@ export class LoadStaffAcountService {
     return this.http.get(this.Url + "/api/UserNotifications/GetNotificationByUserId?notificationType=2", {headers : tokenHeader });
   }
   loadPermissionGroupData() {
-    return this.http.get(this.Url + "/api/PermissionOfGroups");
+    return this.http.get(this.Url + "/api/PermissionOfGroups/GetPermissionByGroup");
   }
 
   loadPermissionData() {

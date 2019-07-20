@@ -49,13 +49,13 @@ export class ShapeService {
     }
     public saveWorkFlow(data){
       var token = "Bearer " + localStorage.getItem("token");
-      var tokenHeader = new HttpHeaders({'Authorization': token}); 
+      var tokenHeader = new HttpHeaders({'Authorization': token});
       return this.http.put(this.urlApi + '/api/WorkflowsTemplates/SaveWorkflow', data , {headers : tokenHeader });
     }
     public checkConnectionWF(data){
       var token = "Bearer " + localStorage.getItem("token");
       var tokenHeader = new HttpHeaders({'Authorization': token}); 
-      return this.http.put(this.urlApi + '/api/WorkFlowTemplateActionConnections/CheckConnectionv2', data , {headers : tokenHeader });
+      return this.http.post(this.urlApi + '/api/WorkFlowTemplateActionConnections/CheckConnectionv2', data , {headers : tokenHeader });
     }
     
 

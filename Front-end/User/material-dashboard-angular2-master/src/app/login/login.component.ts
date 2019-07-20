@@ -31,15 +31,13 @@ export class LoginComponent implements OnInit {
     this.LoginService.Login(this.model).toPromise().then(
       data => {
         if (data.status == 200) {
-          this.dataNow = data.body;
-          
+          this.dataNow = data.body;    
             var a = this.dataNow.token;
             debugger;
-
             localStorage.setItem('token', a);
             this.router.navigate(['/dashboard']);
             debugger;
-          } else if (0) {
+          } else if (1) {
             this.dataNow = data.body;
             if (this.dataNow == "Invalid username or password!") {
               this.wrongPass = "Invalid username or password!";

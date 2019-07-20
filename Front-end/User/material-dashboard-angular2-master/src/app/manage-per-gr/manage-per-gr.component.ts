@@ -36,15 +36,17 @@ export class ManagePerGrComponent implements OnInit {
   }
   callAll() {
     this.loadStaffAcountService.loadPermissionGroupData().toPromise().then(data => {
+      this.listGrPer=[];
       this.users = data;
+      console.log(this.users);
      
       this.users.forEach(element => {
         let saveListPerToString="";
-        element.permission.forEach(element => {
-          saveListPerToString =  saveListPerToString + element.name+", ";
+        element.permissions.forEach(element2 => {
+          saveListPerToString =  saveListPerToString + element2.permissionName+", ";
         });
-        saveListPerToString.substring(0, saveListPerToString.length-2)
-        this.listGrPer.push({nameGr: element.name, namePer: saveListPerToString});
+        saveListPerToString= saveListPerToString.substring(0, saveListPerToString.length-2)
+        this.listGrPer.push({nameGr: element.groupName, namePer: saveListPerToString});
       });
 
       this.listData = new MatTableDataSource(this.listGrPer);
