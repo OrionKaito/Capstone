@@ -48,18 +48,21 @@ export class TableListComponent implements OnInit {
   applyFilter() {
     this.listData.filter = this.searchKey.trim().toLocaleLowerCase();
   }
-  banOrUnbanAcc(id) {
+  enabledDisableWF(id) {
 
-    this.LoginService.BanOrUnbanAcc(id).subscribe(
+    this.LoginService.enabledDisableWF(id).subscribe(
       data => {
         console.log(data);
+        this.callAll()
 
       },
       err => {
         console.log(err);
+        this.callAll()
       }
     )
-    location.reload();
+    this.callAll()
+    
   };
   register() {
     this.model.dateOfBirth = this.model.dateOfBirth.toString() + "T06:08:08-05:00";

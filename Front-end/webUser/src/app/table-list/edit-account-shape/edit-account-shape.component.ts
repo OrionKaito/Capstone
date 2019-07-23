@@ -10,7 +10,7 @@ import { interval } from 'rxjs';
 import { ModalDirective } from 'angular-bootstrap-md';
 import { FormControl, FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { ShapeService } from './shape.service';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { element } from '@angular/core/src/render3';
 import { AddNewDynamicFormComponent } from 'app/add-new-dynamic-form/add-new-dynamic-form.component';
 
@@ -22,6 +22,7 @@ import { AddNewDynamicFormComponent } from 'app/add-new-dynamic-form/add-new-dyn
 export class EditAccountShapeComponent implements OnInit {
   @ViewChild('basicModal') public showModalOnClick: ModalDirective;
 
+  checkConnectionResult: any;
   properties: any;
   propertiesArr: any;
   checkIsAction: boolean;
@@ -66,12 +67,13 @@ export class EditAccountShapeComponent implements OnInit {
   public positionTop: any;
   public positionLeft: any;
   public enableDeleteArrow = false;
-  saveIDofWF:any;
+  saveIDofWF: any;
 
   getListPer: any;
   getListCon: any;
   getListAction: any;
   constructor(
+    private router: Router,
     public toastr: ToastrService,
     public dialog: MatDialog,
     private shapeService: ShapeService,
@@ -80,6 +82,7 @@ export class EditAccountShapeComponent implements OnInit {
   ) { }
   saveActiontype;
   ngOnInit() {
+
     this.properties = {
       name: "",
       description: "",
@@ -89,12 +92,9 @@ export class EditAccountShapeComponent implements OnInit {
     this.propertiesArr = {
       name: ""
     }
-
-
-
-
     this.activatedRoute.params.subscribe(item => {
       if (item.id) {
+        debugger;
         this.saveIDofWF = item.id;
         //load dữ liệu của thằng này kiểu json để show lên lại
         this.shapeService.getJsonByUserId(item.id).toPromise().then(res => {
@@ -129,7 +129,7 @@ export class EditAccountShapeComponent implements OnInit {
 
     })
   }
-  public getListConnectionType(){
+  public getListConnectionType() {
     this.shapeService.getConnectionType().toPromise().then((res: any) => {
       if (res) {
         this.getListCon = res;
@@ -140,7 +140,7 @@ export class EditAccountShapeComponent implements OnInit {
 
     })
   }
-   public getlistActionType(){
+  public getlistActionType() {
     this.shapeService.getActiontype().toPromise().then((res: any) => {
       debugger;
       if (res) {
@@ -151,7 +151,7 @@ export class EditAccountShapeComponent implements OnInit {
       }
 
     })
-   }
+  }
   // hình như là để vẽ mũi tên, k chắc lắm, hình như đúng rồi, haha
   //item này là của menuList1, menuList1 hình như là để chứa các hình
   public dropImageBottom(item) {
@@ -338,7 +338,7 @@ export class EditAccountShapeComponent implements OnInit {
 
     //const exportJson = [];
     let exportJson: any = { action: [], arrow: [] };
-    let exportJson2: any = {workFlowID: String, action: [], arrow: [] };
+    let exportJson2: any = { workFlowID: String, action: [], arrow: [] };
     // for (let i = 0; i < this.listClass.length; i++) {
     //   let obj;
     //   // Lấy value từ id input tag
@@ -460,7 +460,7 @@ export class EditAccountShapeComponent implements OnInit {
         exportJson2.arrow.push(element);
       })
 
-      exportJson2.workFlowID= this.saveIDofWF;
+      exportJson2.workFlowID = this.saveIDofWF;
       //lưu  lại
       const json = JSON.stringify(exportJson2);
       const blob = new Blob([json], { type: 'application/json' });
@@ -469,14 +469,14 @@ export class EditAccountShapeComponent implements OnInit {
       // const data = {
       //   json: exportJson
       // }
-      var a = {id: this.saveIDofWF, "data": JSON.stringify(exportJson)};
+      var a = { id: this.saveIDofWF, "data": JSON.stringify(exportJson) };
       debugger;
       // this.shapeService.postJsonFile(a).subscribe((res: any) => {
       // }, (err) => {
       //   console.log(err);
       // });
-      exportJson2.workFlowID= this.saveIDofWF;
-      var b = {id: this.saveIDofWF, "data": JSON.stringify(exportJson2)};
+      exportJson2.workFlowID = this.saveIDofWF;
+      var b = { id: this.saveIDofWF, "data": JSON.stringify(exportJson2) };
       // this.shapeService.saveAndACtiveJsonFile(exportJson2).subscribe((res: any) => {
       // }, (err) => {
       //   console.log(err);
@@ -815,7 +815,7 @@ export class EditAccountShapeComponent implements OnInit {
     }
   }
 
-  openDinamicForm(id){
+  openDinamicForm(id) {
     const dialogConfig = new MatDialogConfig();
     dialogConfig.autoFocus = true;
     dialogConfig.disableClose = true;
@@ -826,13 +826,13 @@ export class EditAccountShapeComponent implements OnInit {
     });
 
   }
-  saveDraf(){
+  saveDraf() {
     let positionKey: any;
     let classKey: any;
 
     //const exportJson = [];
     let exportJson: any = { action: [], arrow: [] };
-    let exportJson2: any = {workFlowID: String, action: [], arrow: [] };
+    let exportJson2: any = { workFlowID: String, action: [], arrow: [] };
 
     for (let i = 0; i < this.menuList1.length; i++) {
       let obj;
@@ -849,36 +849,37 @@ export class EditAccountShapeComponent implements OnInit {
     }
     if (exportJson.length <= 0) {
       this.toastr.error('Chưa có dữ liệu !!');
-    } else
-    {
+    } else {
       //đẩy mũi tên vô có 1 dòng vậy thôi à?
       this.listClass.forEach(element => {
         exportJson.arrow.push(element);
         exportJson2.arrow.push(element);
       })
 
-      exportJson2.workFlowID= this.saveIDofWF;
+      exportJson2.workFlowID = this.saveIDofWF;
       //lưu  lại
       const json = JSON.stringify(exportJson2);
 
 
-      var a = {"id": this.saveIDofWF, "data": JSON.stringify(exportJson)};
-      exportJson2.workFlowID= this.saveIDofWF;
-      var b = {id: this.saveIDofWF, "data": JSON.stringify(exportJson2)};
+      var a = { "id": this.saveIDofWF, "data": JSON.stringify(exportJson) };
+      exportJson2.workFlowID = this.saveIDofWF;
+      var b = { id: this.saveIDofWF, "data": JSON.stringify(exportJson2) };
 
-      this.shapeService.saveDraf(a).subscribe((res: any) => {
+      this.shapeService.saveDraf(a).toPromise().then((res: any) => {
+        this.toastr.success("Lưu bản nháp WorkFlow thành công!");
+
       }, (err) => {
         console.log(err);
       });
     }
   }
-  saveWorkFlow(){
+  saveWorkFlow() {
     let positionKey: any;
     let classKey: any;
 
     //const exportJson = [];
     let exportJson: any = { action: [], arrow: [] };
-    let exportJson2: any = {workFlowID: String, action: [], arrow: [] };
+    let exportJson2: any = { workFlowID: String, action: [], arrow: [] };
 
     for (let i = 0; i < this.menuList1.length; i++) {
       let obj;
@@ -895,36 +896,38 @@ export class EditAccountShapeComponent implements OnInit {
     }
     if (exportJson.length <= 0) {
       this.toastr.error('Chưa có dữ liệu !!');
-    } else
-    {
+    } else {
       //đẩy mũi tên vô có 1 dòng vậy thôi à?
       this.listClass.forEach(element => {
         exportJson.arrow.push(element);
         exportJson2.arrow.push(element);
       })
 
-      exportJson2.workFlowID= this.saveIDofWF;
+      exportJson2.workFlowID = this.saveIDofWF;
       //lưu  lại
       const json = JSON.stringify(exportJson2);
 
-      let jsonConnections : any = [];
-      let  jsonActions : any=[];
-      exportJson.arrow.forEach(element => {
-        let b=  {
-          fromWorkFlowTemplateActionID: "",
-          toWorkFlowTemplateActionID: "",
-          connectionTypeID: ""
-        };
-        b.fromWorkFlowTemplateActionID = element.idDiv[0].toString();
-        b.toWorkFlowTemplateActionID = element.idDiv[1].toString();
-        b.connectionTypeID = element.name.toString();
-        jsonConnections.push(b);
-      });
+      let jsonConnections: any = [];
+      let jsonActions: any = [];
+
       exportJson.action.forEach(element => {
-        
-        if(element.permissionToUseID != "" && element.permissionToUseID != "0" &&
-         element.permissionToUseID != null) {
-          let oneAction=  {
+
+
+        //tạo Guid ID new cho cái action rồi gắn cho mũi tên
+        let newIdAction = this.create_UUID();
+        exportJson.arrow.forEach(elementArr => {
+          if (elementArr.idDiv[0] == element.id) {
+            elementArr.idDiv[0] = newIdAction
+          }
+          if (elementArr.idDiv[1] == element.id) {
+            elementArr.idDiv[1] = newIdAction
+          }
+        });
+        element.id = newIdAction;
+
+        if (element.permissionToUseID != "" && element.permissionToUseID != "0" &&
+          element.permissionToUseID != null) {
+          let oneAction = {
             id: element.id,
             name: element.name,
             description: element.description,
@@ -935,8 +938,8 @@ export class EditAccountShapeComponent implements OnInit {
             isEnd: element.isEnd
           };
           jsonActions.push(oneAction);
-         } else {
-          let oneAction=  {
+        } else {
+          let oneAction = {
             id: element.id,
             name: element.name,
             description: element.description,
@@ -947,32 +950,127 @@ export class EditAccountShapeComponent implements OnInit {
             isEnd: element.isEnd
           };
           jsonActions.push(oneAction);
-         }
-
-        
+        }
       });
-      let jsonData = JSON.stringify(exportJson);
-      let a = {"workFlowTemplateID": this.saveIDofWF, "data": jsonData,
-       "actions": jsonActions, "connections":jsonConnections};
 
-      exportJson2.workFlowID= this.saveIDofWF;
+
+      exportJson.arrow.forEach(element => {
+        let b = {
+          fromWorkFlowTemplateActionID: "",
+          toWorkFlowTemplateActionID: "",
+          connectionTypeID: ""
+        };
+        b.fromWorkFlowTemplateActionID = element.idDiv[0].toString();
+        b.toWorkFlowTemplateActionID = element.idDiv[1].toString();
+        b.connectionTypeID = element.name.toString();
+        jsonConnections.push(b);
+      });
+
+
+
+      let jsonData = JSON.stringify(exportJson);
+      let a = {
+        "workFlowTemplateID": this.saveIDofWF, "data": jsonData,
+        "actions": jsonActions, "connections": jsonConnections
+      };
+
+      exportJson2.workFlowID = this.saveIDofWF;
       debugger;
       console.log("file json:")
       console.log(JSON.stringify(a));
 
-      this.shapeService.saveWorkFlow(a).subscribe((res: any) => {
+      this.shapeService.saveWorkFlow(a).toPromise().then(
+        data => {
+          console.log("không có vo đau");
+          console.log(data);
+          if (data != "") {
+            this.toastr.success("Vui lòng Active WorkFlow để đưa vào hoạt động!", "Lưu WorkFlow thành công!");
+            this.router.navigate(['/manage-workflow']);
+          }
+        }, (err) => {
+          this.toastr.error("Lỗi: " + err.message, "Có lỗi xảy ra");
+          console.log(err);
+        });
+    }
+  }
+  create_UUID() {
+    var dt = new Date().getTime();
+    var uuid = 'axxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+      var r = (dt + Math.random() * 16) % 16 | 0;
+      dt = Math.floor(dt / 16);
+      return (c == 'x' ? r : (r & 0x3 | 0x8)).toString(16);
+    });
+    return uuid;
+  }
+  checkConnection() {
+
+    let positionKey: any;
+    let classKey: any;
+
+    //const exportJson = [];
+    let exportJson: any = { action: [], arrow: [] };
+    let exportJson2: any = { workFlowID: String, action: [], arrow: [] };
+
+    for (let i = 0; i < this.menuList1.length; i++) {
+      let obj;
+      positionKey = $('#' + this.menuList1[i].id);
+      // lọc ra những thằng làm đầu mũi tên
+      classKey = this.menuList1[i];
+      // thêm 2 thuộc tính
+      classKey.positionTop = positionKey.position().top;
+      classKey.positionLeft = positionKey.position().left;
+      exportJson.action.push(classKey);
+      exportJson2.action.push(classKey);
+
+
+    }
+    if (exportJson.length <= 0) {
+      this.toastr.error('Chưa có dữ liệu !!');
+    } else {
+      //đẩy mũi tên vô có 1 dòng vậy thôi à?
+      this.listClass.forEach(element => {
+        exportJson.arrow.push(element);
+        exportJson2.arrow.push(element);
+      })
+
+      exportJson2.workFlowID = this.saveIDofWF;
+      //lưu  lại
+      const json = JSON.stringify(exportJson2);
+
+      let jsonConnections: any = [];
+      let jsonActions: any = [];
+      exportJson.arrow.forEach(element => {
+        let b = {
+          from: "",
+          to: "",
+          connectionTypeID: ""
+        };
+        b.from = element.idDiv[0].toString();
+        b.to = element.idDiv[1].toString();
+        b.connectionTypeID = element.name.toString();
+        jsonConnections.push(b);
+      });
+      exportJson.action.forEach(element => {
+        let oneAction = {
+          nodeName: element.id,
+          isStart: element.isStart,
+          isEnd: element.isEnd
+        };
+        jsonActions.push(oneAction);
+      });
+      let jsonData = JSON.stringify(exportJson);
+      let a = { "nodes": jsonActions, "connections": jsonConnections };
+
+      console.log(JSON.stringify(a));
+      this.shapeService.checkConnection(a).toPromise().then(res => {
+        this.checkConnectionResult = res;
+        this.toastr.success("" + this.checkConnectionResult, "Check WF:");
+
       }, (err) => {
+        this.toastr.error("Lỗi: " + err.toString(), "Có lỗi xảy ra");
         console.log(err);
       });
     }
+
   }
-  create_UUID(){
-    var dt = new Date().getTime();
-    var uuid = 'axxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
-        var r = (dt + Math.random()*16)%16 | 0;
-        dt = Math.floor(dt/16);
-        return (c=='x' ? r :(r&0x3|0x8)).toString(16);
-    });
-    return uuid;
-}
 }

@@ -54,5 +54,9 @@ export class LoginService {
     const headers = new HttpHeaders({ 'Content-Type': 'application/json'}); 
     return this.http.put(this.Url + "/api/Accounts/ToggleBanAccount?ID=" +id, {"ID": id},{ headers: headers });
   }
+  enabledDisableWF(id: string){
+    const headers = new HttpHeaders({ 'Content-Type': 'application/json'}); 
+    return this.http.put(this.Url + "/api/WorkflowsTemplates/ToggleEnable?ID=" +id, {"ID": id},{ headers: headers });
+  }
  
 }  

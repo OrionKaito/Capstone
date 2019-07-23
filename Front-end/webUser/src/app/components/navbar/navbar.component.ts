@@ -26,12 +26,12 @@ export class NavbarComponent implements OnInit {
     }
 
     ngOnInit(){
-        this.loadStaffAcountService.getNotiUser().toPromise().then(rep=>{
-            this.listNoti = rep;
-        })
-        this.loadStaffAcountService.getNumNotiUser().toPromise().then(rep=>{
-            this.numberNoti = rep;
-        })
+        // this.loadStaffAcountService.getNotiUser().toPromise().then(rep=>{
+        //     this.listNoti = rep;
+        // })
+        // this.loadStaffAcountService.getNumNotiUser().toPromise().then(rep=>{
+        //     this.numberNoti = rep;
+        // })
       this.listTitles = ROUTES.filter(listTitle => listTitle);
       const navbar: HTMLElement = this.element.nativeElement;
       this.toggleButton = navbar.getElementsByClassName('navbar-toggler')[0];
