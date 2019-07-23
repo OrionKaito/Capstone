@@ -129,26 +129,6 @@ namespace Capstone.Controllers
             }
         }
 
-        [HttpPut]
-        public ActionResult PutWorkflowTemplate(WorkFlowTemplateUM model)
-        {
-            if (!ModelState.IsValid) return BadRequest(ModelState);
-
-            try
-            {
-                var workFlowInDb = _workFlowService.GetByID(model.ID);
-                if (workFlowInDb == null) return BadRequest(WebConstant.NotFound);
-
-                _mapper.Map<WorkFlowTemplate>(model);
-                _workFlowService.Save();
-                return Ok(WebConstant.Success);
-            }
-            catch (Exception e)
-            {
-                return BadRequest(e.Message);
-            }
-        }
-
         // POST: api/Workflows
         [HttpPost]
         public ActionResult PostWorkflowTemplate(WorkFlowTemplateCM model)
@@ -226,8 +206,37 @@ namespace Capstone.Controllers
             try
             {
                 _workFlowService.BeginTransaction();
+                bool checkUpdate = false;
                 var workFlowInDB = _workFlowService.GetByID(model.WorkFlowTemplateID);
-                workFlowInDB.Data = model.Data;
+
+                var actionsInDb = _workFlowTemplateActionService.GetByWorkFlowID(model.WorkFlowTemplateID);
+                if (actionsInDb.Any()) //Kiểm tra wokrflow có action nào không
+                {
+                    checkUpdate = true;
+                    //Disable workflow cũ
+                    var workFlowInDb = _workFlowService.GetByID(model.WorkFlowTemplateID);
+                    workFlowInDb.IsDeleted = true;
+                    workFlowInDb.IsEnabled = false;
+                    _workFlowService.Save();
+
+                    //Tạo workflow mới
+                    WorkFlowTemplate workFlow = new WorkFlowTemplate
+                    {
+                        Data = model.Data,
+                        Description = workFlowInDB.Description,
+                        Name = workFlowInDB.Name,
+                        OwnerID = workFlowInDB.OwnerID,
+                        PermissionToEditID = workFlowInDB.PermissionToEditID,
+                        PermissionToUseID = workFlowInDB.PermissionToUseID,
+                    };
+                    _workFlowService.Create(workFlow);
+
+                    model.WorkFlowTemplateID = workFlow.ID; //cập nhật id là của workflow mới
+                }
+                else
+                {
+                    workFlowInDB.Data = model.Data;
+                }
 
                 foreach (var action in model.Actions)
                 {
@@ -244,7 +253,15 @@ namespace Capstone.Controllers
 
                 _workFlowService.CommitTransaction();
 
-                return Ok(WebConstant.Success);
+                if (checkUpdate)
+                {
+                    return StatusCode(201, "Update " + WebConstant.Success);
+                }
+                else
+                {
+                    return Ok(WebConstant.Success);
+
+                }
             }
             catch (Exception e)
             {
