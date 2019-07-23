@@ -12,6 +12,7 @@ namespace Capstone.ViewModel
         public string Data { get; set; }
         public Guid PermissionToEditID { get; set; }
         public Guid PermissionToUseID { get; set; }
+        public bool IsEnabled { get; set; }
     }
 
     public class WorkFlowTemplateCM
