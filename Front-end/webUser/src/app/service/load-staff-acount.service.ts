@@ -32,7 +32,7 @@ export class LoadStaffAcountService {
   loadWorkFlow(){
     var token = "Bearer " + localStorage.getItem("token");
     var tokenHeader = new HttpHeaders({'Authorization': token});
-    return this.http.get(this.Url + "/api/WorkflowsTemplates", {headers : tokenHeader });
+    return this.http.get(this.Url + "/api/WorkflowsTemplates/GetWorkflowToEdit", {headers : tokenHeader });
   }
   loadWFByID(id: string){
     var token = "Bearer " + localStorage.getItem("token");
