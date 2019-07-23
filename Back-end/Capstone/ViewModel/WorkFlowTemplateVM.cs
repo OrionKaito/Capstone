@@ -26,10 +26,10 @@ namespace Capstone.ViewModel
 
     public class WorkFlowTemplateUM
     {
-        public Guid ID { get; set; }
+        public Guid WorkFlowTemplateID { get; set; }
         public string Data { get; set; }
-        public string Name { get; set; }
-        public string Description { get; set; }
+        public IEnumerable<WorkFlowActionCM> Actions { get; set; }
+        public IEnumerable<WorkFlowTemplateActionConnectionCM> Connections { get; set; }
     }
 
     public class WorkFlowActionCM

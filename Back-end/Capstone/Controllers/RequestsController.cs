@@ -322,9 +322,8 @@ namespace Capstone.Controllers
             }
         }
 
-        // GET: api/Requests
         [HttpGet]
-        public ActionResult<IEnumerable<RequestVM>> GetRequests()
+        public ActionResult<IEnumerable<RequestVM>> GetMyRequests()
         {
             try
             {
@@ -334,23 +333,6 @@ namespace Capstone.Controllers
                 {
                     result.Add(_mapper.Map<RequestVM>(item));
                 }
-                return Ok(result);
-            }
-            catch (Exception e)
-            {
-                return BadRequest(e.Message);
-            }
-        }
-
-        // GET: api/Requests/GetByID
-        [HttpGet("GetByID")]
-        public ActionResult<RequestVM> GetRequest(Guid ID)
-        {
-            try
-            {
-                var rs = _requestService.GetByID(ID);
-                if (rs == null) return BadRequest(WebConstant.NotFound);
-                RequestVM result = _mapper.Map<RequestVM>(rs);
                 return Ok(result);
             }
             catch (Exception e)
@@ -370,6 +352,7 @@ namespace Capstone.Controllers
 
                 if (request == null) return BadRequest("RequestAction" + WebConstant.NotFound);
 
+                //Set lại trạng thái isRead của userNotification khi user click vào 
                 var userNotification = _userNotificationService.GetByID(userNotificationID);
 
                 if (userNotification == null) return BadRequest("UserNotification" + WebConstant.NotFound);
