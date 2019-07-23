@@ -9,6 +9,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
+using System.Threading.Tasks;
 
 namespace Capstone.Controllers
 {
@@ -68,7 +69,7 @@ namespace Capstone.Controllers
 
         // POST: api/Requests
         [HttpPost]
-        public ActionResult PostRequest(RequestCM model)
+        public async Task<ActionResult> PostRequest(RequestCM model)
         {
             if (!ModelState.IsValid) return BadRequest(ModelState);
 
@@ -147,13 +148,33 @@ namespace Capstone.Controllers
                 {
                     var user = _userManager.FindByIdAsync(userID).Result;
 
-                    UserNotification userNotification = new UserNotification
+                    if (user.DeviceID != "" || !string.IsNullOrEmpty(user.DeviceID))
                     {
-                        NotificationID = notification.ID,
-                        UserID = user.Id,
-                    };
-                    _userNotificationService.Create(userNotification);
+                        UserNotification userNotification = new UserNotification
+                        {
+                            NotificationID = notification.ID,
+                            UserID = user.Id,
+                            IsSend = true,
+                        };
+                        _userNotificationService.Create(userNotification);
 
+                        string[] deviceTokens = new string[]
+                        {
+                                    user.DeviceID
+                        };
+
+                        bool sent = await PushNotification.SendMessageAsync(deviceTokens, "Received Request", WebConstant.ReceivedRequestMessage + " from " + _userManager.FindByIdAsync(userID).Result.FullName);
+                    }
+                    else
+                    {
+                        UserNotification userNotification = new UserNotification
+                        {
+                            NotificationID = notification.ID,
+                            UserID = user.Id,
+                            IsSend = false,
+                        };
+                        _userNotificationService.Create(userNotification);
+                    }
                 }
                 else
                 {
@@ -163,12 +184,32 @@ namespace Capstone.Controllers
                     {
                         foreach (var user in users)
                         {
-                            UserNotification userNotification = new UserNotification
+                            if (user.DeviceID != "" || !string.IsNullOrEmpty(user.DeviceID))
                             {
-                                NotificationID = notification.ID,
-                                UserID = user.Id,
-                            };
-                            _userNotificationService.Create(userNotification);
+                                UserNotification userNotification = new UserNotification
+                                {
+                                    NotificationID = notification.ID,
+                                    UserID = user.Id,
+                                };
+                                _userNotificationService.Create(userNotification);
+                                string[] deviceTokens = new string[]
+                                {
+                                    user.DeviceID
+                                };
+
+                                bool sent = await PushNotification.SendMessageAsync(deviceTokens, "Received Request", WebConstant.ReceivedRequestMessage + " from " + _userManager.FindByIdAsync(userID).Result.FullName);
+
+                            }
+                            else
+                            {
+                                UserNotification userNotification = new UserNotification
+                                {
+                                    NotificationID = notification.ID,
+                                    UserID = user.Id,
+                                    IsSend = false,
+                                };
+                                _userNotificationService.Create(userNotification);
+                            }
                         }
                     }
                 }
@@ -186,7 +227,7 @@ namespace Capstone.Controllers
         }
 
         [HttpPost("ApproveRequest")]
-        public ActionResult ApproveRequest(RequestApproveCM model)
+        public async Task<ActionResult> ApproveRequest(RequestApproveCM model)
         {
             if (!ModelState.IsValid) return BadRequest(ModelState);
 
@@ -249,19 +290,41 @@ namespace Capstone.Controllers
 
                     _notificationService.Create(notification);
 
+                    var request = _requestService.GetByID(requestAction.ID);
+
                     //UserNotification
 
                     if (nextStep.IsApprovedByLineManager)
                     {
                         var ownerID = _requestService.GetByID(model.RequestID).InitiatorID;
-                        var managerID = _userManager.FindByIdAsync(ownerID).Result.ManagerID;
+                        var manager = _userManager.FindByIdAsync(ownerID).Result;
+                        var managerID = manager.ManagerID;
 
-                        UserNotification userNotification = new UserNotification
+                        if (manager.DeviceID != "" || !string.IsNullOrEmpty(manager.DeviceID))
                         {
-                            NotificationID = notification.ID,
-                            UserID = managerID,
-                        };
-                        _userNotificationService.Create(userNotification);
+                            UserNotification userNotification = new UserNotification
+                            {
+                                NotificationID = notification.ID,
+                                UserID = managerID,
+                            };
+                            _userNotificationService.Create(userNotification);
+                            string[] deviceTokens = new string[]
+                            {
+                                manager.DeviceID
+                            };
+                            bool sent = await PushNotification.SendMessageAsync(deviceTokens, "Received Request", WebConstant.ReceivedRequestMessage + " from " + _userManager.FindByIdAsync(request.InitiatorID).Result.FullName);
+
+                        }
+                        else
+                        {
+                            UserNotification userNotification = new UserNotification
+                            {
+                                NotificationID = notification.ID,
+                                UserID = managerID,
+                                IsSend = false,
+                            };
+                            _userNotificationService.Create(userNotification);
+                        }
 
                     }
                     else
@@ -272,12 +335,32 @@ namespace Capstone.Controllers
                         {
                             foreach (var user in users)
                             {
-                                UserNotification userNotification = new UserNotification
+                                if (user.DeviceID != "" || !string.IsNullOrEmpty(user.DeviceID))
                                 {
-                                    NotificationID = notification.ID,
-                                    UserID = user.Id,
-                                };
-                                _userNotificationService.Create(userNotification);
+                                    UserNotification userNotification = new UserNotification
+                                    {
+                                        NotificationID = notification.ID,
+                                        UserID = user.Id,
+                                    };
+                                    _userNotificationService.Create(userNotification);
+                                    string[] deviceTokens = new string[]
+                                    {
+                                        user.DeviceID
+                                    };
+
+                                    bool sent = await PushNotification.SendMessageAsync(deviceTokens, "Received Request", WebConstant.ReceivedRequestMessage + " from " + _userManager.FindByIdAsync(request.InitiatorID).Result.FullName);
+
+                                }
+                                else
+                                {
+                                    UserNotification userNotification = new UserNotification
+                                    {
+                                        NotificationID = notification.ID,
+                                        UserID = user.Id,
+                                        IsSend = false,
+                                    };
+                                    _userNotificationService.Create(userNotification);
+                                }
                             }
                         }
                     }
@@ -298,12 +381,36 @@ namespace Capstone.Controllers
                     _notificationService.Create(notification);
 
                     var ownerID = _requestService.GetByID(model.RequestID).InitiatorID;
-                    UserNotification userNotification = new UserNotification
+                    var owner = _userManager.FindByIdAsync(ownerID).Result;
+
+                    if (owner.DeviceID != "" || !string.IsNullOrEmpty(owner.DeviceID))
                     {
-                        NotificationID = notification.ID,
-                        UserID = ownerID,
-                    };
-                    _userNotificationService.Create(userNotification);
+                        UserNotification userNotification = new UserNotification
+                        {
+                            NotificationID = notification.ID,
+                            UserID = ownerID,
+                        };
+                        _userNotificationService.Create(userNotification);
+
+                        string[] deviceTokens = new string[]
+                        {
+                            owner.DeviceID
+                        };
+
+                        bool sent = await PushNotification.SendMessageAsync(deviceTokens, "Completed Request", WebConstant.CompletedRequestMessage);
+
+                    }
+                    else
+                    {
+                        UserNotification userNotification = new UserNotification
+                        {
+                            NotificationID = notification.ID,
+                            UserID = ownerID,
+                            IsSend = false,
+                        };
+                        _userNotificationService.Create(userNotification);
+                    }
+
                 }
 
                 //set IsHandled

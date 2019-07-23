@@ -10,8 +10,8 @@ namespace Capstone.Data
     {
         public CapstoneEntities()
             : base(new DbContextOptionsBuilder()
-                  //.UseSqlServer(@"Server=.;Database=Capstone;user id=sa;password=123456789;Trusted_Connection=false;")
-                  .UseSqlServer(@"Server=.;Database=Capstone;user id=sa;password=920713823597;Trusted_Connection=false;")
+                  .UseSqlServer(@"Server=.;Database=Capstone;user id=sa;password=123456789;Trusted_Connection=false;")
+                  //.UseSqlServer(@"Server=.;Database=Capstone;user id=sa;password=920713823597;Trusted_Connection=false;")
                   .Options)
         {
         }
