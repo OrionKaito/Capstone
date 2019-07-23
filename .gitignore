@@ -41,9 +41,8 @@ TestResult.xml
 dlldata.c
 
 # DNX
-project.lock.json
-project.fragment.lock.json
-artifacts/
+
+
 
 *_i.c
 *_p.c
@@ -266,7 +265,6 @@ __pycache__/
 *.cache
 *.props
 *.props
-*.json
 *.pubxml
 Back-end/Capstone.Data/Migrations/20190620100701_20062019_1.Designer.cs
 Back-end/Capstone.Data/Migrations/20190620100701_20062019_1.cs
@@ -285,3 +283,7 @@ Back-end/Capstone.Data/Migrations/20190717090925_17072019.cs
 Back-end/Capstone.Data/Migrations/CapstoneEntitiesModelSnapshot.cs
 Back-end/Capstone.Data/Migrations/CapstoneEntitiesModelSnapshot.cs
 Back-end/Capstone.Data/Migrations/CapstoneEntitiesModelSnapshot.cs
+Back-end/Capstone.Data/CapstoneEntities.cs
+Back-end/Capstone.Data/CapstoneEntities.cs
+Back-end/Capstone.Data/CapstoneEntities.cs
+Back-end/Capstone.Data/CapstoneEntities.cs
