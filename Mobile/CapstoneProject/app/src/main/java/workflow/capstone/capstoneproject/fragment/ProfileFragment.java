@@ -15,6 +15,7 @@ import android.widget.TextView;
 
 import java.util.List;
 
+import es.dmoral.toasty.Toasty;
 import workflow.capstone.capstoneproject.R;
 import workflow.capstone.capstoneproject.activity.LoginActivity;
 import workflow.capstone.capstoneproject.activity.MainActivity;
@@ -32,6 +33,8 @@ public class ProfileFragment extends Fragment {
     private LinearLayout lnChangePassword;
     private LinearLayout lnSignOut;
     private TextView tvFullName;
+    private CapstoneRepository capstoneRepository;
+    private String token;
 
     public ProfileFragment() {
         // Required empty public constructor
@@ -75,15 +78,27 @@ public class ProfileFragment extends Fragment {
     }
 
     private void logout() {
+        token = DynamicWorkflowSharedPreferences.getStoreJWT(getContext(), ConstantDataManager.AUTHORIZATION_TOKEN);
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         builder.setCancelable(false);
         builder.setMessage(R.string.logout_confirm)
                 .setPositiveButton(R.string.sign_out, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        DynamicWorkflowSharedPreferences.removeJWT(getContext());
-                        Intent intent = new Intent(getActivity(), LoginActivity.class);
-                        startActivity(intent);
-                        getActivity().finish();
+                        capstoneRepository = new CapstoneRepositoryImpl();
+                        capstoneRepository.logout(token, new CallBackData<String>() {
+                            @Override
+                            public void onSuccess(String s) {
+                                DynamicWorkflowSharedPreferences.removeJWT(getContext());
+                                Intent intent = new Intent(getActivity(), LoginActivity.class);
+                                startActivity(intent);
+                                getActivity().finish();
+                            }
+
+                            @Override
+                            public void onFail(String message) {
+                                Toasty.error(getActivity(), message, Toasty.LENGTH_SHORT).show();
+                            }
+                        });
                     }
                 })
                 .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {

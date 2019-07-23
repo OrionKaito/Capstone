@@ -186,7 +186,7 @@ public class SendRequestFragment extends Fragment {
             public void onSuccess(RequestForm requestForm) {
                 final List<Connection> connectionList = requestForm.getConnections();
                 for (final Connection connection : connectionList) {
-                    Button btn = new Button(getContext());
+                    Button btn = new Button(getActivity());
                     btn.setText(connection.getConnectionTypeName());
                     btn.setOnClickListener(new View.OnClickListener() {
                         @Override

@@ -71,7 +71,7 @@ public class NotificationAdapter extends BaseAdapter {
 
         holder.tvWorkflowName.setText(userNotification.getWorkflowName());
 
-        String message = userNotification.getMessage().contains("completed") ? userNotification.getMessage() : userNotification.getMessage() + " from " + "<b>" + userNotification.getActorName() + "</b>";
+        String message = userNotification.getMessage().contains("completed") ? userNotification.getMessage() : "From " + "<b>" + userNotification.getActorName() + "</b>";
         holder.tvMessage.setText(HtmlCompat.fromHtml(message, Html.FROM_HTML_MODE_LEGACY));
 
         try {
