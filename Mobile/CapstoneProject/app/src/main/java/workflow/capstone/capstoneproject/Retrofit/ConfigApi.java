@@ -1,10 +1,12 @@
 package workflow.capstone.capstoneproject.retrofit;
 
 public class ConfigApi {
-    public static final String BASE_URL = "http://10.0.2.2:159/api/";
+    public static final String BASE_URL = "http://192.168.1.127:1234/api/";
 
     public interface Api {
         String LOGIN = "Token/User";
+        String TEST_LOGIN = "Token/TestLogin";
+        String LOGOUT = "Token/Logout";
         String GET_PROFILE = "Accounts/GetProfile";
         String UPDATE_PROFILE = "Accounts/UpdateProfile";
         String CHANGE_PASSWORD = "Accounts/ChangePassword";

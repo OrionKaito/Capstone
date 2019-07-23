@@ -12,11 +12,15 @@ import android.util.Log;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
+import java.util.Date;
+import java.util.Map;
+
 import workflow.capstone.capstoneproject.activity.MainActivity;
 
 public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
     private String TAG = "MyFirebaseMessagingService";
+    private String GROUP_KEY_DYNAMIC_WORKFLOW = "workflow.capstone.capstoneproject";
 
     public MyFirebaseMessagingService() {
     }
@@ -38,9 +42,9 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         }
 
         // Check if message contains a notification payload.
-        if (remoteMessage.getNotification() != null) {
-            Log.d(TAG, "Message Notification Body: " + remoteMessage.getNotification().getBody());
-            sendNotification(remoteMessage.getNotification().getBody(), remoteMessage.getNotification().getTitle());
+        if (remoteMessage.getData() != null) {
+            Map<String, String> data = remoteMessage.getData();
+            sendNotification(data.get("body"), data.get("title"));
         }
     }
 
@@ -64,7 +68,8 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
         NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 
-        notificationManager.notify(0, notificationBuilder.build());
+        int unique_value=(int) ((new Date().getTime() / 1000L) % Integer.MAX_VALUE);
+        notificationManager.notify(unique_value, notificationBuilder.build());
 
     }
 }
