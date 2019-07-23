@@ -11,6 +11,16 @@ export class LoadStaffAcountService {
     this.Url = 'https://localhost:44359';
     this.token = localStorage.getItem('token');
   }
+  getNotiUser(){
+    var token = "Bearer " + localStorage.getItem("token");
+    var tokenHeader = new HttpHeaders({'Authorization': token});
+    return this.http.get(this.Url + "/api/UserNotifications/GetNumberOfNotification=3", {headers : tokenHeader });
+  }
+  getNumNotiUser(){
+    var token = "Bearer " + localStorage.getItem("token");
+    var tokenHeader = new HttpHeaders({'Authorization': token});
+    return this.http.get(this.Url + "/api/UserNotifications/GetNotificationByUserId?notificationType=3", {headers : tokenHeader });
+  }
   checkRole(){
     var token = "Bearer " + localStorage.getItem("token");
     var tokenHeader = new HttpHeaders({'Authorization': token});

@@ -2,6 +2,7 @@ import { Component, OnInit, ElementRef } from '@angular/core';
 import { ROUTES } from '../sidebar/sidebar.component';
 import {Location, LocationStrategy, PathLocationStrategy} from '@angular/common';
 import { Router } from '@angular/router';
+import { LoadStaffAcountService } from 'app/service/load-staff-acount.service';
 
 @Component({
   selector: 'app-navbar',
@@ -15,12 +16,22 @@ export class NavbarComponent implements OnInit {
     private toggleButton: any;
     private sidebarVisible: boolean;
 
-    constructor(location: Location,  private element: ElementRef, private router: Router) {
+    listNoti: any=[];
+    numberNoti: any;
+
+    constructor(location: Location,  private element: ElementRef, private router: Router,
+         private loadStaffAcountService: LoadStaffAcountService) {
       this.location = location;
           this.sidebarVisible = false;
     }
 
     ngOnInit(){
+        this.loadStaffAcountService.getNotiUser().toPromise().then(rep=>{
+            this.listNoti = rep;
+        })
+        this.loadStaffAcountService.getNumNotiUser().toPromise().then(rep=>{
+            this.numberNoti = rep;
+        })
       this.listTitles = ROUTES.filter(listTitle => listTitle);
       const navbar: HTMLElement = this.element.nativeElement;
       this.toggleButton = navbar.getElementsByClassName('navbar-toggler')[0];
@@ -32,6 +43,7 @@ export class NavbarComponent implements OnInit {
            this.mobile_menu_visible = 0;
          }
      });
+
     }
 
     sidebarOpen() {
