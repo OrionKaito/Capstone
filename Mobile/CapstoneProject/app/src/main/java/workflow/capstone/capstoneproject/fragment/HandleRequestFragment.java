@@ -305,7 +305,7 @@ public class HandleRequestFragment extends Fragment {
 
                 //get dynamic button
                 for (final Connection connection : connectionList) {
-                    Button btn = new Button(getContext());
+                    Button btn = new Button(getActivity());
                     btn.setText(connection.getConnectionTypeName());
                     btn.setOnClickListener(new View.OnClickListener() {
                         @Override

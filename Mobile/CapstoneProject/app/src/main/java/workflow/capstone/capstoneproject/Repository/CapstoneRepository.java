@@ -9,6 +9,7 @@ import okhttp3.MultipartBody;
 import okhttp3.ResponseBody;
 import workflow.capstone.capstoneproject.api.Request;
 import workflow.capstone.capstoneproject.api.RequestApprove;
+import workflow.capstone.capstoneproject.api.TestLogin;
 import workflow.capstone.capstoneproject.api.UpdateProfileModel;
 import workflow.capstone.capstoneproject.entities.RequestForm;
 import workflow.capstone.capstoneproject.entities.HandleRequestForm;
@@ -21,6 +22,10 @@ import workflow.capstone.capstoneproject.utils.CallBackData;
 
 public interface CapstoneRepository {
     void login(Context context, Map<String, String> fields, CallBackData<Login> callBackData);
+
+    void testLogin(Context context, TestLogin testLogin, CallBackData<Login> callBackData);
+
+    void logout(String token, CallBackData<String> callBackData);
 
     void getProfile(String token, CallBackData<List<Profile>> callBackData);
 

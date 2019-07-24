@@ -11,6 +11,7 @@ namespace Capstone.Model
         public DateTime CreateDate { get; set; }
 
         public string ManagerID { get; set; }
+        public string DeviceID { get; set; }
 
         public bool IsDeleted { get; set; }
     }

@@ -50,15 +50,22 @@ public class RequestResultAdapter extends BaseAdapter {
             convertView = layoutInflater.inflate(R.layout.item_request_result, null);
             holder = new ViewHolder();
             holder.tvStaffName = convertView.findViewById(R.id.tv_staff_name);
+            holder.tvUsername = convertView.findViewById(R.id.tv_username);
             holder.tvCreateDate = convertView.findViewById(R.id.tv_create_date);
             holder.tvStatus = convertView.findViewById(R.id.tv_status);
+//            holder.lineView = convertView.findViewById(R.id.line_view);
             convertView.setTag(holder);
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
 
         StaffResult staffResult = staffResultList.get(position);
-        holder.tvStaffName.setText(DynamicWorkflowUtils.mapNameWithUserName(staffResult.getFullName(), staffResult.getUserName()));
+        holder.tvStaffName.setText(staffResult.getFullName());
+        holder.tvUsername.setText("( " + staffResult.getUserName() + " )");
+
+//        if (position == 0) {
+//            holder.lineView.setVisibility(View.VISIBLE);
+//        }
 
         String createDate = "";
         try {
@@ -77,7 +84,9 @@ public class RequestResultAdapter extends BaseAdapter {
 
     private class ViewHolder {
         TextView tvStaffName;
+        TextView tvUsername;
         TextView tvCreateDate;
         TextView tvStatus;
+//        View lineView;
     }
 }

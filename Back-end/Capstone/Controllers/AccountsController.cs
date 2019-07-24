@@ -128,7 +128,7 @@ namespace Capstone.Controllers
                     "<spacer size=\"32\">" +
                     "</spacer>" +
                     "<center>" +
-                    "<img src=\"https://doc-0s-as-docs.googleusercontent.com/docs/securesc/ha0ro937gcuc7l7deffksulhg5h7mbp1/2ffhedil82jau06t0e75110nq4svhlj0/1563501600000/05868357909278580689/*/1jrVKFISjf1cXIk3-tg9XoYCcgkRL-Dgm\">" +
+                    "<img src=\"https://scontent.fsgn2-3.fna.fbcdn.net/v/t1.15752-9/67218293_430245011152713_1667334152875147264_n.png?_nc_cat=106&_nc_oc=AQm607YZTtCr5S8V7jK5RQQkXp_uWfA-8Mws3wMZUYS1l4u_XSGAz4Sg09C6U618DUKrkt48NWXThowyt8m1_iP-&_nc_ht=scontent.fsgn2-3.fna&oh=9b06d297248e73aaa2385f90e5d8c111&oe=5DA7D78B\">" +
                     "</center>" +
                     "<spacer size=\"16\">" +
                     "</spacer>" +

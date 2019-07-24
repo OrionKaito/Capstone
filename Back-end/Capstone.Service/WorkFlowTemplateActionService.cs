@@ -13,6 +13,7 @@ namespace Capstone.Service
         WorkFlowTemplateAction GetByID(Guid ID);
         WorkFlowTemplateAction GetByName(string name);
         WorkFlowTemplateAction GetStartByWorkFlowID(Guid ID);
+        IEnumerable<WorkFlowTemplateAction> GetByWorkFlowID(Guid ID);
         void Create(WorkFlowTemplateAction workflowAction);
         void Save();
     }
@@ -49,9 +50,14 @@ namespace Capstone.Service
             return _workFlowTemplateActionRepository.GetByName(name);
         }
 
+        public IEnumerable<WorkFlowTemplateAction> GetByWorkFlowID(Guid ID)
+        {
+            return _workFlowTemplateActionRepository.GetMany(x => x.WorkFlowTemplateID == ID);
+        }
+
         public WorkFlowTemplateAction GetStartByWorkFlowID(Guid ID)
         {
-            return _workFlowTemplateActionRepository.GetByWorFlowID(ID);
+            return _workFlowTemplateActionRepository.GetStartByWorFlowID(ID);
         }
 
         public void Save()
