@@ -13,7 +13,7 @@ namespace Capstone.Model
 
         public Guid RequestActionID { get; set; }
         [ForeignKey("RequestActionID")]
-        public RequestAction RequestAction { get; set; }
+        public virtual RequestAction RequestAction { get; set; }
     }
 
 }

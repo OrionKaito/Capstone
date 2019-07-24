@@ -9,6 +9,5 @@ namespace Capstone.Model
         public Guid ID { get; set; }
         public string Name { get; set; }
         public bool IsDeleted { get; set; }
-        //public StatusEnum Status { get; set; }
     }
 }
