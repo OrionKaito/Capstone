@@ -413,7 +413,7 @@ namespace Capstone.Controllers
         }
 
         [HttpPut("ChangePassword")]
-        public async Task<ActionResult> ChangePassword(string password)
+        public async Task<ActionResult> ChangePassword(string oldPassword, string newPassword)
         {
             try
             {
@@ -423,9 +423,20 @@ namespace Capstone.Controllers
                 var userInDB = _userManager.FindByIdAsync(userID).Result;
                 if (userInDB == null) return BadRequest(WebConstant.UserNotExist);
 
+                if(newPassword.Length < 6)
+                {
+                    return BadRequest(WebConstant.PasswordToShort);
+                }
                 var PasswordHash = new PasswordHasher<string>();
+                string currentPasswordHash = userInDB.PasswordHash;
+                string oldPasswordHash = PasswordHash.HashPassword(userInDB.UserName, oldPassword);
+                
+                if (PasswordHash.VerifyHashedPassword(userInDB.UserName, currentPasswordHash, oldPassword) == 0)
+                {
+                    return BadRequest(WebConstant.WrongOldPassword);
+                }
 
-                userInDB.PasswordHash = PasswordHash.HashPassword(userInDB.UserName, password);
+                userInDB.PasswordHash = PasswordHash.HashPassword(userInDB.UserName, newPassword);
                 var result = await _userManager.UpdateAsync(userInDB);
 
                 if (!result.Succeeded) return new BadRequestObjectResult(result.Errors);

@@ -12,6 +12,7 @@ import android.widget.ImageView;
 
 import workflow.capstone.capstoneproject.R;
 import workflow.capstone.capstoneproject.activity.ConfirmForgotPasswordActivity;
+import workflow.capstone.capstoneproject.activity.ProfileActivity;
 import workflow.capstone.capstoneproject.customdialog.CustomDialog;
 import workflow.capstone.capstoneproject.repository.CapstoneRepository;
 import workflow.capstone.capstoneproject.repository.CapstoneRepositoryImpl;
@@ -42,12 +43,13 @@ public class ChangePasswordFragment extends Fragment {
         initView(view);
         token = DynamicWorkflowSharedPreferences.getStoreJWT(getContext(), ConstantDataManager.AUTHORIZATION_TOKEN);
 
-        imgBack.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                FragmentUtils.back(getActivity());
-            }
-        });
+        ProfileActivity.tvProfileTitle.setText("Change Password");
+//        imgBack.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                FragmentUtils.back(getActivity());
+//            }
+//        });
 
         btnChangePassword.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -81,7 +83,7 @@ public class ChangePasswordFragment extends Fragment {
     private void initView(View view) {
         edtPassword = view.findViewById(R.id.edt_password);
         edtConfirmPassword = view.findViewById(R.id.edt_confirm_password);
-        imgBack = view.findViewById(R.id.img_Back);
+//        imgBack = view.findViewById(R.id.img_Back);
         btnChangePassword = view.findViewById(R.id.btn_change_pass);
     }
 

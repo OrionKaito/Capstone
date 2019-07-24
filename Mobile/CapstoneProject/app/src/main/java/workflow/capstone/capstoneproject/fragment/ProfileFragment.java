@@ -19,6 +19,7 @@ import es.dmoral.toasty.Toasty;
 import workflow.capstone.capstoneproject.R;
 import workflow.capstone.capstoneproject.activity.LoginActivity;
 import workflow.capstone.capstoneproject.activity.MainActivity;
+import workflow.capstone.capstoneproject.activity.ProfileActivity;
 import workflow.capstone.capstoneproject.entities.Profile;
 import workflow.capstone.capstoneproject.repository.CapstoneRepository;
 import workflow.capstone.capstoneproject.repository.CapstoneRepositoryImpl;
@@ -47,11 +48,14 @@ public class ProfileFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_profile, container, false);
 
-        tvFullName = view.findViewById(R.id.tv_full_name);
         Profile profile = DynamicWorkflowSharedPreferences.getStoredData(getContext(), ConstantDataManager.PROFILE_KEY, ConstantDataManager.PROFILE_NAME);
+
+        initView(view);
+
+        ProfileActivity.tvProfileTitle.setText("Profile");
+
         tvFullName.setText(profile.getFullName());
 
-        lnViewProfile = view.findViewById(R.id.ln_view_profile);
         lnViewProfile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -59,7 +63,6 @@ public class ProfileFragment extends Fragment {
             }
         });
 
-        lnChangePassword = view.findViewById(R.id.ln_change_password);
         lnChangePassword.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -67,7 +70,6 @@ public class ProfileFragment extends Fragment {
             }
         });
 
-        lnSignOut = view.findViewById(R.id.ln_sign_out);
         lnSignOut.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -75,6 +77,13 @@ public class ProfileFragment extends Fragment {
             }
         });
         return view;
+    }
+
+    private void initView(View view) {
+        tvFullName = view.findViewById(R.id.tv_full_name);
+        lnViewProfile = view.findViewById(R.id.ln_view_profile);
+        lnChangePassword = view.findViewById(R.id.ln_change_password);
+        lnSignOut = view.findViewById(R.id.ln_sign_out);
     }
 
     private void logout() {
@@ -90,6 +99,7 @@ public class ProfileFragment extends Fragment {
                             public void onSuccess(String s) {
                                 DynamicWorkflowSharedPreferences.removeJWT(getContext());
                                 Intent intent = new Intent(getActivity(), LoginActivity.class);
+                                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                                 startActivity(intent);
                                 getActivity().finish();
                             }
@@ -111,11 +121,11 @@ public class ProfileFragment extends Fragment {
     }
 
     private void viewProfile() {
-        FragmentUtils.changeFragment(getActivity(), R.id.main_frame, new ViewProfileFragment());
+        FragmentUtils.changeFragment(getActivity(), R.id.profile_frame, new ViewProfileFragment());
     }
 
     private void changePassword() {
-        FragmentUtils.changeFragment(getActivity(), R.id.main_frame, new ChangePasswordFragment());
+        FragmentUtils.changeFragment(getActivity(), R.id.profile_frame, new ChangePasswordFragment());
     }
 
 }

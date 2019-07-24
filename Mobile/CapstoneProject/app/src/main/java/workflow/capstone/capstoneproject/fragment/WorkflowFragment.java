@@ -1,6 +1,7 @@
 package workflow.capstone.capstoneproject.fragment;
 
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
@@ -15,6 +16,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -22,6 +25,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import workflow.capstone.capstoneproject.R;
+import workflow.capstone.capstoneproject.activity.MainActivity;
+import workflow.capstone.capstoneproject.activity.ProfileActivity;
 import workflow.capstone.capstoneproject.adapter.WorkflowAdapter;
 import workflow.capstone.capstoneproject.entities.WorkflowTemplate;
 import workflow.capstone.capstoneproject.repository.CapstoneRepository;
@@ -38,17 +43,47 @@ public class WorkflowFragment extends Fragment {
     private ListView listView;
     private SwipeRefreshLayout swipeRefreshLayout;
     private EditText mEdtSearch;
+    private LinearLayout lnOpenSearchTab;
+    private TextView tvCancelSearch;
+    private ImageView imgSearch;
+    private ImageView imgMenu;
 
     public WorkflowFragment() {
         // Required empty public constructor
     }
 
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_workflow, container, false);
+        final View view = inflater.inflate(R.layout.fragment_workflow, container, false);
+        initView(view);
+        imgSearch.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                lnOpenSearchTab.setVisibility(View.VISIBLE);
+                imgSearch.setVisibility(View.GONE);
+            }
+        });
+
+        imgMenu.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), ProfileActivity.class);
+                startActivity(intent);
+                getActivity().overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+            }
+        });
+
+        tvCancelSearch.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                lnOpenSearchTab.setVisibility(View.GONE);
+                imgSearch.setVisibility(View.VISIBLE);
+                loadWorkflows(view);
+            }
+        });
+
         //load workflow when start app
         loadWorkflows(view);
 
@@ -58,6 +93,13 @@ public class WorkflowFragment extends Fragment {
         //search view
         initSearchView(view);
         return view;
+    }
+
+    private void initView(View view) {
+        lnOpenSearchTab = view.findViewById(R.id.linear_layout_open_search_tab);
+        tvCancelSearch = view.findViewById(R.id.text_view_cancel_search);
+        imgSearch = view.findViewById(R.id.img_search);
+        imgMenu = view.findViewById(R.id.img_menu);
     }
 
     private void loadWorkflows(final View view) {
