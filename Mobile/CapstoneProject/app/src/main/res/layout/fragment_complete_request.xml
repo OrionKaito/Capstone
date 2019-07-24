@@ -109,7 +109,7 @@
 
             <ListView
                 android:id="@+id/list_status_staff_handle"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_margin="@dimen/dp5"
                 android:visibility="visible"></ListView>

@@ -1,6 +1,7 @@
 package workflow.capstone.capstoneproject.activity;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -9,6 +10,7 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import net.yslibrary.android.keyboardvisibilityevent.KeyboardVisibilityEvent;
@@ -16,6 +18,7 @@ import net.yslibrary.android.keyboardvisibilityevent.KeyboardVisibilityEventList
 
 import java.util.List;
 
+import es.dmoral.toasty.Toasty;
 import workflow.capstone.capstoneproject.R;
 import workflow.capstone.capstoneproject.entities.Profile;
 import workflow.capstone.capstoneproject.fragment.ListHandleRequestFragment;
@@ -32,7 +35,6 @@ public class MainActivity extends AppCompatActivity {
 
     private Context context = this;
     private CapstoneRepository capstoneRepository;
-
     public static TabLayout tabLayout;
     public static TextView notificationBadge;
     public static TextView taskBadge;
@@ -51,6 +53,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         KeyboardVisibilityEvent.setEventListener(this,
                 new KeyboardVisibilityEventListener() {
                     @Override
@@ -96,9 +99,12 @@ public class MainActivity extends AppCompatActivity {
         //workflow tab
         tabLayout.getTabAt(0).setIcon(tabIcons[1]);
 
+        //your request tab
+        tabLayout.getTabAt(1).setIcon(tabIcons[4]);
+
         //handle request tab
-        tabLayout.getTabAt(1).setCustomView(R.layout.task_icon);
-        View taskView = tabLayout.getTabAt(1).getCustomView();
+        tabLayout.getTabAt(2).setCustomView(R.layout.task_icon);
+        View taskView = tabLayout.getTabAt(2).getCustomView();
         imageViewTask = taskView.findViewById(R.id.task_icon);
         imageViewTask.setImageResource(R.drawable.ic_task_gray);
         taskBadge = taskView.findViewById(R.id.task_badge);
@@ -119,8 +125,8 @@ public class MainActivity extends AppCompatActivity {
         });
 
         //notification tab
-        tabLayout.getTabAt(2).setCustomView(R.layout.notification_icon);
-        View notificationView = tabLayout.getTabAt(2).getCustomView();
+        tabLayout.getTabAt(3).setCustomView(R.layout.notification_icon);
+        View notificationView = tabLayout.getTabAt(3).getCustomView();
         imageViewNotification = notificationView.findViewById(R.id.notification_icon);
         imageViewNotification.setImageResource(R.drawable.ic_notification_grey);
         notificationBadge = notificationView.findViewById(R.id.notification_badge);
@@ -139,9 +145,6 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
-
-        //profile tab
-        tabLayout.getTabAt(3).setIcon(tabIcons[4]);
     }
 
     private int[] tabIcons = {
@@ -168,13 +171,13 @@ public class MainActivity extends AppCompatActivity {
                         tabLayout.getTabAt(tabIndex).setIcon(tabIcons[0]);
                         break;
                     case 1:
-                        imageViewTask.setImageResource(R.drawable.ic_task_gray);
+                        tabLayout.getTabAt(tabIndex).setIcon(tabIcons[4]);
                         break;
                     case 2:
-                        imageViewNotification.setImageResource(R.drawable.ic_notification_grey);
+                        imageViewTask.setImageResource(R.drawable.ic_task_gray);
                         break;
                     case 3:
-                        tabLayout.getTabAt(tabIndex).setIcon(tabIcons[4]);
+                        imageViewNotification.setImageResource(R.drawable.ic_notification_grey);
                         break;
                     default:
                         break;
@@ -196,6 +199,8 @@ public class MainActivity extends AppCompatActivity {
                 replaceFragment(workflowFragment);
                 break;
             case 1:
+                break;
+            case 2:
                 imageViewTask.setImageResource(R.drawable.ic_task_blue);
                 capstoneRepository = new CapstoneRepositoryImpl();
                 capstoneRepository.getNumberOfNotification(token, 2, new CallBackData<String>() {
@@ -216,7 +221,7 @@ public class MainActivity extends AppCompatActivity {
                 });
                 replaceFragment(listHandleRequestFragment);
                 break;
-            case 2:
+            case 3:
                 imageViewNotification.setImageResource(R.drawable.ic_notification_blue);
                 capstoneRepository = new CapstoneRepositoryImpl();
                 capstoneRepository.getNumberOfNotification(token, 3, new CallBackData<String>() {
@@ -234,10 +239,6 @@ public class MainActivity extends AppCompatActivity {
                     }
                 });
                 replaceFragment(listCompleteRequestFragment);
-                break;
-            case 3:
-                tabLayout.getTabAt(tabPosition).setIcon(tabIcons[5]);
-                replaceFragment(profileFragment);
                 break;
             default:
                 break;

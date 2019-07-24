@@ -1,12 +1,54 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
     android:focusable="true"
     android:focusableInTouchMode="true"
+    android:orientation="vertical"
     tools:context=".fragment.WorkflowFragment">
+
+    <RelativeLayout
+        android:id="@+id/rl_home_menu"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp50"
+        android:background="@color/white">
+
+        <TextView
+            android:id="@+id/tv_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="@dimen/dp10"
+            android:text="Workflows"
+            android:textColor="@color/colortext"
+            android:textSize="@dimen/sp23" />
+
+        <ImageView
+            android:id="@+id/img_search"
+            android:layout_width="@dimen/dp26"
+            android:layout_height="@dimen/dp26"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="@dimen/dp20"
+            android:layout_toLeftOf="@id/img_menu"
+            android:background="@drawable/ic_search_gray_24dp"
+            android:visibility="visible" />
+
+        <ImageView
+            android:id="@+id/img_menu"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="@dimen/dp15"
+            android:background="@drawable/ic_menu_grey" />
+    </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/sp1"
+        android:background="@color/light_gray" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -16,37 +58,59 @@
         <LinearLayout
             android:id="@+id/linear_layout_open_search_tab"
             android:layout_width="match_parent"
-            android:layout_height="56dp"
-            android:background="@color/white"
-            android:orientation="horizontal"
-            android:visibility="visible"
-            android:weightSum="100">
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            android:orientation="vertical">
 
-            <EditText
-                android:id="@+id/edit_text_search"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:layout_marginLeft="16dp"
-                android:layout_weight="98"
-                android:background="@drawable/background_edit_text_search"
-                android:drawableLeft="@drawable/ic_search_gray_24dp"
-                android:drawablePadding="5dp"
-                android:gravity="center_vertical"
-                android:hint="@string/search_workflow"
-                android:maxLines="1"
-                android:paddingLeft="8dp"
-                android:paddingTop="5dp"
-                android:paddingBottom="5dp" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:background="@color/white"
+                android:orientation="horizontal"
+                android:weightSum="100">
 
+                <EditText
+                    android:id="@+id/edit_text_search"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="16dp"
+                    android:layout_weight="98"
+                    android:background="@drawable/background_edit_text_search"
+                    android:drawableLeft="@drawable/ic_search_gray_24dp"
+                    android:drawablePadding="5dp"
+                    android:gravity="center_vertical"
+                    android:hint="@string/search_workflow"
+                    android:maxLines="1"
+                    android:paddingLeft="8dp"
+                    android:paddingTop="5dp"
+                    android:paddingBottom="5dp" />
+
+                <TextView
+                    android:id="@+id/text_view_cancel_search"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="right|center_vertical"
+                    android:layout_weight="2"
+                    android:padding="@dimen/dp14"
+                    android:text="Cancel"
+                    android:textColor="@color/blue"
+                    android:textSize="@dimen/sp16" />
+
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/sp1"
+                android:background="@color/light_gray" />
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/dp5"
-            android:padding="@dimen/dp7"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:padding="@dimen/dp7">
 
             <android.support.v4.widget.SwipeRefreshLayout
                 android:id="@+id/swipe_Container"
@@ -63,4 +127,4 @@
         </LinearLayout>
     </LinearLayout>
 
-</FrameLayout>
+</LinearLayout>
