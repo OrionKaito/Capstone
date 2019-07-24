@@ -9,7 +9,7 @@ namespace Capstone.Data.Repositories
     public interface IWorkFlowTemplateActionRepository : IRepository<WorkFlowTemplateAction>
     {
         WorkFlowTemplateAction GetByName(string name);
-        WorkFlowTemplateAction GetByWorFlowID(Guid ID);
+        WorkFlowTemplateAction GetStartByWorFlowID(Guid ID);
     }
 
     public class WorkFlowTemplateActionRepository : RepositoryBase<WorkFlowTemplateAction>, IWorkFlowTemplateActionRepository
@@ -21,7 +21,7 @@ namespace Capstone.Data.Repositories
             return DbContext.WorkFlowTemplateActions.Where(w => w.Name.Equals(name)).FirstOrDefault();
         }
 
-        public WorkFlowTemplateAction GetByWorFlowID(Guid ID)
+        public WorkFlowTemplateAction GetStartByWorFlowID(Guid ID)
         {
             return DbContext.WorkFlowTemplateActions.Where(w => w.WorkFlowTemplateID == ID && w.IsStart == true).FirstOrDefault();
         }

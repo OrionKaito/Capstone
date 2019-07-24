@@ -19,5 +19,6 @@ namespace Capstone.Model
 
         public bool IsRead { get; set; }
         public bool IsDeleted { get; set; }
+        public bool IsSend { get; set; }
     }
 }

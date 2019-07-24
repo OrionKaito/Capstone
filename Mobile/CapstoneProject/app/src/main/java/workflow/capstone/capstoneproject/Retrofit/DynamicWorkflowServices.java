@@ -16,12 +16,20 @@ import retrofit2.http.Query;
 import retrofit2.http.Url;
 import workflow.capstone.capstoneproject.api.Request;
 import workflow.capstone.capstoneproject.api.RequestApprove;
+import workflow.capstone.capstoneproject.api.TestLogin;
 import workflow.capstone.capstoneproject.api.UpdateProfileModel;
 
 public interface DynamicWorkflowServices {
     @Headers({"Content-Type:application/json"})
     @POST(ConfigApi.Api.LOGIN)
     Call<ResponseBody> login(@Body Map<String, String> fields);
+
+    @Headers({"Content-Type:application/json"})
+    @POST(ConfigApi.Api.TEST_LOGIN)
+    Call<ResponseBody> testLogin(@Body TestLogin testLogin);
+
+    @PUT(ConfigApi.Api.LOGOUT)
+    Call<ResponseBody> logout();
 
     @GET(ConfigApi.Api.GET_PROFILE)
     Call<ResponseBody> getProfile();

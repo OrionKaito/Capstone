@@ -11,6 +11,7 @@ namespace Capstone.Service
     {
         IEnumerable<UserNotification> GetAll();
         IEnumerable<UserNotification> GetByUserIDAndNotificationType(string ID, NotificationEnum notificationType, bool isCheckHandled);
+        IEnumerable<UserNotification> GetByUserIDAndIsSend(string ID, bool isSend);
         int GetNumberOfNotification(NotificationEnum notificationType, string ID);
         UserNotification GetByID(Guid ID);
         void Create(UserNotification userNotification);
@@ -101,6 +102,11 @@ namespace Capstone.Service
                 }
             }
             return userNotificationList;
+        }
+
+        public IEnumerable<UserNotification> GetByUserIDAndIsSend(string ID, bool isSend)
+        {
+            return _userNotificationRepository.GetMany(u => u.UserID.Equals(ID) && u.IsSend == isSend);
         }
     }
 }
