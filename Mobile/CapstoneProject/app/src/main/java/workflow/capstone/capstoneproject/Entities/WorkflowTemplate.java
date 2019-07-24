@@ -9,15 +9,19 @@ public class WorkflowTemplate implements Serializable {
     @SerializedName("id")
     @Expose
     private String id;
+
     @SerializedName("ownerID")
     @Expose
     private String ownerID;
+
     @SerializedName("name")
     @Expose
     private String name;
+
     @SerializedName("description")
     @Expose
     private String description;
+
     @SerializedName("permissionToEditID")
     @Expose
     private String permissionToEditID;

@@ -1,9 +1,12 @@
-﻿using Capstone.Service;
+﻿using Capstone.Helper;
+using Capstone.Service;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
+using System.Threading.Tasks;
 
 namespace Capstone.Controllers
 {
@@ -99,6 +102,19 @@ namespace Capstone.Controllers
         [HttpDelete("{id}")]
         public void Delete(int id)
         {
+        }
+
+        // POST api/values
+        [HttpPost("PushNotificationToDevice")]
+        public async Task<bool> PushNotificationToDevice(PushNotificationModel model)
+        {
+            try
+            {
+                return await PushNotification.SendMessageAsync(model.registration_ids, model.title, model.body);
+            } catch (Exception e)
+            {
+                return false;
+            }
         }
     }
 }

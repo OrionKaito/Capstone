@@ -1,10 +1,13 @@
 package workflow.capstone.capstoneproject.fragment;
 
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -13,6 +16,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -20,15 +25,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 import workflow.capstone.capstoneproject.R;
+import workflow.capstone.capstoneproject.activity.MainActivity;
+import workflow.capstone.capstoneproject.activity.ProfileActivity;
 import workflow.capstone.capstoneproject.adapter.WorkflowAdapter;
-import workflow.capstone.capstoneproject.entities.Workflow;
 import workflow.capstone.capstoneproject.entities.WorkflowTemplate;
 import workflow.capstone.capstoneproject.repository.CapstoneRepository;
 import workflow.capstone.capstoneproject.repository.CapstoneRepositoryImpl;
 import workflow.capstone.capstoneproject.utils.CallBackData;
 import workflow.capstone.capstoneproject.utils.ConstantDataManager;
 import workflow.capstone.capstoneproject.utils.DynamicWorkflowSharedPreferences;
-import workflow.capstone.capstoneproject.utils.FragmentUtils;
 
 public class WorkflowFragment extends Fragment {
 
@@ -38,17 +43,47 @@ public class WorkflowFragment extends Fragment {
     private ListView listView;
     private SwipeRefreshLayout swipeRefreshLayout;
     private EditText mEdtSearch;
+    private LinearLayout lnOpenSearchTab;
+    private TextView tvCancelSearch;
+    private ImageView imgSearch;
+    private ImageView imgMenu;
 
     public WorkflowFragment() {
         // Required empty public constructor
     }
 
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_workflow, container, false);
+        final View view = inflater.inflate(R.layout.fragment_workflow, container, false);
+        initView(view);
+        imgSearch.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                lnOpenSearchTab.setVisibility(View.VISIBLE);
+                imgSearch.setVisibility(View.GONE);
+            }
+        });
+
+        imgMenu.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), ProfileActivity.class);
+                startActivity(intent);
+                getActivity().overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+            }
+        });
+
+        tvCancelSearch.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                lnOpenSearchTab.setVisibility(View.GONE);
+                imgSearch.setVisibility(View.VISIBLE);
+                loadWorkflows(view);
+            }
+        });
+
         //load workflow when start app
         loadWorkflows(view);
 
@@ -60,20 +95,25 @@ public class WorkflowFragment extends Fragment {
         return view;
     }
 
+    private void initView(View view) {
+        lnOpenSearchTab = view.findViewById(R.id.linear_layout_open_search_tab);
+        tvCancelSearch = view.findViewById(R.id.text_view_cancel_search);
+        imgSearch = view.findViewById(R.id.img_search);
+        imgMenu = view.findViewById(R.id.img_menu);
+    }
+
     private void loadWorkflows(final View view) {
         String token = DynamicWorkflowSharedPreferences.getStoreJWT(getActivity(), ConstantDataManager.AUTHORIZATION_TOKEN);
         capstoneRepository = new CapstoneRepositoryImpl();
-        capstoneRepository.getWorkflow(new CallBackData<List<WorkflowTemplate>>() {
+        capstoneRepository.getWorkflow(token, new CallBackData<List<WorkflowTemplate>>() {
             @Override
             public void onSuccess(List<WorkflowTemplate> workflowTemplates) {
-                listView = view.findViewById(R.id.list);
+                listView = view.findViewById(R.id.list_workflow);
                 workflowList = workflowTemplates;
-//                workflowAdapter = new WorkflowAdapter(workflowList, getContext());
-                if (getActivity()!=null){
+                if (getActivity() != null) {
                     workflowAdapter = new WorkflowAdapter(workflowList, getActivity());
                     listView.setAdapter(workflowAdapter);
                 }
-//                listView.setAdapter(workflowAdapter);
                 listView.setBackgroundColor(Color.WHITE);
                 itemOnClick(listView);
             }
@@ -91,7 +131,8 @@ public class WorkflowFragment extends Fragment {
             @Override
             public void onRefresh() {
                 new Handler().postDelayed(new Runnable() {
-                    @Override public void run() {
+                    @Override
+                    public void run() {
                         swipeRefreshLayout.setRefreshing(false);
                         loadWorkflows(view);
                     }
@@ -136,9 +177,11 @@ public class WorkflowFragment extends Fragment {
     }
 
     private void searchWorkflow(List<WorkflowTemplate> listWorkflow) {
-        workflowAdapter = new WorkflowAdapter(listWorkflow, getContext());
-        listView.setAdapter(workflowAdapter);
-        itemOnClick(listView);
+        if (getActivity() != null) {
+            workflowAdapter = new WorkflowAdapter(listWorkflow, getActivity());
+            listView.setAdapter(workflowAdapter);
+            itemOnClick(listView);
+        }
     }
 
     private void itemOnClick(final ListView listView) {
@@ -146,16 +189,22 @@ public class WorkflowFragment extends Fragment {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
-                Fragment fragment = new DetailWorkflowFragment();
+                Fragment fragment = new SendRequestFragment();
                 Bundle bundle = new Bundle();
-                TextView tvName = view.findViewById(R.id.tv_Workflow_Name);
+                TextView tvName = view.findViewById(R.id.tv_workflow_name);
                 String nameOfWorkflow = tvName.getText().toString();
                 WorkflowTemplate workflowTemplate = (WorkflowTemplate) adapterView.getItemAtPosition(position);
                 String workFlowTemplateID = workflowTemplate.getId();
                 bundle.putString("nameOfWorkflow", nameOfWorkflow);
                 bundle.putString("workFlowTemplateID", workFlowTemplateID);
                 fragment.setArguments(bundle);
-                FragmentUtils.changeFragment(getActivity(), R.id.page_one_fragment, fragment);
+
+                FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                fragmentTransaction.setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_left, R.anim.slide_out_right);
+                fragmentTransaction.replace(R.id.main_frame, fragment);
+                fragmentTransaction.addToBackStack(null);
+                fragmentTransaction.commit();
             }
         });
     }
