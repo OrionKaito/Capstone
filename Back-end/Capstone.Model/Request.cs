@@ -19,6 +19,10 @@ namespace Capstone.Model
         [ForeignKey("WorkFlowTemplateID")]
         public WorkFlowTemplate WorkFlowTemplate { get; set; }
 
+        public Guid CurrentRequestActionID { get; set; }
+        [ForeignKey("CurrentRequestActionID")]
+        public RequestAction RequestAction { get; set; }
+
         public bool IsDeleted { get; set; }
     }
 }
