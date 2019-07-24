@@ -7,13 +7,14 @@
 <div *ngIf="snapshot | async as snap"> -->
 
   <!-- {{ snap.bytesTransferred }} of {{ snap.totalBytes }}  -->
-
-  <div *ngIf="downloadURL as url">
-    Done!
+ 
+  <div *ngIf="downloadURL; else elseBlock">
+    {{file.name}} <mat-icon color="primary" matTooltip="Loaded!">done</mat-icon>
     <!-- <h3>Results!</h3>
     <img [src]="url"><br> -->
     <!-- <a [href]="url" target="_blank" rel="noopener">Download Me!</a> -->
   </div> 
+  <ng-template #elseBlock> Loading... </ng-template>
 
 <!-- 
   <button (click)="task.pause()" [disabled]="!isActive(snap)">Pause</button>

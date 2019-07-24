@@ -1082,7 +1082,7 @@ export class EditAccountShapeComponent implements OnInit {
     this.listClass.forEach(element => {
       listArr.push({ from: element.idDiv[0], to: element.idDiv[1] });
     });
-    if (this.checkStart(listNode, listArr)&& this.checkEnd(listNode, listArr)){
+    if (this.checkStart(listNode, listArr) && this.checkEnd(listNode, listArr)){
       this.toastr.success("Sucess");
     }
   }
@@ -1111,6 +1111,7 @@ export class EditAccountShapeComponent implements OnInit {
               if(this.findNode(arr.to, listNode).id == ""){
                 //k có đuôi báo lỗi
                 this.toastr.error("Mũi tên từ action" + arr.from +" phải chỉa tới một action!");
+                return false;
               } else{
 
                 //có đuôi thì kiểm tra xem đuôi dó có đã hay đang xử lý k
@@ -1191,6 +1192,7 @@ export class EditAccountShapeComponent implements OnInit {
               if(this.findNode(arr.from, listNode).id == ""){
                 //k có đuôi báo lỗi
                 this.toastr.error("Mũi tên đuôi action" + arr.from +" phải bắt đầu từ một action!");
+                return false;
               } else{
 
                 //có đuôi thì kiểm tra xem đuôi dó có đã hay đang xử lý k

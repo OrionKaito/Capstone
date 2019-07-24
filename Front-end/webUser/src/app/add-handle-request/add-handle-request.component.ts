@@ -45,8 +45,8 @@ export class AddHandleRequestComponent implements OnInit {
     this.listCmt.forEach(element => {
       this.actionValues.push({ "key": element , "value": element});
     });
-    
-    var mdSendReq = new ApproveRequest(this.requestHandle.id, nextStepID, this.actionValues );
+    debugger;
+    var mdSendReq = new ApproveRequest(this.requestHandle.id, nextStepID, this.actionValues,this.data );
     this.loadStaffAcountService.sendReqHandle(mdSendReq).toPromise().then(data =>{
       this.toastr.success('Success! ' , '' );
       this.dialogRef.close();
@@ -58,14 +58,14 @@ export class AddHandleRequestComponent implements OnInit {
   }
 
   closeForm(){
-    debugger;
+
     this.dialogRef.close();
   }
 
 
 
   ngOnInit() {
-    debugger;
+
     this.workFlowTemplateID = this.data;
     this.loadStaffAcountService.getHandleForm(this.workFlowTemplateID).toPromise().then(res => {
       this.saveData = res;
