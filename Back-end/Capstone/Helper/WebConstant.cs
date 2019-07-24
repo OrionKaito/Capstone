@@ -33,5 +33,7 @@
         public static string AccountCreated = "Account created, please check your email!";
         public static string EmptyList = "List is empty";
         public static string RequestIsHandled = "This request has been handled.";
+        public static string WrongOldPassword = "Your current password was incorrect.";
+        public static string PasswordToShort = "Passwords must be at least 6 characters.";
     }
 }

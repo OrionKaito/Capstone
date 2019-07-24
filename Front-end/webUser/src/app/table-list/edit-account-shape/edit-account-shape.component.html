@@ -1,0 +1,146 @@
+<div class="container-fluid">
+  <div class="import-json">
+
+    <div id="circularMenu" class="circular-menu">
+
+      <a class="floating-btn" onclick="document.getElementById('circularMenu').classList.toggle('active');">
+        <i class="fa fa-plus"></i>
+      </a>
+
+      <menu class="items-wrapper">
+        <a class="menu-item"><span class="sub-import-json">
+            <mdb-icon fas icon="file-upload"></mdb-icon><input type="file" (change)="importJson($event.target.files)">
+          </span></a>
+        <a (click)="exportJson()" class="menu-item">
+          <mdb-icon fas icon="file-download"></mdb-icon>
+        </a>
+        <a [class.disabled]="menuList1.length <= 0" class="menu-item" title="Clear all" (click)="clearAll()">
+          <mdb-icon fas icon="times"></mdb-icon>
+        </a>
+      </menu>
+
+    </div>
+  </div>
+  <div class="botton-left__table">
+    Properties
+    <table style="width:100% border=1px">
+      <tr *ngIf="checkIsAction">
+        <td>Name</td>
+        <td><input name="properties.name" [(ngModel)]="properties.name" type="text"></td>
+      </tr>
+      <tr *ngIf="checkIsAction">
+        <td>Description</td>
+        <td><input name="properties.description" [(ngModel)]="properties.description" type="text"></td>
+      </tr>
+      <tr *ngIf="checkIsAction && !properties.isApprovedByLineManager && !properties.isStart && !properties.isEnd">
+        <td>Permission</td>
+        <td><select name="properties.permissionToUseID" [(ngModel)]="properties.permissionToUseID">
+            <option *ngFor="let item of listDropdown" value="{{item.id}}">{{item.name}}</option>
+          </select></td>
+      </tr>
+      <tr  *ngIf="checkIsAction">
+        <td>Action Type</td>
+        <td><select name="properties.actionTypeID" [(ngModel)]="properties.actionTypeID">
+            <option *ngFor="let item of listActionType" value="{{item.id}}">{{item.name}}</option>
+          </select></td>
+      </tr>
+      <tr *ngIf="checkIsAction && !properties.isStart && !properties.isEnd">
+        <td colspan="2">Manager Approve <input name="properties.isApprovedByLineManager"
+            [(ngModel)]="properties.isApprovedByLineManager" type="checkbox"></td>
+      </tr>
+      <!-- <tr *ngIf="checkIsAction">
+        <td>Start WF <input name="properties.start" [(ngModel)]="properties.start" type="checkbox"></td>
+        <td>End WF <input name="properties.end" [(ngModel)]="properties.end" type="checkbox"></td>
+      </tr> -->
+      <tr *ngIf="checkIsArrow">
+        <td>Name arrow </td>
+        <td><select name="propertiesArr.name" [(ngModel)]="propertiesArr.name">
+          <option *ngFor="let item of listConnectionType" value="{{item.id}}">{{item.name}}</option>
+        </select>
+      </td>
+      </tr>
+    </table>
+    <button (click)="saveDraf()">Save draft</button>
+    <button (click)="saveWorkFlow()">Save WorkFlow</button>
+    <button (click)="checkConnection()">Check Connection</button>
+
+  </div>
+  <div class="row main">
+    <div class="col-2 menu-left d-flex flex-column align-items-center" style="background-color:red">
+      <app-menu-edit-account-shape style="width: 100%; height: 100%;" (draw)="drop($event)">
+      </app-menu-edit-account-shape>
+
+
+    </div>
+
+
+
+    <div class="col-10 content-body">
+      <div *ngFor="let item of menuList1" style="position:absolute" [style.top.px]="item.positionTop"
+        [style.left.px]="item.positionLeft" class="{{item.class}}" id="{{item.id}}" (click)="showProperties(item)">
+        <div class="md-form form-sm" id="{{item.idInput}}">
+          <input mdbInput type="text" name="item.name" [(ngModel)]="item.name" class="form-control form-control-sm"
+            placeholder="input text">
+            <!-- <button (click)="openDinamicForm(item.id)"> Edit Form</button> -->
+
+          <!-- <form [formGroup]="secondFormGroup" id="{{item.idText}}">
+            <mat-form-field>
+              <mat-select placeholder="Choose value" formControlName="{{ item.formControlName }}">
+                <mat-option *ngFor="let topping of item.dropdown" [value]="topping">{{topping}}</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </form> -->
+          <!-- 2 cái nút start vs end -->
+          <!-- <div class="group-start-end d-flex flex-row justify-content-center">
+            <div class="btn-start mr-2" (click)="startShape(item)" [class.disabled]="!item.start"></div>
+            <div class="btn-end" (click)="endShape(item)" [class.disabled]="!item.end"></div>
+          </div> -->
+
+        </div>
+        <mdb-icon fas icon="plus" class="draw-arrow" (click)="dropImageBottom(item)"></mdb-icon>
+      </div>
+
+      <svg xmlns="http://www.w3.org/2000/svg" style="position:absolute;left:0px;top:0px" width="100%"
+        [attr.height]="heightSVG">
+        <defs>
+          <marker id="arrowhead" viewBox="0 0 10 10" refX="70" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+            <path d="M 0 0 L 10 5 L 0 10 z" />
+          </marker>
+        </defs>
+        <g fill="none" stroke="black" stroke-width="3" marker-end="url(#arrowhead)">
+          <path *ngFor="let item of listArrow" id="{{item}}" (click)="openDialog(item)" />
+        </g>
+      </svg>
+
+
+    </div>
+  </div>
+
+
+  <app-footer class="page-footer"></app-footer>
+
+</div>
+
+
+<div mdbModal #basicModal="mdbModal" class="modal fade right" tabindex="-1" role="dialog"
+  aria-labelledby="myBasicModalLabel" [config]='{backdrop: false, ignoreBackdropClick: true}' aria-hidden="true">
+  <div class="modal-dialog modal-side modal-top-right" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close pull-right" aria-label="Close" (click)="basicModal.hide()">
+          <span aria-hidden="true">×</span>
+        </button>
+        <h4 class="modal-title w-100" id="myModalLabel">Dialog Confirm</h4>
+      </div>
+      <div class="modal-body">
+        Xóa mủi tên vừa chọn ??
+      </div>
+      <div class="modal-footer justify-content-center">
+        <button type="button" mdbBtn color="secondary" class="waves-light" aria-label="Close"
+          (click)="basicModal.hide()" mdbWavesEffect>Close</button>
+        <button type="button" mdbBtn color="primary" class="relative waves-light" (click)="clickArrow()"
+          mdbWavesEffect>OK!</button>
+      </div>
+    </div>
+  </div>
+</div>

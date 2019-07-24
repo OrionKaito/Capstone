@@ -10,9 +10,15 @@ public class ActionValue implements Serializable {
     @SerializedName("key")
     @Expose
     private String key;
+
     @SerializedName("value")
     @Expose
     private String value;
+
+    public ActionValue(String key, String value) {
+        this.key = key;
+        this.value = value;
+    }
 
     public String getKey() {
         return key;
