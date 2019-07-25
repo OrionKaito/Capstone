@@ -80,7 +80,7 @@ namespace Capstone.Controllers
                                     Name = r.Role.Name,
                                 }),
                         ManagerID = u.LineManagerID,
-                        ManagerName = string.IsNullOrEmpty(u.LineManagerID) ? "" : _userManager.FindByIdAsync(u.LineManagerID).Result.FullName,
+                        ManagerName = string.IsNullOrEmpty(u.LineManagerID) ? "" : u.LineManager.FullName,
                         IsDeleted = u.IsDeleted
                     });
 
@@ -101,7 +101,6 @@ namespace Capstone.Controllers
         [HttpGet("GetAccountByUserID")]
         public ActionResult<IEnumerable<RegistrationVM>> GetAccountByUserID(string ID)
         {
-            ID = "3de34afb-000d-4897-9a42-ac823096acda";
             try
             {
                 var user = _userManager.Users
@@ -126,7 +125,7 @@ namespace Capstone.Controllers
                                     Name = r.Role.Name,
                                 }),
                         ManagerID = u.LineManagerID,
-                        ManagerName = string.IsNullOrEmpty(u.LineManagerID) ? "" : _userManager.FindByIdAsync(u.LineManagerID).Result.FullName,
+                        ManagerName = string.IsNullOrEmpty(u.LineManagerID) ? "" : u.LineManager.FullName,
                         IsDeleted = u.IsDeleted
                     });
                 return Ok(user);
@@ -166,7 +165,7 @@ namespace Capstone.Controllers
                                     Name = r.Role.Name,
                                 }),
                         ManagerID = u.LineManagerID,
-                        ManagerName = string.IsNullOrEmpty(u.LineManagerID) ? "" : _userManager.FindByIdAsync(u.LineManagerID).Result.FullName,
+                        ManagerName = string.IsNullOrEmpty(u.LineManagerID) ? "" : u.LineManager.FullName,
                     });
 
                 return Ok(user);
