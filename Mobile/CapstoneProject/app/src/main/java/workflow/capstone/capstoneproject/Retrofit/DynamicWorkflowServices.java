@@ -39,7 +39,7 @@ public interface DynamicWorkflowServices {
     Call<ResponseBody> updateProfile(@Body UpdateProfileModel model);
 
     @PUT(ConfigApi.Api.CHANGE_PASSWORD)
-    Call<ResponseBody> changePassword(@Query(value = "password", encoded = true) String password);
+    Call<ResponseBody> changePassword(@Query(value = "oldPassword", encoded = true) String oldPassword, @Query(value = "newPassword", encoded = true) String newPassword);
 
     @POST(ConfigApi.Api.FORGOT_PASSWORD)
     Call<ResponseBody> forgotPassword(@Query(value = "email", encoded = true) String email);

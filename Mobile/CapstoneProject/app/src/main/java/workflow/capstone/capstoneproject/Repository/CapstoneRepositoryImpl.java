@@ -266,9 +266,9 @@ public class CapstoneRepositoryImpl implements CapstoneRepository {
     }
 
     @Override
-    public void changePassword(Context context, String token, String password, final CallBackData<String> callBackData) {
-        Call<ResponseBody> serviceCall = clientApi.getDWServices(token).changePassword(password);
-        Log.e("URL=", clientApi.getDWServices(token).changePassword(password).request().url().toString());
+    public void changePassword(Context context, String token, String oldPassword, String newPassword, final CallBackData<String> callBackData) {
+        Call<ResponseBody> serviceCall = clientApi.getDWServices(token).changePassword(oldPassword, newPassword);
+        Log.e("URL=", clientApi.getDWServices(token).changePassword(oldPassword, newPassword).request().url().toString());
         final KProgressHUD progressHUD = KProgressHUDManager.showProgressBar(context);
 
         serviceCall.enqueue(new Callback<ResponseBody>() {
