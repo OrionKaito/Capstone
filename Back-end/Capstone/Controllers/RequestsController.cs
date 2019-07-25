@@ -104,6 +104,9 @@ namespace Capstone.Controllers
 
                 _requestActionService.Create(requestAction);
 
+                ///HERE
+                request.CurrentRequestActionID = requestAction.ID;
+
                 //RequestValue
                 foreach (var value in model.ActionValues)
                 {
