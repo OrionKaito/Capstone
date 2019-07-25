@@ -91,6 +91,7 @@ namespace Capstone.Controllers
                         Permissions = _permissionOfGroupService.GetByGroup(group.ID)
                                         .Select(p => new PermissionsViewModel
                                         {
+                                            PermissionOfGroupID = p.ID,
                                             PermissionID = p.PermissionID,
                                             PermissionName = _permissionService.GetByID(p.PermissionID).Name
                                         }),

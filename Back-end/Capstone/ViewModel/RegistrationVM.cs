@@ -15,9 +15,9 @@ namespace Capstone.ViewModel
         public string Email { get; set; }
         public string FullName { get; set; }
         public DateTime? DateOfBirth { get; set; }
-        public string ManagerID { get; set; }
+        public string LineManagerID { get; set; }
         public string ManagerName { get; set; }
-        public RoleVM Roles { get; set; }
+        public RoleVM Role { get; set; }
         public IEnumerable<GroupVM> Groups { get; set; }
         public bool IsDeleted { get; set; }
     }
@@ -28,8 +28,8 @@ namespace Capstone.ViewModel
         public string Password { get; set; }
         public string FullName { get; set; }
         public DateTime? DateOfBirth { get; set; }
-        public string ManagerID { get; set; }
-        public IEnumerable<Guid> RoleIDs { get; set; }
+        public string LineManagerID { get; set; }
+        public Guid RoleID { get; set; }
         public IEnumerable<Guid> GroupIDs { get; set; }
     }
 
@@ -43,8 +43,8 @@ namespace Capstone.ViewModel
     public class RegistrationByAdminUM
     {
         public string ID { get; set; }
-        public string ManagerID { get; set; }
-        public IEnumerable<Guid> RoleIDs { get; set; }
+        public string LineManagerID { get; set; }
+        public Guid RoleID { get; set; }
         public IEnumerable<Guid> GroupIDs { get; set; }
     }
 }
