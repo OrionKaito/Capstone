@@ -85,7 +85,7 @@ export class LoadStaffAcountService {
   loadWFByID(id: string){
     var token = "Bearer " + localStorage.getItem("token");
     var tokenHeader = new HttpHeaders({'Authorization': token});
-    return this.http.get(this.Url + "/api/WorkflowsTemplates", {headers : tokenHeader });
+    return this.http.get(this.Url + "/api/WorkflowsTemplates/GetByID?ID="+ id, {headers : tokenHeader });
   }
   loadPermissionOfRoleData() {
     return this.http.get(this.Url + "/api/PermissionOfRoles");

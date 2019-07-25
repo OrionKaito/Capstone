@@ -48,6 +48,7 @@ export class AddNewRequestComponent implements OnInit {
     debugger;
     this.actionValues.push({ "key": this.formKey, "value": this.formValue})
     var mdSendReq = new SendRequest("", this.actionValues, this.listURL, this.workFlowTemplateID.toString(), nextStepID.toString());
+    console.log(JSON.stringify(mdSendReq));
     this.loadStaffAcountService.sendReq(mdSendReq).toPromise().then(data =>{
       this.toastr.success('Success! ' , '' );
       console.log(this.downloadURL);

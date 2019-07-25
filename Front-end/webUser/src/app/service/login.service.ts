@@ -30,15 +30,18 @@ export class LoginService {
    return  this.http.post(a,model, { observe: 'response' });  
   }  
   Register(model : any){
-   
-    debugger;
      var b =this.Url + "/api/Accounts";   
    return this.http.post(b,model,{responseType: 'text'}); 
   }
   addNewWF(model : any){
     var token = "Bearer " + localStorage.getItem("token");
     var tokenHeader = new HttpHeaders({'Authorization': token});
-    debugger;
+     var b =this.Url + "/api/WorkflowsTemplates";   
+   return this.http.post(b,model,{headers : tokenHeader }); 
+  }
+  editWF(model : any){
+    var token = "Bearer " + localStorage.getItem("token");
+    var tokenHeader = new HttpHeaders({'Authorization': token});
      var b =this.Url + "/api/WorkflowsTemplates";   
    return this.http.post(b,model,{headers : tokenHeader }); 
   }
@@ -48,11 +51,19 @@ export class LoginService {
     var tokenHeader = new HttpHeaders({'Authorization': token});
     return this.http.get(this.Url + "/api/Accounts/GetProfile", {headers : tokenHeader });
   }
+
   updateUserProfile(a,b){
     var token = "Bearer " + localStorage.getItem("token");
     var tokenHeader = new HttpHeaders({'Authorization': token});
-    var body= {"fullName":a,"dateOfBirth":b};
-    return this.http.put(this.Url + "/api/Accounts", body, {headers : tokenHeader });
+    var body= {"fullName":a,"dateOfBirth":b, "imagePath": ""};
+    return this.http.put(this.Url + "/api/Accounts/UpdateProfile", body, {headers : tokenHeader , responseType: 'text' });
+  }
+  changePass(cur: any, newP: any ){
+    debugger;
+    var token = "Bearer " + localStorage.getItem("token");
+    var tokenHeader = new HttpHeaders({'Authorization': token});
+    let thisURL= this.Url + "/api/Accounts/ChangePassword?oldPassword="+ cur +"&newPassword="+ newP;
+    return this.http.put( thisURL, {"oldPassword": cur, "newPassword": newP} , {headers : tokenHeader , responseType: 'text' });
   }
 
   BanOrUnbanAcc(id: string){

@@ -99,6 +99,7 @@ const config = {
     AddNewRequestComponent,
     AddAccountComponent,
     AddPermissionComponent,
+    AddManagePerGrComponent,
     DropzoneDirective,
     EditAccountShapeComponent,
     MenuEditAccountShapeComponent,
@@ -111,7 +112,7 @@ const config = {
   ],
   
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
-  entryComponents:[AddAccountComponent, AddNewDynamicFormComponent,AddManagePerGrComponent, AddPermissionComponent, AddNewRequestComponent, AddHandleRequestComponent ],
+  entryComponents:[AddAccountComponent, AddManagePerGrComponent, AddNewDynamicFormComponent,AddManagePerGrComponent, AddPermissionComponent, AddNewRequestComponent, AddHandleRequestComponent ],
 
   providers: [],
   bootstrap: [AppComponent]

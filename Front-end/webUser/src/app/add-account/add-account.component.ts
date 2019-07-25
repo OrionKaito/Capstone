@@ -28,30 +28,35 @@ export class AddAccountComponent implements OnInit {
   groupList: any = [];
 
   ngOnInit() {
-
-
-    if (this.data != null && this.data != "null") this.createAcc = false;
-    if (!this.createAcc) {
-      this.loadStaffAcountService.loadWFByID(this.data).toPromise().then(data => {
-        this.recevieData = data;
-      })
-    }
-    this.loadStaffAcountService.loadPermissionData().toPromise().then(data => {
-      this.permissionList = data;
-      console.log("per:");
-      console.log(this.permissionList);
-    })
     this.formData.permissionToEditID = "0";
     this.formData.permissionToUseID = "0";
+
+    if (this.data != null && this.data != "null") this.createAcc = false;
+    this.loadStaffAcountService.loadPermissionData().toPromise().then(data => {
+      this.permissionList = data;
+      if (!this.createAcc) {
+        this.loadStaffAcountService.loadWFByID(this.data).toPromise().then(data => {
+  
+          this.recevieData = data;
+          this.formData.name = this.recevieData.name;
+          this.formData.description = this.recevieData.description;
+        //  this.formData.description = "Ádasd";
+          this.formData.permissionToEditID = this.recevieData.permissionToEditID;
+          this.formData.permissionToUseID = this.recevieData.permissionToUseID;
+          console.log(this.formData);
+        })
+      }
+    })
+   
+
+
 
   }
   onSubmit() {
     this.formData.data="";
-    //this.formData.dateOfBirth  = this.formData.dateOfBirth.toString() + "T06:08:08-05:00";
+    if(!this.createAcc){
     this.LoginService.addNewWF(this.formData).toPromise().then(
       resp => {
-        console.log(resp.toString());
-        debugger;
         if (resp != "") {
           debugger;
           this.toastr.success('Success! ', '');
@@ -60,9 +65,25 @@ export class AddAccountComponent implements OnInit {
         else {
           //this.errorMessage = resp.toString();    
         }
+      }, (err) =>{
+        this.toastr.error("Please try it again!", "Something wrong");
       });
 
-
+    } else {
+      this.LoginService.editWF(this.formData).toPromise().then(
+        resp => {
+          if (resp != "") {
+            debugger;
+            this.toastr.success('Success! ', '');
+            this.dialogRef.close();
+          }
+          else {
+            //this.errorMessage = resp.toString();    
+          }
+        }, (err) =>{
+          this.toastr.error("Please try it again!", "Something wrong");
+        });
+    }
 
   }
 
