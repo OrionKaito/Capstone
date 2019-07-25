@@ -6,8 +6,6 @@ using Capstone.ViewModel;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace Capstone.Controllers
 {
@@ -38,6 +36,9 @@ namespace Capstone.Controllers
                 var checkExist = _userRoleService.CheckExist(model.UserID, model.RoleID);
                 if (checkExist != null) return BadRequest("Existed!");
 
+                var checkRole = _userRoleService.GetByUserID(model.UserID);
+                if (checkRole != null) return BadRequest("This user have a role!");
+
                 UserRole userRole = new UserRole();
                 userRole = _mapper.Map<UserRole>(model);
                 _userRoleService.Create(userRole);
@@ -51,23 +52,21 @@ namespace Capstone.Controllers
 
         // GET: api/UserRoles
         [HttpGet("GetByUserID")]
-        public ActionResult<IEnumerable<UserRoleVM>> GetByUserID(string ID)
+        public ActionResult<UserRoleVM> GetByUserID(string ID)
         {
             try
             {
-                List<UserRoleVM> result = new List<UserRoleVM>();
+                UserRoleVM result = new UserRoleVM();
                 var data = _userRoleService.GetByUserID(ID);
-                if (data.Count() == 0) return NotFound(WebConstant.EmptyList);
-                foreach (var item in data)
+                if (data == null) return NotFound("This user do not have role!");
+                result = new UserRoleVM
                 {
-                    result.Add(new UserRoleVM {
-                        ID = item.ID,
-                        UserID = item.UserID,
-                        FullName = _userManager.FindByIdAsync(item.UserID).Result.FullName,
-                        RoleID = item.RoleID,
-                        RoleName = _roleService.GetByID(item.RoleID).Name
-                    });
-                }
+                    ID = data.ID,
+                    UserID = data.UserID,
+                    FullName = data.User.FullName,
+                    RoleID = data.RoleID,
+                    RoleName = data.Role.Name
+                };
                 return Ok(result);
             }
             catch (Exception e)

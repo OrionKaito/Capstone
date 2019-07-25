@@ -11,7 +11,7 @@ namespace Capstone.Service
     public interface IUserRoleService
     {
         IEnumerable<UserRole> GetAll();
-        IEnumerable<UserRole> GetByUserID(string ID);
+        UserRole GetByUserID(string ID);
         UserRole GetByID(Guid ID);
         UserRole CheckExist(string UserID, Guid RoleID);
         void Create(UserRole userRole);
@@ -57,9 +57,9 @@ namespace Capstone.Service
             return _userRoleRepository.GetById(ID);
         }
 
-        public IEnumerable<UserRole> GetByUserID(string ID)
+        public UserRole GetByUserID(string ID)
         {
-            return _userRoleRepository.GetMany(u => u.IsDeleted == false && u.UserID.Equals(ID));
+            return _userRoleRepository.GetByUserID(ID);
         }
 
         public void Save()

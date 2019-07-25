@@ -102,10 +102,10 @@ namespace Capstone.Controllers
                     CreateDate = DateTime.Now,
                 };
 
+                _requestActionService.Create(requestAction);
+
                 ///HERE
                 request.CurrentRequestActionID = requestAction.ID;
-
-                _requestActionService.Create(requestAction);
 
                 //RequestValue
                 foreach (var value in model.ActionValues)
