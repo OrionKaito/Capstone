@@ -52,9 +52,9 @@ namespace Capstone.Service
             return _requestRepository.GetMany(r => r.InitiatorID.Equals(ID));
         }
 
-        public IEnumerable<Request> GetRequestToApproveByPermission(List<Guid> permissions)
+        public IEnumerable<Request> GetRequestToApproveByPermissions(List<Guid> permissions)
         {
-            return _requestRepository.GetMany(r => r.IsCompleted == false && permissions.con r.RequestAction.WorkFlowTemplateAction.PermissionToUseID == permissionID);
+            return _requestRepository.GetMany(r => r.IsCompleted == false && permissions.Contains(r.RequestAction.WorkFlowTemplateAction.PermissionToUseID.GetValueOrDefault()));
         }
 
         public void Save()
