@@ -12,7 +12,9 @@ namespace Capstone.Service
         IEnumerable<UserNotification> GetAll();
         IEnumerable<UserNotification> GetByUserIDAndNotificationType(string ID, NotificationEnum notificationType, bool isCheckHandled);
         IEnumerable<UserNotification> GetByUserIDAndIsSend(string ID, bool isSend);
-        int GetNumberOfNotification(NotificationEnum notificationType, string ID);
+        IEnumerable<UserNotification> GetByUserID(string ID);
+        int GetNumberOfNotificationByType(NotificationEnum notificationType, string ID);
+        int GetNumberOfNotification(string ID);
         UserNotification GetByID(Guid ID);
         void Create(UserNotification userNotification);
         void Delete(UserNotification userNotification);
@@ -33,7 +35,7 @@ namespace Capstone.Service
             _notificationRepository = notificationRepository;
         }
 
-        public int GetNumberOfNotification(NotificationEnum notificationType, string ID)
+        public int GetNumberOfNotificationByType(NotificationEnum notificationType, string ID)
         {
             var notification = _notificationRepository.GetByNotificationTypeAndIsHandled(notificationType);
             int numberOfNotification = 0;
@@ -107,6 +109,16 @@ namespace Capstone.Service
         public IEnumerable<UserNotification> GetByUserIDAndIsSend(string ID, bool isSend)
         {
             return _userNotificationRepository.GetMany(u => u.UserID.Equals(ID) && u.IsSend == isSend);
+        }
+
+        public IEnumerable<UserNotification> GetByUserID(string ID)
+        {
+            return _userNotificationRepository.GetMany(u => u.UserID.Equals(ID) && u.IsDeleted == false && u.IsRead == false);
+        }
+
+        public int GetNumberOfNotification(string ID)
+        {
+            return _userNotificationRepository.GetMany(u => u.IsDeleted == false && u.IsRead == false && u.UserID.Equals(ID)).Count();
         }
     }
 }

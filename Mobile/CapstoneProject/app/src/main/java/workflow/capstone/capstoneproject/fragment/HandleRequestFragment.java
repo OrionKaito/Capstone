@@ -361,7 +361,7 @@ public class HandleRequestFragment extends Fragment {
             @Override
             public void onSuccess(String s) {
                 FragmentUtils.back(getActivity());
-                View taskView = MainActivity.tabLayout.getTabAt(1).getCustomView();
+                View taskView = MainActivity.tabLayout.getTabAt(2).getCustomView();
                 MainActivity.imageViewTask = taskView.findViewById(R.id.task_icon);
                 MainActivity.imageViewTask.setImageResource(R.drawable.ic_task_gray);
                 MainActivity.taskBadge = taskView.findViewById(R.id.task_badge);

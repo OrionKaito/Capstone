@@ -24,6 +24,7 @@ import java.util.List;
 
 import es.dmoral.toasty.Toasty;
 import workflow.capstone.capstoneproject.R;
+import workflow.capstone.capstoneproject.activity.ProfileActivity;
 import workflow.capstone.capstoneproject.api.UpdateProfileModel;
 import workflow.capstone.capstoneproject.customdialog.CustomDialog;
 import workflow.capstone.capstoneproject.entities.Profile;
@@ -66,13 +67,14 @@ public class ViewProfileFragment extends Fragment {
         initView(view);
         token = DynamicWorkflowSharedPreferences.getStoreJWT(getContext(), ConstantDataManager.AUTHORIZATION_TOKEN);
 
+        ProfileActivity.tvProfileTitle.setText("View Profile");
         edtFullName.setInputType(InputType.TYPE_NULL);
-        imgBack.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                FragmentUtils.back(getActivity());
-            }
-        });
+//        imgBack.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                FragmentUtils.back(getActivity());
+//            }
+//        });
 
         profile = DynamicWorkflowSharedPreferences.getStoredData(getContext(), ConstantDataManager.PROFILE_KEY, ConstantDataManager.PROFILE_NAME);
         edtFullName.setText(profile.getFullName());
@@ -182,7 +184,7 @@ public class ViewProfileFragment extends Fragment {
     }
 
     private void initView(View view) {
-        imgBack = view.findViewById(R.id.img_Back);
+//        imgBack = view.findViewById(R.id.img_Back);
         imgEditFullname = view.findViewById(R.id.img_edit_fullname);
         imgEditDob = view.findViewById(R.id.img_edit_dob);
         edtFullName = view.findViewById(R.id.edt_full_name);

@@ -49,25 +49,25 @@ public class WorkflowAdapter extends BaseAdapter {
             holder = new ViewHolder();
             holder.tvWorkflowName = convertView.findViewById(R.id.tv_workflow_name);
             holder.tvWorkflowDes = convertView.findViewById(R.id.tv_workflow_des);
-            holder.lineView = convertView.findViewById(R.id.line_view);
+//            holder.lineView = convertView.findViewById(R.id.line_view);
             convertView.setTag(holder);
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
         WorkflowTemplate workflowTemplate = this.listData.get(position);
-        holder.tvWorkflowName.setText(workflowTemplate.getName());
+        holder.tvWorkflowName.setText(workflowTemplate.getName().toUpperCase());
         holder.tvWorkflowDes.setText(workflowTemplate.getDescription());
-        if (position == getCount() - 1) {
-            holder.lineView.setVisibility(View.GONE);
-        } else {
-            holder.lineView.setVisibility(View.VISIBLE);
-        }
+//        if (position == getCount() - 1) {
+//            holder.lineView.setVisibility(View.GONE);
+//        } else {
+//            holder.lineView.setVisibility(View.VISIBLE);
+//        }
         return convertView;
     }
 
     private class ViewHolder {
         TextView tvWorkflowName;
         TextView tvWorkflowDes;
-        View lineView;
+//        View lineView;
     }
 }
