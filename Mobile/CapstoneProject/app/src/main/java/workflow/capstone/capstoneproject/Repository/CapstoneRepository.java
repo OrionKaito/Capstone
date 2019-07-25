@@ -31,7 +31,7 @@ public interface CapstoneRepository {
 
     void updateProfile(Context context, String token, UpdateProfileModel model, CallBackData<String> callBackData);
 
-    void changePassword(Context context, String token, String password, CallBackData<String> callBackData);
+    void changePassword(Context context, String token, String oldPassword, String newPassword, CallBackData<String> callBackData);
 
     void forgotPassword(Context context, String email, CallBackData<String> callBackData);
 

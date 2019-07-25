@@ -48,6 +48,134 @@ namespace Capstone.Controllers
             _mapper = mapper;
         }
 
+        [HttpGet]
+        public ActionResult<RegistrationPaginVM> GetAccountsPagination(int? numberOfPage, int? NumberOfRecord)
+        {
+            try
+            {
+                var page = numberOfPage ?? 1;
+                var count = NumberOfRecord ?? WebConstant.DefaultPageRecordCount;
+
+                var users = _userManager.Users
+                    .ToListAsync()
+                    .Result
+                    .Skip((page - 1) * count)
+                    .Take(count)
+                    .Select(u => new RegistrationVM
+                    {
+                        ID = u.Id,
+                        DateOfBirth = u.DateOfBirth,
+                        Email = u.Email,
+                        FullName = u.FullName,
+                        Groups = _userGroupService.GetByUserID(u.Id)
+                                .Select(g => new GroupVM
+                                {
+                                    ID = g.GroupID,
+                                    Name = g.Group.Name,
+                                }),
+                        Roles = _userRoleService.GetByUserID(u.Id)
+                                .Select(r => new RoleVM
+                                {
+                                    ID = r.RoleID,
+                                    Name = r.Role.Name,
+                                }),
+                        ManagerID = u.LineManagerID,
+                        ManagerName = string.IsNullOrEmpty(u.LineManagerID) ? "" : u.LineManager.FullName,
+                        IsDeleted = u.IsDeleted
+                    });
+
+                var data = new RegistrationPaginVM
+                {
+                    TotalPage = _userManager.Users.ToListAsync().Result.Count,
+                    Accounts = users,
+                };
+
+                return Ok(data);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
+
+        [HttpGet("GetAccountByUserID")]
+        public ActionResult<IEnumerable<RegistrationVM>> GetAccountByUserID(string ID)
+        {
+            try
+            {
+                var user = _userManager.Users
+                    .Where(u => u.Id == ID)
+                    .ToList()
+                    .Select(u => new RegistrationVM
+                    {
+                        ID = u.Id,
+                        DateOfBirth = u.DateOfBirth,
+                        Email = u.Email,
+                        FullName = u.FullName,
+                        Groups = _userGroupService.GetByUserID(u.Id)
+                                .Select(g => new GroupVM
+                                {
+                                    ID = g.GroupID,
+                                    Name = g.Group.Name,
+                                }),
+                        Roles = _userRoleService.GetByUserID(u.Id)
+                                .Select(r => new RoleVM
+                                {
+                                    ID = r.ID,
+                                    Name = r.Role.Name,
+                                }),
+                        ManagerID = u.LineManagerID,
+                        ManagerName = string.IsNullOrEmpty(u.LineManagerID) ? "" : u.LineManager.FullName,
+                        IsDeleted = u.IsDeleted
+                    });
+                return Ok(user);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
+
+        [HttpGet("GetProfile")]
+        public ActionResult<IEnumerable<RegistrationVM>> GetProfile()
+        {
+            try
+            {
+                RegistrationVM result = new RegistrationVM();
+                var userId = HttpContext.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier).Value;
+                var user = _userManager.Users
+                    .Where(u => u.Id == userId)
+                    .ToList()
+                    .Select(u => new RegistrationVM
+                    {
+                        ID = u.Id,
+                        DateOfBirth = u.DateOfBirth,
+                        Email = u.Email,
+                        FullName = u.FullName,
+                        Groups = _userGroupService.GetByUserID(u.Id)
+                                .Select(g => new GroupVM
+                                {
+                                    ID = g.GroupID,
+                                    Name = g.Group.Name,
+                                }),
+                        Roles = _userRoleService.GetByUserID(u.Id)
+                                .Select(r => new RoleVM
+                                {
+                                    ID = r.ID,
+                                    Name = r.Role.Name,
+                                }),
+                        ManagerID = u.LineManagerID,
+                        ManagerName = string.IsNullOrEmpty(u.LineManagerID) ? "" : u.LineManager.FullName,
+                    });
+
+                return Ok(user);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
+
         [AllowAnonymous]
         [HttpPost]
         public async Task<IActionResult> PostAccount([FromBody]RegistrationCM model)
@@ -63,12 +191,11 @@ namespace Capstone.Controllers
                 UserName = model.Email,
                 FullName = model.FullName,
                 DateOfBirth = model.DateOfBirth,
-                ManagerID = model.ManagerID,
+                LineManagerID = model.ManagerID,
                 IsDeleted = false,
             };
 
-            Random random = new Random();
-            user.EmailConfirmCode = random.Next(100001, 999999).ToString();
+            user.EmailConfirmCode = Utilities.RandomString(8);
 
             var result = await _userManager.CreateAsync(user, model.Password);
 
@@ -197,126 +324,28 @@ namespace Capstone.Controllers
             }
         }
 
-        [HttpGet]
-        public ActionResult<RegistrationPaginVM> GetAccountsPagination(int? numberOfPage, int? NumberOfRecord)
+        [HttpPost("ForgotPassword")]
+        public async Task<IActionResult> ForgotPassword(string email)
         {
             try
             {
-                var page = numberOfPage ?? 1;
-                var count = NumberOfRecord ?? WebConstant.DefaultPageRecordCount;
+                var userInDB = await _userManager.FindByEmailAsync(email);
 
-                var users = _userManager.Users
-                    .ToListAsync()
-                    .Result
-                    .Skip((page - 1) * count)
-                    .Take(count)
-                    .Select(u => new RegistrationVM
-                    {
-                        ID = u.Id,
-                        DateOfBirth = u.DateOfBirth,
-                        Email = u.Email,
-                        FullName = u.FullName,
-                        Groups = _userGroupService.GetByUserID(u.Id)
-                                .Select(g => new GroupVM
-                                {
-                                    ID = g.GroupID,
-                                    Name = _groupService.GetByID(g.GroupID).Name,
-                                }),
-                        Roles = _userRoleService.GetByUserID(u.Id)
-                                .Select(r => new RoleVM
-                                {
-                                    ID = r.RoleID,
-                                    Name = _roleService.GetByID(r.RoleID).Name,
-                                }),
-                        ManagerID = u.ManagerID,
-                        ManagerName = string.IsNullOrEmpty(u.ManagerID) ? "" : _userManager.FindByIdAsync(u.ManagerID).Result.FullName,
-                        IsDeleted = u.IsDeleted
-                    });
+                if (userInDB == null) return BadRequest(WebConstant.UserNotExist);
 
-                var data = new RegistrationPaginVM
-                {
-                    TotalPage = _userManager.Users.ToListAsync().Result.Count,
-                    Accounts = users,
-                };
+                Random random = new Random();
+                userInDB.EmailConfirmCode = Utilities.RandomString(8); ;
+                var result = await _userManager.UpdateAsync(userInDB);
 
-                return Ok(data);
-            }
-            catch (Exception e)
-            {
-                return BadRequest(e.Message);
-            }
-        }
+                if (!result.Succeeded) return new BadRequestObjectResult(result.Errors);
 
-        [HttpGet("GetAccountByUserID")]
-        public ActionResult<IEnumerable<RegistrationVM>> GetAccountByUserID(string ID)
-        {
-            try
-            {
-                var user = _userManager.Users
-                    .Where(u => u.Id == ID)
-                    .ToList()
-                    .Select(u => new RegistrationVM
-                    {
-                        ID = u.Id,
-                        DateOfBirth = u.DateOfBirth,
-                        Email = u.Email,
-                        FullName = u.FullName,
-                        Groups = _userGroupService.GetByUserID(u.Id)
-                                .Select(g => new GroupVM
-                                {
-                                    ID = g.GroupID,
-                                    Name = _groupService.GetByID(g.GroupID).Name,
-                                }),
-                        Roles = _userRoleService.GetByUserID(u.Id)
-                                .Select(r => new RoleVM
-                                {
-                                    ID = r.ID,
-                                    Name = _roleService.GetByID(r.RoleID).Name,
-                                }),
-                        ManagerID = u.ManagerID,
-                        ManagerName = string.IsNullOrEmpty(u.ManagerID) ? "" : _userManager.FindByIdAsync(u.ManagerID).Result.FullName,
-                        IsDeleted = u.IsDeleted
-                    });
-                return Ok(user);
-            }
-            catch (Exception e)
-            {
-                return BadRequest(e.Message);
-            }
-        }
+                await _emailService.SendMail(email, "Request To Change Password", "Account name : "
+                        + userInDB.UserName
+                        + "\n\nYour Code is : "
+                        + userInDB.EmailConfirmCode
+                + "\n\nThanks & Regards\nDynamicWorkFlow Team");
 
-        [HttpGet("GetProfile")]
-        public ActionResult<IEnumerable<RegistrationVM>> GetProfile()
-        {
-            try
-            {
-                RegistrationVM result = new RegistrationVM();
-                var userId = HttpContext.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier).Value;
-                var user = _userManager.Users
-                    .Where(u => u.Id == userId)
-                    .ToList()
-                    .Select(u => new RegistrationVM
-                    {
-                        ID = u.Id,
-                        DateOfBirth = u.DateOfBirth,
-                        Email = u.Email,
-                        FullName = u.FullName,
-                        Groups = _userGroupService.GetByUserID(u.Id)
-                                .Select(g => new GroupVM
-                                {
-                                    ID = g.GroupID,
-                                    Name = _groupService.GetByID(g.GroupID).Name,
-                                }),
-                        Roles = _userRoleService.GetByUserID(u.Id)
-                                .Select(r => new RoleVM
-                                {
-                                    ID = r.ID,
-                                    Name = _roleService.GetByID(r.RoleID).Name,
-                                }),
-                        ManagerID = u.ManagerID
-                    });
-
-                return Ok(user);
+                return Ok(WebConstant.Success);
             }
             catch (Exception e)
             {
@@ -343,35 +372,6 @@ namespace Capstone.Controllers
                 var result = await _userManager.UpdateAsync(userInDB);
 
                 if (!result.Succeeded) return new BadRequestObjectResult(result.Errors);
-
-                return Ok(WebConstant.Success);
-            }
-            catch (Exception e)
-            {
-                return BadRequest(e.Message);
-            }
-        }
-
-        [HttpPost("ForgotPassword")]
-        public async Task<IActionResult> ForgotPassword(string email)
-        {
-            try
-            {
-                var userInDB = await _userManager.FindByEmailAsync(email);
-
-                if (userInDB == null) return BadRequest(WebConstant.UserNotExist);
-
-                Random random = new Random();
-                userInDB.EmailConfirmCode = random.Next(100001, 999999).ToString();
-                var result = await _userManager.UpdateAsync(userInDB);
-
-                if (!result.Succeeded) return new BadRequestObjectResult(result.Errors);
-
-                await _emailService.SendMail(email, "Request To Change Password", "Account name : "
-                        + userInDB.UserName
-                        + "\n\nYour Code is : "
-                        + userInDB.EmailConfirmCode
-                + "\n\nThanks & Regards\nDynamicWorkFlow Team");
 
                 return Ok(WebConstant.Success);
             }
@@ -413,7 +413,7 @@ namespace Capstone.Controllers
         }
 
         [HttpPut("ChangePassword")]
-        public async Task<ActionResult> ChangePassword(string password)
+        public async Task<ActionResult> ChangePassword(string oldPassword, string newPassword)
         {
             try
             {
@@ -423,9 +423,20 @@ namespace Capstone.Controllers
                 var userInDB = _userManager.FindByIdAsync(userID).Result;
                 if (userInDB == null) return BadRequest(WebConstant.UserNotExist);
 
+                if (newPassword.Length < 6)
+                {
+                    return BadRequest(WebConstant.PasswordToShort);
+                }
                 var PasswordHash = new PasswordHasher<string>();
+                string currentPasswordHash = userInDB.PasswordHash;
+                string oldPasswordHash = PasswordHash.HashPassword(userInDB.UserName, oldPassword);
 
-                userInDB.PasswordHash = PasswordHash.HashPassword(userInDB.UserName, password);
+                if (PasswordHash.VerifyHashedPassword(userInDB.UserName, currentPasswordHash, oldPassword) == 0)
+                {
+                    return BadRequest(WebConstant.WrongOldPassword);
+                }
+
+                userInDB.PasswordHash = PasswordHash.HashPassword(userInDB.UserName, newPassword);
                 var result = await _userManager.UpdateAsync(userInDB);
 
                 if (!result.Succeeded) return new BadRequestObjectResult(result.Errors);
@@ -439,7 +450,7 @@ namespace Capstone.Controllers
         }
 
         [HttpPut("PutByID")]
-        public async Task<ActionResult> PutAccountByID([FromBody]RegistrationByIDUM model)
+        public async Task<ActionResult> PutAccountByAdmin([FromBody]RegistrationByAdminUM model)
         {
             if (!ModelState.IsValid) return BadRequest(ModelState);
 
@@ -451,7 +462,7 @@ namespace Capstone.Controllers
                 var userInDB = _userManager.FindByIdAsync(model.ID).Result;
                 if (userInDB == null) return BadRequest(WebConstant.NotFound);
 
-                userInDB.ManagerID = model.ManagerID;
+                userInDB.LineManagerID = model.ManagerID;
                 userInDB.SecurityStamp = Guid.NewGuid().ToString();
                 var result = await _userManager.UpdateAsync(userInDB);
 

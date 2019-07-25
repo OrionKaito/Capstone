@@ -36,10 +36,11 @@ namespace Capstone.ViewModel
     public class RegistrationUM
     {
         public string FullName { get; set; }
+        public string ImagePath { get; set; }
         public DateTime? DateOfBirth { get; set; }
     }
 
-    public class RegistrationByIDUM
+    public class RegistrationByAdminUM
     {
         public string ID { get; set; }
         public string ManagerID { get; set; }

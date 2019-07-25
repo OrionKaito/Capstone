@@ -12,6 +12,7 @@ import android.widget.ImageView;
 
 import workflow.capstone.capstoneproject.R;
 import workflow.capstone.capstoneproject.activity.ConfirmForgotPasswordActivity;
+import workflow.capstone.capstoneproject.activity.ProfileActivity;
 import workflow.capstone.capstoneproject.customdialog.CustomDialog;
 import workflow.capstone.capstoneproject.repository.CapstoneRepository;
 import workflow.capstone.capstoneproject.repository.CapstoneRepositoryImpl;
@@ -22,6 +23,7 @@ import workflow.capstone.capstoneproject.utils.FragmentUtils;
 
 public class ChangePasswordFragment extends Fragment {
 
+    private EditText edtOldPassword;
     private EditText edtPassword;
     private EditText edtConfirmPassword;
     private ImageView imgBack;
@@ -42,25 +44,27 @@ public class ChangePasswordFragment extends Fragment {
         initView(view);
         token = DynamicWorkflowSharedPreferences.getStoreJWT(getContext(), ConstantDataManager.AUTHORIZATION_TOKEN);
 
-        imgBack.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                FragmentUtils.back(getActivity());
-            }
-        });
+        ProfileActivity.tvProfileTitle.setText("Change Password");
+//        imgBack.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                FragmentUtils.back(getActivity());
+//            }
+//        });
 
         btnChangePassword.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String password = edtPassword.getText().toString();
+                String oldPassword = edtOldPassword.getText().toString();
+                String newPassword = edtPassword.getText().toString();
                 String confirmPassword = edtConfirmPassword.getText().toString();
-                if(password.trim().isEmpty() || confirmPassword.trim().isEmpty()) {
+                if(oldPassword.trim().isEmpty() || newPassword.trim().isEmpty() || confirmPassword.trim().isEmpty()) {
                     configDialog(false, true, "Please input all of field!", false, getResources().getString(R.string.close));
-                } else if(!password.equals(confirmPassword)) {
+                } else if(!newPassword.equals(confirmPassword)) {
                     configDialog(false, true, "Confirm Password do not match with Password!", false, getResources().getString(R.string.close));
                 } else {
                     capstoneRepository = new CapstoneRepositoryImpl();
-                    capstoneRepository.changePassword(getContext(), token, password, new CallBackData<String>() {
+                    capstoneRepository.changePassword(getContext(), token, oldPassword, newPassword, new CallBackData<String>() {
                         @Override
                         public void onSuccess(String s) {
                             configDialog(true, false, getResources().getString(R.string.change_password_success), true, getResources().getString(R.string.ok));
@@ -68,7 +72,7 @@ public class ChangePasswordFragment extends Fragment {
 
                         @Override
                         public void onFail(String message) {
-
+                            configDialog(false, true, message, false, getResources().getString(R.string.close));
                         }
                     });
                 }
@@ -79,9 +83,10 @@ public class ChangePasswordFragment extends Fragment {
     }
 
     private void initView(View view) {
+        edtOldPassword = view.findViewById(R.id.edt_current_password);
         edtPassword = view.findViewById(R.id.edt_password);
         edtConfirmPassword = view.findViewById(R.id.edt_confirm_password);
-        imgBack = view.findViewById(R.id.img_Back);
+//        imgBack = view.findViewById(R.id.img_Back);
         btnChangePassword = view.findViewById(R.id.btn_change_pass);
     }
 
