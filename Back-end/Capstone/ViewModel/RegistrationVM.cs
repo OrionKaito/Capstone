@@ -17,7 +17,7 @@ namespace Capstone.ViewModel
         public DateTime? DateOfBirth { get; set; }
         public string ManagerID { get; set; }
         public string ManagerName { get; set; }
-        public IEnumerable<RoleVM> Roles { get; set; }
+        public RoleVM Roles { get; set; }
         public IEnumerable<GroupVM> Groups { get; set; }
         public bool IsDeleted { get; set; }
     }
