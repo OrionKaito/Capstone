@@ -19,6 +19,11 @@ export class LoginService {
     const headerSettings: {[name: string]: string | string[]; } = {};  
     this.header =  new HttpHeaders(headerSettings);  
   }  
+  Loginv2(model : any){  
+    debugger;  
+    var a =this.Url + "/api/Token/TestLogin";  
+    return  this.http.post(a,model, { observe: 'response' });  
+  }  
   Login(model : any){  
     debugger;  
      var a =this.Url + "/api/Token/User";  

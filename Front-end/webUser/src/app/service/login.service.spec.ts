@@ -27,13 +27,13 @@ export class LoginComponent {
     this.LoginService.Login(this.model).subscribe(    
       data => {    
         debugger;    
-        if(data!="")    
+        if(data.toString() != "")    
         {       
           this.router.navigate(['/Dashboard']);    
           debugger;    
         }    
         else{    
-          this.errorMessage = data;    
+          this.errorMessage = data.toString();    
         }    
       },    
       error => {    
