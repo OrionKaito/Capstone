@@ -64,21 +64,13 @@ namespace Capstone.Controllers
         }
 
         // GET: api/Roles
-        [HttpGet("GetByUserID")]
-        public ActionResult<IEnumerable<string>> GetByUserID(string ID)
+        [HttpGet("GetRoleByUserID")]
+        public ActionResult<string> GetRoleByUserID(string ID)
         {
             try
             {
-                List<string> result = new List<string>();
-                var data = _roleService.GetByUserID(ID);
-                foreach (var item in data)
-                {
-                    result.Add(item);
-                }
-
-                if (result.Count == 0) return BadRequest(WebConstant.NotFound);
-
-                return Ok(result);
+                var role = _roleService.GetByUserID(ID);
+                return Ok(role.Name);
             }
             catch (Exception e)
             {

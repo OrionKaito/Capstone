@@ -12,7 +12,7 @@ namespace Capstone.Service
         IEnumerable<Role> GetAll();
         Role GetByID(Guid ID);
         Role GetByName(string Name);
-        IEnumerable<string> GetByUserID(string ID);
+        Role GetByUserID(string ID);
         void Create(Role role);
         void Delete(Role role);
         void Save();
@@ -58,16 +58,10 @@ namespace Capstone.Service
             return _roleRepository.GetByName(Name);
         }
 
-        public IEnumerable<string> GetByUserID(string ID)
+        public Role GetByUserID(string ID)
         {
-            List<string> listRoleName = new List<string>();
-            var data = _userRoleRepository.GetMany(u => u.IsDeleted == false && u.UserID.Equals(ID));
-            foreach (var item in data)
-            {
-                listRoleName.Add(_roleRepository.GetById(item.RoleID).Name);
-            }
-
-            return listRoleName;
+            var data = _userRoleRepository.GetByUserID(ID);
+            return data.Role;
         }
 
         public void Save()

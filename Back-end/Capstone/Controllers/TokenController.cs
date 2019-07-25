@@ -53,8 +53,8 @@ namespace Capstone.Controllers
                 var userInDb = _userManager.FindByIdAsync(userId).Result;
                 if (userInDb == null) return BadRequest(WebConstant.UserNotExist);
 
-                var roles = _roleService.GetByUserID(userId);
-                return Ok(roles);
+                var role = _roleService.GetByUserID(userId);
+                return Ok(role);
             }
             catch (Exception e)
             {
@@ -78,16 +78,13 @@ namespace Capstone.Controllers
                     return BadRequest(WebConstant.InvalidUSer);
                 }
 
-                IEnumerable<string> listRoleOfUser = _roleService.GetByUserID(identity.Result.Id);
+                var role = _roleService.GetByUserID(identity.Result.Id);
 
                 bool checkUser = false;
 
-                foreach (var item in listRoleOfUser)
+                if (role.Name.Equals(WebConstant.User) || role.Name.Equals(WebConstant.Staff))
                 {
-                    if (item.Equals(WebConstant.User) || item.Equals(WebConstant.Staff))
-                    {
-                        checkUser = true;
-                    }
+                    checkUser = true;
                 }
 
                 if (!checkUser)
@@ -105,21 +102,10 @@ namespace Capstone.Controllers
                     return BadRequest(WebConstant.BannedAccount);
                 }
 
-                bool checkStaff = false;
-
-                foreach (var item in listRoleOfUser)
-                {
-                    if (item.Equals(WebConstant.Staff))
-                    {
-                        checkStaff = true;
-                    }
-                }
-
-                string role = checkStaff == true ? WebConstant.Staff : WebConstant.User;
                 var tokenString = GenerateJSONWebToken(identity.Result);
                 TokenVM tokenVM = new TokenVM
                 {
-                    Role = role,
+                    Role = role.Name,
                     Token = tokenString
                 };
                 return Ok(tokenVM);
@@ -146,16 +132,13 @@ namespace Capstone.Controllers
                     return BadRequest(WebConstant.InvalidUSer);
                 }
 
-                IEnumerable<string> listRoleOfUser = _roleService.GetByUserID(identity.Result.Id);
+                var role = _roleService.GetByUserID(identity.Result.Id);
 
                 bool checkAdmin = false;
 
-                foreach (var item in listRoleOfUser)
+                if (role.Name.Equals(WebConstant.Admin))
                 {
-                    if (item.Equals(WebConstant.Admin))
-                    {
-                        checkAdmin = true;
-                    }
+                    checkAdmin = true;
                 }
 
                 if (!checkAdmin)
@@ -230,16 +213,13 @@ namespace Capstone.Controllers
 
                 if (!result.Succeeded) return new BadRequestObjectResult(result.Errors);
 
-                IEnumerable<string> listRoleOfUser = _roleService.GetByUserID(identity.Result.Id);
+                var role = _roleService.GetByUserID(identity.Result.Id);
 
                 bool checkUser = false;
 
-                foreach (var item in listRoleOfUser)
+                if (role.Name.Equals(WebConstant.User) || role.Name.Equals(WebConstant.Staff))
                 {
-                    if (item.Equals(WebConstant.User) || item.Equals(WebConstant.Staff))
-                    {
-                        checkUser = true;
-                    }
+                    checkUser = true;
                 }
 
                 if (!checkUser)
@@ -257,21 +237,10 @@ namespace Capstone.Controllers
                     return BadRequest(WebConstant.BannedAccount);
                 }
 
-                bool checkStaff = false;
-
-                foreach (var item in listRoleOfUser)
-                {
-                    if (item.Equals(WebConstant.Staff))
-                    {
-                        checkStaff = true;
-                    }
-                }
-
-                string role = checkStaff == true ? WebConstant.Staff : WebConstant.User;
                 var tokenString = GenerateJSONWebToken(identity.Result);
                 TokenVM tokenVM = new TokenVM
                 {
-                    Role = role,
+                    Role = role.Name,
                     Token = tokenString
                 };
                 return Ok(tokenVM);
