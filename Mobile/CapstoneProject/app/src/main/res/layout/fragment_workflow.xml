@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white"
+    android:background="@color/light_gray"
     android:focusable="true"
     android:focusableInTouchMode="true"
     android:orientation="vertical"
@@ -31,18 +31,28 @@
             android:layout_height="@dimen/dp26"
             android:layout_centerVertical="true"
             android:layout_marginRight="@dimen/dp20"
-            android:layout_toLeftOf="@id/img_menu"
+            android:layout_toLeftOf="@id/img_avatar"
             android:background="@drawable/ic_search_gray_24dp"
             android:visibility="visible" />
 
-        <ImageView
-            android:id="@+id/img_menu"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+        <!--<ImageView-->
+            <!--android:id="@+id/img_menu"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_alignParentRight="true"-->
+            <!--android:layout_centerVertical="true"-->
+            <!--android:layout_marginRight="@dimen/dp15"-->
+            <!--android:background="@drawable/ic_menu_grey" />-->
+        <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/img_avatar"
+            android:layout_width="@dimen/dp32"
+            android:layout_height="@dimen/dp32"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:layout_marginRight="@dimen/dp15"
-            android:background="@drawable/ic_menu_grey" />
+            android:src="@drawable/avatar"
+            app:civ_border_color="@color/gray"
+            app:civ_border_width="1dp" />
     </RelativeLayout>
 
     <View
@@ -108,7 +118,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="@dimen/dp5"
+            android:layout_margin="@dimen/dp3"
             android:orientation="vertical"
             android:padding="@dimen/dp7">
 
@@ -121,8 +131,9 @@
                     android:id="@+id/list_workflow"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:divider="#00000000"
-                    android:footerDividersEnabled="false"></ListView>
+                    android:divider="@android:color/transparent"
+                    android:dividerHeight="10.0sp"
+                    android:background="@color/light_gray"></ListView>
             </android.support.v4.widget.SwipeRefreshLayout>
         </LinearLayout>
     </LinearLayout>
