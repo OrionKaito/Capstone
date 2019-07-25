@@ -10,7 +10,7 @@
     <color name="gray">#9f9292</color>
     <color name="white">#FFFFFF</color>
     <color name="light_gray">#DCDCDC</color>
-    <color name="colortext">#0D0D0D</color>
+    <color name="colortext">#000</color>
     <color name="colorhint">#a9aaac</color>
     <color name="success_stroke_color">#A5DC86</color>
     <color name="warning_stroke_color">#ffff00</color>
