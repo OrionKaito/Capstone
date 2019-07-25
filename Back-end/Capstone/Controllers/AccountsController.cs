@@ -67,17 +67,16 @@ namespace Capstone.Controllers
                         DateOfBirth = u.DateOfBirth,
                         Email = u.Email,
                         FullName = u.FullName,
+                        Roles = new RoleVM
+                        {
+                            ID = _userRoleService.GetByUserID(u.Id).RoleID,
+                            Name = _userRoleService.GetByUserID(u.Id).Role.Name
+                        },
                         Groups = _userGroupService.GetByUserID(u.Id)
                                 .Select(g => new GroupVM
                                 {
                                     ID = g.GroupID,
                                     Name = g.Group.Name,
-                                }),
-                        Roles = _userRoleService.GetByUserID(u.Id)
-                                .Select(r => new RoleVM
-                                {
-                                    ID = r.RoleID,
-                                    Name = r.Role.Name,
                                 }),
                         ManagerID = u.LineManagerID,
                         ManagerName = string.IsNullOrEmpty(u.LineManagerID) ? "" : u.LineManager.FullName,
@@ -118,12 +117,11 @@ namespace Capstone.Controllers
                                     ID = g.GroupID,
                                     Name = g.Group.Name,
                                 }),
-                        Roles = _userRoleService.GetByUserID(u.Id)
-                                .Select(r => new RoleVM
-                                {
-                                    ID = r.ID,
-                                    Name = r.Role.Name,
-                                }),
+                        Roles = new RoleVM
+                        {
+                            ID = _userRoleService.GetByUserID(u.Id).RoleID,
+                            Name = _userRoleService.GetByUserID(u.Id).Role.Name,
+                        },
                         ManagerID = u.LineManagerID,
                         ManagerName = string.IsNullOrEmpty(u.LineManagerID) ? "" : u.LineManager.FullName,
                         IsDeleted = u.IsDeleted
@@ -158,12 +156,11 @@ namespace Capstone.Controllers
                                     ID = g.GroupID,
                                     Name = g.Group.Name,
                                 }),
-                        Roles = _userRoleService.GetByUserID(u.Id)
-                                .Select(r => new RoleVM
-                                {
-                                    ID = r.ID,
-                                    Name = r.Role.Name,
-                                }),
+                        Roles = new RoleVM
+                        {
+                            ID = _userRoleService.GetByUserID(u.Id).RoleID,
+                            Name = _userRoleService.GetByUserID(u.Id).Role.Name,
+                        },
                         ManagerID = u.LineManagerID,
                         ManagerName = string.IsNullOrEmpty(u.LineManagerID) ? "" : u.LineManager.FullName,
                     });
@@ -476,11 +473,8 @@ namespace Capstone.Controllers
                 }
 
                 //Delete Role
-                var roles = _userRoleService.GetByUserID(model.ID);
-                foreach (var role in roles)
-                {
-                    _userRoleService.Delete(role);
-                }
+                var role = _userRoleService.GetByUserID(model.ID);
+                _userRoleService.Delete(role);
 
                 //Add Role
                 foreach (var roleID in model.RoleIDs)
