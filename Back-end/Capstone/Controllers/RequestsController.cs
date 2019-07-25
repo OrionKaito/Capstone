@@ -419,7 +419,7 @@ namespace Capstone.Controllers
                     }
 
                 }
-                Request
+
                 //set IsHandled
                 notificationByRequestActionID.IsHandled = true;
                 _notificationService.Save();
