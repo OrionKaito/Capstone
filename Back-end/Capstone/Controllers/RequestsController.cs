@@ -31,6 +31,7 @@ namespace Capstone.Controllers
         private readonly IWorkFlowTemplateActionConnectionService _workFlowTemplateActionConnectionService;
         private readonly IConnectionTypeService _connectionTypeService;
         private readonly IWorkFlowTemplateService _workFlowTemplateService;
+        private readonly IPermissionService _permissionService;
         private readonly UserManager<User> _userManager;
 
         public RequestsController(IActionTypeService actionTypeService
@@ -47,6 +48,7 @@ namespace Capstone.Controllers
             , IConnectionTypeService connectionTypeService
             , UserManager<User> userManager
             , IWorkFlowTemplateService workFlowTemplateService
+            , IPermissionService permissionService
             )
         {
             _actionTypeService = actionTypeService;
@@ -63,9 +65,8 @@ namespace Capstone.Controllers
             _connectionTypeService = connectionTypeService;
             _userManager = userManager;
             _workFlowTemplateService = workFlowTemplateService;
+            _permissionService = permissionService;
         }
-
-
 
         // POST: api/Requests
         [HttpPost]
@@ -104,7 +105,7 @@ namespace Capstone.Controllers
 
                 _requestActionService.Create(requestAction);
 
-                ///HERE
+                //Cập nhật current request action
                 request.CurrentRequestActionID = requestAction.ID;
 
                 //RequestValue
@@ -251,6 +252,8 @@ namespace Capstone.Controllers
                 var currentUser = HttpContext.User;
                 var userID = currentUser.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier).Value;
 
+                var request = _requestService.GetByID(model.RequestID);
+
                 //RequestAction
                 RequestAction requestAction = new RequestAction
                 {
@@ -280,6 +283,10 @@ namespace Capstone.Controllers
 
                 if (!nextStep.IsEnd) //Kiểm tra đây không phải action cuối cùng
                 {
+                    //Cập nhật request
+                    request.CurrentRequestActionID = requestAction.ID;
+                    _requestService.Save();
+
                     //Notification
                     Notification notification = new Notification
                     {
@@ -293,8 +300,6 @@ namespace Capstone.Controllers
 
                     _notificationService.Create(notification);
 
-                    //var request = _requestService.GetByID(requestAction.ID);
-                    var request = _requestService.GetByID(requestAction.RequestID);
                     //UserNotification
 
                     if (nextStep.IsApprovedByLineManager)
@@ -377,6 +382,11 @@ namespace Capstone.Controllers
                 }
                 else // Nếu nó là action cuối cùng (kết quả) thì gửi về cho người gửi request
                 {
+                    //Cập nhật request
+                    request.IsCompleted = true;
+                    request.CurrentRequestActionID = requestAction.ID;
+                    _requestService.Save();
+
                     //Notification
                     Notification notification = new Notification
                     {
@@ -393,6 +403,7 @@ namespace Capstone.Controllers
                     var ownerID = _requestService.GetByID(model.RequestID).InitiatorID;
                     var owner = _userManager.FindByIdAsync(ownerID).Result;
 
+                    //Push notification
                     if (owner.DeviceID != "" || !string.IsNullOrEmpty(owner.DeviceID))
                     {
                         UserNotification userNotification = new UserNotification
@@ -440,7 +451,7 @@ namespace Capstone.Controllers
         }
 
         [HttpGet]
-        public ActionResult<IEnumerable<RequestVM>> GetMyRequests()
+        public ActionResult<IEnumerable<MyRequestVM>> GetMyRequests()
         {
             try
             {
@@ -570,6 +581,37 @@ namespace Capstone.Controllers
             }
         }
 
+        [HttpGet("GetRequestsToHandleByPermission")]
+        public ActionResult<IEnumerable<RequestVM>> GetRequestsToHandleByPermission()
+        {
+            //Lấy các permission của user
+            var userID = HttpContext.User.Claims.FirstOrDefault(u => u.Type == ClaimTypes.NameIdentifier).Value;
+            var permissions = _permissionService.GetByUserID(userID);
+            List<Guid> permissionsID = new List<Guid>();
+            foreach (var permission in permissions)
+            {
+                permissionsID.Add(permission.ID);
+            }
+            //Lấy các request mà chưa xong và requestaction có permission của user
+            var requests = _requestService.GetRequestToApproveByPermissions(permissionsID).Select(r => new RequestVM
+            {
+                ID = r.ID,
+                CreateDate = r.CreateDate.GetValueOrDefault(),
+                Description = r.Description,
+                InitiatorID = r.InitiatorID,
+                InitiatorName = r.User.FullName,
+                WorkFlowTemplateID = r.WorkFlowTemplateID,
+                WorkFlowTemplateName = r.WorkFlowTemplate.Name,
+            });
+
+            if (requests.IsNullOrEmpty())
+            {
+                return Ok(WebConstant.NoRequestYet);
+            }
+
+            return Ok(requests);
+        }
+
         [HttpGet("GetRequestHandleForm")]
         public ActionResult<HandleFormVM> GetHandleForm(Guid requestActionID)
         {
@@ -689,27 +731,6 @@ namespace Capstone.Controllers
                 return BadRequest(e.Message);
             }
         }
-
-        // PUT: api/Requests
-        // Người gửi không có quyền update
-        //[HttpPut]
-        //public IActionResult PutRequest(RequestUM model)
-        //{
-        //    if (!ModelState.IsValid) return BadRequest(ModelState);
-
-        //    try
-        //    {
-        //        var requestInDb = _requestService.GetByID(model.ID);
-        //        if (requestInDb == null) return BadRequest(WebConstant.NotFound);
-        //        _mapper.Map(model, requestInDb);
-        //        _requestService.Save();
-        //        return Ok(WebConstant.Success);
-        //    }
-        //    catch (Exception e)
-        //    {
-        //        return BadRequest(e.Message);
-        //    }
-        //}
 
         // DELETE: api/Requests/5
         [HttpDelete("{id}")]

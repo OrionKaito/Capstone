@@ -13,7 +13,11 @@ namespace Capstone.ViewModel
 
         public string InitiatorID { get; set; }
 
+        public string InitiatorName { get; set; }
+
         public Guid WorkFlowTemplateID { get; set; }
+
+        public string WorkFlowTemplateName { get; set; }
 
         public DateTime CreateDate { get; set; }
     }
@@ -137,5 +141,24 @@ namespace Capstone.ViewModel
         public DateTime CreateDate { get; set; }
 
         public string Status { get; set; }
+    }
+
+    public class MyRequestVM
+    {
+        public Guid ID { get; set; }
+
+        public DateTime? CreateDate { get; set; }
+
+        public string Description { get; set; }
+
+        public Guid WorkFlowTemplateID { get; set; }
+
+        public Guid? CurrentRequestActionID { get; set; }
+
+        public string CurrentRequestActionName { get; set; }
+
+        public bool IsCompleted { get; set; }
+
+        public bool IsDeleted { get; set; }
     }
 }

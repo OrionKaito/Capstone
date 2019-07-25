@@ -23,6 +23,7 @@
         public static string VerifyAccount = "Please verify your account first!";
         public static string BannedAccount = "Account is banned!";
         public static string NoNotificationYet = "There are not any notfication yet!";
+        public static string NoRequestYet = "There are not any request yet!";
         public static string WorkflowUpdateMessage = "has update workflow";
         public static string CompletedRequestMessage = "Your request is completed";
         public static string ReceivedRequestMessage = "You received a request";
