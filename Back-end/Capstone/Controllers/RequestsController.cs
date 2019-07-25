@@ -275,7 +275,7 @@ namespace Capstone.Controllers
 
                 var nextStep = _workFlowTemplateActionService.GetByID(model.NextStepID);
 
-                if (!nextStep.IsEnd) //If this last step or not
+                if (!nextStep.IsEnd) //Kiểm tra đây không phải action cuối cùng
                 {
                     //Notification
                     Notification notification = new Notification
@@ -290,82 +290,89 @@ namespace Capstone.Controllers
 
                     _notificationService.Create(notification);
 
-                    var request = _requestService.GetByID(requestAction.ID);
-
+                    //var request = _requestService.GetByID(requestAction.ID);
+                    var request = _requestService.GetByID(requestAction.RequestID);
                     //UserNotification
 
                     if (nextStep.IsApprovedByLineManager)
                     {
                         var ownerID = _requestService.GetByID(model.RequestID).InitiatorID;
                         var manager = _userManager.FindByIdAsync(ownerID).Result;
-                        var managerID = manager.ManagerID;
+                        var managerID = manager.LineManagerID;
 
-                        if (manager.DeviceID != "" || !string.IsNullOrEmpty(manager.DeviceID))
+                        if (managerID != "" || !string.IsNullOrEmpty(managerID))
                         {
-                            UserNotification userNotification = new UserNotification
+                            if (manager.DeviceID != "" || !string.IsNullOrEmpty(manager.DeviceID))
                             {
-                                NotificationID = notification.ID,
-                                UserID = managerID,
-                            };
-                            _userNotificationService.Create(userNotification);
-                            string[] deviceTokens = new string[]
-                            {
+                                UserNotification userNotification = new UserNotification
+                                {
+                                    NotificationID = notification.ID,
+                                    UserID = managerID,
+                                };
+                                _userNotificationService.Create(userNotification);
+                                string[] deviceTokens = new string[]
+                                {
                                 manager.DeviceID
-                            };
-                            bool sent = await PushNotification.SendMessageAsync(deviceTokens, "Received Request", WebConstant.ReceivedRequestMessage + " from " + _userManager.FindByIdAsync(request.InitiatorID).Result.FullName);
+                                };
+                                bool sent = await PushNotification.SendMessageAsync(deviceTokens
+                                    , "Received Request", WebConstant.ReceivedRequestMessage
+                                    + " from "
+                                    + _userManager.FindByIdAsync(request.InitiatorID).Result.FullName);
 
-                        }
-                        else
-                        {
-                            UserNotification userNotification = new UserNotification
+                            }
+                            else
                             {
-                                NotificationID = notification.ID,
-                                UserID = managerID,
-                                IsSend = false,
-                            };
-                            _userNotificationService.Create(userNotification);
-                        }
-
-                    }
-                    else
-                    {
-                        var users = _userService.getUsersByPermissionID(nextStep.PermissionToUseID.GetValueOrDefault());
-
-                        if (users != null && users.Any())
-                        {
-                            foreach (var user in users)
-                            {
-                                if (user.DeviceID != "" || !string.IsNullOrEmpty(user.DeviceID))
+                                UserNotification userNotification = new UserNotification
                                 {
-                                    UserNotification userNotification = new UserNotification
-                                    {
-                                        NotificationID = notification.ID,
-                                        UserID = user.Id,
-                                    };
-                                    _userNotificationService.Create(userNotification);
-                                    string[] deviceTokens = new string[]
-                                    {
-                                        user.DeviceID
-                                    };
-
-                                    bool sent = await PushNotification.SendMessageAsync(deviceTokens, "Received Request", WebConstant.ReceivedRequestMessage + " from " + _userManager.FindByIdAsync(request.InitiatorID).Result.FullName);
-
-                                }
-                                else
-                                {
-                                    UserNotification userNotification = new UserNotification
-                                    {
-                                        NotificationID = notification.ID,
-                                        UserID = user.Id,
-                                        IsSend = false,
-                                    };
-                                    _userNotificationService.Create(userNotification);
-                                }
+                                    NotificationID = notification.ID,
+                                    UserID = managerID,
+                                    IsSend = false,
+                                };
+                                _userNotificationService.Create(userNotification);
                             }
                         }
                     }
+
+                    //Lấy các user có permission xử lý action để gửi notification
+                    var users = _userService.getUsersByPermissionID(nextStep.PermissionToUseID.GetValueOrDefault());
+
+                    if (users.IsNullOrEmpty())
+                    {
+                        foreach (var user in users)
+                        {
+                            if (user.DeviceID != "" || !string.IsNullOrEmpty(user.DeviceID))
+                            {
+                                UserNotification userNotification = new UserNotification
+                                {
+                                    NotificationID = notification.ID,
+                                    UserID = user.Id,
+                                };
+                                _userNotificationService.Create(userNotification);
+                                string[] deviceTokens = new string[]
+                                {
+                                        user.DeviceID
+                                };
+
+                                bool sent = await PushNotification.SendMessageAsync(deviceTokens
+                                    , "Received Request", WebConstant.ReceivedRequestMessage
+                                    + " from "
+                                    + _userManager.FindByIdAsync(request.InitiatorID).Result.FullName);
+                            }
+                            else
+                            {
+                                UserNotification userNotification = new UserNotification
+                                {
+                                    NotificationID = notification.ID,
+                                    UserID = user.Id,
+                                    IsSend = false,
+                                };
+                                _userNotificationService.Create(userNotification);
+                            }
+                        }
+                    }
+
                 }
-                else
+                else // Nếu nó là action cuối cùng (kết quả) thì gửi về cho người gửi request
                 {
                     //Notification
                     Notification notification = new Notification
@@ -412,7 +419,7 @@ namespace Capstone.Controllers
                     }
 
                 }
-
+                Request
                 //set IsHandled
                 notificationByRequestActionID.IsHandled = true;
                 _notificationService.Save();

@@ -13,12 +13,17 @@ namespace Capstone.Model
 
         public string InitiatorID { get; set; }
         [ForeignKey("InitiatorID")]
-        public User User { get; set; }
+        public virtual User User { get; set; }
 
         public Guid WorkFlowTemplateID { get; set; }
         [ForeignKey("WorkFlowTemplateID")]
-        public WorkFlowTemplate WorkFlowTemplate { get; set; }
+        public virtual WorkFlowTemplate WorkFlowTemplate { get; set; }
 
+        public Guid CurrentRequestActionID { get; set; }
+        [ForeignKey("CurrentRequestActionID")]
+        public virtual RequestAction RequestAction { get; set; }
+
+        public bool IsCompleted { get; set; }
         public bool IsDeleted { get; set; }
     }
 }

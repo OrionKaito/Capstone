@@ -21,6 +21,13 @@ namespace Capstone.Controllers
             _emailService = emailService;
         }
 
+        [HttpGet("Test")]
+        public ActionResult Test()
+        {
+            var test = Utilities.RandomString(8);
+            return Ok(test);
+        }
+
         // GET api/values
         [HttpGet]
         [Authorize]
@@ -111,7 +118,8 @@ namespace Capstone.Controllers
             try
             {
                 return await PushNotification.SendMessageAsync(model.registration_ids, model.title, model.body);
-            } catch (Exception e)
+            }
+            catch (Exception e)
             {
                 return false;
             }

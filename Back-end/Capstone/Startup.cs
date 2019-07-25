@@ -14,6 +14,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
@@ -69,8 +70,9 @@ namespace Capstone
 
             // Add the processing server as IHostedService
             services.AddHangfireServer();
-            services.AddDbContext<CapstoneEntities>();
-
+            services.AddDbContext<CapstoneEntities>(
+                        options => options.UseLazyLoadingProxies()
+                        .UseSqlServer(Configuration.GetConnectionString("CapstoneEntities")));
             #region DI
 
             services.AddScoped<IDbFactory, DbFactory>();
