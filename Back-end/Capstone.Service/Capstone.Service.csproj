@@ -5,6 +5,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Proxies" Version="2.2.6" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\Capstone.Data\Capstone.Data.csproj" />
     <ProjectReference Include="..\Capstone.Model\Capstone.Model.csproj" />
   </ItemGroup>

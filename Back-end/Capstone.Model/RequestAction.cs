@@ -13,15 +13,15 @@ namespace Capstone.Model
 
         public Guid RequestID { get; set; }
         [ForeignKey("RequestID")]
-        public Request Request { get; set; }
+        public virtual Request Request { get; set; }
 
         public string ActorID { get; set; }
         [ForeignKey("ActorID")]
-        public User User { get; set; }
+        public virtual User User { get; set; }
 
         public Guid? NextStepID { get; set; }
         [ForeignKey("NextStepID")]
-        public WorkFlowTemplateAction WorkFlowTemplateAction { get; set; }
+        public virtual WorkFlowTemplateAction WorkFlowTemplateAction { get; set; }
 
         public bool IsDeleted { get; set; }
     }

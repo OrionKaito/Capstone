@@ -11,11 +11,11 @@ namespace Capstone.Model
 
         public Guid NotificationID { get; set; }
         [ForeignKey("NotificationID")]
-        public Notification Notification { get; set; }
+        public virtual Notification Notification { get; set; }
 
         public string UserID { get; set; }
         [ForeignKey("UserID")]
-        public User User { get; set; }
+        public virtual User User { get; set; }
 
         public bool IsRead { get; set; }
         public bool IsDeleted { get; set; }

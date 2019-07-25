@@ -8,6 +8,6 @@ namespace Capstone.Model
         [Key]
         public Guid ID { get; set; }
         public string Name { get; set; }
-        public bool IsDeleted { get; set; }
+        public virtual bool IsDeleted { get; set; }
     }
 }

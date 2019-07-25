@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using System;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Capstone.Model
 {
@@ -9,8 +10,11 @@ namespace Capstone.Model
         public string EmailConfirmCode { get; set; }
         public DateTime? DateOfBirth { get; set; }
         public DateTime CreateDate { get; set; }
+        public string ImagePath { get; set; }
 
-        public string ManagerID { get; set; }
+        public string LineManagerID { get; set; }
+        [ForeignKey("LineManagerID")]
+        public virtual User LineManager { get; set; }
         public string DeviceID { get; set; }
 
         public bool IsDeleted { get; set; }
