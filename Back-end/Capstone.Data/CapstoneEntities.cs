@@ -103,24 +103,6 @@ namespace Capstone.Data
                 NormalizedUserName = "orionkaito".ToUpper(),
                 EmailConfirmed = true,
                 IsDeleted = false,
-            },
-
-            new User
-            {
-                Id = Guid.NewGuid().ToString(),
-                CreateDate = DateTime.Now,
-                DateOfBirth = DateTime.Now,
-                Email = "fontend@gmail.com",
-                NormalizedEmail = "fontend@gmail.com".ToUpper(),
-                EmailConfirmCode = "999999",
-                FullName = "manager",
-                SecurityStamp = Guid.NewGuid().ToString(),
-                LineManagerID = "",
-                PasswordHash = PasswordHash.HashPassword("manager", "123456"),
-                UserName = "manager",
-                NormalizedUserName = "manager".ToUpper(),
-                EmailConfirmed = true,
-                IsDeleted = false,
             });
 
             modelBuilder.Entity<Role>().HasData(new Role
