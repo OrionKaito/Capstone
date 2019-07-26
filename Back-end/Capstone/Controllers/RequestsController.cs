@@ -138,9 +138,6 @@ namespace Capstone.Controllers
                     EventID = requestAction.ID,
                     NotificationType = NotificationEnum.ReceivedRequest,
                     CreateDate = DateTime.Now,
-
-                    ID = Guid.NewGuid(),
-                    IsDeleted = false,
                 };
 
                 _notificationService.Create(notification);
@@ -293,9 +290,6 @@ namespace Capstone.Controllers
                         EventID = requestAction.ID,
                         NotificationType = NotificationEnum.ReceivedRequest,
                         CreateDate = DateTime.Now,
-
-                        ID = Guid.NewGuid(),
-                        IsDeleted = false,
                     };
 
                     _notificationService.Create(notification);
@@ -393,9 +387,6 @@ namespace Capstone.Controllers
                         EventID = requestAction.ID,
                         NotificationType = NotificationEnum.CompletedRequest,
                         CreateDate = DateTime.Now,
-
-                        ID = Guid.NewGuid(),
-                        IsDeleted = false,
                     };
 
                     _notificationService.Create(notification);
@@ -462,7 +453,7 @@ namespace Capstone.Controllers
                     ID = r.ID,
                     CreateDate = r.CreateDate,
                     CurrentRequestActionID = r.CurrentRequestActionID,
-                    CurrentRequestActionName = r.RequestAction.WorkFlowTemplateAction.Name,
+                    CurrentRequestActionName = _requestActionService.GetByID(r.CurrentRequestActionID).WorkFlowTemplateAction.Name,
                     Description = r.Description,
                     WorkFlowTemplateID = r.WorkFlowTemplateID,
                     WorkFlowTemplateName = r.WorkFlowTemplate.Name,
