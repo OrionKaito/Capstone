@@ -138,9 +138,6 @@ namespace Capstone.Controllers
                     EventID = requestAction.ID,
                     NotificationType = NotificationEnum.ReceivedRequest,
                     CreateDate = DateTime.Now,
-
-                    ID = Guid.NewGuid(),
-                    IsDeleted = false,
                 };
 
                 _notificationService.Create(notification);
@@ -293,9 +290,6 @@ namespace Capstone.Controllers
                         EventID = requestAction.ID,
                         NotificationType = NotificationEnum.ReceivedRequest,
                         CreateDate = DateTime.Now,
-
-                        ID = Guid.NewGuid(),
-                        IsDeleted = false,
                     };
 
                     _notificationService.Create(notification);
@@ -393,9 +387,6 @@ namespace Capstone.Controllers
                         EventID = requestAction.ID,
                         NotificationType = NotificationEnum.CompletedRequest,
                         CreateDate = DateTime.Now,
-
-                        ID = Guid.NewGuid(),
-                        IsDeleted = false,
                     };
 
                     _notificationService.Create(notification);
@@ -450,18 +441,27 @@ namespace Capstone.Controllers
             }
         }
 
-        [HttpGet]
+        [HttpGet("GetMyRequests")]
         public ActionResult<IEnumerable<MyRequestVM>> GetMyRequests()
         {
             try
             {
-                List<RequestVM> result = new List<RequestVM>();
-                var data = _requestService.GetAll();
-                foreach (var item in data)
+                var userID = HttpContext.User.Claims.FirstOrDefault(u => u.Type == ClaimTypes.NameIdentifier).Value;
+
+                var requests = _requestService.GetByUserID(userID).Select(r => new MyRequestVM
                 {
-                    result.Add(_mapper.Map<RequestVM>(item));
-                }
-                return Ok(result);
+                    ID = r.ID,
+                    CreateDate = r.CreateDate,
+                    CurrentRequestActionID = r.CurrentRequestActionID,
+                    CurrentRequestActionName = _requestActionService.GetByID(r.CurrentRequestActionID).WorkFlowTemplateAction.Name,
+                    Description = r.Description,
+                    WorkFlowTemplateID = r.WorkFlowTemplateID,
+                    WorkFlowTemplateName = r.WorkFlowTemplate.Name,
+                    IsCompleted = r.IsCompleted,
+                    IsDeleted = r.IsDeleted,
+                });
+
+                return Ok(requests);
             }
             catch (Exception e)
             {

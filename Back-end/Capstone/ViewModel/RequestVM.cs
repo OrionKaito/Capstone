@@ -155,7 +155,9 @@ namespace Capstone.ViewModel
 
         public Guid WorkFlowTemplateID { get; set; }
 
-        public Guid? CurrentRequestActionID { get; set; }
+        public string WorkFlowTemplateName { get; set; }
+
+        public Guid CurrentRequestActionID { get; set; }
 
         public string CurrentRequestActionName { get; set; }
 
