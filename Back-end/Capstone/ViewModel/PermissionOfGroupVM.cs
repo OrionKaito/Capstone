@@ -34,6 +34,7 @@ namespace Capstone.ViewModel
 
     public class PermissionsViewModel
     {
+        public Guid PermissionOfGroupID { get; set; }
         public Guid PermissionID { get; set; }
         public string PermissionName { get; set; }
     }

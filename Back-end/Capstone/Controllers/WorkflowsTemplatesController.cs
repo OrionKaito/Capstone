@@ -21,18 +21,21 @@ namespace Capstone.Controllers
         private readonly IConnectionTypeService _connectionTypeService;
         private readonly IWorkFlowTemplateService _workFlowService;
         private readonly IPermissionService _permissionService;
+        private readonly IRoleService _roleService;
 
         public WorkflowsTemplatesController(IMapper mapper
             , IWorkFlowTemplateService workFlowService
             , IPermissionService permissionService
             , IWorkFlowTemplateActionService workFlowTemplateActionService
-            , IWorkFlowTemplateActionConnectionService workFlowTemplateActionConnectionService)
+            , IWorkFlowTemplateActionConnectionService workFlowTemplateActionConnectionService
+            , IRoleService roleService)
         {
             _mapper = mapper;
             _workFlowService = workFlowService;
             _permissionService = permissionService;
             _workFlowTemplateActionService = workFlowTemplateActionService;
             _workFlowTemplateActionConnectionService = workFlowTemplateActionConnectionService;
+            _roleService = roleService;
         }
 
         // GET: api/Workflows
@@ -107,13 +110,12 @@ namespace Capstone.Controllers
             try
             {
                 var userID = HttpContext.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier).Value;
-                var permissionsOfUser = _permissionService.GetByUserID(userID);
+                var role = _roleService.GetByUserID(userID);
 
                 List<WorkFlowTemplateVM> workFlowTemplates = new List<WorkFlowTemplateVM>();
-
-                foreach (var item in permissionsOfUser)
+                if (role.Name.Equals(WebConstant.Staff))
                 {
-                    var workflows = _workFlowService.GetByPermissionToEdit(item.ID);
+                    var workflows = _workFlowService.GetAll();
 
                     foreach (var workflow in workflows)
                     {
@@ -226,7 +228,6 @@ namespace Capstone.Controllers
                         Description = workFlowInDB.Description,
                         Name = workFlowInDB.Name,
                         OwnerID = workFlowInDB.OwnerID,
-                        PermissionToEditID = workFlowInDB.PermissionToEditID,
                         PermissionToUseID = workFlowInDB.PermissionToUseID,
                     };
                     _workFlowService.Create(workFlow);

@@ -11,7 +11,7 @@ namespace Capstone.Service
     {
         IEnumerable<WorkFlowTemplate> GetAll();
         IEnumerable<WorkFlowTemplate> GetByPermissionToUse(Guid ID);
-        IEnumerable<WorkFlowTemplate> GetByPermissionToEdit(Guid ID);
+        //IEnumerable<WorkFlowTemplate> GetByPermissionToEdit(Guid ID);
         WorkFlowTemplate GetByID(Guid ID);
         WorkFlowTemplate GetByName(string name);
         void Create(WorkFlowTemplate workflow);
@@ -60,10 +60,10 @@ namespace Capstone.Service
             return _workFlowTemplateRepository.GetByPermissionToUse(ID);
         }
 
-        public IEnumerable<WorkFlowTemplate> GetByPermissionToEdit(Guid ID)
-        {
-            return _workFlowTemplateRepository.GetByPermissionToEdit(ID);
-        }
+        //public IEnumerable<WorkFlowTemplate> GetByPermissionToEdit(Guid ID)
+        //{
+        //    return _workFlowTemplateRepository.GetByPermissionToEdit(ID);
+        //}
 
         public void Save()
         {
