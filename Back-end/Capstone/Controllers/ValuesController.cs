@@ -37,7 +37,7 @@ namespace Capstone.Controllers
                 links.Add(button.Value.ToString());
             }
 
-            string message = _emailService.GenerateMessageApproveRequest("Kiet threesum", names, links);
+            string message = _emailService.GenerateMessageApproveRequest("Kiet", names, links);
             try
             {
                 _emailService.SendMail("orionkaito@gmail.com", "Test", message);
