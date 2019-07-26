@@ -11,6 +11,8 @@ export class LoadStaffAcountService {
     this.Url = 'https://localhost:44359';
     this.token = localStorage.getItem('token');
   }
+
+
   getNotiUser(){
     var token = "Bearer " + localStorage.getItem("token");
     var tokenHeader = new HttpHeaders({'Authorization': token});
