@@ -11,6 +11,7 @@ namespace Capstone.Service
     public interface IRequestService
     {
         IEnumerable<Request> GetAll();
+        IEnumerable<Request> GetRequestToApproveByPermissions(List<Guid> permissions);
         IEnumerable<Request> GetByUserID(string ID);
         Request GetByID(Guid ID);
         void Create(Request request);
@@ -49,6 +50,11 @@ namespace Capstone.Service
         public IEnumerable<Request> GetByUserID(string ID)
         {
             return _requestRepository.GetMany(r => r.InitiatorID.Equals(ID));
+        }
+
+        public IEnumerable<Request> GetRequestToApproveByPermissions(List<Guid> permissions)
+        {
+            return _requestRepository.GetMany(r => r.IsCompleted == false && permissions.Contains(r.RequestAction.WorkFlowTemplateAction.PermissionToUseID.GetValueOrDefault()));
         }
 
         public void Save()
