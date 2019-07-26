@@ -14,9 +14,11 @@ public class ConfigApi {
         String CONFIRM_FORGOT_PASSWORD = "Accounts/ConfirmForgotPassword";
         String VERIFY_ACCOUNT = "Accounts/ConfirmEmail";
         String GET_WORKFLOW = "WorkflowsTemplates/GetWorkflowToUse";
-        String GET_NUMBER_NOTIFICATION = "UserNotifications/GetNumberOfNotification";
-        String GET_NOTIFICATION = "UserNotifications/GetNotificationByUserId";
+        String GET_NUMBER_NOTIFICATION = "UserNotifications/GetNumberNotification";
+        String GET_NOTIFICATION = "UserNotifications/GetNotificationByUser";
+        String GET_REQUESTS_TO_HANDLE_BY_PERMISSION = "Requests/GetRequestsToHandleByPermission";
         String GET_NOTIFICATION_BY_TYPE = "UserNotifications/GetNotificationByUserId";
+        String GET_MY_REQUEST = "Requests/GetMyRequests";
         String POST_REQUEST = "Requests";
         String POST_REQUEST_FILE = "RequestFiles";
         String GET_REQUEST_RESULT = "Requests/GetRequestResult";
