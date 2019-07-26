@@ -69,8 +69,8 @@ namespace Capstone.Service
                 {
                     listButton += reader.ReadToEnd();
                 }
-                listButton.Replace("{Name}", names[i]);
-                listButton.Replace("{Link}", links[i]);
+                listButton = listButton.Replace("{Name}", names[i] + " ");
+                listButton = listButton.Replace("{Link}", links[i]);
             }
 
             body = body.Replace("{ListButton}", listButton);
