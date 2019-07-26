@@ -20,6 +20,8 @@ namespace Capstone.ViewModel
         public string WorkFlowTemplateName { get; set; }
 
         public DateTime CreateDate { get; set; }
+
+        public Guid RequestActionID { get; set; }
     }
 
     public class RequestCM

@@ -470,7 +470,7 @@ namespace Capstone.Controllers
         }
 
         [HttpGet("GetRequestResult")]
-        public ActionResult<RequestResultVM> GetRequestResult(Guid requestActionID, Guid userNotificationID)
+        public ActionResult<RequestResultVM> GetRequestResult(Guid requestActionID, Guid? userNotificationID)
         {
             try
             {
@@ -481,11 +481,14 @@ namespace Capstone.Controllers
                 if (request == null) return BadRequest("RequestAction" + WebConstant.NotFound);
 
                 //Set lại trạng thái isRead của userNotification khi user click vào 
-                var userNotification = _userNotificationService.GetByID(userNotificationID);
+                if (userNotificationID != null)
+                {
+                    var userNotification = _userNotificationService.GetByID(userNotificationID.GetValueOrDefault());
 
-                if (userNotification == null) return BadRequest("UserNotification" + WebConstant.NotFound);
-                userNotification.IsRead = true;
-                _userNotificationService.Save();
+                    if (userNotification == null) return BadRequest("UserNotification" + WebConstant.NotFound);
+                    userNotification.IsRead = true;
+                    _userNotificationService.Save();
+                }
 
                 var workflow = _workFlowTemplateService.GetByID(request.WorkFlowTemplateID);
 
@@ -602,6 +605,7 @@ namespace Capstone.Controllers
                 InitiatorName = r.User.FullName,
                 WorkFlowTemplateID = r.WorkFlowTemplateID,
                 WorkFlowTemplateName = r.WorkFlowTemplate.Name,
+                RequestActionID = r.CurrentRequestActionID,
             });
 
             if (requests.IsNullOrEmpty())
