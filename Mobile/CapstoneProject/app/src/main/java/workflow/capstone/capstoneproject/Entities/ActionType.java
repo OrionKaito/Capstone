@@ -10,11 +10,9 @@ public class ActionType implements Serializable  {
     @SerializedName("id")
     @Expose
     private String id;
-
     @SerializedName("name")
     @Expose
     private String name;
-
     @SerializedName("data")
     @Expose
     private String data;
