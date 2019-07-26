@@ -11,6 +11,8 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Include="Migrations\20190726025035_chien1.cs" />
+    <Compile Include="Migrations\20190726025035_chien1.designer.cs" />
     <Compile Include="Migrations\CapstoneEntitiesModelSnapshot.cs" />
   </ItemGroup>
 

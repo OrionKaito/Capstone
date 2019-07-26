@@ -38,7 +38,7 @@
   
                                 <ng-container matColumnDef="name">
                                     <mat-header-cell *matHeaderCellDef mat-sort-header>Name of request</mat-header-cell>
-                                    <mat-cell *matCellDef="let element"  (click)="CreateRequestOfWF(element.eventID)">{{element.workflowName}} from "<strong>{{element.actorName}}</strong>"<p>{{element.createDate | date:'yyyy-MM-dd HH:mm'}}</p></mat-cell>
+                                    <mat-cell *matCellDef="let element"  (click)="CreateRequestOfWF(element.requestActionID)">{{element.workFlowTemplateName}} from "<strong>{{element.initiatorName}}</strong>"<p>{{element.createDate | date:'yyyy-MM-dd HH:mm'}}</p></mat-cell>
                                 </ng-container>
                                 <ng-container matColumnDef="isDeleted">
                                     <mat-header-cell *matHeaderCellDef></mat-header-cell>

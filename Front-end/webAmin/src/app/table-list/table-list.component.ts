@@ -39,6 +39,11 @@ export class TableListComponent implements OnInit {
       this.users1 = data;
       this.users = this.users1.accounts;
       this.listData = new MatTableDataSource(this.users);
+      console.log(this.listData);
+      console.log('sss');
+      debugger;
+  
+      
       const nowData = this.listData.data;
       this.listData.sort = this.sort;
       this.listData.paginator = this.paginator;
@@ -70,6 +75,8 @@ export class TableListComponent implements OnInit {
       //       })
       //     })
       //   });
+    }, err=>{
+      console.log(err.message);
     })
   }
 

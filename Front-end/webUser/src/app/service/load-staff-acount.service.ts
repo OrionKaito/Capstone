@@ -130,7 +130,7 @@ export class LoadStaffAcountService {
   loadHandlingRequest(){
     var token = "Bearer " + localStorage.getItem("token");
     var tokenHeader = new HttpHeaders({'Authorization': token});
-    return this.http.get(this.Url + "/api/UserNotifications/GetNotificationByUserId?notificationType=2", {headers : tokenHeader });
+    return this.http.get(this.Url + "/api/Requests/GetRequestsToHandleByPermission", {headers : tokenHeader });
   }
   loadPermissionGroupData() {
     return this.http.get(this.Url + "/api/PermissionOfGroups/GetPermissionByGroup");
