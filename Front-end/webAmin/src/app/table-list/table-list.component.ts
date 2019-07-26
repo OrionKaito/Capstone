@@ -102,6 +102,7 @@ export class TableListComponent implements OnInit {
   };
   register() {
     this.model.dateOfBirth = this.model.dateOfBirth.toString() + "T06:08:08-05:00";
+    console.log(this.model);
     this.LoginService.Register(this.model).subscribe(
       resp => {
         console.log(resp.toString());

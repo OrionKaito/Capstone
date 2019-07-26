@@ -43,9 +43,9 @@
                                 <ng-container matColumnDef="isDeleted">
                                     <mat-header-cell *matHeaderCellDef></mat-header-cell>
                                     <mat-cell *matCellDef="let element">                       
-                                        <button (click)="CreateRequestOfWF(element.eventID)" mat-icon-button
+                                        <button (click)="CreateRequestOfWF(element.requestActionID)" mat-icon-button
                                             matTooltip="Full Request Information">
-                                            <mat-icon id="element.id">description</mat-icon>
+                                            <mat-icon id="element.requestActionID">description</mat-icon>
                                         </button>          
                                     </mat-cell>
                                 </ng-container>

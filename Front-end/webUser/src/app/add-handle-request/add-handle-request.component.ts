@@ -66,9 +66,12 @@ export class AddHandleRequestComponent implements OnInit {
 
 
   ngOnInit() {
-
+    debugger;
+    console.log("vo day");
     this.workFlowTemplateID = this.data;
+    console.log(this.data);
     this.loadStaffAcountService.getHandleForm(this.workFlowTemplateID).toPromise().then(res => {
+      console.log(res);
       this.saveData = res;
       this.initiatorName = this.saveData.initiatorName;
       this.workFlowTemplateName = this.saveData.workFlowTemplateName;
