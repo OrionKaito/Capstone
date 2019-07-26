@@ -56,12 +56,21 @@ namespace Capstone.Service
 
         public IEnumerable<Request> GetRequestToApproveByPermissions(List<Guid> permissions)
         {
-            return _requestRepository.GetMany(r => r.IsCompleted == false
-            && permissions
-            .Contains(_requestActionRepository.GetById(r.CurrentRequestActionID)
-            .WorkFlowTemplateAction
-            .PermissionToUseID
-            .GetValueOrDefault()));
+            var requestNotComplete = _requestRepository.GetMany(r => r.IsCompleted == false);
+
+            List<Request> result = new List<Request>();
+
+            foreach (var request in requestNotComplete)
+            {
+                var requestAction = _requestActionRepository.GetById(request.CurrentRequestActionID);
+                var permisisonOfRequest = requestAction.WorkFlowTemplateAction.PermissionToUseID.GetValueOrDefault();
+                if (permissions.Contains(permisisonOfRequest))
+                {
+                    result.Add(request);
+                }
+            }
+
+            return result;
         }
 
         public void Save()
