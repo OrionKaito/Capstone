@@ -23,11 +23,13 @@ namespace Capstone.Service
     public class RequestService : IRequestService
     {
         private readonly IRequestRepository _requestRepository;
+        private readonly IRequestActionRepository _requestActionRepository;
         private readonly IUnitOfWork _unitOfWork;
 
-        public RequestService(IRequestRepository requestRepository, IUnitOfWork unitOfWork)
+        public RequestService(IRequestRepository requestRepository, IRequestActionRepository requestActionRepository, IUnitOfWork unitOfWork)
         {
             _requestRepository = requestRepository;
+            _requestActionRepository = requestActionRepository;
             _unitOfWork = unitOfWork;
         }
 
@@ -54,7 +56,21 @@ namespace Capstone.Service
 
         public IEnumerable<Request> GetRequestToApproveByPermissions(List<Guid> permissions)
         {
-            return _requestRepository.GetMany(r => r.IsCompleted == false && permissions.Contains(r.RequestAction.WorkFlowTemplateAction.PermissionToUseID.GetValueOrDefault()));
+            var requestNotComplete = _requestRepository.GetMany(r => r.IsCompleted == false);
+
+            List<Request> result = new List<Request>();
+
+            foreach (var request in requestNotComplete)
+            {
+                var requestAction = _requestActionRepository.GetById(request.CurrentRequestActionID);
+                var permisisonOfRequest = requestAction.WorkFlowTemplateAction.PermissionToUseID.GetValueOrDefault();
+                if (permissions.Contains(permisisonOfRequest))
+                {
+                    result.Add(request);
+                }
+            }
+
+            return result;
         }
 
         public void Save()
