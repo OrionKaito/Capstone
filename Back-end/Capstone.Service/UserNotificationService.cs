@@ -113,7 +113,7 @@ namespace Capstone.Service
 
         public IEnumerable<UserNotification> GetByUserID(string ID)
         {
-            return _userNotificationRepository.GetMany(u => u.UserID.Equals(ID) && u.IsDeleted == false && u.IsRead == false);
+            return _userNotificationRepository.GetMany(u => u.UserID.Equals(ID) && u.IsDeleted == false);
         }
 
         public int GetNumberOfNotification(string ID)

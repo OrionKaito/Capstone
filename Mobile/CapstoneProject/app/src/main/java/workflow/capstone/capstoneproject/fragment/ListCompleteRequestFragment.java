@@ -80,15 +80,13 @@ public class ListCompleteRequestFragment extends Fragment {
     private void loadCompleteRequest() {
         String token = DynamicWorkflowSharedPreferences.getStoreJWT(getActivity(), ConstantDataManager.AUTHORIZATION_TOKEN);
         capstoneRepository = new CapstoneRepositoryImpl();
-        capstoneRepository.getNotificationByType(token, 3, new CallBackData<List<UserNotification>>() {
+        capstoneRepository.getNotification(token, new CallBackData<List<UserNotification>>() {
             @Override
             public void onSuccess(List<UserNotification> userNotifications) {
                 notificationList = userNotifications;
-                if (getActivity() != null) {
-                    notificationAdapter = new NotificationAdapter(notificationList, getActivity(), true);
-                    listView.setAdapter(notificationAdapter);
-                    onItemClick(listView);
-                }
+                notificationAdapter = new NotificationAdapter(notificationList, getContext(), true);
+                listView.setAdapter(notificationAdapter);
+//                onItemClick(listView);
             }
 
             @Override

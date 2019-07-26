@@ -9,22 +9,24 @@ public class WorkflowTemplate implements Serializable {
     @SerializedName("id")
     @Expose
     private String id;
-
     @SerializedName("ownerID")
     @Expose
     private String ownerID;
-
     @SerializedName("name")
     @Expose
     private String name;
-
     @SerializedName("description")
     @Expose
     private String description;
-
-    @SerializedName("permissionToEditID")
+    @SerializedName("data")
     @Expose
-    private String permissionToEditID;
+    private String data;
+    @SerializedName("permissionToUseID")
+    @Expose
+    private String permissionToUseID;
+    @SerializedName("isEnabled")
+    @Expose
+    private Boolean isEnabled;
 
     public String getId() {
         return id;
@@ -58,11 +60,27 @@ public class WorkflowTemplate implements Serializable {
         this.description = description;
     }
 
-    public String getPermissionToEditID() {
-        return permissionToEditID;
+    public String getData() {
+        return data;
     }
 
-    public void setPermissionToEditID(String permissionToEditID) {
-        this.permissionToEditID = permissionToEditID;
+    public void setData(String data) {
+        this.data = data;
+    }
+
+    public String getPermissionToUseID() {
+        return permissionToUseID;
+    }
+
+    public void setPermissionToUseID(String permissionToUseID) {
+        this.permissionToUseID = permissionToUseID;
+    }
+
+    public Boolean getIsEnabled() {
+        return isEnabled;
+    }
+
+    public void setIsEnabled(Boolean isEnabled) {
+        this.isEnabled = isEnabled;
     }
 }

@@ -79,12 +79,8 @@ public class CompleteRequestFragment extends Fragment {
                 tvRequestStatus.setText(requestResult.getStatus());
                 configListView(listViewStatusStaffHandle, requestResult.getStaffResult());
 
-                View notificationView = MainActivity.tabLayout.getTabAt(3).getCustomView();
-                MainActivity.imageViewNotification = notificationView.findViewById(R.id.notification_icon);
-                MainActivity.imageViewNotification.setImageResource(R.drawable.ic_notification_blue);
-                MainActivity.notificationBadge = notificationView.findViewById(R.id.notification_badge);
                 capstoneRepository = new CapstoneRepositoryImpl();
-                capstoneRepository.getNumberOfNotification(token, 3, new CallBackData<String>() {
+                capstoneRepository.getNumberOfNotification(token, new CallBackData<String>() {
                     @Override
                     public void onSuccess(String s) {
                         if (Integer.parseInt(s) > 0) {

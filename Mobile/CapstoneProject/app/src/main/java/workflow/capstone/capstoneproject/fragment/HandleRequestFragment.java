@@ -361,27 +361,27 @@ public class HandleRequestFragment extends Fragment {
             @Override
             public void onSuccess(String s) {
                 FragmentUtils.back(getActivity());
-                View taskView = MainActivity.tabLayout.getTabAt(2).getCustomView();
-                MainActivity.imageViewTask = taskView.findViewById(R.id.task_icon);
-                MainActivity.imageViewTask.setImageResource(R.drawable.ic_task_gray);
-                MainActivity.taskBadge = taskView.findViewById(R.id.task_badge);
-                capstoneRepository = new CapstoneRepositoryImpl();
-                capstoneRepository.getNumberOfNotification(token, 2, new CallBackData<String>() {
-                    @Override
-                    public void onSuccess(String s) {
-                        if (Integer.parseInt(s) > 0) {
-                            MainActivity.taskBadge.setText(s);
-                            MainActivity.taskBadge.setVisibility(View.VISIBLE);
-                        } else {
-                            MainActivity.taskBadge.setVisibility(View.INVISIBLE);
-                        }
-                    }
-
-                    @Override
-                    public void onFail(String message) {
-
-                    }
-                });
+//                View taskView = MainActivity.tabLayout.getTabAt(2).getCustomView();
+//                MainActivity.imageViewTask = taskView.findViewById(R.id.task_icon);
+//                MainActivity.imageViewTask.setImageResource(R.drawable.ic_task_gray);
+//                MainActivity.taskBadge = taskView.findViewById(R.id.task_badge);
+//                capstoneRepository = new CapstoneRepositoryImpl();
+//                capstoneRepository.getNumberOfNotification(token, new CallBackData<String>() {
+//                    @Override
+//                    public void onSuccess(String s) {
+//                        if (Integer.parseInt(s) > 0) {
+//                            MainActivity.taskBadge.setText(s);
+//                            MainActivity.taskBadge.setVisibility(View.VISIBLE);
+//                        } else {
+//                            MainActivity.taskBadge.setVisibility(View.INVISIBLE);
+//                        }
+//                    }
+//
+//                    @Override
+//                    public void onFail(String message) {
+//
+//                    }
+//                });
                 progressHUD.dismiss();
                 Toasty.success(getContext(), R.string.handle_success, Toasty.LENGTH_SHORT).show();
             }

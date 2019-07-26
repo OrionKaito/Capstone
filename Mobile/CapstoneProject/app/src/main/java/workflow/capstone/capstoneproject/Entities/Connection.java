@@ -8,11 +8,9 @@ public class Connection {
     @SerializedName("nextStepID")
     @Expose
     private String nextStepID;
-
     @SerializedName("connectionID")
     @Expose
     private String connectionID;
-
     @SerializedName("connectionTypeName")
     @Expose
     private String connectionTypeName;

@@ -286,7 +286,6 @@ public class SendRequestFragment extends Fragment {
             request.setDescription("Xin nghi hoc");
             request.setWorkFlowTemplateID(workFlowTemplateID);
             request.setNextStepID(nextStepID);
-            request.setStatus(1);
             request.setActionValues(actionValues);
             request.setImagePaths(listPath);
 
