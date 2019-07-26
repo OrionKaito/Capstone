@@ -441,7 +441,7 @@ namespace Capstone.Controllers
             }
         }
 
-        [HttpGet]
+        [HttpGet("GetMyRequests")]
         public ActionResult<IEnumerable<MyRequestVM>> GetMyRequests()
         {
             try
