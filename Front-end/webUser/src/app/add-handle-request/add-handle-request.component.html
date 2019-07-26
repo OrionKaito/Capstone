@@ -16,8 +16,13 @@
   <div *ngFor="let item of requestActionHandleValue" class="form-row">
     {{item.key}} : {{item.value}}
   </div>
+  <div class="form-row">
+    File:
+  </div>
   <div *ngFor="let item of requestActionHandleFile" class="form-row">
-    <a href="{{item.path}}">Attached files</a>
+    <!-- <a href="{{item.path}}" target="_blank">{{item.name}}</a> -->
+      <a href="{{item.path}}" target="_blank" >{{item.name}}</a>
+      
   </div>
 </form>
 <div class="form-row">

@@ -47,6 +47,7 @@ export class AddHandleRequestComponent implements OnInit {
     });
     debugger;
     var mdSendReq = new ApproveRequest(this.requestHandle.id, nextStepID, this.actionValues,this.data );
+    console.log(JSON.stringify(mdSendReq));
     this.loadStaffAcountService.sendReqHandle(mdSendReq).toPromise().then(data =>{
       this.toastr.success('Success! ' , '' );
       this.dialogRef.close();
@@ -74,6 +75,11 @@ export class AddHandleRequestComponent implements OnInit {
       this.buttons = this.saveData.connections;
       this.requestHandle = this.saveData.request;
       this.requestActionHandleFile = this.saveData.userRequestAction.requestFiles;
+      this.requestActionHandleFile.forEach(element => {
+        element.path = "https://localhost:44359/" +element.path;
+        element.name = element.path.substr(34);
+      });
+
       this.requestActionHandleValue = this.saveData.userRequestAction.requestValues;
       this.cmtHandle = this.saveData.staffRequestActions;
 
