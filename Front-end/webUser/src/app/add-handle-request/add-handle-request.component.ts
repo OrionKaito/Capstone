@@ -45,8 +45,9 @@ export class AddHandleRequestComponent implements OnInit {
     this.listCmt.forEach(element => {
       this.actionValues.push({ "key": element , "value": element});
     });
-    
-    var mdSendReq = new ApproveRequest(this.requestHandle.id, nextStepID, this.actionValues );
+    debugger;
+    var mdSendReq = new ApproveRequest(this.requestHandle.id, nextStepID, this.actionValues,this.data );
+    console.log(JSON.stringify(mdSendReq));
     this.loadStaffAcountService.sendReqHandle(mdSendReq).toPromise().then(data =>{
       this.toastr.success('Success! ' , '' );
       this.dialogRef.close();
@@ -58,7 +59,7 @@ export class AddHandleRequestComponent implements OnInit {
   }
 
   closeForm(){
-    debugger;
+
     this.dialogRef.close();
   }
 
@@ -66,14 +67,22 @@ export class AddHandleRequestComponent implements OnInit {
 
   ngOnInit() {
     debugger;
+    console.log("vo day");
     this.workFlowTemplateID = this.data;
+    console.log(this.data);
     this.loadStaffAcountService.getHandleForm(this.workFlowTemplateID).toPromise().then(res => {
+      console.log(res);
       this.saveData = res;
       this.initiatorName = this.saveData.initiatorName;
       this.workFlowTemplateName = this.saveData.workFlowTemplateName;
       this.buttons = this.saveData.connections;
       this.requestHandle = this.saveData.request;
       this.requestActionHandleFile = this.saveData.userRequestAction.requestFiles;
+      this.requestActionHandleFile.forEach(element => {
+        element.path = "https://localhost:44359/" +element.path;
+        element.name = element.path.substr(34);
+      });
+
       this.requestActionHandleValue = this.saveData.userRequestAction.requestValues;
       this.cmtHandle = this.saveData.staffRequestActions;
 

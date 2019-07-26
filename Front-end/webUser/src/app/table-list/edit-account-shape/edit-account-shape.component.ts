@@ -264,7 +264,7 @@ export class EditAccountShapeComponent implements OnInit {
     //   this.toastr.error('Lỗi định dạng !!');
     // } else {
     //   // this.progress.show();
-    //   //lấy ra thôi, do để json dạng mảng nên ms lấy lenght rồi trừ rắc rối ri
+    //   //lấy ra thôi, do để json dạng mảng nên ms lấy length rồi trừ rắc rối ri
     //   //cả đoạn này chỉ để check id
     //   for (let i = 0; i < (dataImport.length - 1); i++) {
     //     // xem có trùng thằng nào k
@@ -287,7 +287,7 @@ export class EditAccountShapeComponent implements OnInit {
       this.toastr.error('Lỗi định dạng !!');
     } else {
       // this.progress.show();
-      //lấy ra thôi, do để json dạng mảng nên ms lấy lenght rồi trừ rắc rối ri
+      //lấy ra thôi, do để json dạng mảng nên ms lấy length rồi trừ rắc rối ri
       //cả đoạn này chỉ để check id
       for (let i = 0; i < dataImport.action.length; i++) {
         // xem có trùng thằng nào k
@@ -1072,5 +1072,186 @@ export class EditAccountShapeComponent implements OnInit {
       });
     }
 
+  }
+  checkConnectionFe() {
+    let listNode: any = [];
+    let listArr: any = [];
+    this.menuList1.forEach(element => {
+      listNode.push({ id: element.id, isStart: element.isStart, isEnd: element.isEnd });
+    })
+    this.listClass.forEach(element => {
+      listArr.push({ from: element.idDiv[0], to: element.idDiv[1] });
+    });
+    if (this.checkStart(listNode, listArr) && this.checkEnd(listNode, listArr)){
+      this.toastr.success("Sucess");
+    }
+  }
+  checkStart(listNode, listArr) {
+    let nodeNowHandling: any = [];
+    let nodeHandled: any = [];
+    let nodeWillHandle: any = [];
+
+    listNode.forEach(element => {
+      if (element.isStart) {
+        nodeNowHandling.push(element);
+      }
+    });
+
+    if (nodeNowHandling.length != 1) {
+      this.toastr.error("Only one Start Action is support!")
+    }else {
+      while(nodeNowHandling.length > 0){
+        //với mỗi thằng node hiện đang xử lý
+        nodeNowHandling.forEach(node => {
+          //so dánh trong mũi tên để tìm ra thằng đuôi của nó
+          listArr.forEach(arr => {
+            //nếu nó bằng thằng đầu
+            if(node.id == arr.from) {
+              //thì tìm thằng đuôi
+              if(this.findNode(arr.to, listNode).id == ""){
+                //k có đuôi báo lỗi
+                this.toastr.error("Mũi tên từ action" + arr.from +" phải chỉa tới một action!");
+                return false;
+              } else{
+
+                //có đuôi thì kiểm tra xem đuôi dó có đã hay đang xử lý k
+                let nodeCheckNow:any;
+                nodeCheckNow = this.findNode(arr.to, listNode);
+                let node1=this.findNode(nodeCheckNow.id, nodeHandled);
+                let node2=this.findNode(nodeCheckNow.id, nodeNowHandling);
+                if(node1.id != "" ||
+                 node2.id != ""){
+
+                 }else{
+                  // chưa đụng tới thì thêm vô sẽ xử lý
+                  nodeWillHandle.push(nodeCheckNow)
+                 }
+               
+              }
+             
+            }
+          });
+        });
+
+        nodeNowHandling.forEach(element => {
+          nodeHandled.push(element);
+        });
+        nodeNowHandling= [];
+        nodeWillHandle.forEach(element => {
+          nodeNowHandling.push(element);
+        });
+        nodeWillHandle=[];
+      }
+      let nodeWithoutStart:any=[];
+      listNode.forEach(element => {
+        let check = true;
+        nodeHandled.forEach(element2 => {
+          if(element.id== element2.id){
+            check = false;
+          } 
+        });
+        if(check){
+          nodeWithoutStart.push(element);
+        }
+      });
+      if(nodeWithoutStart.length == 0){
+        return true;
+
+      } else {
+        let a="";
+        nodeWithoutStart.forEach(element => {
+          a = a +element.id + ", ";
+        });
+        this.toastr.error("Action not usefull, can not come here from start: " +a);
+        return false;
+      }
+    }
+  }
+  checkEnd(listNode, listArr) {
+    let nodeNowHandling: any = [];
+    let nodeHandled: any = [];
+    let nodeWillHandle: any = [];
+
+    listNode.forEach(element => {
+      if (element.isEnd) {
+        nodeNowHandling.push(element);
+      }
+    });
+
+    // if (nodeNowHandling.length != 1) {
+    //   this.toastr.error("Only one Start Action is support!")
+    // }else {
+      while(nodeNowHandling.length > 0){
+        //với mỗi thằng node hiện đang xử lý
+        nodeNowHandling.forEach(node => {
+          //so dánh trong mũi tên để tìm ra thằng đuôi của nó
+          listArr.forEach(arr => {
+            //nếu nó bằng thằng đầu
+            if(node.id == arr.to) {
+              //thì tìm thằng đuôi
+              if(this.findNode(arr.from, listNode).id == ""){
+                //k có đuôi báo lỗi
+                this.toastr.error("Mũi tên đuôi action" + arr.from +" phải bắt đầu từ một action!");
+                return false;
+              } else{
+
+                //có đuôi thì kiểm tra xem đuôi dó có đã hay đang xử lý k
+                let nodeCheckNow:any;
+                nodeCheckNow = this.findNode(arr.from, listNode);
+                if(this.findNode(nodeCheckNow.id, nodeHandled).id != "" ||
+                 this.findNode(nodeCheckNow.id, nodeNowHandling).id != ""){
+                 }else{
+                  // chưa đụng tới thì thêm vô sẽ xử lý
+                  nodeWillHandle.push(nodeCheckNow)
+                 }
+               
+              }
+             
+            }
+          });
+        });
+
+        nodeNowHandling.forEach(element => {
+          nodeHandled.push(element);
+        });
+        nodeNowHandling= [];
+        nodeWillHandle.forEach(element => {
+          nodeNowHandling.push(element);
+        });
+        nodeWillHandle=[];
+      }
+      let nodeWithoutStart:any=[];
+      listNode.forEach(element => {
+        let check = true;
+        nodeHandled.forEach(element2 => {
+          if(element.id== element2.id){
+            check = false;
+          } 
+        });
+        if(check){
+          nodeWithoutStart.push(element);
+        }
+      });
+      if(nodeWithoutStart.length == 0){
+        return true;
+
+      } else {
+        let a="";
+        nodeWithoutStart.forEach(element => {
+          a = a +element.id + ", ";
+        });
+        this.toastr.error("Action này không thể đi đến kết thúc" +a);
+        return false;
+      }
+   // }
+  }
+  findNode(node, listNode){
+    let retu = {id: "", isStart: false, isEnd: false};
+    listNode.forEach(element => {
+      if(node.toString() == element.id.toString()) {
+        retu= element;
+      }
+    });
+    return retu;
   }
 }

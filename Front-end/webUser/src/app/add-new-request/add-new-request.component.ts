@@ -39,7 +39,7 @@ export class AddNewRequestComponent implements OnInit {
 
 
   addURLtoList(event) {
-    this.listURL.push(event);
+    this.listURL.push(event.toString());
   }
   toggleHover(event: boolean) {
     this.isHovering = event;
@@ -47,15 +47,18 @@ export class AddNewRequestComponent implements OnInit {
   sendReqNextStep(nextStepID){
     debugger;
     this.actionValues.push({ "key": this.formKey, "value": this.formValue})
-    var mdSendReq = new SendRequest("", this.actionValues, this.listURL, this.workFlowTemplateID, nextStepID);
+    var mdSendReq = new SendRequest("", this.actionValues, this.listURL, this.workFlowTemplateID.toString(), nextStepID.toString());
+    console.log(JSON.stringify(mdSendReq));
     this.loadStaffAcountService.sendReq(mdSendReq).toPromise().then(data =>{
       this.toastr.success('Success! ' , '' );
       console.log(this.downloadURL);
       console.log("aaaa");
       console.log(this.listURL);
       this.dialogRef.close();
-    }
-    )
+    }, (err) => {
+        this.toastr.error("Error:" + err.message, "Something wrong!" );
+      });
+    
   }
   
   onDrop(files: FileList) {
@@ -100,7 +103,7 @@ export class AddNewRequestComponent implements OnInit {
 
 
   ngOnInit() {
-    debugger;
+
     this.workFlowTemplateID = this.data;
     this.loadStaffAcountService.getRequestForm(this.workFlowTemplateID).toPromise().then(res => {
       this.saveData = res;

@@ -1,25 +1,73 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { AngularFireDatabase } from 'angularfire2/database';
+import { AngularFireAuth } from 'angularfire2/auth';
+import * as firebase from 'firebase/app';
+import 'rxjs/add/operator/take';
+import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+
 
 @Injectable({
   providedIn: 'root'
 })
 export class LoadStaffAcountService {
+  messaging = firebase.messaging();
+  currentMessage = new BehaviorSubject(null); 
   Url: string;
   token: string;
-  constructor(private http: HttpClient) {
+
+  constructor(private http: HttpClient, private db: AngularFireDatabase, private afAuth: AngularFireAuth) {
+
     this.Url = 'https://localhost:44359';
     this.token = localStorage.getItem('token');
   }
+  private updateToken(token){
+    this.afAuth.authState.take(1).toPromise().then(user =>{
+      if(!user) return;
+      const data ={[user.uid]: token};
+      this.db.object('fcmTokens/').update(data);
+    })
+  }
+  getPermission(){
+    this.messaging.requestPermission()
+    .then(()=>{
+      console.log('Notification permission granted.');
+      return this.messaging.getToken();
+    }).then(token=>{
+      console.log(token);
+      this.updateToken(token);
+      localStorage.setItem("tokenNoti", token);
+
+    }).catch((err)=>{
+      console.log('Unable to get permission to notify.', err);
+    });
+  }
+  
+  receiveMessage(){
+    this.messaging.onMessage((payload)=>{
+       console.log("Message received. ", payload);
+        this.currentMessage.next(payload);
+    });
+  }
+  // sendDiviceIdToDtb(deviceID){
+  //   var token = "Bearer " + localStorage.getItem("token");
+  //   var tokenHeader = new HttpHeaders({'Authorization': token});
+  //   return this.http.get(this.Url + "/api/UserNotifications/GetNumberOfNotification=3", deviceID, {headers : tokenHeader });
+  // }
+
+
+
+
+
   getNotiUser(){
     var token = "Bearer " + localStorage.getItem("token");
     var tokenHeader = new HttpHeaders({'Authorization': token});
-    return this.http.get(this.Url + "/api/UserNotifications/GetNumberOfNotification=3", {headers : tokenHeader });
+    return this.http.get(this.Url + "/api/UserNotifications/GetNotificationByUser", {headers : tokenHeader });
   }
   getNumNotiUser(){
     var token = "Bearer " + localStorage.getItem("token");
     var tokenHeader = new HttpHeaders({'Authorization': token});
-    return this.http.get(this.Url + "/api/UserNotifications/GetNotificationByUserId?notificationType=3", {headers : tokenHeader });
+    return this.http.get(this.Url + "/api/UserNotifications/GetNumberNotification", {headers : tokenHeader });
   }
   checkRole(){
     var token = "Bearer " + localStorage.getItem("token");
@@ -37,7 +85,7 @@ export class LoadStaffAcountService {
   loadWFByID(id: string){
     var token = "Bearer " + localStorage.getItem("token");
     var tokenHeader = new HttpHeaders({'Authorization': token});
-    return this.http.get(this.Url + "/api/WorkflowsTemplates", {headers : tokenHeader });
+    return this.http.get(this.Url + "/api/WorkflowsTemplates/GetByID?ID="+ id, {headers : tokenHeader });
   }
   loadPermissionOfRoleData() {
     return this.http.get(this.Url + "/api/PermissionOfRoles");
@@ -82,7 +130,7 @@ export class LoadStaffAcountService {
   loadHandlingRequest(){
     var token = "Bearer " + localStorage.getItem("token");
     var tokenHeader = new HttpHeaders({'Authorization': token});
-    return this.http.get(this.Url + "/api/UserNotifications/GetNotificationByUserId?notificationType=2", {headers : tokenHeader });
+    return this.http.get(this.Url + "/api/Requests/GetRequestsToHandleByPermission", {headers : tokenHeader });
   }
   loadPermissionGroupData() {
     return this.http.get(this.Url + "/api/PermissionOfGroups/GetPermissionByGroup");

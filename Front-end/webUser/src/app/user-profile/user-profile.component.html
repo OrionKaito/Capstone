@@ -34,7 +34,7 @@
                               </div>
                               <div class="col-md-6">
                                 <mat-form-field class="example-full-width">
-                                  <input matInput name="{{userDetail.dateOfBirth}}" [(ngModel)]='userDetail.dateOfBirth' placeholder="Date Of Birth" type="datetime-local">
+                                  <input matInput name="{{userDetail.dateOfBirth}}" [(ngModel)]='userDetail.dateOfBirth'  placeholder="Date Of Birth" type="datetime-local">
                                 </mat-form-field>
                               </div>
                           </div>
@@ -77,12 +77,19 @@
                                   </div>
                               </div>
                           </div> -->
-                          <button mat-raised-button type="submit"  class="btn btn-danger pull-right">Update Profile</button>
+                          
+                          <button mat-raised-button type="submit"  class="btn btn-danger pull-right">Save</button>
                           <div class="clearfix"></div>
                       </form>
                   </div>
               </div>
           </div>
+
+
+          
+
+
+
           <div class="col-md-4">
               <div class="card card-profile">
                   <div class="card-avatar">
@@ -97,6 +104,43 @@
                           Don't be scared of the truth because we need to restart the human foundation in truth. And I love my job, love you, love myself.
                       </p>
                       <a href="#pablo" class="btn btn-danger btn-round">Follow</a>
+                  </div>
+              </div>
+          </div>
+
+
+          <div class="col-md-8">
+              <div class="card">
+                  <div class="card-header card-header-danger">
+                      <h4 class="card-title">Change password</h4>
+                      <p class="card-category">Change your current password to a new one</p>
+                  </div>
+                  <div class="card-body">
+                   
+                          <div class="row">
+                              <div class="col-md-6">
+                                  <mat-form-field class="example-full-width">
+                                    <input matInput name="{{changePass.cur}}" [(ngModel)]='changePass.cur'  placeholder="Current:" type="password">
+                                  </mat-form-field>
+                                </div>
+                          </div>
+                          <div class="row">
+                              <div class="col-md-6">
+                                  <mat-form-field class="example-full-width">
+                                    <input matInput name="{{changePass.new}}" [(ngModel)]='changePass.new'  placeholder="New:" type="password">
+                                  </mat-form-field>
+                                </div>
+                          </div>
+                          <div class="row">
+                              <div class="col-md-6">
+                                  <mat-form-field class="example-full-width">
+                                    <input matInput name="{{changePass.re}}" [(ngModel)]='changePass.re'  placeholder="Retype new:" type="password">
+                                  </mat-form-field>
+                                </div>
+                          </div>               
+                          <button mat-raised-button (click)="changePassword()"  class="btn btn-danger pull-right">Change password</button>
+                          <div class="clearfix"></div>
+                     
                   </div>
               </div>
           </div>
