@@ -455,13 +455,22 @@ namespace Capstone.Controllers
         {
             try
             {
-                List<RequestVM> result = new List<RequestVM>();
-                var data = _requestService.GetAll();
-                foreach (var item in data)
+                var userID = HttpContext.User.Claims.FirstOrDefault(u => u.Type == ClaimTypes.NameIdentifier).Value;
+
+                var requests = _requestService.GetByUserID(userID).Select(r => new MyRequestVM
                 {
-                    result.Add(_mapper.Map<RequestVM>(item));
-                }
-                return Ok(result);
+                    ID = r.ID,
+                    CreateDate = r.CreateDate,
+                    CurrentRequestActionID = r.CurrentRequestActionID,
+                    CurrentRequestActionName = r.RequestAction.WorkFlowTemplateAction.Name,
+                    Description = r.Description,
+                    WorkFlowTemplateID = r.WorkFlowTemplateID,
+                    WorkFlowTemplateName = r.WorkFlowTemplate.Name,
+                    IsCompleted = r.IsCompleted,
+                    IsDeleted = r.IsDeleted,
+                });
+
+                return Ok(requests);
             }
             catch (Exception e)
             {
