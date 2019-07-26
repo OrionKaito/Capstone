@@ -24,8 +24,29 @@ namespace Capstone.Controllers
         [HttpGet("Test")]
         public ActionResult Test()
         {
-            var test = Utilities.RandomString(8);
-            return Ok(test);
+            Dictionary<string, string> buttons = new Dictionary<string, string>();
+            buttons.Add("Accept", "localhost:1433");
+            buttons.Add("Deny", "localhost:1433");
+            buttons.Add("Send to Mangaer", "localhost:1433");
+
+            List<string> names = new List<string>();
+            List<string> links = new List<string>();
+            foreach (var button in buttons)
+            {
+                names.Add(button.Key.ToString());
+                links.Add(button.Value.ToString());
+            }
+
+            string message = _emailService.GenerateMessageApproveRequest("Kiet threesum", names, links);
+            try
+            {
+                _emailService.SendMail("orionkaito@gmail.com", "Test", message);
+            }
+            catch (Exception e)
+            {
+                return BadRequest("Wrong" + e.Message);
+            }
+            return Ok("success");
         }
 
         // GET api/values
