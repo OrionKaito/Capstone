@@ -38,17 +38,17 @@
   <div class="form-row">
     <div class="form-group col-md-6">
       <label>Role</label>
-      <!-- <select name="role" #role="ngModel" [(ngModel)]="formData.roleIDs" class="form-control">
+      <select name="role" #role="ngModel" [(ngModel)]="formData.roleID" class="form-control">
         <option value="0">-Select-</option>
         <option *ngFor="let item of roleList" value="{{item.id}}">{{item.name}}</option>
-      </select> -->
-      <div class="form-row">
+      </select>
+      <!-- <div class="form-row">
         <ng-multiselect-dropdown name="b" [placeholder]="'--Select role--'" [data]="dropRoleList"
           [(ngModel)]="formData.roleIDs" [settings]="dropdownSettings" (onSelect)="onItemSelect($event)"
           (onSelectAll)="onSelectAll($event)">
 
         </ng-multiselect-dropdown>
-      </div>
+      </div> -->
     </div>
     <div class="form-group col-md-6">
       <label>Group</label>
@@ -68,7 +68,7 @@
   </div>
   <div class="form-group">
     <label>Manage of user</label>
-    <select name="group" [(ngModel)]="formData.managerID" class="form-control">
+    <select name="group" [(ngModel)]="formData.LineManagerID" class="form-control">
       <option value="0">-Select-</option>
       <option *ngFor="let item of manageList" value="{{item.id}}">{{item.fullName}}</option>
     </select>

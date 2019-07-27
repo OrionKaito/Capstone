@@ -5,7 +5,7 @@
                 <div class="card">
                     <div class="card-header card-header-danger">
                         <div class="hal-div">
-                            <h4 class="card-title ">Workflow list</h4>
+                            <h4 class="card-title ">Group of Permission list</h4>
                             <p class="card-category">List of workflow in the system</p>
                         </div>
                         <div class="hal2-div">
@@ -46,10 +46,10 @@
                                     <mat-header-cell *matHeaderCellDef mat-sort-header>Name Permission</mat-header-cell>
                                     <mat-cell *matCellDef="let element">{{element.namePer}}</mat-cell>
                                 </ng-container>
-                                <ng-container matColumnDef="isDeleted">
+                                <ng-container matColumnDef="groupID">
                                     <mat-header-cell *matHeaderCellDef></mat-header-cell>
                                     <mat-cell *matCellDef="let element">
-                                        <td *ngIf="element.isDeleted;  else elseBlock">
+                                        <!-- <td *ngIf="element.isDeleted;  else elseBlock">
                                             <button (click)="banOrUnbanAcc(element.id)" mat-icon-button color="primary"
                                                 matTooltip="De-Active Permission">
                                                 <mat-icon id="element.id">check_circle_outline</mat-icon>
@@ -58,9 +58,10 @@
                                                 mat-icon-button color="warn" matTooltip="Active Permission">
                                                 <mat-icon id="element.id">block</mat-icon>
                                             </button>
-                                        </ng-template>
-                                        <button (click)="AddOrEditWF(element.id)" mat-icon-button
-                                            matTooltip="Edit Permission">
+                                        </ng-template> -->
+                        
+                                        <button (click)="AddOrEditWF(element.groupID)" mat-icon-button
+                                            matTooltip="Edit Group of Permission">
                                             <mat-icon id="element.id">border_color</mat-icon>
                                         </button>
 

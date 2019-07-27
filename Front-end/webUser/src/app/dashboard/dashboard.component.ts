@@ -9,9 +9,10 @@ import { MessagingService } from 'app/service/messaging.service';
   styleUrls: ['./dashboard.component.css']
 })
 export class DashboardComponent implements OnInit {
+
   message;
   users: any= [];
-  constructor(private loadStaffAcountService: LoadStaffAcountService, private messagingService: MessagingService) { }
+  constructor(private loadStaffAcountService: LoadStaffAcountService) { }
   startAnimationForLineChart(chart){
       let seq: any, delays: any, durations: any;
       seq = 0;
@@ -69,6 +70,18 @@ export class DashboardComponent implements OnInit {
       seq2 = 0;
   };
   ngOnInit() {
+
+    // Notification.requestPermission().then((permission) => {
+    //   if (permission === 'granted') {
+    //     console.log('Notification permission granted.');
+    //     // TODO(developer): Retrieve an Instance ID token for use with FCM.
+    //     // ...
+        
+    //   } else {
+    //     console.log('Unable to get permission to notify.');
+    //   }
+    // });
+
         // const userId = 'user001';
 
     // this.messagingService.requestPermission(userId)

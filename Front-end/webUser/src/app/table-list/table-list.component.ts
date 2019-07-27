@@ -90,7 +90,6 @@ export class TableListComponent implements OnInit {
     dialogConfig.width = "50%";
     dialogConfig.data = id;
     this.dialog.open(AddAccountComponent, dialogConfig).afterClosed().subscribe(res => {
-      console.log(res);
       this.callAll();
     });
   }

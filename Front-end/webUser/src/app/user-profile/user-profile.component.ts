@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { Route } from '@angular/compiler/src/core';
 import { LoginService } from 'app/service/login.service';
 import { Router } from '@angular/router';
+import { DatePipe } from '@angular/common';
+import { ToastrService } from 'ngx-toastr';
 
 
 @Component({
@@ -12,18 +14,25 @@ import { Router } from '@angular/router';
 export class UserProfileComponent implements OnInit {
 userDetail1: any=[];
 userDetail;
-  constructor(private router: Router , private loginService: LoginService ) { }
+changePass: any;
+
+  constructor(private router: Router ,private toastr: ToastrService, private loginService: LoginService ) { }
 
   ngOnInit() {
+    this.changePass= {
+      cur : "",
+      new: "",
+      re: ""
+    };
     debugger;
     this.loginService.getUserProfile().toPromise().then(
       resp =>{
         debugger;
         this.userDetail1 = resp;
         this.userDetail = this.userDetail1[0];
-        console.log(this.userDetail);
-        console.log(this.userDetail.email);
-        console.log(this.userDetail.fullName);
+        
+        // this.userDetail.dateOfBirth = Date.parse(this.userDetail.dateOfBirth) ;
+        // console.log(this.userDetail.dateOfBirth);
       },
       err => {
         console.log(err);
@@ -31,16 +40,26 @@ userDetail;
     )
   }
   updateProfile(){
-
-    
     this.loginService.updateUserProfile(this.userDetail.fullName,this.userDetail.dateOfBirth).subscribe(
       data=>{
-        console.log(data);       
+        this.toastr.success("Update your profile success!!!", "Success!");   
       },
       err=>{
-        console.log(err);
+        this.toastr.error("Error: " + err.message + ". Please do it later!!", "Something wrong!");   
       }
 
+    )
+  }
+
+  changePassword(){
+    debugger;
+    this.loginService.changePass(this.changePass.cur, this.changePass.new).subscribe(
+      data=>{
+        this.toastr.success("Change your password success!!!", "Success!");   
+      },
+      err=>{
+        this.toastr.error("Error: " + err.message + ". Please try again!!", "Something wrong!");   
+      }
     )
   }
 

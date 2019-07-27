@@ -1,24 +1,24 @@
 export class AccountItem {
 
-    constructor(roleIDs:any =[],
+    constructor(roleID:any =[],
         groupIDs: any =[],
-        managerID,
+        LineManagerID,
         email,
         password,
         fullName,
         dateOfBirth){
-            this.roleIDs= roleIDs ;
+            this.roleID= roleID ;
             this.groupIDs =groupIDs ;
-            this.managerID= managerID;
+            this.LineManagerID= LineManagerID;
             this.email= email;
             this.password=password;
             this.fullName = fullName;
             this.dateOfBirth = dateOfBirth;
         }
         id:any;
-    roleIDs: any = [];
+    roleID: any = [];
     groupIDs: any = [];
-    managerID: string;
+    LineManagerID: string;
     email: string;
     password: string;
     fullName: string;

@@ -1,4 +1,6 @@
-<h4 class="dispaly-4">Create new Request
+<h4 class="dispaly-4">
+  {{saveData.workFlowName}}
+  : {{formKey}}
     <div (click)="closeForm()" class="icon-head-pup">
         <!-- <button type="button" class="btn btn-outline-dark ml-1" [mat-dialog-close]><i class="fa fa-close"></i> Close</button> -->
         <button type="button" [mat-dialog-close] ><i class="fa fa-close"></i>
@@ -6,10 +8,39 @@
     </div> </h4>
 
 <hr>
+
+
+<div *ngFor="let item of dynamicForm" class="form-row">
+    <div *ngIf="item.textOnly.name" class="form-group col-md-6">
+      <h6>{{item.textOnly.name}}</h6>
+    </div>
+    <div *ngIf="item.shortText.name" class="form-group col-md-6">
+      <label>{{item.shortText.name}} </label>
+      <input [(ngModel)]="item.shortText.value" type="text" class="shortText-dynamicForm">
+    </div>
+    <div *ngIf="item.longText.name" class="form-group col-md-6">
+      <label>{{item.longText.name}} </label>
+      <input [(ngModel)]="item.longText.value" type="text" class="shortText-dynamicForm">
+    </div>
+    <div *ngIf="item.comboBox.name" class="form-row">
+      <label>{{item.comboBox.name}}</label>
+      <select [(ngModel)]="item.comboBox.value" class="form-control">
+        <option value="0">-Select-</option>
+        <option *ngFor="let ite of item.comboBox.valueOfProper">{{ite}}</option>
+      </select>
+  
+    </div>
+    <div *ngIf="item.inputCheckbox.name" class="form-group col-md-6">
+      <label>{{item.inputCheckbox.name }}</label>
+      <input [(ngModel)]="item.inputCheckbox.value" type="checkbox" />
+    </div>
+  
+</div>
+
+
 <form #form="ngForm" autocomplete="off" (submit)="onSubmit()">
     <div class="form-row">
       <div class="form-group col-md-6">
-        <label> {{formKey}}</label>
         <input name="name" [(ngModel)]="formValue" class="form-control"> 
       </div>
       
