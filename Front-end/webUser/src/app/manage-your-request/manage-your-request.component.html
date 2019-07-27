@@ -1,0 +1,78 @@
+<div class="main-content">
+  <div class="container-fluid">
+      <div class="row">
+          <div class="col-md-12">
+              <div class="card">
+                  <div class="card-header card-header-danger">
+                      <div class="hal-div">
+                          <h4 class="card-title ">Permission list</h4>
+                          <p class="card-category">List of workflow in the system</p>
+                      </div>
+                      <div class="hal2-div">
+                          <div class="search-div">
+
+                              <mat-form-field class="search-form-field" floatLabel="never">
+                                  <input matInput [(ngModel)]="searchKey" placeholder="Search" autocomplete="off"
+                                      (keyup)="applyFilter()">
+                                  <button mat-button matSuffix mat-icon-button aria-label="Clear" *ngIf="searchKey"
+                                      (click)="onSearchClear()">
+                                      <mat-icon>close</mat-icon>
+                                  </button>
+                              </mat-form-field>
+
+                          </div>
+
+                      </div>
+                      <div class="hal3-div">
+                          <button (click)="AddOrEditWF(null)" mat-raised-button>
+                              <mat-icon>add</mat-icon>
+                          </button>Create
+                      </div>
+                  </div>
+
+
+                  <div class="card-body">
+
+                      <div class="table-responsive">
+
+
+                          <mat-table [dataSource]="listData" matSort>
+
+                              <ng-container matColumnDef="name">
+                                  <mat-header-cell *matHeaderCellDef mat-sort-header>Name</mat-header-cell>
+                                  <mat-cell *matCellDef="let element">{{element.currentRequestActionName}} of {{element.workFlowTemplateName}}</mat-cell>
+                              </ng-container>
+                              <ng-container matColumnDef="isDeleted">
+                                  <mat-header-cell *matHeaderCellDef></mat-header-cell>
+                                  <mat-cell *matCellDef="let element">
+                                      <td *ngIf="element.isDeleted;  else elseBlock">
+                                          <button (click)="banOrUnbanAcc(element.id)" mat-icon-button color="primary"
+                                              matTooltip="De-Active Permission">
+                                              <mat-icon id="element.id">check_circle_outline</mat-icon>
+                                          </button></td>
+                                      <ng-template #elseBlock><button (click)="banOrUnbanAcc(element.id)"
+                                              mat-icon-button color="warn" matTooltip="Active Permission">
+                                              <mat-icon id="element.id">block</mat-icon>
+                                          </button>
+                                      </ng-template>
+                                      <button (click)="AddOrEditWF(element.id)" mat-icon-button
+                                          matTooltip="Edit Permission">
+                                          <mat-icon id="element.id">border_color</mat-icon>
+                                      </button>
+
+                                  </mat-cell>
+                              </ng-container>
+
+                              <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+                              <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+
+                          </mat-table>
+                          <mat-paginator [pageSizeOptions]="[5,10,25,100]" [pageSize]="5" showFirstLastButtons>
+                          </mat-paginator>
+                      </div>
+                  </div>
+              </div>
+          </div>
+      </div>
+  </div>
+</div>
