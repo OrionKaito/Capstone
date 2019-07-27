@@ -23,14 +23,14 @@
     <label>Description</label>
     <input name="description" type="text" [(ngModel)]="formData.description" class="form-control">
   </div>
-  <div class="form-row">
+  <!-- <div class="form-row">
     <label>Permission to edit</label>
     <select name="permissionEdit" [(ngModel)]="formData.permissionToEditID" class="form-control">
       <option value="0">-Select-</option>
       <option *ngFor="let item of permissionList" value="{{item.id}}">{{item.name}}</option>
     </select>
 
-  </div>
+  </div> -->
   <div class="form-row">
     <label>Permission to use this Workflow</label>
     <select name="permissionUse" [(ngModel)]="formData.permissionToUseID" class="form-control">

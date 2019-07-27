@@ -42,6 +42,7 @@ import { AddNewDynamicFormComponent } from './add-new-dynamic-form/add-new-dynam
 import { ManagePerGrComponent } from './manage-per-gr/manage-per-gr.component';
 import { AddManagePerGrComponent } from './add-manage-per-gr/add-manage-per-gr.component';
 import { AngularFireDatabase, AngularFireDatabaseModule } from 'angularfire2/database';
+import { ManageYourRequestComponent } from './manage-your-request/manage-your-request.component';
 
 const config = {
   apiKey: "AIzaSyA870TvgTsit4CcKLI0hnn3v89-yR6mwLE",
@@ -108,6 +109,7 @@ const config = {
     SetGroupPermissionComponent,
     AddNewDynamicFormComponent,
     AddManagePerGrComponent,
+
 
   ],
   

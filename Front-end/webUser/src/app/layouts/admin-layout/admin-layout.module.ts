@@ -36,6 +36,7 @@ import { UploadTaskComponent } from 'app/upload-task/upload-task.component';
 import { WorkflowOfUserComponent } from 'app/workflow-of-user/workflow-of-user.component';
 import { HandleRequestComponent } from 'app/handle-request/handle-request.component';
 import { ManagePerGrComponent } from 'app/manage-per-gr/manage-per-gr.component';
+import { ManageYourRequestComponent } from 'app/manage-your-request/manage-your-request.component';
 
 // const config = {
 //   apiKey: "AIzaSyCBhMb1lO_1ioNypRrHS4I1q9sYxJ2thcs",
@@ -82,7 +83,8 @@ import { ManagePerGrComponent } from 'app/manage-per-gr/manage-per-gr.component'
     ManagePermissionComponent,
     WorkflowOfUserComponent,
     HandleRequestComponent,
-    ManagePerGrComponent
+    ManagePerGrComponent,
+    ManageYourRequestComponent
   ]
 })
 
