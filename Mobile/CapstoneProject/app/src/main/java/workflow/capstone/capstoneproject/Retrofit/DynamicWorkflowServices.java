@@ -57,13 +57,19 @@ public interface DynamicWorkflowServices {
     Call<ResponseBody> getWorkflow();
 
     @GET(ConfigApi.Api.GET_NUMBER_NOTIFICATION)
-    Call<ResponseBody> getNumberNotification(@Query(value = "notificationType", encoded = true) int notificationType);
+    Call<ResponseBody> getNumberNotification();
 
     @GET(ConfigApi.Api.GET_NOTIFICATION)
     Call<ResponseBody> getNotification();
 
+    @GET(ConfigApi.Api.GET_REQUESTS_TO_HANDLE_BY_PERMISSION)
+    Call<ResponseBody> getRequestsToHandleByPermission();
+
     @GET(ConfigApi.Api.GET_NOTIFICATION_BY_TYPE)
     Call<ResponseBody> getNotificationByType(@Query(value = "notificationType", encoded = true) int notificationType);
+
+    @GET(ConfigApi.Api.GET_MY_REQUEST)
+    Call<ResponseBody> getMyRequest();
 
     @Headers({"Content-Type:application/json"})
     @POST(ConfigApi.Api.POST_REQUEST)

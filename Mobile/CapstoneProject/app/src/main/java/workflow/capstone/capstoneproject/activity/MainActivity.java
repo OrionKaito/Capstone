@@ -22,6 +22,7 @@ import es.dmoral.toasty.Toasty;
 import workflow.capstone.capstoneproject.R;
 import workflow.capstone.capstoneproject.entities.Profile;
 import workflow.capstone.capstoneproject.fragment.ListHandleRequestFragment;
+import workflow.capstone.capstoneproject.fragment.MyRequestFragment;
 import workflow.capstone.capstoneproject.fragment.ProfileFragment;
 import workflow.capstone.capstoneproject.fragment.ListCompleteRequestFragment;
 import workflow.capstone.capstoneproject.fragment.WorkflowFragment;
@@ -46,6 +47,7 @@ public class MainActivity extends AppCompatActivity {
     private WorkflowFragment workflowFragment;
     private ListCompleteRequestFragment listCompleteRequestFragment;
     private ListHandleRequestFragment listHandleRequestFragment;
+    private MyRequestFragment myRequestFragment;
     private ProfileFragment profileFragment;
     private String token;
 
@@ -85,6 +87,7 @@ public class MainActivity extends AppCompatActivity {
         workflowFragment = new WorkflowFragment();
         listCompleteRequestFragment = new ListCompleteRequestFragment();
         listHandleRequestFragment = new ListHandleRequestFragment();
+        myRequestFragment = new MyRequestFragment();
         profileFragment = new ProfileFragment();
         for (int i = 0; i < 4; i++) {
             tabLayout.addTab(tabLayout.newTab());
@@ -107,22 +110,22 @@ public class MainActivity extends AppCompatActivity {
         View taskView = tabLayout.getTabAt(2).getCustomView();
         imageViewTask = taskView.findViewById(R.id.task_icon);
         imageViewTask.setImageResource(R.drawable.ic_task_gray);
-        taskBadge = taskView.findViewById(R.id.task_badge);
-        capstoneRepository = new CapstoneRepositoryImpl();
-        capstoneRepository.getNumberOfNotification(token, 2, new CallBackData<String>() {
-            @Override
-            public void onSuccess(String s) {
-                if (Integer.parseInt(s) > 0) {
-                    taskBadge.setText(s);
-                    taskBadge.setVisibility(View.VISIBLE);
-                }
-            }
-
-            @Override
-            public void onFail(String message) {
-
-            }
-        });
+//        taskBadge = taskView.findViewById(R.id.task_badge);
+//        capstoneRepository = new CapstoneRepositoryImpl();
+//        capstoneRepository.getNumberOfNotification(token, new CallBackData<String>() {
+//            @Override
+//            public void onSuccess(String s) {
+//                if (Integer.parseInt(s) > 0) {
+//                    taskBadge.setText(s);
+//                    taskBadge.setVisibility(View.VISIBLE);
+//                }
+//            }
+//
+//            @Override
+//            public void onFail(String message) {
+//
+//            }
+//        });
 
         //notification tab
         tabLayout.getTabAt(3).setCustomView(R.layout.notification_icon);
@@ -131,7 +134,7 @@ public class MainActivity extends AppCompatActivity {
         imageViewNotification.setImageResource(R.drawable.ic_notification_grey);
         notificationBadge = notificationView.findViewById(R.id.notification_badge);
         capstoneRepository = new CapstoneRepositoryImpl();
-        capstoneRepository.getNumberOfNotification(token, 3, new CallBackData<String>() {
+        capstoneRepository.getNumberOfNotification(token, new CallBackData<String>() {
             @Override
             public void onSuccess(String s) {
                 if (Integer.parseInt(s) > 0) {
@@ -152,8 +155,8 @@ public class MainActivity extends AppCompatActivity {
             R.drawable.ic_home_blue,
             R.drawable.ic_notification_grey,
             R.drawable.ic_notification_blue,
-            R.drawable.ic_menu_grey,
-            R.drawable.ic_menu_blue
+            R.drawable.ic_history_grey,
+            R.drawable.ic_history_blue
     };
 
     private void setOnChangeTab() {
@@ -199,45 +202,46 @@ public class MainActivity extends AppCompatActivity {
                 replaceFragment(workflowFragment);
                 break;
             case 1:
+                replaceFragment(myRequestFragment);
                 break;
             case 2:
-                imageViewTask.setImageResource(R.drawable.ic_task_blue);
-                capstoneRepository = new CapstoneRepositoryImpl();
-                capstoneRepository.getNumberOfNotification(token, 2, new CallBackData<String>() {
-                    @Override
-                    public void onSuccess(String s) {
-                        if (Integer.parseInt(s) > 0) {
-                            taskBadge.setText(s);
-                            taskBadge.setVisibility(View.VISIBLE);
-                        } else {
-                            taskBadge.setVisibility(View.INVISIBLE);
-                        }
-                    }
-
-                    @Override
-                    public void onFail(String message) {
-
-                    }
-                });
+//                imageViewTask.setImageResource(R.drawable.ic_task_blue);
+//                capstoneRepository = new CapstoneRepositoryImpl();
+//                capstoneRepository.getNumberOfNotification(token, new CallBackData<String>() {
+//                    @Override
+//                    public void onSuccess(String s) {
+//                        if (Integer.parseInt(s) > 0) {
+//                            taskBadge.setText(s);
+//                            taskBadge.setVisibility(View.VISIBLE);
+//                        } else {
+//                            taskBadge.setVisibility(View.INVISIBLE);
+//                        }
+//                    }
+//
+//                    @Override
+//                    public void onFail(String message) {
+//
+//                    }
+//                });
                 replaceFragment(listHandleRequestFragment);
                 break;
             case 3:
                 imageViewNotification.setImageResource(R.drawable.ic_notification_blue);
-                capstoneRepository = new CapstoneRepositoryImpl();
-                capstoneRepository.getNumberOfNotification(token, 3, new CallBackData<String>() {
-                    @Override
-                    public void onSuccess(String s) {
-                        if (Integer.parseInt(s) > 0) {
-                            notificationBadge.setText(s);
-                            notificationBadge.setVisibility(View.VISIBLE);
-                        }
-                    }
-
-                    @Override
-                    public void onFail(String message) {
-
-                    }
-                });
+//                capstoneRepository = new CapstoneRepositoryImpl();
+//                capstoneRepository.getNumberOfNotification(token, new CallBackData<String>() {
+//                    @Override
+//                    public void onSuccess(String s) {
+//                        if (Integer.parseInt(s) > 0) {
+//                            notificationBadge.setText(0);
+                            notificationBadge.setVisibility(View.INVISIBLE);
+//                        }
+//                    }
+//
+//                    @Override
+//                    public void onFail(String message) {
+//
+//                    }
+//                });
                 replaceFragment(listCompleteRequestFragment);
                 break;
             default:

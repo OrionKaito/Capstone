@@ -7,6 +7,7 @@ import java.io.Serializable;
 
 public class UserNotification implements Serializable {
 
+
     @SerializedName("workflowName")
     @Expose
     private String workflowName;
@@ -117,5 +118,6 @@ public class UserNotification implements Serializable {
     public void setIsHandled(Boolean isHandled) {
         this.isHandled = isHandled;
     }
+
 
 }

@@ -19,14 +19,6 @@ public class Request {
     @Expose
     private String nextStepID;
 
-    @SerializedName("status")
-    @Expose
-    private Integer status;
-
-    @SerializedName("myProperty")
-    @Expose
-    private Integer myProperty;
-
     @SerializedName("actionValues")
     @Expose
     private List<ActionValue> actionValues;
@@ -57,22 +49,6 @@ public class Request {
 
     public void setNextStepID(String nextStepID) {
         this.nextStepID = nextStepID;
-    }
-
-    public Integer getStatus() {
-        return status;
-    }
-
-    public void setStatus(Integer status) {
-        this.status = status;
-    }
-
-    public Integer getMyProperty() {
-        return myProperty;
-    }
-
-    public void setMyProperty(Integer myProperty) {
-        this.myProperty = myProperty;
     }
 
     public List<ActionValue> getActionValues() {
