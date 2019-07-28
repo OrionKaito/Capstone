@@ -271,8 +271,8 @@ namespace Capstone.Controllers
             }
         }
 
-        [HttpPut("SaveCraft")]
-        public ActionResult SaveCraft(SaveCraftTemplateUM model)
+        [HttpPut("SaveDraft")]
+        public ActionResult SaveDraft(SaveCraftTemplateUM model)
         {
             if (!ModelState.IsValid) return BadRequest(ModelState);
 
