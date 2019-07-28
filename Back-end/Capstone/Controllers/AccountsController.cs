@@ -225,56 +225,7 @@ namespace Capstone.Controllers
 
                     //Send mail
 
-                    var message = _emailService.ReadEmailTemplate(user.UserName, user.EmailConfirmCode);
-
-                    //var message = "<style type=\"text/css\"> " +
-                    //" body,html,.body { background: #f3f3f3 !important; } " +
-                    //".container.header { background: #f3f3f3;} " +
-                    //".body-border {border-top: 8px solid #663399;}" +
-                    //"</style> <spacer size=\"16\"></spacer>" +
-                    //"<container class=\"header\">" +
-                    //"<row>" +
-                    //"<columns>" +
-                    //"<center>" +
-                    //"<h1 class=\"text - center\">Welcome to Dynamic WorkFlow</h1>" +
-                    //"</center>" +
-                    //"<center>" +
-                    //"<menu class=\"text - center\">" +
-                    //"</menu>" +
-                    //"</center>" +
-                    //"</columns>" +
-                    //"</row>" +
-                    //"</container>" +
-                    //"<container class=\"body-border\">" +
-                    //"<row>" +
-                    //"<columns>" +
-                    //"<spacer size=\"32\">" +
-                    //"</spacer>" +
-                    //"<center>" +
-                    //"<img src=\"https://scontent.fsgn2-3.fna.fbcdn.net/v/t1.15752-9/67218293_430245011152713_1667334152875147264_n.png?_nc_cat=106&_nc_oc=AQm607YZTtCr5S8V7jK5RQQkXp_uWfA-8Mws3wMZUYS1l4u_XSGAz4Sg09C6U618DUKrkt48NWXThowyt8m1_iP-&_nc_ht=scontent.fsgn2-3.fna&oh=9b06d297248e73aaa2385f90e5d8c111&oe=5DA7D78B\">" +
-                    //"</center>" +
-                    //"<spacer size=\"16\">" +
-                    //"</spacer>" +
-                    //"<h4>Thank you for creating an account with DynamicWorkflow.</h4>" +
-                    //"Account name : " +
-                    //user.UserName +
-                    //"<p>Your account will work but you must verify it by enter this code in our app</p>" +
-                    //"<h1>Your Activation Code is : " +
-                    //"<span style=\"color: blue\">" + user.EmailConfirmCode + "</span>" +
-                    //"</h1>" +
-                    //"Thanks & Regards\nDynamicWorkFlow Team" +
-                    //"<center>" +
-                    //"<menu>" +
-                    //"<item href=\"#\">dynamicworkflow.com</item> " +
-                    //"<item href=\"#\">Facebook</item> " +
-                    //"<item href=\"#\">Twitter</item> " +
-                    //"<item href=\"#\">(408)-555-0123</item>" +
-                    //"</menu>" +
-                    //"</center>" +
-                    //"</columns>" +
-                    //"</row>" +
-                    //"<spacer size=\"16\"></spacer>" +
-                    //"</container>";
+                    var message = _emailService.GenerateMessageSendConfirmCode(user.UserName, user.EmailConfirmCode);
 
                     await _emailService.SendMail(user.Email, "Activation Code to Verify Email Address", message);
 
@@ -334,7 +285,7 @@ namespace Capstone.Controllers
                 var result = await _userManager.UpdateAsync(userInDB);
 
                 if (!result.Succeeded) return new BadRequestObjectResult(result.Errors);
-                var message = _emailService.ReadEmailTemplate(userInDB.UserName, userInDB.EmailConfirmCode);
+                var message = _emailService.GenerateMessageSendConfirmCode(userInDB.UserName, userInDB.EmailConfirmCode);
                 await _emailService.SendMail(email, "Request To Change Password", message);
 
                 return Ok(WebConstant.Success);

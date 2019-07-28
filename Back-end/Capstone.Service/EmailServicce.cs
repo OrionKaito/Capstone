@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System.Collections.Generic;
+using System.IO;
 using System.Net;
 using System.Net.Mail;
 using System.Threading.Tasks;
@@ -8,7 +9,8 @@ namespace Capstone.Service
     public interface IEmailService
     {
         Task SendMail(string to, string subject, string message);
-        string ReadEmailTemplate(string username, string emailConfirmCode);
+        string GenerateMessageSendConfirmCode(string username, string emailConfirmCode);
+        string GenerateMessageApproveRequest(string userName, List<string> names, List<string> links);
     }
 
     public class EmailServicce : IEmailService
@@ -32,10 +34,10 @@ namespace Capstone.Service
             smtp.Send(msg);
         }
 
-        public string ReadEmailTemplate(string userName, string emailConfirmCode)
+        public string GenerateMessageSendConfirmCode(string userName, string emailConfirmCode)
         {
-            var pathToSave = Path.Combine(Directory.GetCurrentDirectory());
-            var fullPath = pathToSave + ".Service\\EmailTemplate\\ConfirmCode.html";
+            var currentDirectory = Path.Combine(Directory.GetCurrentDirectory());
+            var fullPath = currentDirectory + ".Service\\EmailTemplate\\ConfirmCode.html";
             string body = string.Empty;
             using (StreamReader reader = new StreamReader(fullPath))
             {
@@ -43,6 +45,35 @@ namespace Capstone.Service
             }
             body = body.Replace("{Username}", userName);
             body = body.Replace("{EmailConfirmCode}", emailConfirmCode);
+            return body;
+        }
+
+        public string GenerateMessageApproveRequest(string userName, List<string> names, List<string> links)
+        {
+            var currentDirectory = Path.Combine(Directory.GetCurrentDirectory());
+            var fullPath = currentDirectory + ".Service\\EmailTemplate\\ApproveRequest.html";
+            string body = string.Empty;
+            using (StreamReader reader = new StreamReader(fullPath))
+            {
+                body = reader.ReadToEnd();
+            }
+            body = body.Replace("{Username}", userName);
+
+            //Lấy template cho button
+            fullPath = currentDirectory + ".Service\\EmailTemplate\\Button.html";
+            string listButton = string.Empty;
+
+            for (int i = 0; i < names.Count; i++)
+            {
+                using (StreamReader reader = new StreamReader(fullPath))
+                {
+                    listButton += reader.ReadToEnd();
+                }
+                listButton = listButton.Replace("{Name}", names[i] + " ");
+                listButton = listButton.Replace("{Link}", "\"" + links[i] + "\"");
+            }
+
+            body = body.Replace("{ListButton}", listButton);
             return body;
         }
     }

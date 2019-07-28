@@ -12,5 +12,5 @@ public class ConstantDataManager {
     public static final int MY_PERMISSIONS_READ_EXTERNAL_STORAGE = 3;
     public static final int MY_PERMISSIONS_WRITE_EXTERNAL_STORAGE = 4;
 
-    public static final String IMAGE_URL = "http://192.168.1.122:1234/";
+    public static final String IMAGE_URL = "http://192.168.7.168:1234/";
 }

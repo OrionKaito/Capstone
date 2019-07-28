@@ -59,7 +59,8 @@ namespace Capstone.Controllers
                 var data = _permissionOfGroupService.GetAll();
                 foreach (var item in data)
                 {
-                    result.Add(new PermissionOfGroupVM {
+                    result.Add(new PermissionOfGroupVM
+                    {
                         ID = item.ID,
                         PermissionID = item.PermissionID,
                         PermissionName = _permissionService.GetByID(item.PermissionID).Name,
@@ -85,10 +86,11 @@ namespace Capstone.Controllers
                 var groupList = _groupService.GetAll();
                 foreach (var group in groupList)
                 {
-                    result.Add(new PermissionOfGroupViewModel {
+                    result.Add(new PermissionOfGroupViewModel
+                    {
                         GroupID = group.ID,
                         GroupName = group.Name,
-                        Permissions = _permissionOfGroupService.GetByGroup(group.ID)
+                        Permissions = _permissionOfGroupService.GetByGroupID(group.ID)
                                         .Select(p => new PermissionsViewModel
                                         {
                                             PermissionOfGroupID = p.ID,
@@ -140,7 +142,7 @@ namespace Capstone.Controllers
             try
             {
                 List<PermissionOfGroupVM> result = new List<PermissionOfGroupVM>();
-                var data = _permissionOfGroupService.GetByGroup(ID);
+                var data = _permissionOfGroupService.GetByGroupID(ID);
                 if (data.Count() == 0) return NotFound(WebConstant.EmptyList);
                 foreach (var item in data)
                 {
@@ -186,16 +188,44 @@ namespace Capstone.Controllers
         }
 
         // PUT: api/PermissionOfGroups
-        [HttpPut]
-        public IActionResult PutPermissionOfGroup(PermissionOfGroupUM model)
+        [HttpPut("CreateOrEditPermissionByGroup")]
+        public IActionResult CreateOrEditPermissionByGroup(PermissionOfGroupUM model)
         {
             if (!ModelState.IsValid) return BadRequest(ModelState);
             try
             {
-                var permissionOfGroupInDb = _permissionOfGroupService.GetByID(model.ID);
-                if (permissionOfGroupInDb == null) return BadRequest(WebConstant.NotFound);
-                _mapper.Map(model, permissionOfGroupInDb);
-                _permissionOfGroupService.Save();
+                var permissionOfGroupInDB = _permissionOfGroupService.GetByGroupID(model.GroupID);
+
+                if (permissionOfGroupInDB == null)
+                {
+                    foreach (var permissionID in model.PermissionIDs)
+                    {
+                        PermissionOfGroupCM permissionOfGroupCM = new PermissionOfGroupCM
+                        {
+                            GroupID = model.GroupID,
+                            PermissionID = permissionID
+                        };
+                        _permissionOfGroupService.Create(_mapper.Map<PermissionOfGroup>(permissionOfGroupCM));
+                    }
+                }
+                else
+                {
+                    foreach (var permissionOfGroup in permissionOfGroupInDB)
+                    {
+                        _permissionOfGroupService.Delete(permissionOfGroup);
+                    }
+
+                    foreach (var permissionID in model.PermissionIDs)
+                    {
+                        PermissionOfGroupCM permissionOfGroupCM = new PermissionOfGroupCM
+                        {
+                            GroupID = model.GroupID,
+                            PermissionID = permissionID
+                        };
+                        _permissionOfGroupService.Create(_mapper.Map<PermissionOfGroup>(permissionOfGroupCM));
+                    }
+                }
+
                 return Ok(WebConstant.Success);
             }
             catch (Exception e)
