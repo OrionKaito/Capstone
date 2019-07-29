@@ -444,7 +444,7 @@ public class SendRequestFragment extends Fragment {
             request.setDescription("");
             request.setWorkFlowTemplateID(workFlowTemplateID);
             request.setNextStepID(nextStepID);
-            request.setActionValues(actionValueList);
+            request.setActionValues(actionValues);
             request.setImagePaths(listPath);
 
             final KProgressHUD progressHUD = KProgressHUDManager.showProgressBar(getContext());
