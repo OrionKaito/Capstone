@@ -27,11 +27,13 @@ export class LoginService {
   }  
   Login(model : any){  
     debugger;  
+
      var a =this.Url + "api/Token/User";  
    return  this.http.post(a,model, { observe: 'response' });  
   }  
   Register(model : any){
      var b =this.Url + "api/Accounts";   
+
    return this.http.post(b,model,{responseType: 'text'}); 
   }
   addNewWF(model : any){
@@ -75,5 +77,12 @@ export class LoginService {
     const headers = new HttpHeaders({ 'Content-Type': 'application/json'}); 
     return this.http.put(this.Url + "api/WorkflowsTemplates/ToggleEnable?ID=" +id, {"ID": id},{ headers: headers });
   }
- 
+  resetPassword(email: string){
+    return this.http.post(this.Url + '/api/Accounts/ForgotPassword?email=' + email, {'email': email} ,{ responseType: 'text'});
+  }
+  sendCodeConfig(code: string, email: string, password: string ) {
+
+    return this.http.put(this.Url + '/api/Accounts/ConfirmForgotPassword?code=' + code + '&email=' + email + '&password=' + password,
+        {'code': code, 'email': email, 'password': password}, { responseType: 'text'});
+  }
 }  

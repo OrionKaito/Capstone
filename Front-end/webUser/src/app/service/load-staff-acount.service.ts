@@ -23,6 +23,7 @@ export class LoadStaffAcountService {
     this.Url = GlobalVar.url;
     this.token = localStorage.getItem('token');
   }
+
   private updateToken(token){
     this.afAuth.authState.take(1).toPromise().then(user =>{
       if(!user) return;
@@ -56,6 +57,7 @@ export class LoadStaffAcountService {
   //   var tokenHeader = new HttpHeaders({'Authorization': token});
   //   return this.http.get(this.Url + "/api/UserNotifications/GetNumberOfNotification=3", deviceID, {headers : tokenHeader });
   // }
+
 
 
 

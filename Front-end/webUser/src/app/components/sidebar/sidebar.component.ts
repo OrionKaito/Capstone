@@ -33,11 +33,12 @@ export class SidebarComponent implements OnInit {
     this.loadStaffAcountService.checkRole().toPromise().then(rep => {
       this.dataNow = rep;
       if (this.dataNow.name == "staff") {
-        for (let i = 0; i < ROUTES.length + 5; i++) {
+        for (let i = 0; i < 10; i++) {
           ROUTES.pop();
+
         }
         ROUTES.push(
-          { path: '/dashboard', title: 'Dashboard', icon: 'dashboard', class: '' },
+
           { path: '/manage-workflow', title: 'Manage WorkFlow', icon: 'content_paste', class: '' },
           { path: '/manage-permission', title: 'Manage Permission', icon: 'content_paste', class: '' },      
           { path: '/manage-per-gr', title: 'Manage Permission Group', icon: 'content_paste', class: '' },
@@ -51,7 +52,7 @@ export class SidebarComponent implements OnInit {
           ROUTES.pop();
         }
         ROUTES.push(
-          { path: '/dashboard', title: 'Dashboard', icon: 'dashboard', class: '' },
+
           { path: '/create-request', title: 'Create Request', icon: 'content_paste', class: '' },
           { path: '/handle-request', title: 'Handle Request', icon: 'content_paste', class: '' },
           { path: '/your-request', title: 'Your request', icon: 'content_paste', class: '' }
