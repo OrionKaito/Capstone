@@ -39,7 +39,7 @@
                         </a>
                         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownMenuLink">
                                 <a *ngFor="let item of listNoti"  class="dropdown-item">{{item.workflowName}} from {{item.actorName}}</a>                       
-                                <a *ngIf="!noNoti"  class="dropdown-item">There are no more Notification.</a>                       
+                                <a *ngIf="noNoti"  class="dropdown-item">There are no more Notification.</a>                       
 
                         </div>
                     </li>

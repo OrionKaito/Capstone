@@ -952,6 +952,7 @@ export class EditAccountShapeComponent implements OnInit {
         console.log(err);
       });
     }
+    
   }
   saveWorkFlow() {
     let positionKey: any;

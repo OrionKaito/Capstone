@@ -22,51 +22,64 @@ export class LoginComponent implements OnInit {
   dataNow: any = {};
   errorMessage: any;
   saveMe: any;
+  email: string;
+  formname: string;
+  title: string;
+  checkPage: boolean;
+  nameOfbtn: string;
+  nameOfsummit: string;
+  showCode: boolean;
+  ngsummitFun: string;
 
+
+  resetPassmodel: any;
   constructor(private router: Router, private LoginService: LoginService, private loadStaffAcountService: LoadStaffAcountService ) { }
 
   ngOnInit() {
     this.loadStaffAcountService.getPermission();
     this.loadStaffAcountService.receiveMessage();
     this.message = this.loadStaffAcountService.currentMessage;
-  this.formname = 'loginForm';
-        this.title = 'Sign In';
-        this.nameOfbtn = 'Forget Password';
-        this.checkPage = true;
-        this.showCode = false;
-        this.nameOfsummit = 'Sign In';
-        this.ngsummitFun = 'forgetPass()';
+    this.formname = 'loginForm';
+    this.title = 'Sign In';
+    this.nameOfbtn = 'Forget Password';
+    this.checkPage = true;
+    this.showCode = false;
+    this.nameOfsummit = 'Sign In';
+    this.ngsummitFun = 'forgetPass()';
     sessionStorage.removeItem('userName');
     sessionStorage.clear();
     if (localStorage.getItem('token') != null && localStorage.getItem('saveMe') != null)
       this.router.navigate(['/dashboard']);
 
   }
-  login() {
-    debugger;
-    let tokenNoti = localStorage.getItem("tokenNoti");
-    if(tokenNoti == null){tokenNoti = ""};
-    let loginWithTkNoti ={userName: this.model.Username, password: this.model.Password, deviceID:  tokenNoti};
-    this.LoginService.Loginv2(loginWithTkNoti).toPromise().then(
-      // this.LoginService.Login(this.model).toPromise().then(
-      data => {
-        if (data.status == 200) {
-          this.dataNow = data.body;
+//   login() {
+//     debugger;
+//     let tokenNoti = localStorage.getItem("tokenNoti");
+//     if(tokenNoti == null){tokenNoti = ""};
+//     let loginWithTkNoti ={userName: this.model.Username, password: this.model.Password, deviceID:  tokenNoti};
+//     this.LoginService.Loginv2(loginWithTkNoti).toPromise().then(
+//       // this.LoginService.Login(this.model).toPromise().then(
+//       data => {
+//         if (data.status == 200) {
+//           this.dataNow = data.body;
           
-            var a = this.dataNow.token;
-            debugger;
+//             var a = this.dataNow.token;
+//             debugger;
 
-            localStorage.setItem('token', a);
-            this.router.navigate(['/dashboard']);
-        }
-        this.resetPassmodel = {
-            email: '',
-            code: '',
-            password: ''
-        }
-    }
+//             localStorage.setItem('token', a);
+//             this.router.navigate(['/dashboard']);
+//         }
+//         this.resetPassmodel = {
+//             email: '',
+//             code: '',
+//             password: ''
+//         }
+//     }
 
     login() {
+        let tokenNoti = localStorage.getItem("tokenNoti");
+        if(tokenNoti == null){tokenNoti = ""};
+        let loginWithTkNoti ={userName: this.model.Username, password: this.model.Password, deviceID:  tokenNoti};
         debugger;
         this.LoginService.Login(this.model).toPromise().then(
             data => {

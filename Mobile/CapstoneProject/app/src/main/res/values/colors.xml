@@ -14,4 +14,5 @@
     <color name="colorhint">#a9aaac</color>
     <color name="success_stroke_color">#A5DC86</color>
     <color name="warning_stroke_color">#ffff00</color>
+    <color name="edit_text_background">#00000000</color>
 </resources>
