@@ -84,7 +84,7 @@ public class ListCompleteRequestFragment extends Fragment {
             @Override
             public void onSuccess(List<UserNotification> userNotifications) {
                 notificationList = userNotifications;
-                notificationAdapter = new NotificationAdapter(notificationList, getContext(), true);
+                notificationAdapter = new NotificationAdapter(notificationList, getActivity(), true);
                 listView.setAdapter(notificationAdapter);
 //                onItemClick(listView);
             }

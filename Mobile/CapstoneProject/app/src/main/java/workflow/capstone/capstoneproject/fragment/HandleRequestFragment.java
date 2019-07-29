@@ -83,6 +83,7 @@ public class HandleRequestFragment extends Fragment {
     private TextView tvReason;
     private DownloadManager downloadManager;
     private String requestActionID;
+    private LinearLayout lnRequestForm;
 
     public HandleRequestFragment() {
         // Required empty public constructor
@@ -128,7 +129,8 @@ public class HandleRequestFragment extends Fragment {
         lnButton = view.findViewById(R.id.ln_button);
         tvInitiatorName = view.findViewById(R.id.tv_initiator_name);
         tvWorkFlowName = view.findViewById(R.id.tv_name_of_workflow);
-        tvReason = view.findViewById(R.id.tv_reason);
+        lnRequestForm = view.findViewById(R.id.ln_request_form);
+//        tvReason = view.findViewById(R.id.tv_reason);
     }
 
     private void updateListComment() {
@@ -277,9 +279,32 @@ public class HandleRequestFragment extends Fragment {
                 //get message
                 List<RequestValue> requestValueUserList = handleRequestForm.getUserRequestAction().getRequestValues();
                 for (RequestValue requestValue : requestValueUserList) {
-                    if (requestValue.getKey().equals("text")) {
-                        tvReason.setText(requestValue.getValue());
-                    }
+//                    if (requestValue.getKey()) {
+//                        tvReason.setText(requestValue.getValue());
+//                    }
+                    LinearLayout linearLayout = new LinearLayout(getActivity());
+                    LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                    params.setMargins(0,5,0,5);
+                    linearLayout.setLayoutParams(params);
+                    linearLayout.setOrientation(LinearLayout.HORIZONTAL);
+                    linearLayout.setBackgroundResource(R.color.white);
+                    linearLayout.setWeightSum(10);
+
+                    TextView textViewKey = new TextView(getActivity());
+                    textViewKey.setText(requestValue.getKey());
+                    textViewKey.setTextSize(15.0f);
+                    textViewKey.setTextColor(getResources().getColor(R.color.colorAccent));
+                    textViewKey.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT, 7.0f));
+                    linearLayout.addView(textViewKey);
+
+                    TextView textViewName = new TextView(getActivity());
+                    textViewName.setText(requestValue.getValue());
+                    textViewName.setTextSize(18.0f);
+                    textViewName.setTextColor(getResources().getColor(R.color.colortext));
+                    textViewName.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT, 3.0f));
+                    linearLayout.addView(textViewName);
+
+                    lnRequestForm.addView(linearLayout);
                 }
 
                 //get comment

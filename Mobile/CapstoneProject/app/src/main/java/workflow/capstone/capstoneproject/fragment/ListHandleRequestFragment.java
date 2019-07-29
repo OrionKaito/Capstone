@@ -84,7 +84,7 @@ public class ListHandleRequestFragment extends Fragment {
             @Override
             public void onSuccess(List<RequestToHandle> requestToHandles) {
                 requestToHandleList = requestToHandles;
-                requestToHandleAdapter = new RequestToHandleAdapter(requestToHandleList, getContext());
+                requestToHandleAdapter = new RequestToHandleAdapter(requestToHandleList, getActivity());
                 listView.setAdapter(requestToHandleAdapter);
                 onItemClick(listView);
             }
