@@ -91,9 +91,9 @@ public class CapstoneRepositoryImpl implements CapstoneRepository {
     }
 
     @Override
-    public void testLogin(Context context, TestLogin testLogin, final CallBackData<Login> callBackData) {
-        Call<ResponseBody> serviceCall = clientApi.getDynamicWorkflowServices().testLogin(testLogin);
-        Log.e("URL=", clientApi.getDynamicWorkflowServices().testLogin(testLogin).request().url().toString());
+    public void newLogin(Context context, TestLogin testLogin, final CallBackData<Login> callBackData) {
+        Call<ResponseBody> serviceCall = clientApi.getDynamicWorkflowServices().newLogin(testLogin);
+        Log.e("URL=", clientApi.getDynamicWorkflowServices().newLogin(testLogin).request().url().toString());
         //show progress bar
         final KProgressHUD progressHUD = KProgressHUDManager.showProgressBar(context);
 
@@ -143,9 +143,9 @@ public class CapstoneRepositoryImpl implements CapstoneRepository {
     }
 
     @Override
-    public void logout(String token, final CallBackData<String> callBackData) {
-        Call<ResponseBody> serviceCall = clientApi.getDWServices(token).logout();
-        Log.e("URL=", clientApi.getDWServices(token).logout().request().url().toString());
+    public void logout(String token, String deviceToken, final CallBackData<String> callBackData) {
+        Call<ResponseBody> serviceCall = clientApi.getDWServices(token).logout(deviceToken);
+        Log.e("URL=", clientApi.getDWServices(token).logout(deviceToken).request().url().toString());
 
         serviceCall.enqueue(new Callback<ResponseBody>() {
             @Override

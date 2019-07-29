@@ -25,11 +25,11 @@ public interface DynamicWorkflowServices {
     Call<ResponseBody> login(@Body Map<String, String> fields);
 
     @Headers({"Content-Type:application/json"})
-    @POST(ConfigApi.Api.TEST_LOGIN)
-    Call<ResponseBody> testLogin(@Body TestLogin testLogin);
+    @POST(ConfigApi.Api.NEW_LOGIN)
+    Call<ResponseBody> newLogin(@Body TestLogin testLogin);
 
     @PUT(ConfigApi.Api.LOGOUT)
-    Call<ResponseBody> logout();
+    Call<ResponseBody> logout(@Query(value = "deviceToken", encoded = true) String deviceToken);
 
     @GET(ConfigApi.Api.GET_PROFILE)
     Call<ResponseBody> getProfile();

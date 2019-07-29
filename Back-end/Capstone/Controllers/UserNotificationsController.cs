@@ -291,24 +291,7 @@ namespace Capstone.Controllers
                 var requestAction = _requestActionService.GetByID(notificationInDb.EventID);
                 var request = _requestService.GetByID(requestAction.RequestID);
 
-                if (notificationInDb.NotificationType == NotificationEnum.UpdatedWorkflow)
-                {
-                    var result = new NotificationViewModel
-                    {
-                        WorkflowName = _workFlowTemplateService.GetByID(request.WorkFlowTemplateID).Name,
-                        UserNotificationID = item.ID,
-                        ActorName = _userManager.FindByIdAsync(request.InitiatorID).Result.FullName, //đang làm sai
-                        EventID = notificationInDb.EventID,
-                        Message = WebConstant.WorkflowUpdateMessage,
-                        NotificationType = notificationInDb.NotificationType,
-                        NotificationTypeName = notificationInDb.NotificationType.ToString(),
-                        CreateDate = notificationInDb.CreateDate,
-                        IsRead = item.IsRead,
-                        IsHandled = notificationInDb.IsHandled
-                    };
-                    data.Add(result);
-                }
-                else if (notificationInDb.NotificationType == NotificationEnum.ReceivedRequest)
+                if (notificationInDb.NotificationType == NotificationEnum.ReceivedRequest)
                 {
                     var result = new NotificationViewModel
                     {
@@ -333,7 +316,7 @@ namespace Capstone.Controllers
                         UserNotificationID = item.ID,
                         ActorName = _userManager.FindByIdAsync(request.InitiatorID).Result.FullName,
                         EventID = notificationInDb.EventID,
-                        Message = WebConstant.DeniedRequestMessage,
+                        Message = WebConstant.CompletedRequestMessage,
                         NotificationType = notificationInDb.NotificationType,
                         NotificationTypeName = notificationInDb.NotificationType.ToString(),
                         CreateDate = notificationInDb.CreateDate,

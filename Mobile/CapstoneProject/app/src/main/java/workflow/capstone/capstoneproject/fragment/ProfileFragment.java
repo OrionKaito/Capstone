@@ -13,6 +13,10 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.iid.InstanceIdResult;
+
 import java.util.List;
 
 import es.dmoral.toasty.Toasty;
@@ -36,6 +40,7 @@ public class ProfileFragment extends Fragment {
     private TextView tvFullName;
     private CapstoneRepository capstoneRepository;
     private String token;
+    private String deviceToken;
 
     public ProfileFragment() {
         // Required empty public constructor
@@ -88,13 +93,23 @@ public class ProfileFragment extends Fragment {
 
     private void logout() {
         token = DynamicWorkflowSharedPreferences.getStoreJWT(getContext(), ConstantDataManager.AUTHORIZATION_TOKEN);
+        FirebaseInstanceId.getInstance().getInstanceId()
+                .addOnSuccessListener(new OnSuccessListener<InstanceIdResult>() {
+                    @Override
+                    public void onSuccess(InstanceIdResult instanceIdResult) {
+
+                        // Get new Instance ID token
+                        deviceToken = instanceIdResult.getToken();
+                    }
+                });
+
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         builder.setCancelable(false);
         builder.setMessage(R.string.logout_confirm)
                 .setPositiveButton(R.string.sign_out, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         capstoneRepository = new CapstoneRepositoryImpl();
-                        capstoneRepository.logout(token, new CallBackData<String>() {
+                        capstoneRepository.logout(token, deviceToken, new CallBackData<String>() {
                             @Override
                             public void onSuccess(String s) {
                                 DynamicWorkflowSharedPreferences.removeJWT(getContext());
