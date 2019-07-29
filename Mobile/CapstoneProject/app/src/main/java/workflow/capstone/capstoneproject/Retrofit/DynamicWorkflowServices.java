@@ -38,6 +38,9 @@ public interface DynamicWorkflowServices {
     @PUT(ConfigApi.Api.UPDATE_PROFILE)
     Call<ResponseBody> updateProfile(@Body UpdateProfileModel model);
 
+    @PUT(ConfigApi.Api.UPDATE_AVATAR)
+    Call<ResponseBody> updateAvatar(@Query(value = "imagePath", encoded = true) String imagePath);
+
     @PUT(ConfigApi.Api.CHANGE_PASSWORD)
     Call<ResponseBody> changePassword(@Query(value = "oldPassword", encoded = true) String oldPassword, @Query(value = "newPassword", encoded = true) String newPassword);
 

@@ -33,6 +33,8 @@ public interface CapstoneRepository {
 
     void updateProfile(Context context, String token, UpdateProfileModel model, CallBackData<String> callBackData);
 
+    void updateAvatar(Context context, String token, String imagePath, CallBackData<String> callBackData);
+
     void changePassword(Context context, String token, String oldPassword, String newPassword, CallBackData<String> callBackData);
 
     void forgotPassword(Context context, String email, CallBackData<String> callBackData);
@@ -69,5 +71,4 @@ public interface CapstoneRepository {
 
     void approveRequest(String token, RequestApprove requestApprove, CallBackData<String> callBackData);
 
-    void downloadFileWithDynamicUrlSync(String fileUrl, CallBackData<ResponseBody> callBackData);
 }

@@ -9,6 +9,7 @@ public class ConfigApi {
         String LOGOUT = "Token/Logout";
         String GET_PROFILE = "Accounts/GetProfile";
         String UPDATE_PROFILE = "Accounts/UpdateProfile";
+        String UPDATE_AVATAR = "Accounts/UpdateAvatar";
         String CHANGE_PASSWORD = "Accounts/ChangePassword";
         String FORGOT_PASSWORD = "Accounts/ForgotPassword";
         String CONFIRM_FORGOT_PASSWORD = "Accounts/ConfirmForgotPassword";
