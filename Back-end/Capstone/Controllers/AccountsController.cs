@@ -67,6 +67,7 @@ namespace Capstone.Controllers
                         DateOfBirth = u.DateOfBirth,
                         Email = u.Email,
                         FullName = u.FullName,
+                        ImagePath = u.ImagePath == null ? "" : u.ImagePath,
                         Role = new RoleVM
                         {
                             ID = _userRoleService.GetByUserID(u.Id).RoleID,
@@ -111,6 +112,7 @@ namespace Capstone.Controllers
                         DateOfBirth = u.DateOfBirth,
                         Email = u.Email,
                         FullName = u.FullName,
+                        ImagePath = u.ImagePath == null ? "" : u.ImagePath,
                         Groups = _userGroupService.GetByUserID(u.Id)
                                 .Select(g => new GroupVM
                                 {
@@ -150,6 +152,7 @@ namespace Capstone.Controllers
                         DateOfBirth = u.DateOfBirth,
                         Email = u.Email,
                         FullName = u.FullName,
+                        ImagePath = u.ImagePath == null ? "" : u.ImagePath,
                         Groups = _userGroupService.GetByUserID(u.Id)
                                 .Select(g => new GroupVM
                                 {
