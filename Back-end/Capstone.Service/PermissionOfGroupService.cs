@@ -10,10 +10,11 @@ namespace Capstone.Service
     public interface IPermissionOfGroupService
     {
         IEnumerable<PermissionOfGroup> GetAll();
-        IEnumerable<PermissionOfGroup> GetByGroup(Guid ID);
+        IEnumerable<PermissionOfGroup> GetByGroupID(Guid ID);
         IEnumerable<PermissionOfGroup> GetByPermission(Guid ID);
         PermissionOfGroup GetByID(Guid ID);
         PermissionOfGroup CheckExist(Guid PermissionID, Guid GroupID);
+        PermissionOfGroup GetByGroupIDAndPermissionID(Guid GroupID, Guid PermissionID);
         void Create(PermissionOfGroup permissionOfGroup);
         void Delete(PermissionOfGroup permissionOfGroup);
         void Save();
@@ -62,7 +63,7 @@ namespace Capstone.Service
             return _permissionOfGroupRepository.GetMany(p => p.IsDeleted == false && p.PermissionID == ID);
         }
 
-        public IEnumerable<PermissionOfGroup> GetByGroup(Guid ID)
+        public IEnumerable<PermissionOfGroup> GetByGroupID(Guid ID)
         {
             return _permissionOfGroupRepository.GetMany(p => p.IsDeleted == false && p.GroupID == ID);
         }
@@ -70,6 +71,11 @@ namespace Capstone.Service
         public void Save()
         {
             _unitOfWork.Commit();
+        }
+
+        public PermissionOfGroup GetByGroupIDAndPermissionID(Guid GroupID, Guid PermissionID)
+        {
+            return _permissionOfGroupRepository.GetMany(p => p.GroupID == GroupID && p.PermissionID == PermissionID).FirstOrDefault();
         }
     }
 }

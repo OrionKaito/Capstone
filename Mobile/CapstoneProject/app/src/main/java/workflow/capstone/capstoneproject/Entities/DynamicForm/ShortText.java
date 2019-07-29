@@ -1,20 +1,17 @@
 package workflow.capstone.capstoneproject.entities.DynamicForm;
 
-import java.util.List;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class Field {
+public class ShortText {
 
     @SerializedName("name")
     @Expose
     private String name;
-    @SerializedName("type")
-    @Expose
-    private String type;
+
     @SerializedName("value")
     @Expose
-    private List<String> value = null;
+    private String value;
 
     public String getName() {
         return name;
@@ -24,19 +21,11 @@ public class Field {
         this.name = name;
     }
 
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
-    }
-
-    public List<String> getValue() {
+    public String getValue() {
         return value;
     }
 
-    public void setValue(List<String> value) {
+    public void setValue(String value) {
         this.value = value;
     }
 

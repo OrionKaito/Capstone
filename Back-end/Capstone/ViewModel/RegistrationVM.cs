@@ -15,6 +15,7 @@ namespace Capstone.ViewModel
         public string Email { get; set; }
         public string FullName { get; set; }
         public DateTime? DateOfBirth { get; set; }
+        public string ImagePath { get; set; }
         public string LineManagerID { get; set; }
         public string ManagerName { get; set; }
         public RoleVM Role { get; set; }
@@ -36,7 +37,6 @@ namespace Capstone.ViewModel
     public class RegistrationUM
     {
         public string FullName { get; set; }
-        public string ImagePath { get; set; }
         public DateTime? DateOfBirth { get; set; }
     }
 

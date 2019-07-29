@@ -874,7 +874,11 @@ public class CapstoneRepositoryImpl implements CapstoneRepository {
                         callBackData.onFail(response.message());
                     }
                 } else if (response.code() == 400) {
-                    callBackData.onFail(response.message());
+                    try {
+                        callBackData.onFail(response.errorBody().string());
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
                 }
             }
 

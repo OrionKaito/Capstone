@@ -20,9 +20,8 @@ namespace Capstone.ViewModel
 
     public class PermissionOfGroupUM
     {
-        public Guid ID { get; set; }
-        public Guid PermissionID { get; set; }
         public Guid GroupID { get; set; }
+        public IEnumerable<Guid> PermissionIDs { get; set; }
     }
 
     public class PermissionOfGroupViewModel
