@@ -65,6 +65,7 @@ export class AddNewDynamicFormComponent implements OnInit {
   addToCb(nameOfCb){
     debugger;
     this.listCb.push(nameOfCb);
+    this.toastr.success("Add option success");
   }
   createNewForm(){
     let model = {

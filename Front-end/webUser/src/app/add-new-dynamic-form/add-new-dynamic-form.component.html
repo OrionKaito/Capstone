@@ -15,9 +15,9 @@
     Type
     <select name="propertiesThis" [(ngModel)]="propertiesThis">
       <option value="0">-Select-</option>
-      <option value="1">Text only</option>
-      <option value="2">Short Text</option>
-      <option value="3">Long Text</option>
+      <option value="1">Label</option>
+      <option value="2">Text</option>
+      <option value="3">Text Area</option>
       <option value="4">Combo box</option>
       <option value="5">Check Box</option>
     </select>
@@ -37,7 +37,7 @@
     </select>
   </div>
   <div class="col-md-6">
-    Chosse:
+    Add option:
     <input name="nameOfCb" type="text" [(ngModel)]="nameOfCb">
     <button class="icon-head-pup" (click)="addToCb(nameOfCb)">Add</button>
   </div>
