@@ -158,118 +158,93 @@ export class EditAccountShapeComponent implements OnInit {
     //lấy id của hình ra, bỏ vô subClass
     this.subClass.push(item.id);
     if (this.subClass.length > 1) {
-    //cả đoạn này chỉ để đặt tên cho mũi tên + ghi id  div kết nối
-    if (this.subClass.length > 1) {
-      let count: any;
-      //mũi tên đầu dặt tên là arrow0
-      if (this.listArrow.length <= 0) {
-        count = 0;
-        this.listClass.push({
-          idDiv: this.subClass,
-          idArrow: this.create_UUID().toString(),
-          name: 'arrow' + count
+      //cả đoạn này chỉ để đặt tên cho mũi tên + ghi id  div kết nối
+      if (this.subClass.length > 1) {
+        let count: any;
+        //mũi tên đầu dặt tên là arrow0
+        if (this.listArrow.length <= 0) {
+          count = 0;
+          this.listClass.push({
+            idDiv: this.subClass,
+            idArrow: this.create_UUID().toString(),
+            name: 'arrow' + count
 
-        });
-      } else {
-        //những mũi tên tiếp theo nó lấy mũi đầu cắt chuỗi lấy số rồi cộng lên
-        const subCount = this.listArrow[this.listArrow.length - 1];
-        //count = subCount.split('arrow');
-        count = this.listArrow.length;
-        this.listClass.push({
-          // idDiv: 2 id của hai điểm
-          idDiv: this.subClass,
-          // idArrow: 2 điểm có một mủi tên
-          // idArrow: 'arrow' + this.listClass.length
-          idArrow: this.create_UUID().toString(),
-          name: 'arrow' + (+count + 1)
-        });
+          });
+        } else {
+          //những mũi tên tiếp theo nó lấy mũi đầu cắt chuỗi lấy số rồi cộng lên
+          const subCount = this.listArrow[this.listArrow.length - 1];
+          //count = subCount.split('arrow');
+          count = this.listArrow.length;
+          this.listClass.push({
+            // idDiv: 2 id của hai điểm
+            idDiv: this.subClass,
+            // idArrow: 2 điểm có một mủi tên
+            // idArrow: 'arrow' + this.listClass.length
+            idArrow: this.create_UUID().toString(),
+            name: 'arrow' + (+count + 1)
+          });
+        }
+        // Gọi hàm vẽ mủi tên
+        //(chl) cái tham số bottom này chưa hiểm lắm
+        this.draw('bottom');
       }
-      // Gọi hàm vẽ mủi tên
-      //(chl) cái tham số bottom này chưa hiểm lắm
-      this.draw('bottom');
+    } else {
+      this.menuList1.filter(itemPlus => {
+        if (itemPlus.id === item.id) {
+          document.getElementById('body-svg').style.cursor = 'pointer';
+        }
+      })
     }
-  } else {
-    this.menuList1.filter(itemPlus => {
-      if (itemPlus.id === item.id) {
-        document.getElementById('body-svg').style.cursor = 'pointer';
-      }
-    })
-  }
   }
 
   //sau khi click hình bên trái thì tạo 1 hình phía bên phải (chl)
   public drop(event) {
     const subEvent = event;
-   if (this.menuList1.length > 0) {
-    if (subEvent.class === 'example-box aqua-gradient' ||
-    subEvent.class === 'example-box3 aqua-gradient' ) {
-     
-      for (let i = 0; i < this.menuList1.length; i++) {
-        console.log(this.menuList1[i].class);
-        console.log(subEvent.class);
-        if (this.menuList1[i].class === subEvent.class) {
-          this.toastr.info('Qua muc cho phep');
-          return;
-        }
-        else {
-          if (i === this.menuList1.length - 1)
-            this.addShape(subEvent);
-
-        }
-      }
-  
-    } else {
-      this.addShape(subEvent);
-    }
-
-    } else {
-      this.addShape(subEvent);
-    }
-
+    this.addShape(subEvent);
   }
 
   public addShape(subEvent) {
     const count = this.menuList1.length;
-   // Tạo id động cho từng hình
-   subEvent.id = this.create_UUID().toString();
-   subEvent.name = 'FormName' + count;
-   subEvent.description = 'FormDescription' + count;
-   subEvent.permissionToUseID = "";
-   subEvent.isApprovedByLineManager = false;
-   //subEvent.idText = 'form' + count;
-   subEvent.formControlName = 'form' + count;
-   subEvent.actionTypeID = "";
-   // subEvent.dropdown = this.listDropdown;
+    // Tạo id động cho từng hình
+    subEvent.id = this.create_UUID().toString();
+    subEvent.name = 'FormName' + count;
+    subEvent.description = 'FormDescription' + count;
+    subEvent.permissionToUseID = "";
+    subEvent.isApprovedByLineManager = false;
+    //subEvent.idText = 'form' + count;
+    subEvent.formControlName = 'form' + count;
+    subEvent.actionTypeID = "";
+    // subEvent.dropdown = this.listDropdown;
 
 
-   // thêm vô 2 cái list
-   this.menuList1.push(JSON.parse(JSON.stringify(subEvent)));
-   this.subMenu.push(JSON.parse(JSON.stringify(subEvent)));
+    // thêm vô 2 cái list
+    this.menuList1.push(JSON.parse(JSON.stringify(subEvent)));
+    this.subMenu.push(JSON.parse(JSON.stringify(subEvent)));
 
-   if (subEvent.formControlName === 'form0') {
-     const abc = {};
-     abc[subEvent.formControlName] = [''];
-     this.secondFormGroup = this.formBuilder.group(abc);
-   }
+    if (subEvent.formControlName === 'form0') {
+      const abc = {};
+      abc[subEvent.formControlName] = [''];
+      this.secondFormGroup = this.formBuilder.group(abc);
+    }
 
 
-   //hình như thằng ni là thằng để sinh ra
-   this.menuList1.forEach(item => {
-     this.secondFormGroup.addControl(item.formControlName, new FormControl(''));
-   })
+    //hình như thằng ni là thằng để sinh ra
+    this.menuList1.forEach(item => {
+      this.secondFormGroup.addControl(item.formControlName, new FormControl(''));
+    })
 
-   // Delay để gọi hàm Drag của Jquery
-   setTimeout(() => {
-     this.initDraw();
-   }, 500);
+    // Delay để gọi hàm Drag của Jquery
+    setTimeout(() => {
+      this.initDraw();
+    }, 500);
 
-   // Show message
-   if (this.menuList1.length < 2) {
-     this.toastr.info('Di chuyển hình !!', '', { timeOut: 5000 });
-     setTimeout(() => {
-       this.toastr.info('Nhấn delete để xóa !!', '', { timeOut: 5000 });
-     }, 2000);
-   }
+    // Show message
+    if (this.menuList1.length < 2) {
+      this.toastr.info('Di chuyển hình !!', '', { timeOut: 5000 });
+      setTimeout(() => {
+        this.toastr.info('Nhấn delete để xóa !!', '', { timeOut: 5000 });
+      }, 2000);
+    }
   }
 
   //import json file từ máy
@@ -778,6 +753,7 @@ export class EditAccountShapeComponent implements OnInit {
 
   public openDialog(item) {
     // debugger;
+    
     this.listClass.forEach(element => {
       if (element.idArrow === item) {
         this.propertiesArr = element;
@@ -785,6 +761,7 @@ export class EditAccountShapeComponent implements OnInit {
         this.checkIsArrow = true;
       }
     });
+    console.log(this.propertiesArr);
     if (localStorage.getItem('arrow') == item) {
       this.showModalOnClick.show();
       this.enableDeleteArrow = true;
@@ -795,7 +772,6 @@ export class EditAccountShapeComponent implements OnInit {
   }
 
   public dialogConfirmDelete(item) {
-    console.log(item);
     this.showModalConfirmDelete.show();
     localStorage.setItem('idShape', item.id);
   }
@@ -806,35 +782,20 @@ export class EditAccountShapeComponent implements OnInit {
     for (let i = 0; i < this.menuList1.length; i++) {
       if (this.menuList1[i].id === item) {
         this.menuList1.splice(i, 1);
-        // this.listClass.splice(i, 1);
       }
     }
 
     if (this.listClass.length > 0) {
-    for (let i = 0; i < this.listClass.length; i++) {
-      for (let e = 0; e < this.listClass[i].idDiv.length; e++) {
-        if (this.listClass[i].idDiv[e] === item) {
-          for (let q = 0; q < this.listArrow.length; q++) {
-            if (this.listArrow[q] === this.listClass[i].idArrow) {
-              this.listArrow.splice(q, 1);
-              // this.listClass.splice(i, 1);
-            }
+      for (let i = 0; i < this.listClass.length; i++) {
+        for (let e = 0; e < this.listClass[i].idDiv.length; e++) {
+          if (this.listClass[i].idDiv[e] === item) {
+            this.listArrow = this.listArrow.filter(id => id !== this.listClass[i].idArrow);
+            this.listClass.splice(i, 1);
+            return
           }
         }
       }
     }
-
-    for (let i = 0; i < this.listClass.length; i++) {
-      for (let e = 0; e < this.listClass[i].idDiv.length; e++) {
-        if (this.listClass[i].idDiv[e] === item) {
-              this.listClass.splice(i, 1);
-           
-        }
-      }
-    }
-  }
-  console.log(this.listArrow);
-  console.log(this.listClass);
 
   }
 
@@ -895,12 +856,18 @@ export class EditAccountShapeComponent implements OnInit {
     }
   }
 
+  public clearConnect() {
+    this.subClass = [];
+    document.getElementById('body-svg').style.cursor = 'default';
+    
+  }
+
   openDinamicForm(id) {
     const dialogConfig = new MatDialogConfig();
     dialogConfig.autoFocus = true;
-    dialogConfig.disableClose = true;
+    // dialogConfig.disableClose = true;
     dialogConfig.width = "50%";
-    dialogConfig.data = id;
+    dialogConfig.data = [];
     this.dialog.open(AddNewDynamicFormComponent, dialogConfig).afterClosed().subscribe(res => {
       console.log(res);
     });
@@ -1163,7 +1130,7 @@ export class EditAccountShapeComponent implements OnInit {
     this.listClass.forEach(element => {
       listArr.push({ from: element.idDiv[0], to: element.idDiv[1] });
     });
-    if (this.checkStart(listNode, listArr) && this.checkEnd(listNode, listArr)){
+    if (this.checkStart(listNode, listArr) && this.checkEnd(listNode, listArr)) {
       this.toastr.success("Sucess");
     }
   }
@@ -1180,36 +1147,36 @@ export class EditAccountShapeComponent implements OnInit {
 
     if (nodeNowHandling.length != 1) {
       this.toastr.error("Only one Start Action is support!")
-    }else {
-      while(nodeNowHandling.length > 0){
+    } else {
+      while (nodeNowHandling.length > 0) {
         //với mỗi thằng node hiện đang xử lý
         nodeNowHandling.forEach(node => {
           //so dánh trong mũi tên để tìm ra thằng đuôi của nó
           listArr.forEach(arr => {
             //nếu nó bằng thằng đầu
-            if(node.id == arr.from) {
+            if (node.id == arr.from) {
               //thì tìm thằng đuôi
-              if(this.findNode(arr.to, listNode).id == ""){
+              if (this.findNode(arr.to, listNode).id == "") {
                 //k có đuôi báo lỗi
-                this.toastr.error("Mũi tên từ action" + arr.from +" phải chỉa tới một action!");
+                this.toastr.error("Mũi tên từ action" + arr.from + " phải chỉa tới một action!");
                 return false;
-              } else{
+              } else {
 
                 //có đuôi thì kiểm tra xem đuôi dó có đã hay đang xử lý k
-                let nodeCheckNow:any;
+                let nodeCheckNow: any;
                 nodeCheckNow = this.findNode(arr.to, listNode);
-                let node1=this.findNode(nodeCheckNow.id, nodeHandled);
-                let node2=this.findNode(nodeCheckNow.id, nodeNowHandling);
-                if(node1.id != "" ||
-                 node2.id != ""){
+                let node1 = this.findNode(nodeCheckNow.id, nodeHandled);
+                let node2 = this.findNode(nodeCheckNow.id, nodeNowHandling);
+                if (node1.id != "" ||
+                  node2.id != "") {
 
-                 }else{
+                } else {
                   // chưa đụng tới thì thêm vô sẽ xử lý
                   nodeWillHandle.push(nodeCheckNow)
-                 }
-               
+                }
+
               }
-             
+
             }
           });
         });
@@ -1217,33 +1184,33 @@ export class EditAccountShapeComponent implements OnInit {
         nodeNowHandling.forEach(element => {
           nodeHandled.push(element);
         });
-        nodeNowHandling= [];
+        nodeNowHandling = [];
         nodeWillHandle.forEach(element => {
           nodeNowHandling.push(element);
         });
-        nodeWillHandle=[];
+        nodeWillHandle = [];
       }
-      let nodeWithoutStart:any=[];
+      let nodeWithoutStart: any = [];
       listNode.forEach(element => {
         let check = true;
         nodeHandled.forEach(element2 => {
-          if(element.id== element2.id){
+          if (element.id == element2.id) {
             check = false;
-          } 
+          }
         });
-        if(check){
+        if (check) {
           nodeWithoutStart.push(element);
         }
       });
-      if(nodeWithoutStart.length == 0){
+      if (nodeWithoutStart.length == 0) {
         return true;
 
       } else {
-        let a="";
+        let a = "";
         nodeWithoutStart.forEach(element => {
-          a = a +element.id + ", ";
+          a = a + element.id + ", ";
         });
-        this.toastr.error("Action not usefull, can not come here from start: " +a);
+        this.toastr.error("Action not usefull, can not come here from start: " + a);
         return false;
       }
     }
@@ -1262,75 +1229,75 @@ export class EditAccountShapeComponent implements OnInit {
     // if (nodeNowHandling.length != 1) {
     //   this.toastr.error("Only one Start Action is support!")
     // }else {
-      while(nodeNowHandling.length > 0){
-        //với mỗi thằng node hiện đang xử lý
-        nodeNowHandling.forEach(node => {
-          //so dánh trong mũi tên để tìm ra thằng đuôi của nó
-          listArr.forEach(arr => {
-            //nếu nó bằng thằng đầu
-            if(node.id == arr.to) {
-              //thì tìm thằng đuôi
-              if(this.findNode(arr.from, listNode).id == ""){
-                //k có đuôi báo lỗi
-                this.toastr.error("Mũi tên đuôi action" + arr.from +" phải bắt đầu từ một action!");
-                return false;
-              } else{
+    while (nodeNowHandling.length > 0) {
+      //với mỗi thằng node hiện đang xử lý
+      nodeNowHandling.forEach(node => {
+        //so dánh trong mũi tên để tìm ra thằng đuôi của nó
+        listArr.forEach(arr => {
+          //nếu nó bằng thằng đầu
+          if (node.id == arr.to) {
+            //thì tìm thằng đuôi
+            if (this.findNode(arr.from, listNode).id == "") {
+              //k có đuôi báo lỗi
+              this.toastr.error("Mũi tên đuôi action" + arr.from + " phải bắt đầu từ một action!");
+              return false;
+            } else {
 
-                //có đuôi thì kiểm tra xem đuôi dó có đã hay đang xử lý k
-                let nodeCheckNow:any;
-                nodeCheckNow = this.findNode(arr.from, listNode);
-                if(this.findNode(nodeCheckNow.id, nodeHandled).id != "" ||
-                 this.findNode(nodeCheckNow.id, nodeNowHandling).id != ""){
-                 }else{
-                  // chưa đụng tới thì thêm vô sẽ xử lý
-                  nodeWillHandle.push(nodeCheckNow)
-                 }
-               
+              //có đuôi thì kiểm tra xem đuôi dó có đã hay đang xử lý k
+              let nodeCheckNow: any;
+              nodeCheckNow = this.findNode(arr.from, listNode);
+              if (this.findNode(nodeCheckNow.id, nodeHandled).id != "" ||
+                this.findNode(nodeCheckNow.id, nodeNowHandling).id != "") {
+              } else {
+                // chưa đụng tới thì thêm vô sẽ xử lý
+                nodeWillHandle.push(nodeCheckNow)
               }
-             
-            }
-          });
-        });
 
-        nodeNowHandling.forEach(element => {
-          nodeHandled.push(element);
+            }
+
+          }
         });
-        nodeNowHandling= [];
-        nodeWillHandle.forEach(element => {
-          nodeNowHandling.push(element);
-        });
-        nodeWillHandle=[];
-      }
-      let nodeWithoutStart:any=[];
-      listNode.forEach(element => {
-        let check = true;
-        nodeHandled.forEach(element2 => {
-          if(element.id== element2.id){
-            check = false;
-          } 
-        });
-        if(check){
-          nodeWithoutStart.push(element);
+      });
+
+      nodeNowHandling.forEach(element => {
+        nodeHandled.push(element);
+      });
+      nodeNowHandling = [];
+      nodeWillHandle.forEach(element => {
+        nodeNowHandling.push(element);
+      });
+      nodeWillHandle = [];
+    }
+    let nodeWithoutStart: any = [];
+    listNode.forEach(element => {
+      let check = true;
+      nodeHandled.forEach(element2 => {
+        if (element.id == element2.id) {
+          check = false;
         }
       });
-      if(nodeWithoutStart.length == 0){
-        return true;
-
-      } else {
-        let a="";
-        nodeWithoutStart.forEach(element => {
-          a = a +element.id + ", ";
-        });
-        this.toastr.error("Action này không thể đi đến kết thúc" +a);
-        return false;
+      if (check) {
+        nodeWithoutStart.push(element);
       }
-   // }
+    });
+    if (nodeWithoutStart.length == 0) {
+      return true;
+
+    } else {
+      let a = "";
+      nodeWithoutStart.forEach(element => {
+        a = a + element.id + ", ";
+      });
+      this.toastr.error("Action này không thể đi đến kết thúc" + a);
+      return false;
+    }
+    // }
   }
-  findNode(node, listNode){
-    let retu = {id: "", isStart: false, isEnd: false};
+  findNode(node, listNode) {
+    let retu = { id: "", isStart: false, isEnd: false };
     listNode.forEach(element => {
-      if(node.toString() == element.id.toString()) {
-        retu= element;
+      if (node.toString() == element.id.toString()) {
+        retu = element;
       }
     });
     return retu;
