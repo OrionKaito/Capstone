@@ -479,5 +479,29 @@ namespace Capstone.Controllers
                 return BadRequest(e.Message);
             }
         }
+
+        [HttpPut("UpdateAvatar")]
+        public async Task<ActionResult> UpdateAvatar(string imagePath)
+        {
+            try
+            {
+                var currentUser = HttpContext.User;
+                var userID = currentUser.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier).Value;
+
+                var userInDB = _userManager.FindByIdAsync(userID).Result;
+                if (userInDB == null) return BadRequest(WebConstant.UserNotExist);
+
+                userInDB.ImagePath = imagePath;
+                var result = await _userManager.UpdateAsync(userInDB);
+
+                if (!result.Succeeded) return new BadRequestObjectResult(result.Errors);
+
+                return Ok(WebConstant.Success);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
     }
 }

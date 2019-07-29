@@ -75,9 +75,9 @@ public class MyRequestFragment extends Fragment {
             @Override
             public void onSuccess(List<MyRequest> myRequests) {
                 myRequestList = myRequests;
-                myRequestAdapter = new MyRequestAdapter(myRequestList, getContext());
+                myRequestAdapter = new MyRequestAdapter(myRequestList, getActivity());
                 listView.setAdapter(myRequestAdapter);
-                DynamicWorkflowUtils.setListViewHeightBasedOnChildren(listView);
+//                DynamicWorkflowUtils.setListViewHeightBasedOnChildren(listView);
                 onItemCLick(listView);
                 if(myRequestList.isEmpty()) {
                     tvEmptyRequest.setVisibility(View.VISIBLE);

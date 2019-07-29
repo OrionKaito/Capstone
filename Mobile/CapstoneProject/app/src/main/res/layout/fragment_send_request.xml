@@ -200,6 +200,14 @@
                     <!--android:textColor="@color/white"-->
                     <!--android:textSize="@dimen/sp18" />-->
                 </LinearLayout>
+                <LinearLayout
+                    android:id="@+id/ln_dynamic_form"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="@dimen/dp10">
+
+                </LinearLayout>
             </LinearLayout>
 
         </LinearLayout>
