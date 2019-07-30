@@ -18,7 +18,7 @@ export class AddManagePerGrComponent implements OnInit {
 
   groupList: any = [];
   permissionList: any = [];
-
+  nameGR: any;
   createGroup = true;
   formData = {groupID:"", permissionIDs: [] };
   saveData: any;
@@ -30,6 +30,9 @@ export class AddManagePerGrComponent implements OnInit {
     private router: Router, private loadStaffAcountService: LoadStaffAcountService) { }
 
   ngOnInit() {
+    this.nameGR = this.data.name;
+    console.log("data bên nhỏ:", this.data);
+    console.log("name:", this.nameGR);
 
     
     this.loadStaffAcountService.loadPermissionData().toPromise().then(res => {
@@ -53,7 +56,7 @@ export class AddManagePerGrComponent implements OnInit {
 
 
       
-      this.loadStaffAcountService.loadPermissionByGr(this.data).toPromise().then(res2 => {
+      this.loadStaffAcountService.loadPermissionByGr(this.data.id).toPromise().then(res2 => {
         this.saveData = res2;
         let listPerNow : any=[];
         this.saveData.forEach(element => {
@@ -96,7 +99,7 @@ export class AddManagePerGrComponent implements OnInit {
         perListID.push(element.id);
       });
       let model = {
-        groupID: this.data,
+        groupID: this.data.id,
         permissionIDs: perListID
         
       }

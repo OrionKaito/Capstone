@@ -1,0 +1,27 @@
+<h4 class="dispaly-4">Your old request
+  <div (click)="closeForm()" class="icon-head-pup">
+    <button type="button" [mat-dialog-close] ><i class="fa fa-close"></i>
+      </button>
+</div>
+</h4>
+<hr>
+
+  <div class="form-row">
+    <div class="form-group col-md-6">
+      <label>Name of WorkFlow</label>
+      {{yourRequest.workFlowTemplateName}}
+    </div>
+  </div>
+  <div class="form-row">
+    <div class="form-group col-md-6">
+      <label>Status</label>
+      {{yourRequest.status}}
+    </div>
+  </div>
+  <!-- <div class="form-row">
+    <div class="form-group col-md-6">
+      <label>By:</label>
+      {{yourRequest.staffResult.fullName}}
+    </div>
+  </div> -->
+

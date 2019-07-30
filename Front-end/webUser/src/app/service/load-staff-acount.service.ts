@@ -219,5 +219,10 @@ export class LoadStaffAcountService {
     return this.http.put(this.Url + "api/PermissionOfGroups/CreateOrEditPermissionByGroup",model, {headers : tokenHeader, responseType: "text" });
 
   }
+  getYourRequest(id){
+    var token = "Bearer " + localStorage.getItem("token");
+    var tokenHeader = new HttpHeaders({'Authorization': token});
+    return this.http.get(this.Url + "api/Requests/GetRequestResult?requestActionID=" +id, {headers : tokenHeader});
+  }
 
 }
