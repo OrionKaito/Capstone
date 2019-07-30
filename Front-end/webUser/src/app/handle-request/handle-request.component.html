@@ -38,7 +38,11 @@
   
                                 <ng-container matColumnDef="name">
                                     <mat-header-cell *matHeaderCellDef mat-sort-header>Name of request</mat-header-cell>
-                                    <mat-cell *matCellDef="let element"  (click)="CreateRequestOfWF(element.requestActionID)">{{element.workFlowTemplateName}} from "<strong>{{element.initiatorName}}</strong>"<p>{{element.createDate | date:'yyyy-MM-dd HH:mm'}}</p></mat-cell>
+                                    <mat-cell *matCellDef="let element"  (click)="CreateRequestOfWF(element.requestActionID)">{{element.workFlowTemplateName}} from <strong>: {{element.initiatorName}}</strong></mat-cell>
+                                </ng-container>
+                                <ng-container matColumnDef="time">
+                                    <mat-header-cell *matHeaderCellDef mat-sort-header>Time send request</mat-header-cell>
+                                    <mat-cell *matCellDef="let element"  (click)="CreateRequestOfWF(element.requestActionID)">{{element.createDate | date:'yyyy-MM-dd HH:mm'}}</mat-cell>
                                 </ng-container>
                                 <ng-container matColumnDef="isDeleted">
                                     <mat-header-cell *matHeaderCellDef></mat-header-cell>

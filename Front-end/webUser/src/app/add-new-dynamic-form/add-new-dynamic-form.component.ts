@@ -32,6 +32,7 @@ export class AddNewDynamicFormComponent implements OnInit {
     // console.log(this.listComboElement);
 
   }
+
   addProperties(name,properties){
     console.log(this.nameHere);
     debugger;
@@ -57,14 +58,15 @@ export class AddNewDynamicFormComponent implements OnInit {
       }
       this.listComboElement.push(a);
       console.log(this.listComboElement);
-
   }
+
   deleteThisRow(index){
     this.listComboElement.splice(index,1);
   }
   addToCb(nameOfCb){
     debugger;
     this.listCb.push(nameOfCb);
+    this.toastr.success("Add option success");
   }
   createNewForm(){
     let model = {

@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { LoadStaffAcountService } from 'app/service/load-staff-acount.service';
+import { Router } from '@angular/router';
 
 declare const $: any;
 declare interface RouteInfo {
@@ -27,7 +28,7 @@ export class SidebarComponent implements OnInit {
   menuItems: any[];
   dataNow: any
 
-  constructor(private loadStaffAcountService: LoadStaffAcountService) { }
+  constructor(private router: Router,private loadStaffAcountService: LoadStaffAcountService) { }
 
   ngOnInit() {
     this.loadStaffAcountService.checkRole().toPromise().then(rep => {
@@ -60,6 +61,8 @@ export class SidebarComponent implements OnInit {
 
       }
       this.menuItems = ROUTES.filter(menuItem => menuItem);
+    }, err => {
+      this.router.navigate(['/login']);
     });
 
    
