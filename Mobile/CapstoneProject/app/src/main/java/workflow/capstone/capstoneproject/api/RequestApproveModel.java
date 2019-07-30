@@ -5,7 +5,7 @@ import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
-public class RequestApprove {
+public class RequestApproveModel {
 
     @SerializedName("requestID")
     @Expose
@@ -25,7 +25,7 @@ public class RequestApprove {
 
     @SerializedName("actionValues")
     @Expose
-    private List<ActionValue> actionValues = null;
+    private List<ActionValueModel> actionValueModels = null;
 
     public String getRequestID() {
         return requestID;
@@ -59,11 +59,11 @@ public class RequestApprove {
         this.nextStepID = nextStepID;
     }
 
-    public List<ActionValue> getActionValues() {
-        return actionValues;
+    public List<ActionValueModel> getActionValueModels() {
+        return actionValueModels;
     }
 
-    public void setActionValues(List<ActionValue> actionValues) {
-        this.actionValues = actionValues;
+    public void setActionValueModels(List<ActionValueModel> actionValueModels) {
+        this.actionValueModels = actionValueModels;
     }
 }
