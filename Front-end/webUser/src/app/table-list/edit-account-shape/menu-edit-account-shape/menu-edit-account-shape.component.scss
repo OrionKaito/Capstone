@@ -122,4 +122,16 @@ $MINT: linear-gradient(40deg, #ff6ec4, #7873f5) !important;
     border-bottom: 100px solid #00C851;
     transition: box-shadow 200ms cubic-bezier(0, 0, 0.2, 1);
   }
+
+  .example-form {
+    min-width: 150px;
+    max-width: 500px;
+    width: 100%;
+  }
+
+  .example-full-width {
+    width: 100%;
+  }
+
 }
+

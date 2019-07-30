@@ -22,6 +22,7 @@ import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
 import { ToastrModule } from 'ngx-toastr';
 import { ManagePermissionComponent } from './manage-permission/manage-permission.component';
 import { AddPermissionComponent } from './add-permission/add-permission.component';
+import '@firebase/messaging';
 import * as firebase from "firebase/app";
 import { AngularFireModule } from '@angular/fire';
 import { AngularFirestoreModule } from '@angular/fire/firestore';
@@ -40,24 +41,29 @@ import { MDBBootstrapModule, ButtonsModule, WavesModule,
 import { AddNewDynamicFormComponent } from './add-new-dynamic-form/add-new-dynamic-form.component';
 import { ManagePerGrComponent } from './manage-per-gr/manage-per-gr.component';
 import { AddManagePerGrComponent } from './add-manage-per-gr/add-manage-per-gr.component';
+import { AngularFireDatabase, AngularFireDatabaseModule } from 'angularfire2/database';
+import { ManageYourRequestComponent } from './manage-your-request/manage-your-request.component';
 
 const config = {
-  apiKey: "AIzaSyCBhMb1lO_1ioNypRrHS4I1q9sYxJ2thcs",
-    authDomain: "capstonedinamicworkflow.firebaseapp.com",
-    databaseURL: "https://capstonedinamicworkflow.firebaseio.com",
-    projectId: "capstonedinamicworkflow",
-    storageBucket: "capstonedinamicworkflow.appspot.com",
-    messagingSenderId: "1002298812738",
-    appId: "1:1002298812738:web:3979cfb21aa67003"
+  apiKey: "AIzaSyA870TvgTsit4CcKLI0hnn3v89-yR6mwLE",
+  authDomain: "capstoneproject-248a5.firebaseapp.com",
+  databaseURL: "https://capstoneproject-248a5.firebaseio.com",
+  projectId: "capstoneproject-248a5",
+  storageBucket: "capstoneproject-248a5.appspot.com",
+  messagingSenderId: "499817926017",
+  appId: "1:499817926017:web:027e25c5294ad5dc"
+
 };
 @NgModule({
   imports: [
+
     NgMultiSelectDropDownModule.forRoot(),
     ToastrModule.forRoot(),
     AngularFireModule.initializeApp(config),
     AngularFirestoreModule, // firestore
     AngularFireAuthModule, // auth
     AngularFireStorageModule, // storage
+    AngularFireDatabaseModule,
     BrowserAnimationsModule,
     CommonModule,
     MatIconModule,
@@ -94,6 +100,7 @@ const config = {
     AddNewRequestComponent,
     AddAccountComponent,
     AddPermissionComponent,
+    AddManagePerGrComponent,
     DropzoneDirective,
     EditAccountShapeComponent,
     MenuEditAccountShapeComponent,
@@ -103,10 +110,11 @@ const config = {
     AddNewDynamicFormComponent,
     AddManagePerGrComponent,
 
+
   ],
   
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
-  entryComponents:[AddAccountComponent, AddNewDynamicFormComponent,AddManagePerGrComponent, AddPermissionComponent, AddNewRequestComponent, AddHandleRequestComponent ],
+  entryComponents:[AddAccountComponent, AddManagePerGrComponent, AddNewDynamicFormComponent,AddManagePerGrComponent, AddPermissionComponent, AddNewRequestComponent, AddHandleRequestComponent ],
 
   providers: [],
   bootstrap: [AppComponent]

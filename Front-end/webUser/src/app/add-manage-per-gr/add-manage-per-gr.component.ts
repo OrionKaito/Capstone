@@ -29,7 +29,9 @@ export class AddManagePerGrComponent implements OnInit {
     private router: Router, private loadStaffAcountService: LoadStaffAcountService) { }
 
   ngOnInit() {
+    debugger;
     if (this.data != null && this.data != "null") this.createGroup = false;
+
     this.loadStaffAcountService.loadGroupData().toPromise().then(data=>{
       this.groupList = data;
       this.loadStaffAcountService.loadPermissionData().toPromise().then(res=>{
@@ -76,8 +78,7 @@ export class AddManagePerGrComponent implements OnInit {
       //     }
       //   });
     }
-    this.toastr.success('Success! ', '');
-    this.dialogRef.close();
+
   }
 
 }

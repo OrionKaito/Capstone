@@ -1,59 +1,57 @@
 <h4 class="dispaly-4">{{workFlowTemplateName}}
-    <div (click)="closeForm()" class="icon-head-pup">
-        <!-- <button type="button" class="btn btn-outline-dark ml-1" [mat-dialog-close]><i class="fa fa-close"></i> Close</button> -->
-        <button type="button" [mat-dialog-close] ><i class="fa fa-close"></i>
-          </button>
-    </div>
+  <div (click)="closeForm()" class="icon-head-pup">
+    <!-- <button type="button" class="btn btn-outline-dark ml-1" [mat-dialog-close]><i class="fa fa-close"></i> Close</button> -->
+    <button type="button" [mat-dialog-close]><i class="fa fa-close"></i>
+    </button>
+  </div>
 </h4>
 <hr>
-<form #form="ngForm" autocomplete="off" >
+<form #form="ngForm" autocomplete="off">
   <div class="form-row">
     initiatorName : {{initiatorName}}
   </div>
   <div class="form-row">
-    Time : {{requestHandle.createDate | date:'yyyy-MM-dd HH:mm'}} 
+    Time : 
+    {{requestHandle.createDate | date:'yyyy-MM-dd HH:mm'}}
   </div>
   <div *ngFor="let item of requestActionHandleValue" class="form-row">
-    {{item.key}} : {{item.value}} 
+    {{item.key}} : {{item.value}}
+  </div>
+  <div class="form-row">
+    File:
   </div>
   <div *ngFor="let item of requestActionHandleFile" class="form-row">
-    <a href="{{item.path}}">Attached files</a>
+    <!-- <a href="{{item.path}}" target="_blank">{{item.name}}</a> -->
+      <a href="{{item.path}}" target="_blank" >{{item.name}}</a>
+      
   </div>
-  
-  <div class="form-group">
-    <button *ngFor="let item of buttons" id="item.nextStepID" (click)="sendReqNextStep(item.nextStepID)"
-      class="btn btn-dark"><i class="fa fa-database"></i> {{item.connectionTypeName}}</button> 
-      <!-- <button id="ádasd"   > adsdasd</button>  -->
-      <!-- <button type="button" class="btn btn-outline-dark ml-1" [mat-dialog-close]><i class="fa fa-close"></i> Close</button> -->
-  </div>
-
-  
-
 </form>
 <div class="form-row">
-    Comment: 
+  Comment:
 </div>
 <div class="form-row">
   <div class="form-group col-md-6"><input name="name" type="text" [(ngModel)]="cmt" class="form-control"></div>
-  <div class="form-group col-md-6"> <button
-      (click)="addNewCmt()">Add comment</button> </div>
+  <div class="form-group col-md-6"> <button (click)="addNewCmt()">Add comment</button> </div>
 </div>
 <div *ngFor="let item of cmtHandle">
-    <div *ngFor="let item2 of item.requestValues">
-      <div class="form-row"><strong> {{item.fullName}} </strong>({{item.userName}}) 
-         <!-- <label>{{item.createDate  | date:'yyyy-MM-dd HH:mm'}} </label> -->
-        </div>
-        <div class="form-row">  {{item2.value}}    
-         </div>
+  <div *ngFor="let item2 of item.requestValues">
+    <div class="form-row"><strong> {{item.fullName}} </strong>({{item.userName}})
+      <label>{{item.createDate  | date:'yyyy-MM-dd HH:mm'}} </label>
+    </div>
+    <div class="form-row"> {{item2.value}}
     </div>
   </div>
-  <div *ngFor="let item of listCmt">
+</div>
+<div *ngFor="let item of listCmt">
 
-        <div class="form-row"><strong> You </strong>       
-          </div>
-          <div class="form-row">  {{item}}    
-           </div>
-      
-    </div>
-
-
+  <div class="form-row"><strong> You </strong>
+  </div>
+  <div class="form-row"> {{item}}
+  </div>
+</div>
+<div class="form-group">
+    <button *ngFor="let item of buttons" id="item.nextStepID" (click)="sendReqNextStep(item.nextStepID)"
+      class="btn btn-dark"><i class="fa fa-database"></i> {{item.connectionTypeName}}</button>
+    <!-- <button id="ádasd"   > adsdasd</button>  -->
+    <!-- <button type="button" class="btn btn-outline-dark ml-1" [mat-dialog-close]><i class="fa fa-close"></i> Close</button> -->
+  </div>

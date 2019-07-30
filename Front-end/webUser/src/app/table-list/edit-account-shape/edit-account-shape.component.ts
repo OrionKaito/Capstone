@@ -21,6 +21,7 @@ import { AddNewDynamicFormComponent } from 'app/add-new-dynamic-form/add-new-dyn
 })
 export class EditAccountShapeComponent implements OnInit {
   @ViewChild('basicModal') public showModalOnClick: ModalDirective;
+  @ViewChild('confirmDelete') public showModalConfirmDelete: ModalDirective;
 
   checkConnectionResult: any;
   properties: any;
@@ -94,7 +95,7 @@ export class EditAccountShapeComponent implements OnInit {
     }
     this.activatedRoute.params.subscribe(item => {
       if (item.id) {
-        debugger;
+
         this.saveIDofWF = item.id;
         //load dữ liệu của thằng này kiểu json để show lên lại
         this.shapeService.getJsonByUserId(item.id).toPromise().then(res => {
@@ -106,9 +107,8 @@ export class EditAccountShapeComponent implements OnInit {
             var a = JSON.parse(this.saveActiontype.data);
             console.log(a);
             // var c = a.json;
-            console.log("thu nhat");
             this.addImportEnd(a);
-            console.log("ádasd");
+
           }
         });
       }
@@ -142,7 +142,7 @@ export class EditAccountShapeComponent implements OnInit {
   }
   public getlistActionType() {
     this.shapeService.getActiontype().toPromise().then((res: any) => {
-      debugger;
+      // debugger;
       if (res) {
         this.getListAction = res;
         this.getListAction.forEach(item => {
@@ -157,6 +157,7 @@ export class EditAccountShapeComponent implements OnInit {
   public dropImageBottom(item) {
     //lấy id của hình ra, bỏ vô subClass
     this.subClass.push(item.id);
+    if (this.subClass.length > 1) {
     //cả đoạn này chỉ để đặt tên cho mũi tên + ghi id  div kết nối
     if (this.subClass.length > 1) {
       let count: any;
@@ -187,54 +188,88 @@ export class EditAccountShapeComponent implements OnInit {
       //(chl) cái tham số bottom này chưa hiểm lắm
       this.draw('bottom');
     }
+  } else {
+    this.menuList1.filter(itemPlus => {
+      if (itemPlus.id === item.id) {
+        document.getElementById('body-svg').style.cursor = 'pointer';
+      }
+    })
+  }
   }
 
   //sau khi click hình bên trái thì tạo 1 hình phía bên phải (chl)
   public drop(event) {
     const subEvent = event;
+   if (this.menuList1.length > 0) {
+    if (subEvent.class === 'example-box aqua-gradient' ||
+    subEvent.class === 'example-box3 aqua-gradient' ) {
+     
+      for (let i = 0; i < this.menuList1.length; i++) {
+        console.log(this.menuList1[i].class);
+        console.log(subEvent.class);
+        if (this.menuList1[i].class === subEvent.class) {
+          this.toastr.info('Qua muc cho phep');
+          return;
+        }
+        else {
+          if (i === this.menuList1.length - 1)
+            this.addShape(subEvent);
+
+        }
+      }
+  
+    } else {
+      this.addShape(subEvent);
+    }
+
+    } else {
+      this.addShape(subEvent);
+    }
+
+  }
+
+  public addShape(subEvent) {
     const count = this.menuList1.length;
+   // Tạo id động cho từng hình
+   subEvent.id = this.create_UUID().toString();
+   subEvent.name = 'FormName' + count;
+   subEvent.description = 'FormDescription' + count;
+   subEvent.permissionToUseID = "";
+   subEvent.isApprovedByLineManager = false;
+   //subEvent.idText = 'form' + count;
+   subEvent.formControlName = 'form' + count;
+   subEvent.actionTypeID = "";
+   // subEvent.dropdown = this.listDropdown;
 
-    // Tạo id động cho từng hình
-    subEvent.id = this.create_UUID().toString();
-    subEvent.name = 'FormName' + count;
-    subEvent.description = 'FormDescription' + count;
-    subEvent.permissionToUseID = "";
-    subEvent.isApprovedByLineManager = false;
-    //subEvent.idText = 'form' + count;
-    subEvent.formControlName = 'form' + count;
-    subEvent.actionTypeID = "";
-    // subEvent.dropdown = this.listDropdown;
 
-    debugger;
+   // thêm vô 2 cái list
+   this.menuList1.push(JSON.parse(JSON.stringify(subEvent)));
+   this.subMenu.push(JSON.parse(JSON.stringify(subEvent)));
 
-    // thêm vô 2 cái list
-    this.menuList1.push(JSON.parse(JSON.stringify(subEvent)));
-    this.subMenu.push(JSON.parse(JSON.stringify(subEvent)));
+   if (subEvent.formControlName === 'form0') {
+     const abc = {};
+     abc[subEvent.formControlName] = [''];
+     this.secondFormGroup = this.formBuilder.group(abc);
+   }
 
-    if (subEvent.formControlName === 'form0') {
-      const abc = {};
-      abc[subEvent.formControlName] = [''];
-      this.secondFormGroup = this.formBuilder.group(abc);
-    }
 
-    //hình như thằng ni là thằng để sinh ra
-    this.menuList1.forEach(item => {
-      this.secondFormGroup.addControl(item.formControlName, new FormControl(''));
-    })
+   //hình như thằng ni là thằng để sinh ra
+   this.menuList1.forEach(item => {
+     this.secondFormGroup.addControl(item.formControlName, new FormControl(''));
+   })
 
-    // Delay để gọi hàm Drag của Jquery
-    setTimeout(() => {
-      this.initDraw();
-    }, 500);
+   // Delay để gọi hàm Drag của Jquery
+   setTimeout(() => {
+     this.initDraw();
+   }, 500);
 
-    // Show message
-    if (this.menuList1.length < 2) {
-      this.toastr.info('Di chuyển hình !!', '', { timeOut: 5000 });
-      setTimeout(() => {
-        this.toastr.info('Nhấn delete để xóa !!', '', { timeOut: 5000 });
-      }, 2000);
-    }
-
+   // Show message
+   if (this.menuList1.length < 2) {
+     this.toastr.info('Di chuyển hình !!', '', { timeOut: 5000 });
+     setTimeout(() => {
+       this.toastr.info('Nhấn delete để xóa !!', '', { timeOut: 5000 });
+     }, 2000);
+   }
   }
 
   //import json file từ máy
@@ -264,7 +299,7 @@ export class EditAccountShapeComponent implements OnInit {
     //   this.toastr.error('Lỗi định dạng !!');
     // } else {
     //   // this.progress.show();
-    //   //lấy ra thôi, do để json dạng mảng nên ms lấy lenght rồi trừ rắc rối ri
+    //   //lấy ra thôi, do để json dạng mảng nên ms lấy length rồi trừ rắc rối ri
     //   //cả đoạn này chỉ để check id
     //   for (let i = 0; i < (dataImport.length - 1); i++) {
     //     // xem có trùng thằng nào k
@@ -287,7 +322,7 @@ export class EditAccountShapeComponent implements OnInit {
       this.toastr.error('Lỗi định dạng !!');
     } else {
       // this.progress.show();
-      //lấy ra thôi, do để json dạng mảng nên ms lấy lenght rồi trừ rắc rối ri
+      //lấy ra thôi, do để json dạng mảng nên ms lấy length rồi trừ rắc rối ri
       //cả đoạn này chỉ để check id
       for (let i = 0; i < dataImport.action.length; i++) {
         // xem có trùng thằng nào k
@@ -470,7 +505,7 @@ export class EditAccountShapeComponent implements OnInit {
       //   json: exportJson
       // }
       var a = { id: this.saveIDofWF, "data": JSON.stringify(exportJson) };
-      debugger;
+      // debugger;
       // this.shapeService.postJsonFile(a).subscribe((res: any) => {
       // }, (err) => {
       //   console.log(err);
@@ -519,6 +554,7 @@ export class EditAccountShapeComponent implements OnInit {
     // Có đủ hai điểm để vẽ mủi tên
     if (this.subClass.length > 1) {
       this.subClass = [];
+      document.getElementById('body-svg').style.cursor = 'default';
       this.classQuerySelector = [];
       this.listArrow = [];
       this.posnALeft = [];
@@ -741,7 +777,7 @@ export class EditAccountShapeComponent implements OnInit {
   }
 
   public openDialog(item) {
-    debugger;
+    // debugger;
     this.listClass.forEach(element => {
       if (element.idArrow === item) {
         this.propertiesArr = element;
@@ -755,6 +791,50 @@ export class EditAccountShapeComponent implements OnInit {
     } else {
       localStorage.setItem('arrow', item);
     }
+
+  }
+
+  public dialogConfirmDelete(item) {
+    console.log(item);
+    this.showModalConfirmDelete.show();
+    localStorage.setItem('idShape', item.id);
+  }
+
+  public deleteShape() {
+    this.showModalConfirmDelete.hide();
+    const item = localStorage.getItem('idShape');
+    for (let i = 0; i < this.menuList1.length; i++) {
+      if (this.menuList1[i].id === item) {
+        this.menuList1.splice(i, 1);
+        // this.listClass.splice(i, 1);
+      }
+    }
+
+    if (this.listClass.length > 0) {
+    for (let i = 0; i < this.listClass.length; i++) {
+      for (let e = 0; e < this.listClass[i].idDiv.length; e++) {
+        if (this.listClass[i].idDiv[e] === item) {
+          for (let q = 0; q < this.listArrow.length; q++) {
+            if (this.listArrow[q] === this.listClass[i].idArrow) {
+              this.listArrow.splice(q, 1);
+              // this.listClass.splice(i, 1);
+            }
+          }
+        }
+      }
+    }
+
+    for (let i = 0; i < this.listClass.length; i++) {
+      for (let e = 0; e < this.listClass[i].idDiv.length; e++) {
+        if (this.listClass[i].idDiv[e] === item) {
+              this.listClass.splice(i, 1);
+           
+        }
+      }
+    }
+  }
+  console.log(this.listArrow);
+  console.log(this.listClass);
 
   }
 
@@ -785,7 +865,7 @@ export class EditAccountShapeComponent implements OnInit {
   }
 
   showProperties(item) {
-    debugger;
+    // debugger;
     this.menuList1.forEach(element => {
       if (element.id === item.id) {
         this.properties = element;
@@ -975,7 +1055,7 @@ export class EditAccountShapeComponent implements OnInit {
       };
 
       exportJson2.workFlowID = this.saveIDofWF;
-      debugger;
+      // debugger;
       console.log("file json:")
       console.log(JSON.stringify(a));
 
@@ -1072,5 +1152,186 @@ export class EditAccountShapeComponent implements OnInit {
       });
     }
 
+  }
+  checkConnectionFe() {
+    let listNode: any = [];
+    let listArr: any = [];
+    this.menuList1.forEach(element => {
+      listNode.push({ id: element.id, isStart: element.isStart, isEnd: element.isEnd });
+    })
+    this.listClass.forEach(element => {
+      listArr.push({ from: element.idDiv[0], to: element.idDiv[1] });
+    });
+    if (this.checkStart(listNode, listArr) && this.checkEnd(listNode, listArr)){
+      this.toastr.success("Sucess");
+    }
+  }
+  checkStart(listNode, listArr) {
+    let nodeNowHandling: any = [];
+    let nodeHandled: any = [];
+    let nodeWillHandle: any = [];
+
+    listNode.forEach(element => {
+      if (element.isStart) {
+        nodeNowHandling.push(element);
+      }
+    });
+
+    if (nodeNowHandling.length != 1) {
+      this.toastr.error("Only one Start Action is support!")
+    }else {
+      while(nodeNowHandling.length > 0){
+        //với mỗi thằng node hiện đang xử lý
+        nodeNowHandling.forEach(node => {
+          //so dánh trong mũi tên để tìm ra thằng đuôi của nó
+          listArr.forEach(arr => {
+            //nếu nó bằng thằng đầu
+            if(node.id == arr.from) {
+              //thì tìm thằng đuôi
+              if(this.findNode(arr.to, listNode).id == ""){
+                //k có đuôi báo lỗi
+                this.toastr.error("Mũi tên từ action" + arr.from +" phải chỉa tới một action!");
+                return false;
+              } else{
+
+                //có đuôi thì kiểm tra xem đuôi dó có đã hay đang xử lý k
+                let nodeCheckNow:any;
+                nodeCheckNow = this.findNode(arr.to, listNode);
+                let node1=this.findNode(nodeCheckNow.id, nodeHandled);
+                let node2=this.findNode(nodeCheckNow.id, nodeNowHandling);
+                if(node1.id != "" ||
+                 node2.id != ""){
+
+                 }else{
+                  // chưa đụng tới thì thêm vô sẽ xử lý
+                  nodeWillHandle.push(nodeCheckNow)
+                 }
+               
+              }
+             
+            }
+          });
+        });
+
+        nodeNowHandling.forEach(element => {
+          nodeHandled.push(element);
+        });
+        nodeNowHandling= [];
+        nodeWillHandle.forEach(element => {
+          nodeNowHandling.push(element);
+        });
+        nodeWillHandle=[];
+      }
+      let nodeWithoutStart:any=[];
+      listNode.forEach(element => {
+        let check = true;
+        nodeHandled.forEach(element2 => {
+          if(element.id== element2.id){
+            check = false;
+          } 
+        });
+        if(check){
+          nodeWithoutStart.push(element);
+        }
+      });
+      if(nodeWithoutStart.length == 0){
+        return true;
+
+      } else {
+        let a="";
+        nodeWithoutStart.forEach(element => {
+          a = a +element.id + ", ";
+        });
+        this.toastr.error("Action not usefull, can not come here from start: " +a);
+        return false;
+      }
+    }
+  }
+  checkEnd(listNode, listArr) {
+    let nodeNowHandling: any = [];
+    let nodeHandled: any = [];
+    let nodeWillHandle: any = [];
+
+    listNode.forEach(element => {
+      if (element.isEnd) {
+        nodeNowHandling.push(element);
+      }
+    });
+
+    // if (nodeNowHandling.length != 1) {
+    //   this.toastr.error("Only one Start Action is support!")
+    // }else {
+      while(nodeNowHandling.length > 0){
+        //với mỗi thằng node hiện đang xử lý
+        nodeNowHandling.forEach(node => {
+          //so dánh trong mũi tên để tìm ra thằng đuôi của nó
+          listArr.forEach(arr => {
+            //nếu nó bằng thằng đầu
+            if(node.id == arr.to) {
+              //thì tìm thằng đuôi
+              if(this.findNode(arr.from, listNode).id == ""){
+                //k có đuôi báo lỗi
+                this.toastr.error("Mũi tên đuôi action" + arr.from +" phải bắt đầu từ một action!");
+                return false;
+              } else{
+
+                //có đuôi thì kiểm tra xem đuôi dó có đã hay đang xử lý k
+                let nodeCheckNow:any;
+                nodeCheckNow = this.findNode(arr.from, listNode);
+                if(this.findNode(nodeCheckNow.id, nodeHandled).id != "" ||
+                 this.findNode(nodeCheckNow.id, nodeNowHandling).id != ""){
+                 }else{
+                  // chưa đụng tới thì thêm vô sẽ xử lý
+                  nodeWillHandle.push(nodeCheckNow)
+                 }
+               
+              }
+             
+            }
+          });
+        });
+
+        nodeNowHandling.forEach(element => {
+          nodeHandled.push(element);
+        });
+        nodeNowHandling= [];
+        nodeWillHandle.forEach(element => {
+          nodeNowHandling.push(element);
+        });
+        nodeWillHandle=[];
+      }
+      let nodeWithoutStart:any=[];
+      listNode.forEach(element => {
+        let check = true;
+        nodeHandled.forEach(element2 => {
+          if(element.id== element2.id){
+            check = false;
+          } 
+        });
+        if(check){
+          nodeWithoutStart.push(element);
+        }
+      });
+      if(nodeWithoutStart.length == 0){
+        return true;
+
+      } else {
+        let a="";
+        nodeWithoutStart.forEach(element => {
+          a = a +element.id + ", ";
+        });
+        this.toastr.error("Action này không thể đi đến kết thúc" +a);
+        return false;
+      }
+   // }
+  }
+  findNode(node, listNode){
+    let retu = {id: "", isStart: false, isEnd: false};
+    listNode.forEach(element => {
+      if(node.toString() == element.id.toString()) {
+        retu= element;
+      }
+    });
+    return retu;
   }
 }

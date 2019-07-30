@@ -121,31 +121,7 @@ public class LoginActivity extends AppCompatActivity {
             setTextError("Please input password!");
         } else {
             capstoneRepository = new CapstoneRepositoryImpl();
-//            capstoneRepository.login(context, fields, new CallBackData<Login>() {
-//                @Override
-//                public void onSuccess(Login login) {
-//                    DynamicWorkflowSharedPreferences.storeJWT(context, ConstantDataManager.AUTHORIZATION_TOKEN, login.getToken());
-//                    Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-//                    startActivity(intent);
-//                    finish();
-//                }
-//
-//                @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
-//                @Override
-//                public void onFail(String message) {
-//                    if (message.contains("Invalid username or password!")) {
-//                        setTextError(message);
-//                    } else if (message.contains("Please verify your account first")) {
-//                        VerifyAccountDialog dialog = new VerifyAccountDialog(LoginActivity.this);
-//                        dialog.setCancelable(false);
-//                        dialog.create();
-//                        dialog.show();
-//                    } else {
-//                        setTextError(message);
-//                    }
-//                }
-//            });
-            capstoneRepository.testLogin(context, testLogin, new CallBackData<Login>() {
+            capstoneRepository.login(context, fields, new CallBackData<Login>() {
                 @Override
                 public void onSuccess(Login login) {
                     DynamicWorkflowSharedPreferences.storeJWT(context, ConstantDataManager.AUTHORIZATION_TOKEN, login.getToken());
@@ -169,6 +145,30 @@ public class LoginActivity extends AppCompatActivity {
                     }
                 }
             });
+//            capstoneRepository.testLogin(context, testLogin, new CallBackData<Login>() {
+//                @Override
+//                public void onSuccess(Login login) {
+//                    DynamicWorkflowSharedPreferences.storeJWT(context, ConstantDataManager.AUTHORIZATION_TOKEN, login.getToken());
+//                    Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+//                    startActivity(intent);
+//                    finish();
+//                }
+//
+//                @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+//                @Override
+//                public void onFail(String message) {
+//                    if (message.contains("Invalid username or password!")) {
+//                        setTextError(message);
+//                    } else if (message.contains("Please verify your account first")) {
+//                        VerifyAccountDialog dialog = new VerifyAccountDialog(LoginActivity.this);
+//                        dialog.setCancelable(false);
+//                        dialog.create();
+//                        dialog.show();
+//                    } else {
+//                        setTextError(message);
+//                    }
+//                }
+//            });
         }
     }
 

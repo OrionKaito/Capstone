@@ -1,5 +1,17 @@
-<h4 *ngIf="createGroup" class="dispaly-4">Add new Permission</h4>
-<h4 *ngIf="!createGroup" class="dispaly-4">Edit Permission</h4>
+<h4 *ngIf="createGroup" class="dispaly-4">Add new Permission
+  <div (click)="closeForm()" class="icon-head-pup">
+    <!-- <button type="button" class="btn btn-outline-dark ml-1" [mat-dialog-close]><i class="fa fa-close"></i> Close</button> -->
+    <button type="button" [mat-dialog-close] ><i class="fa fa-close"></i>
+      </button>
+</div>
+</h4>
+<h4 *ngIf="!createGroup" class="dispaly-4">Edit Permission
+  <div (click)="closeForm()" class="icon-head-pup">
+    <!-- <button type="button" class="btn btn-outline-dark ml-1" [mat-dialog-close]><i class="fa fa-close"></i> Close</button> -->
+    <button type="button" [mat-dialog-close] ><i class="fa fa-close"></i>
+      </button>
+</div>
+</h4>
 <hr>
 <form #form="ngForm" autocomplete="off" (submit)="onSubmit()">
   <div class="form-row">

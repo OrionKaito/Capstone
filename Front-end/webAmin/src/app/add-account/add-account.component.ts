@@ -49,7 +49,7 @@ export class AddAccountComponent implements OnInit {
 
     // this.formData.groupIDs[0] = "0";
     // this.formData.roleIDs[0] = "0";
-    this.formData.managerID = "0";
+    this.formData.LineManagerID = "0";
     // this.inputGroup=[{
     //   "id": "e6f8b263-9806-4198-1d2d-08d6f6159d78",
     //   "name": "Phòng quản lý"
@@ -77,24 +77,25 @@ export class AddAccountComponent implements OnInit {
       this.loadStaffAcountService.loadRoleData().toPromise().then(data => {
         this.roleList = data;
 
-        this.dropRoleList = [
-        ];
-        this.roleList.forEach(element => {
-          this.dropRoleList.push({ id: element.id, name: element.name });
-        });
+        // this.dropRoleList = [
+        // ];
+        // this.roleList.forEach(element => {
+        //   this.dropRoleList.push({ id: element.id, name: element.name });
+        // });
 
-        this.dropdownSettings = {
-          singleSelection: false,
-          idField: 'id',
-          textField: 'name',
-          selectAllText: 'Select All',
-          unSelectAllText: 'UnSelect All',
-          itemsShowLimit: 5,
-          allowSearchFilter: true
-        };
+        // this.dropdownSettings = {
+        //   singleSelection: false,
+        //   idField: 'id',
+        //   textField: 'name',
+        //   selectAllText: 'Select All',
+        //   unSelectAllText: 'UnSelect All',
+        //   itemsShowLimit: 5,
+        //   allowSearchFilter: true
+        // };
         this.loadStaffAcountService.loadStaffData().toPromise().then(data => {
           this.manageList1 = data;
           this.manageList = this.manageList1.accounts;
+          console.log(this.manageList);
           if (this.data != null && this.data != "null") this.createAcc = false;
           if (!this.createAcc) {
 
@@ -108,11 +109,11 @@ export class AddAccountComponent implements OnInit {
               this.formData.groupIDs.forEach(element => {
                 this.selectedItemGrs.push({ item_id: element.id, item_text: element.name });    
               });
-              this.formData.roleIDs = this.recevieData.roles;
-              this.formData.roleIDs.forEach(element => {
+              this.formData.roleID = this.recevieData.roles;
+              this.formData.roleID.forEach(element => {
                 this.selectedItemRoles.push({ item_id: element.id, item_text: element.name });    
               });
-              this.formData.managerID = this.recevieData.managerID;
+              this.formData.LineManagerID = this.recevieData.managerID;
 
             })
           }
@@ -125,7 +126,7 @@ export class AddAccountComponent implements OnInit {
     if (this.createAcc) {
       var a = this.formData.dateOfBirth.toString() + "T06:08:08-05:00";
       this.formData.dateOfBirth = new Date(a);
-      let formData1 = new AccountItem(this.formData.roleIDs, this.formData.groupIDs, this.formData.managerID, this.formData.email, this.formData.password, this.formData.fullName, this.formData.dateOfBirth
+      let formData1 = new AccountItem(this.formData.roleID, this.formData.groupIDs, this.formData.LineManagerID, this.formData.email, this.formData.password, this.formData.fullName, this.formData.dateOfBirth
         );
 
       let saveID: any =[];
@@ -134,15 +135,16 @@ export class AddAccountComponent implements OnInit {
       });
       formData1.groupIDs= [];
       formData1.groupIDs= saveID;
-      let saveIDRole: any =[];
-      this.formData.roleIDs.forEach(element => {
-        saveIDRole.push(element.id);
-      });
-      formData1.roleIDs= [];
-      formData1.roleIDs= saveIDRole;
-      if(formData1.managerID == "0") {
-        formData1.managerID = "";
+     // let saveIDRole: any =[];
+      // this.formData.roleIDs.forEach(element => {
+      //   saveIDRole.push(element.id);
+      // });
+  
+      formData1.roleID= this.formData.roleID;
+      if(formData1.LineManagerID == "0") {
+        formData1.LineManagerID = "";
       }
+      console.log(JSON.stringify(formData1));
       this.LoginService.Register(formData1).subscribe(
         resp => {
           console.log(resp.toString());
@@ -158,7 +160,7 @@ export class AddAccountComponent implements OnInit {
         });
 
     } else {
-      let formData1 = new AccountItem(this.formData.roleIDs, this.formData.groupIDs, this.formData.managerID, this.formData.email, this.formData.password, this.formData.fullName, this.formData.dateOfBirth
+      let formData1 = new AccountItem(this.formData.roleID, this.formData.groupIDs, this.formData.LineManagerID, this.formData.email, this.formData.password, this.formData.fullName, this.formData.dateOfBirth
         );
 
       console.log(formData1);
@@ -169,11 +171,11 @@ export class AddAccountComponent implements OnInit {
       formData1.groupIDs= [];
       formData1.groupIDs= saveID;
       let saveIDRole: any =[];
-      this.formData.roleIDs.forEach(element => {
+      this.formData.roleID.forEach(element => {
         saveIDRole.push(element.id);
       });
-      formData1.roleIDs= [];
-      formData1.roleIDs= saveIDRole;
+      formData1.roleID= [];
+      formData1.roleID= saveIDRole;
       formData1.id = this.data;
       this.LoginService.editAccount(formData1).subscribe(
         resp => {

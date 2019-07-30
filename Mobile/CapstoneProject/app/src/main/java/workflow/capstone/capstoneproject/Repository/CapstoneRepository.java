@@ -11,11 +11,13 @@ import workflow.capstone.capstoneproject.api.Request;
 import workflow.capstone.capstoneproject.api.RequestApprove;
 import workflow.capstone.capstoneproject.api.TestLogin;
 import workflow.capstone.capstoneproject.api.UpdateProfileModel;
+import workflow.capstone.capstoneproject.entities.MyRequest;
 import workflow.capstone.capstoneproject.entities.RequestForm;
 import workflow.capstone.capstoneproject.entities.HandleRequestForm;
 import workflow.capstone.capstoneproject.entities.Login;
 import workflow.capstone.capstoneproject.entities.Profile;
 import workflow.capstone.capstoneproject.entities.RequestResult;
+import workflow.capstone.capstoneproject.entities.RequestToHandle;
 import workflow.capstone.capstoneproject.entities.UserNotification;
 import workflow.capstone.capstoneproject.entities.WorkflowTemplate;
 import workflow.capstone.capstoneproject.utils.CallBackData;
@@ -41,11 +43,15 @@ public interface CapstoneRepository {
 
     void getWorkflow(String token, CallBackData<List<WorkflowTemplate>> callBackData);
 
-    void getNumberOfNotification(String token, int notificationType, CallBackData<String> callBackData);
+    void getNumberOfNotification(String token, CallBackData<String> callBackData);
 
     void getNotification(String token, CallBackData<List<UserNotification>> callBackData);
 
+    void getRequestsToHandleByPermission(String token, CallBackData<List<RequestToHandle>> callBackData);
+
     void getNotificationByType(String token, int notificationType, CallBackData<List<UserNotification>> callBackData);
+
+    void getMyRequest(String token, CallBackData<List<MyRequest>> callBackData);
 
     void postRequest(String token, Request request, CallBackData<String> callBackData);
 
