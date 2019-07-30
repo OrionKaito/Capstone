@@ -15,7 +15,6 @@ namespace Capstone.Model
         public string LineManagerID { get; set; }
         [ForeignKey("LineManagerID")]
         public virtual User LineManager { get; set; }
-        public string DeviceID { get; set; }
 
         public bool IsDeleted { get; set; }
     }

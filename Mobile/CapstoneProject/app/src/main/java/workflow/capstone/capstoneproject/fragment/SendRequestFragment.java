@@ -9,7 +9,6 @@ import android.content.ClipData;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -17,7 +16,6 @@ import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
-import android.text.InputType;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -54,7 +52,6 @@ import workflow.capstone.capstoneproject.adapter.ListFileNameAdapter;
 import workflow.capstone.capstoneproject.api.ActionValue;
 import workflow.capstone.capstoneproject.api.Request;
 import workflow.capstone.capstoneproject.entities.Connection;
-import workflow.capstone.capstoneproject.entities.DynamicForm.ComboBox;
 import workflow.capstone.capstoneproject.entities.DynamicForm.DynamicForm;
 import workflow.capstone.capstoneproject.entities.RequestForm;
 import workflow.capstone.capstoneproject.repository.CapstoneRepository;
@@ -158,7 +155,6 @@ public class SendRequestFragment extends Fragment {
                         capstoneRepository.postRequestFile(token, multipartBody, new CallBackData<String[]>() {
                             @Override
                             public void onSuccess(String[] strings) {
-                                Toast.makeText(getContext(), "File Success: " + file.getName(), Toast.LENGTH_SHORT).show();
                                 for (int i = 0; i < strings.length; i++) {
                                     listPath.add(strings[i]);
                                 }
@@ -269,18 +265,19 @@ public class SendRequestFragment extends Fragment {
                 linearLayoutLabel.addView(textView);
                 lnDynamicForm.addView(linearLayoutLabel);
 
-                View lineView = new View(getActivity());
-                LinearLayout.LayoutParams viewParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 1);
-                viewParams.setMargins(10,10,10,10);
-                lineView.setLayoutParams(viewParams);
-                lineView.setBackgroundColor(getResources().getColor(R.color.colortext));
-                lnDynamicForm.addView(lineView);
+//                View lineView = new View(getActivity());
+//                LinearLayout.LayoutParams viewParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 1);
+//                viewParams.setMargins(10,10,10,10);
+//                lineView.setLayoutParams(viewParams);
+//                lineView.setBackgroundColor(getResources().getColor(R.color.colortext));
+//                lnDynamicForm.addView(lineView);
 
             } else if (!dynamicFormList.get(i).getShortText().getName().isEmpty()) {
                 EditText editText = new EditText(getActivity());
                 //set layout_weight cho edittext
                 editText.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT, 3.0f));
                 editText.setBackgroundColor(getResources().getColor(R.color.edit_text_background));
+                editText.setBackgroundResource(R.drawable.border_radius);
 
                 putIdToMap(editText, i);
 
@@ -295,7 +292,7 @@ public class SendRequestFragment extends Fragment {
                 editText.setMaxLines(5);
                 editText.setGravity(Gravity.TOP);
                 editText.setBackgroundColor(getResources().getColor(R.color.edit_text_background));
-
+                editText.setBackgroundResource(R.drawable.border_radius);
                 putIdToMap(editText, i);
 
                 configView(dynamicFormList.get(i).getLongText().getName(), editText);
@@ -313,7 +310,6 @@ public class SendRequestFragment extends Fragment {
                 spinner.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT, 3.0f));
                 ArrayAdapter<String> adapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_spinner_dropdown_item, listOption);
                 spinner.setAdapter(adapter);
-
                 putIdToMap(spinner, i);
 
                 configView(dynamicFormList.get(i).getComboBox().getName(), spinner);
@@ -341,7 +337,7 @@ public class SendRequestFragment extends Fragment {
         textView.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT, 7.0f));
         textView.setText(textViewName);
         textView.setTextSize(17.0f);
-        textView.setTextColor(getResources().getColor(R.color.colortext));
+        textView.setTextColor(getResources().getColor(R.color.colorAccent));
 
         //add child view to linear layout
         linearLayout.addView(textView);
@@ -349,12 +345,12 @@ public class SendRequestFragment extends Fragment {
         lnDynamicForm.addView(linearLayout);
 
         //add line view underline linear layout
-        View lineView = new View(getActivity());
-        LinearLayout.LayoutParams viewParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 2);
-        viewParams.setMargins(10,10,10,10);
-        lineView.setLayoutParams(viewParams);
-        lineView.setBackgroundColor(getResources().getColor(R.color.colortext));
-        lnDynamicForm.addView(lineView);
+//        View lineView = new View(getActivity());
+//        LinearLayout.LayoutParams viewParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 2);
+//        viewParams.setMargins(10,10,10,10);
+//        lineView.setLayoutParams(viewParams);
+//        lineView.setBackgroundColor(getResources().getColor(R.color.colortext));
+//        lnDynamicForm.addView(lineView);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
@@ -444,7 +440,7 @@ public class SendRequestFragment extends Fragment {
             request.setDescription("");
             request.setWorkFlowTemplateID(workFlowTemplateID);
             request.setNextStepID(nextStepID);
-            request.setActionValues(actionValues);
+            request.setActionValues(actionValueList);
             request.setImagePaths(listPath);
 
             final KProgressHUD progressHUD = KProgressHUDManager.showProgressBar(getContext());

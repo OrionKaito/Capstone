@@ -484,8 +484,10 @@ namespace Capstone.Controllers
         }
 
         [HttpPut("UpdateAvatar")]
-        public async Task<ActionResult> UpdateAvatar(string imagePath)
+        public async Task<ActionResult> UpdateAvatar(UpdateAvatar model)
         {
+            if (!ModelState.IsValid) return BadRequest(ModelState);
+
             try
             {
                 var currentUser = HttpContext.User;
@@ -494,7 +496,7 @@ namespace Capstone.Controllers
                 var userInDB = _userManager.FindByIdAsync(userID).Result;
                 if (userInDB == null) return BadRequest(WebConstant.UserNotExist);
 
-                userInDB.ImagePath = imagePath;
+                userInDB.ImagePath = model.ImagePath;
                 var result = await _userManager.UpdateAsync(userInDB);
 
                 if (!result.Succeeded) return new BadRequestObjectResult(result.Errors);

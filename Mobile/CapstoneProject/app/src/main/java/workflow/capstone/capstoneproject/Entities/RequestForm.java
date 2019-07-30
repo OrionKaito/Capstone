@@ -11,9 +11,11 @@ public class RequestForm implements Serializable {
     @SerializedName("workFlowName")
     @Expose
     private String workFlowName;
+
     @SerializedName("connections")
     @Expose
-    private List<Connection> connections = null;
+    private List<Connection> connections;
+
     @SerializedName("actionType")
     @Expose
     private ActionType actionType;

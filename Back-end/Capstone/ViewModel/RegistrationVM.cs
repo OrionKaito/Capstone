@@ -47,4 +47,9 @@ namespace Capstone.ViewModel
         public Guid RoleID { get; set; }
         public IEnumerable<Guid> GroupIDs { get; set; }
     }
+
+    public class UpdateAvatar
+    {
+        public string ImagePath { get; set; }
+    }
 }

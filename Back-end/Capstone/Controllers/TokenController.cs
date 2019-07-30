@@ -1,4 +1,5 @@
-﻿using Capstone.Helper;
+﻿using AutoMapper;
+using Capstone.Helper;
 using Capstone.Model;
 using Capstone.Service;
 using Capstone.ViewModel;
@@ -29,10 +30,12 @@ namespace Capstone.Controllers
         private readonly INotificationService _notificationService;
         private readonly IRequestActionService _requestActionService;
         private readonly IRequestService _requestService;
+        private readonly IUserDeviceService _userDeviceService;
+        private readonly IMapper _mapper;
 
         public TokenController(IConfiguration config, UserManager<User> userManager, IPermissionService permissionService, IRoleService roleService
             , IUserNotificationService userNotificationService, INotificationService notificationService, IRequestActionService requestActionService
-            , IRequestService requestService)
+            , IRequestService requestService, IUserDeviceService userDeviceService, IMapper mapper)
         {
             _config = config;
             _userManager = userManager;
@@ -42,6 +45,8 @@ namespace Capstone.Controllers
             _notificationService = notificationService;
             _requestActionService = requestActionService;
             _requestService = requestService;
+            _userDeviceService = userDeviceService;
+            _mapper = mapper;
         }
 
         [HttpGet("GetRole")]
@@ -166,8 +171,8 @@ namespace Capstone.Controllers
         }
 
         [AllowAnonymous]
-        [HttpPost("TestLogin")]
-        public async Task<ActionResult<TokenVM>> TestLogin([FromBody]LoginVM loginVM)
+        [HttpPost("NewLogin")]
+        public async Task<ActionResult<TokenVM>> NewLogin([FromBody]LoginVM loginVM)
         {
             if (!ModelState.IsValid)
             {
@@ -181,15 +186,21 @@ namespace Capstone.Controllers
                     return BadRequest(WebConstant.InvalidUSer);
                 }
                 var userToVerify = _userManager.FindByNameAsync(loginVM.UserName).Result;
-                userToVerify.DeviceID = loginVM.DeviceID;
 
-                var result = await _userManager.UpdateAsync(userToVerify);
+                UserDeviceVM model = new UserDeviceVM
+                {
+                    UserID = userToVerify.Id,
+                    DeviceToken = loginVM.DeviceToken
+                };
+
+                _userDeviceService.Create(_mapper.Map<UserDevice>(model));
+
                 var userNotificationList = _userNotificationService.GetByUserIDAndIsSend(userToVerify.Id, false);
 
-                string[] deviceTokens = new string[]
-                {
-                    userToVerify.DeviceID
+                string[] deviceTokens = new string[] {
+                    loginVM.DeviceToken
                 };
+
                 foreach (var userNotification in userNotificationList)
                 {
                     bool sent = false;
@@ -210,8 +221,6 @@ namespace Capstone.Controllers
                     userNotification.IsSend = true;
                     _userNotificationService.Save();
                 }
-
-                if (!result.Succeeded) return new BadRequestObjectResult(result.Errors);
 
                 var role = _roleService.GetByUserID(identity.Result.Id);
 
@@ -252,15 +261,19 @@ namespace Capstone.Controllers
         }
 
         [HttpPut("Logout")]
-        public async Task<ActionResult<string>> Logout()
+        public ActionResult<string> Logout(string deviceToken)
         {
             try
             {
                 var userId = HttpContext.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier).Value;
-                var userInDb = _userManager.FindByIdAsync(userId).Result;
-                userInDb.DeviceID = "";
-                var result = await _userManager.UpdateAsync(userInDb);
-                if (!result.Succeeded) return new BadRequestObjectResult(result.Errors);
+
+                UserDevice userDevice = _userDeviceService.GetByUserIDAndDeviceToken(userId, deviceToken);
+                if (userDevice == null)
+                {
+                    return BadRequest("Something Wrong");
+                }
+
+                _userDeviceService.Delete(userDevice);
                 return StatusCode(201, "Logout Success");
             }
             catch (Exception e)
