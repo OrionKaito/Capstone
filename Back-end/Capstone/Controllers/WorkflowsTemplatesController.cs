@@ -248,7 +248,25 @@ namespace Capstone.Controllers
 
                 foreach (var connection in model.Connections)
                 {
-                    var workflowConnection = _mapper.Map<WorkFlowTemplateActionConnection>(connection);
+                    var connectionTypeInDb = _connectionTypeService.GetByName(connection.Name);
+
+                    if (connectionTypeInDb == null) // kiểm tra connection type này có chưa
+                    {
+                        ConnectionType connectionType = new ConnectionType
+                        {
+                            Name = connection.Name,
+                        };
+                        _connectionTypeService.Create(connectionType);
+                        connectionTypeInDb = connectionType;
+                    }
+
+                    WorkFlowTemplateActionConnection workflowConnection = new WorkFlowTemplateActionConnection
+                    {
+                        ConnectionTypeID = connectionTypeInDb.ID,
+                        FromWorkFlowTemplateActionID = connection.FromWorkFlowTemplateActionID,
+                        ToWorkFlowTemplateActionID = connection.ToWorkFlowTemplateActionID,
+                    };
+
                     _workFlowTemplateActionConnectionService.Create(workflowConnection);
                 }
 

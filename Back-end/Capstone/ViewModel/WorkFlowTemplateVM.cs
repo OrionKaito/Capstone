@@ -42,12 +42,19 @@ namespace Capstone.ViewModel
         public bool IsEnd { get; set; }
     }
 
+    public class WorkFlowConnectionCM
+    {
+        public Guid FromWorkFlowTemplateActionID { get; set; }
+        public Guid ToWorkFlowTemplateActionID { get; set; }
+        public string Name { get; set; }
+    }
+
     public class SaveWowkFlowTemplateUM
     {
         public Guid WorkFlowTemplateID { get; set; }
         public string Data { get; set; }
         public IEnumerable<WorkFlowActionCM> Actions { get; set; }
-        public IEnumerable<WorkFlowTemplateActionConnectionCM> Connections { get; set; }
+        public IEnumerable<WorkFlowConnectionCM> Connections { get; set; }
     }
 
     public class SaveCraftTemplateUM
