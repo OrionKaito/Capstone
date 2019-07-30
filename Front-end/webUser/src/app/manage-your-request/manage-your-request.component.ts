@@ -4,6 +4,7 @@ import { ToastrService } from 'ngx-toastr';
 import { Router } from '@angular/router';
 import { LoadStaffAcountService } from 'app/service/load-staff-acount.service';
 import { LoginService } from 'app/service/login.service';
+import { AddYourRequestComponent } from 'app/add-your-request/add-your-request.component';
 
 @Component({
   selector: 'app-manage-your-request',
@@ -22,7 +23,7 @@ export class ManageYourRequestComponent implements OnInit {
   model: any = {};
   errorMessage: string;
   listData: MatTableDataSource<any>;
-  displayedColumns: string[] = ['name', "isDeleted"];
+  displayedColumns: string[] = ['name', 'namewf', "isDeleted"];
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild(MatPaginator) paginator: MatPaginator;
   constructor(private toastr: ToastrService, private router: Router, private dialog: MatDialog,
@@ -79,16 +80,16 @@ export class ManageYourRequestComponent implements OnInit {
         this.errorMessage = error.message;
       });
   };
-  AddOrEditWF(id: string) {
+  SeeFullRequest(id: string) {
     const dialogConfig = new MatDialogConfig();
     dialogConfig.autoFocus = true;
     dialogConfig.disableClose = true;
     dialogConfig.width = "50%";
     dialogConfig.data = id;
-    // this.dialog.open(AddPermissionComponent, dialogConfig).afterClosed().subscribe(res => {
-    //   console.log(res);
-    //   this.callAll();
-    // });
+    this.dialog.open(AddYourRequestComponent, dialogConfig).afterClosed().subscribe(res => {
+      console.log(res);
+      this.callAll();
+    });
     this.callAll();
   }
 }

@@ -45,8 +45,8 @@ export class LoginService {
   editWF(model : any){
     var token = "Bearer " + localStorage.getItem("token");
     var tokenHeader = new HttpHeaders({'Authorization': token});
-     var b =this.Url + "api/WorkflowsTemplates";   
-   return this.http.post(b,model,{headers : tokenHeader }); 
+     var b =this.Url + "api/WorkflowsTemplates/SaveDraft"; 
+   return this.http.put(b,model,{headers : tokenHeader, responseType: 'text' }); 
   }
 
   getUserProfile(){

@@ -95,13 +95,14 @@ export class ManagePerGrComponent implements OnInit {
   //       this.errorMessage = error.message;
   //     });
   // };
-  AddOrEditWF(id: string) {
+  AddOrEditWF(id: string, name: string) {
     debugger;
     const dialogConfig = new MatDialogConfig();
     dialogConfig.autoFocus = true;
     dialogConfig.disableClose = true;
     dialogConfig.width = "50%";
-    dialogConfig.data = id;
+    dialogConfig.data = {"id" : id, "name": name};
+    console.log("data nè: ", dialogConfig.data);
     this.dialog.open(AddManagePerGrComponent, dialogConfig).afterClosed().subscribe(res => {
       this.callAll();
     });

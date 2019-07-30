@@ -15,7 +15,7 @@ import {
 } from '@agm/core';
 import { AdminLayoutComponent } from './layouts/admin-layout/admin-layout.component';
 import { CommonModule } from '@angular/common';
-import { MatTableModule, MatTabsModule, MatIconModule, MatPaginatorModule, MatSortModule, MatDialogModule, MatSelectModule, MatFormFieldModule, MatChipsModule } from '@angular/material';
+import { MatTableModule, MatTabsModule, MatIconModule, MatPaginatorModule, MatSortModule, MatDialogModule, MatSelectModule, MatFormFieldModule, MatChipsModule, MatInputModule } from '@angular/material';
 import { CdkTable, CdkTableModule } from '@angular/cdk/table';
 import { AddAccountComponent } from './add-account/add-account.component';
 import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
@@ -43,6 +43,7 @@ import { ManagePerGrComponent } from './manage-per-gr/manage-per-gr.component';
 import { AddManagePerGrComponent } from './add-manage-per-gr/add-manage-per-gr.component';
 import { AngularFireDatabase, AngularFireDatabaseModule } from 'angularfire2/database';
 import { ManageYourRequestComponent } from './manage-your-request/manage-your-request.component';
+import { AddYourRequestComponent } from './add-your-request/add-your-request.component';
 
 const config = {
   apiKey: "AIzaSyA870TvgTsit4CcKLI0hnn3v89-yR6mwLE",
@@ -84,7 +85,7 @@ const config = {
       apiKey: 'YOUR_GOOGLE_MAPS_API_KEY'
     }),
     ButtonsModule, WavesModule, CollapseModule, InputsModule, IconsModule,
-    MatSelectModule, MatFormFieldModule, MatChipsModule,
+    MatSelectModule, MatFormFieldModule, MatChipsModule, MatInputModule,
     MDBBootstrapModule.forRoot()
 
 
@@ -109,12 +110,21 @@ const config = {
     SetGroupPermissionComponent,
     AddNewDynamicFormComponent,
     AddManagePerGrComponent,
+    AddYourRequestComponent,
 
 
   ],
   
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
-  entryComponents:[AddAccountComponent, AddManagePerGrComponent, AddNewDynamicFormComponent,AddManagePerGrComponent, AddPermissionComponent, AddNewRequestComponent, AddHandleRequestComponent ],
+  entryComponents:[
+    AddAccountComponent, 
+    AddManagePerGrComponent,
+     AddNewDynamicFormComponent,
+     AddManagePerGrComponent, 
+     AddPermissionComponent, 
+     AddNewRequestComponent, 
+     AddHandleRequestComponent,
+    AddYourRequestComponent ],
 
   providers: [],
   bootstrap: [AppComponent]
