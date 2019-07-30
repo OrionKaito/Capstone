@@ -77,10 +77,13 @@ namespace Capstone.Controllers
         }
 
         [HttpGet("GetWorkflowToUse")]
-        public ActionResult<IEnumerable<WorkFlowTemplateVM>> GetWorkflowToUse()
+        public ActionResult<IEnumerable<WorkFlowTemplateVM>> GetWorkflowToUse(int? numberOfPage, int? NumberOfRecord)
         {
             try
             {
+                var page = numberOfPage ?? 1;
+                var count = NumberOfRecord ?? WebConstant.DefaultPageRecordCount;
+
                 var userID = HttpContext.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier).Value;
                 var permissionsOfUser = _permissionService.GetByUserID(userID);
 
@@ -88,7 +91,9 @@ namespace Capstone.Controllers
 
                 foreach (var item in permissionsOfUser)
                 {
-                    var workflows = _workFlowService.GetByPermissionToUse(item.ID);
+                    var workflows = _workFlowService.GetByPermissionToUse(item.ID)
+                        .Skip((page - 1) * count)
+                        .Take(count);
 
                     foreach (var workflow in workflows)
                     {
