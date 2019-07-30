@@ -56,22 +56,36 @@
     </div>
 
     <div>
-        <button type="button" (click)="addProperties(nameHere,propertiesThis)">Add</button>
+        <button type="button" mdbWavesEffect mdbBtn color="secondary"
+         (click)="addProperties(nameHere,propertiesThis)">Add</button>
       </div>
 
   </div>
   <div *ngIf="propertiesThis == 4" class="form-row">
     <div class="col-md-6">
-      DEMO:
+      <!-- DEMO:
       <select class="form-control">
         <option value="0">-Select-</option>
         <option *ngFor="let item of listCb">{{item}}</option>
-      </select>
+      </select> -->
+
+      <mat-form-field class="example-full-width">
+          <mat-label>DEMO:</mat-label>
+          <mat-select>
+            <mat-option value="0">-Select-</mat-option>
+            <mat-option *ngFor="let item of listCb">{{item}}</mat-option>
+          </mat-select>
+        </mat-form-field>
+
     </div>
     <div class="col-md-6">
-      Add option:
-      <input name="nameOfCb" type="text" [(ngModel)]="nameOfCb">
-      <button class="icon-head-pup" (click)="addToCb(nameOfCb)">Add</button>
+      <!-- Add option:
+      <input name="nameOfCb" type="text" [(ngModel)]="nameOfCb"> -->
+      <mat-form-field class="example-full-width">
+          <input matInput placeholder="Add option:" name="nameOfCb" type="text" [(ngModel)]="nameOfCb">
+        </mat-form-field>
+      <button class="icon-head-pup" mdbWavesEffect mdbBtn color="secondary"
+      (click)="addToCb(nameOfCb)">Add</button>
     </div>
   
   </div>
@@ -84,12 +98,22 @@
       <h6>{{item.textOnly.name}}</h6>
     </div>
     <div *ngIf="item.shortText.name" class="form-group col-md-6">
-      <label>{{item.shortText.name}} </label>
-      <input [(ngModel)]="item.shortText.value" type="text" class="shortText-dynamicForm">
+      <!-- <label>{{item.shortText.name}} </label>
+      <input [(ngModel)]="item.shortText.value" type="text" class="shortText-dynamicForm"> -->
+
+      <mat-form-field class="example-full-width">
+          <input matInput placeholder="{{item.shortText.name}} "  [(ngModel)]="item.shortText.value" type="text">
+        </mat-form-field>
+
     </div>
     <div *ngIf="item.longText.name" class="form-group col-md-6">
-      <label>{{item.longText.name}} </label>
-      <input [(ngModel)]="item.longText.value" type="text" class="shortText-dynamicForm">
+      <!-- <label>{{item.longText.name}} </label>
+      <input [(ngModel)]="item.longText.value" type="text" class="shortText-dynamicForm"> -->
+
+      <mat-form-field class="example-full-width">
+          <textarea matInput placeholder="{{item.longText.name}}"  [(ngModel)]="item.longText.value" type="text"></textarea>
+        </mat-form-field>
+
     </div>
     <div *ngIf="item.comboBox.name" class="form-row">
       <label>{{item.comboBox.name}}</label>
@@ -100,8 +124,9 @@
   
     </div>
     <div *ngIf="item.inputCheckbox.name" class="form-group col-md-6">
-      <label>{{item.inputCheckbox.name }}</label>
-      <input type="checkbox" />
+      <!-- <label>{{item.inputCheckbox.name }}</label> -->
+      <!-- <input type="checkbox" /> -->
+      <mat-checkbox>{{item.inputCheckbox.name }}</mat-checkbox>
     </div>
     <div (click)="deleteThisRow(i)" class="icon-head-pup">
       <i class="fa fa-close"></i>

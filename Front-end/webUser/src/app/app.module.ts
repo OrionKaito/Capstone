@@ -15,7 +15,7 @@ import {
 } from '@agm/core';
 import { AdminLayoutComponent } from './layouts/admin-layout/admin-layout.component';
 import { CommonModule } from '@angular/common';
-import { MatTableModule, MatTabsModule, MatIconModule, MatPaginatorModule, MatSortModule, MatDialogModule, MatSelectModule, MatFormFieldModule, MatChipsModule, MatInputModule } from '@angular/material';
+import { MatTableModule, MatTabsModule, MatCheckboxModule, MatIconModule, MatPaginatorModule, MatSortModule, MatDialogModule, MatSelectModule, MatFormFieldModule, MatChipsModule, MatInputModule } from '@angular/material';
 import { CdkTable, CdkTableModule } from '@angular/cdk/table';
 import { AddAccountComponent } from './add-account/add-account.component';
 import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
@@ -76,6 +76,7 @@ const config = {
     ComponentsModule,
     HttpClientModule,
     MatDialogModule,
+    MatCheckboxModule,
     RouterModule,
     AppRoutingModule,
     FormsModule,
