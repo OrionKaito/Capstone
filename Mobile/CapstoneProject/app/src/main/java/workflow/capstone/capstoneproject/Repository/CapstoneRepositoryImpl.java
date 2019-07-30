@@ -32,6 +32,7 @@ import workflow.capstone.capstoneproject.entities.RequestResult;
 import workflow.capstone.capstoneproject.entities.RequestToHandle;
 import workflow.capstone.capstoneproject.entities.UserNotification;
 import workflow.capstone.capstoneproject.entities.WorkflowTemplate;
+import workflow.capstone.capstoneproject.entities.WorkflowTemplatePaging;
 import workflow.capstone.capstoneproject.retrofit.ClientApi;
 import workflow.capstone.capstoneproject.utils.CallBackData;
 import workflow.capstone.capstoneproject.utils.KProgressHUDManager;
@@ -395,9 +396,9 @@ public class CapstoneRepositoryImpl implements CapstoneRepository  {
     }
 
     @Override
-    public void getWorkflow(String token, final CallBackData<List<WorkflowTemplate>> callBackData) {
-        Call<ResponseBody> serviceCall = clientApi.getDWServices(token).getWorkflow();
-        Log.e("URL=", clientApi.getDWServices(token).getWorkflow().request().url().toString());
+    public void getWorkflow(String token, int numberOfPage, int numberOfRecord, final CallBackData<WorkflowTemplatePaging> callBackData) {
+        Call<ResponseBody> serviceCall = clientApi.getDWServices(token).getWorkflow(numberOfPage, numberOfRecord);
+        Log.e("URL=", clientApi.getDWServices(token).getWorkflow(numberOfPage, numberOfRecord).request().url().toString());
         serviceCall.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
@@ -405,9 +406,9 @@ public class CapstoneRepositoryImpl implements CapstoneRepository  {
                     if (response.code() == 200) {
                         try {
                             String result = response.body().string();
-                            Type type = new TypeToken<List<WorkflowTemplate>>() {
+                            Type type = new TypeToken<WorkflowTemplatePaging>() {
                             }.getType();
-                            List<WorkflowTemplate> responseResult = new Gson().fromJson(result, type);
+                            WorkflowTemplatePaging responseResult = new Gson().fromJson(result, type);
                             if (responseResult == null) {
                                 callBackData.onFail(response.message());
                             }

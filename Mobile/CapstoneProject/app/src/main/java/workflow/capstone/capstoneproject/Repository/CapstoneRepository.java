@@ -19,7 +19,7 @@ import workflow.capstone.capstoneproject.entities.RequestForm;
 import workflow.capstone.capstoneproject.entities.RequestResult;
 import workflow.capstone.capstoneproject.entities.RequestToHandle;
 import workflow.capstone.capstoneproject.entities.UserNotification;
-import workflow.capstone.capstoneproject.entities.WorkflowTemplate;
+import workflow.capstone.capstoneproject.entities.WorkflowTemplatePaging;
 import workflow.capstone.capstoneproject.utils.CallBackData;
 
 public interface CapstoneRepository {
@@ -43,7 +43,7 @@ public interface CapstoneRepository {
 
     void verifyAccount(Context context, String code, String email, CallBackData<String> callBackData);
 
-    void getWorkflow(String token, CallBackData<List<WorkflowTemplate>> callBackData);
+    void getWorkflow(String token, int numberOfPage, int numberOfRecord, CallBackData<WorkflowTemplatePaging> callBackData);
 
     void getNumberOfNotification(String token, CallBackData<String> callBackData);
 

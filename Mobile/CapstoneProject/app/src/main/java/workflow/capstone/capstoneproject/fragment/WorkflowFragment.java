@@ -14,6 +14,7 @@ import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -33,6 +34,7 @@ import workflow.capstone.capstoneproject.activity.ProfileActivity;
 import workflow.capstone.capstoneproject.adapter.WorkflowAdapter;
 import workflow.capstone.capstoneproject.entities.Profile;
 import workflow.capstone.capstoneproject.entities.WorkflowTemplate;
+import workflow.capstone.capstoneproject.entities.WorkflowTemplatePaging;
 import workflow.capstone.capstoneproject.repository.CapstoneRepository;
 import workflow.capstone.capstoneproject.repository.CapstoneRepositoryImpl;
 import workflow.capstone.capstoneproject.utils.CallBackData;
@@ -51,8 +53,10 @@ public class WorkflowFragment extends Fragment {
     private LinearLayout lnOpenSearchTab;
     private TextView tvCancelSearch;
     private ImageView imgSearch;
-    private ImageView imgMenu;
     private CircleImageView imgAvatar;
+    private int numberOfPage = 1;
+    private boolean flag_loading = false;
+    private String token;
 
     public WorkflowFragment() {
         // Required empty public constructor
@@ -83,14 +87,6 @@ public class WorkflowFragment extends Fragment {
                     .into(imgAvatar);
         }
 
-//        imgMenu.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Intent intent = new Intent(getActivity(), ProfileActivity.class);
-//                startActivity(intent);
-//                getActivity().overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
-//            }
-//        });
         imgAvatar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -124,22 +120,64 @@ public class WorkflowFragment extends Fragment {
         lnOpenSearchTab = view.findViewById(R.id.linear_layout_open_search_tab);
         tvCancelSearch = view.findViewById(R.id.text_view_cancel_search);
         imgSearch = view.findViewById(R.id.img_search);
-//        imgMenu = view.findViewById(R.id.img_menu);
         imgAvatar = view.findViewById(R.id.img_avatar);
+        listView = view.findViewById(R.id.list_workflow);
     }
 
     private void loadWorkflows(final View view) {
-        String token = DynamicWorkflowSharedPreferences.getStoreJWT(getActivity(), ConstantDataManager.AUTHORIZATION_TOKEN);
+        numberOfPage = 1;
+        token = DynamicWorkflowSharedPreferences.getStoreJWT(getActivity(), ConstantDataManager.AUTHORIZATION_TOKEN);
         capstoneRepository = new CapstoneRepositoryImpl();
-        capstoneRepository.getWorkflow(token, new CallBackData<List<WorkflowTemplate>>() {
+        capstoneRepository.getWorkflow(token, numberOfPage, ConstantDataManager.NUMBER_OF_RECORD, new CallBackData<WorkflowTemplatePaging>() {
             @Override
-            public void onSuccess(List<WorkflowTemplate> workflowTemplates) {
-                listView = view.findViewById(R.id.list_workflow);
-                workflowList = workflowTemplates;
+            public void onSuccess(WorkflowTemplatePaging workflowTemplatePaging) {
+                workflowList = workflowTemplatePaging.getWorkFlowTemplates();
                 if (getActivity() != null) {
                     workflowAdapter = new WorkflowAdapter(workflowList, getActivity());
                     listView.setAdapter(workflowAdapter);
                 }
+                DynamicWorkflowUtils.setListViewHeightBasedOnChildren(listView);
+                itemOnClick(listView);
+//                if (workflowTemplatePaging.getTotalRecord() > 10) {
+//                    loadMoreItems(listView);
+//                }
+            }
+
+            @Override
+            public void onFail(String message) {
+
+            }
+        });
+    }
+
+    private void loadMoreItems(ListView listView) {
+        listView.setOnScrollListener(new AbsListView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(AbsListView view, int scrollState) {
+
+            }
+
+            @Override
+            public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+                if (firstVisibleItem + visibleItemCount == totalItemCount && totalItemCount != 0) {
+                    if (flag_loading == false) {
+                        flag_loading = true;
+                        addItems();
+                    }
+                }
+            }
+        });
+    }
+
+    private void addItems() {
+        capstoneRepository = new CapstoneRepositoryImpl();
+        capstoneRepository.getWorkflow(token, ++numberOfPage, ConstantDataManager.NUMBER_OF_RECORD, new CallBackData<WorkflowTemplatePaging>() {
+            @Override
+            public void onSuccess(WorkflowTemplatePaging workflowTemplatePaging) {
+                workflowList.addAll(workflowTemplatePaging.getWorkFlowTemplates());
+                workflowAdapter = new WorkflowAdapter(workflowList, getActivity());
+                workflowAdapter.notifyDataSetChanged();
+                flag_loading = false;
                 DynamicWorkflowUtils.setListViewHeightBasedOnChildren(listView);
                 itemOnClick(listView);
             }

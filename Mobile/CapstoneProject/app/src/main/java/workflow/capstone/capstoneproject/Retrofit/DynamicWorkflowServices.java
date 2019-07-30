@@ -57,7 +57,7 @@ public interface DynamicWorkflowServices {
                                      @Query(value = "email", encoded = true) String email);
 
     @GET(ConfigApi.Api.GET_WORKFLOW)
-    Call<ResponseBody> getWorkflow();
+    Call<ResponseBody> getWorkflow(@Query(value = "numberOfPage", encoded = true) Integer numberOfPage, @Query(value = "NumberOfRecord", encoded = true) Integer NumberOfRecord);
 
     @GET(ConfigApi.Api.GET_NUMBER_NOTIFICATION)
     Call<ResponseBody> getNumberNotification();
