@@ -157,6 +157,7 @@ public class MainActivity extends AppCompatActivity {
             R.drawable.ic_notification_blue,
             R.drawable.ic_history_grey,
             R.drawable.ic_history_blue
+
     };
 
     private void setOnChangeTab() {
@@ -189,7 +190,7 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onTabReselected(TabLayout.Tab tab) {
-
+                setCurrentTabFragment(tab.getPosition());
             }
         });
     }
@@ -202,46 +203,15 @@ public class MainActivity extends AppCompatActivity {
                 replaceFragment(workflowFragment);
                 break;
             case 1:
+                tabLayout.getTabAt(tabPosition).setIcon(tabIcons[5]);
                 replaceFragment(myRequestFragment);
                 break;
             case 2:
-//                imageViewTask.setImageResource(R.drawable.ic_task_blue);
-//                capstoneRepository = new CapstoneRepositoryImpl();
-//                capstoneRepository.getNumberOfNotification(token, new CallBackData<String>() {
-//                    @Override
-//                    public void onSuccess(String s) {
-//                        if (Integer.parseInt(s) > 0) {
-//                            taskBadge.setText(s);
-//                            taskBadge.setVisibility(View.VISIBLE);
-//                        } else {
-//                            taskBadge.setVisibility(View.INVISIBLE);
-//                        }
-//                    }
-//
-//                    @Override
-//                    public void onFail(String message) {
-//
-//                    }
-//                });
+                imageViewTask.setImageResource(R.drawable.ic_task_blue);
                 replaceFragment(listHandleRequestFragment);
                 break;
             case 3:
                 imageViewNotification.setImageResource(R.drawable.ic_notification_blue);
-//                capstoneRepository = new CapstoneRepositoryImpl();
-//                capstoneRepository.getNumberOfNotification(token, new CallBackData<String>() {
-//                    @Override
-//                    public void onSuccess(String s) {
-//                        if (Integer.parseInt(s) > 0) {
-//                            notificationBadge.setText(0);
-                            notificationBadge.setVisibility(View.INVISIBLE);
-//                        }
-//                    }
-//
-//                    @Override
-//                    public void onFail(String message) {
-//
-//                    }
-//                });
                 replaceFragment(listCompleteRequestFragment);
                 break;
             default:
