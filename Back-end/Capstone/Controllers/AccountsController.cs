@@ -86,7 +86,7 @@ namespace Capstone.Controllers
 
                 var data = new RegistrationPaginVM
                 {
-                    TotalPage = _userManager.Users.ToListAsync().Result.Count,
+                    TotalRecord = _userManager.Users.ToListAsync().Result.Count,
                     Accounts = users,
                 };
 
