@@ -185,7 +185,7 @@ export class LoadStaffAcountService {
 
 
   loadGroupByID(id) {
-    return this.http.get(this.Url + " api/Groups/GetByID?ID=" + id);
+    return this.http.get(this.Url + "api/Groups/GetByID?ID=" + id);
 
   }
   sendReq(req){
@@ -207,6 +207,17 @@ export class LoadStaffAcountService {
     var token = "Bearer " + localStorage.getItem("token");
     var tokenHeader = new HttpHeaders({'Authorization': token});
     return this.http.post(this.Url + "api/ActionTypes", action, {headers : tokenHeader });
+  }
+  loadPermissionByGr(id){
+    var token = "Bearer " + localStorage.getItem("token");
+    var tokenHeader = new HttpHeaders({'Authorization': token});
+    return this.http.get(this.Url + "api/PermissionOfGroups/GetByGroup?ID=" + id, {headers : tokenHeader });
+  }
+  putPerGr(model){
+    var token = "Bearer " + localStorage.getItem("token");
+    var tokenHeader = new HttpHeaders({'Authorization': token});
+    return this.http.put(this.Url + "api/PermissionOfGroups/CreateOrEditPermissionByGroup",model, {headers : tokenHeader, responseType: "text" });
+
   }
 
 }
