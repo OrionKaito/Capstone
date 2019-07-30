@@ -5,7 +5,7 @@ namespace Capstone.ViewModel
 {
     public class RegistrationPaginVM
     {
-        public int TotalPage { get; set; }
+        public int TotalRecord { get; set; }
         public IEnumerable<RegistrationVM> Accounts { get; set; }
     }
 
@@ -46,5 +46,10 @@ namespace Capstone.ViewModel
         public string LineManagerID { get; set; }
         public Guid RoleID { get; set; }
         public IEnumerable<Guid> GroupIDs { get; set; }
+    }
+
+    public class UpdateAvatar
+    {
+        public string ImagePath { get; set; }
     }
 }

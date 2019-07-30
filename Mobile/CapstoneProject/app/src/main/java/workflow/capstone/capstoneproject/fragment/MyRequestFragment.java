@@ -23,6 +23,7 @@ import workflow.capstone.capstoneproject.R;
 import workflow.capstone.capstoneproject.activity.ProfileActivity;
 import workflow.capstone.capstoneproject.adapter.MyRequestAdapter;
 import workflow.capstone.capstoneproject.entities.MyRequest;
+import workflow.capstone.capstoneproject.entities.Profile;
 import workflow.capstone.capstoneproject.entities.RequestToHandle;
 import workflow.capstone.capstoneproject.entities.UserNotification;
 import workflow.capstone.capstoneproject.repository.CapstoneRepository;
@@ -52,8 +53,13 @@ public class MyRequestFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_my_request, container, false);
 
         imgAvatar = view.findViewById(R.id.img_avatar);
-        Picasso.get().load("https://scontent.fsgn2-4.fna.fbcdn.net/v/t1.0-1/p160x160/51544827_1431384577001877_5331970394951778304_n.jpg?_nc_cat=109&_nc_oc=AQnco7rDhQqwfiIMn0yb5w1T_XbHhK4H7VHH2OkcvvJwPffe8ztui6o1jgmD0HV70sM_obUhA5ESdSz-trY9uwGu&_nc_ht=scontent.fsgn2-4.fna&oh=efcc572eee6bb9b41bc554297c98a4d6&oe=5DAD14A0")
+
+        Profile profile = DynamicWorkflowSharedPreferences.getStoredData(getContext(), ConstantDataManager.PROFILE_KEY, ConstantDataManager.PROFILE_NAME);
+        Picasso.get()
+                .load(ConstantDataManager.IMAGE_URL + profile.getImagePath())
+                .error(getResources().getDrawable(R.drawable.avatar))
                 .into(imgAvatar);
+
         imgAvatar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -75,12 +81,13 @@ public class MyRequestFragment extends Fragment {
             @Override
             public void onSuccess(List<MyRequest> myRequests) {
                 myRequestList = myRequests;
-                myRequestAdapter = new MyRequestAdapter(myRequestList, getContext());
-                listView.setAdapter(myRequestAdapter);
-                DynamicWorkflowUtils.setListViewHeightBasedOnChildren(listView);
-
+                if (getActivity() != null) {
+                    myRequestAdapter = new MyRequestAdapter(myRequestList, getActivity());
+                    listView.setAdapter(myRequestAdapter);
+                }
+//                DynamicWorkflowUtils.setListViewHeightBasedOnChildren(listView);
                 onItemCLick(listView);
-                if(myRequestList.isEmpty()) {
+                if (myRequestList.isEmpty()) {
                     tvEmptyRequest.setVisibility(View.VISIBLE);
                 }
             }

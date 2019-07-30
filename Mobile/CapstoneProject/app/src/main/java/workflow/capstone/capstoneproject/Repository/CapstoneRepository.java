@@ -25,13 +25,15 @@ import workflow.capstone.capstoneproject.utils.CallBackData;
 public interface CapstoneRepository {
     void login(Context context, Map<String, String> fields, CallBackData<Login> callBackData);
 
-    void testLogin(Context context, TestLogin testLogin, CallBackData<Login> callBackData);
+    void newLogin(Context context, TestLogin testLogin, CallBackData<Login> callBackData);
 
-    void logout(String token, CallBackData<String> callBackData);
+    void logout(String token, String deviceToken, CallBackData<String> callBackData);
 
     void getProfile(String token, CallBackData<List<Profile>> callBackData);
 
     void updateProfile(Context context, String token, UpdateProfileModel model, CallBackData<String> callBackData);
+
+    void updateAvatar(Context context, String token, String imagePath, CallBackData<String> callBackData);
 
     void changePassword(Context context, String token, String oldPassword, String newPassword, CallBackData<String> callBackData);
 
@@ -69,5 +71,4 @@ public interface CapstoneRepository {
 
     void approveRequest(String token, RequestApprove requestApprove, CallBackData<String> callBackData);
 
-    void downloadFileWithDynamicUrlSync(String fileUrl, CallBackData<ResponseBody> callBackData);
 }

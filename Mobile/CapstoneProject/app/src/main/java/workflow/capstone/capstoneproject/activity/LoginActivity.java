@@ -44,7 +44,7 @@ public class LoginActivity extends AppCompatActivity {
     private Context context = this;
     private TextView tvErrorLogin;
     private TextView tvForgotPassword;
-    private String deviceID;
+    private String deviceToken;
     private ImageView logoLogin;
 
     @Override
@@ -88,17 +88,17 @@ public class LoginActivity extends AppCompatActivity {
                     public void onSuccess(InstanceIdResult instanceIdResult) {
 
                         // Get new Instance ID token
-                        deviceID = instanceIdResult.getToken();
+                        deviceToken = instanceIdResult.getToken();
                     }
                 });
 
-        if (deviceID == null) {
-            deviceID = FirebaseInstanceId.getInstance().getToken();
+        if (deviceToken == null) {
+            deviceToken = FirebaseInstanceId.getInstance().getToken();
         }
         TestLogin testLogin = new TestLogin();
         testLogin.setUserName(username);
         testLogin.setPassword(password);
-        testLogin.setDeviceID(deviceID);
+        testLogin.setDeviceToken(deviceToken);
 
         SharedPreferences preferences = context.getSharedPreferences("VERIFYACCOUNT", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
@@ -121,31 +121,7 @@ public class LoginActivity extends AppCompatActivity {
             setTextError("Please input password!");
         } else {
             capstoneRepository = new CapstoneRepositoryImpl();
-            capstoneRepository.login(context, fields, new CallBackData<Login>() {
-                @Override
-                public void onSuccess(Login login) {
-                    DynamicWorkflowSharedPreferences.storeJWT(context, ConstantDataManager.AUTHORIZATION_TOKEN, login.getToken());
-                    Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                    startActivity(intent);
-                    finish();
-                }
-
-                @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
-                @Override
-                public void onFail(String message) {
-                    if (message.contains("Invalid username or password!")) {
-                        setTextError(message);
-                    } else if (message.contains("Please verify your account first")) {
-                        VerifyAccountDialog dialog = new VerifyAccountDialog(LoginActivity.this);
-                        dialog.setCancelable(false);
-                        dialog.create();
-                        dialog.show();
-                    } else {
-                        setTextError(message);
-                    }
-                }
-            });
-//            capstoneRepository.testLogin(context, testLogin, new CallBackData<Login>() {
+//            capstoneRepository.login(context, fields, new CallBackData<Login>() {
 //                @Override
 //                public void onSuccess(Login login) {
 //                    DynamicWorkflowSharedPreferences.storeJWT(context, ConstantDataManager.AUTHORIZATION_TOKEN, login.getToken());
@@ -169,6 +145,30 @@ public class LoginActivity extends AppCompatActivity {
 //                    }
 //                }
 //            });
+            capstoneRepository.newLogin(context, testLogin, new CallBackData<Login>() {
+                @Override
+                public void onSuccess(Login login) {
+                    DynamicWorkflowSharedPreferences.storeJWT(context, ConstantDataManager.AUTHORIZATION_TOKEN, login.getToken());
+                    Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                    startActivity(intent);
+                    finish();
+                }
+
+                @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+                @Override
+                public void onFail(String message) {
+                    if (message.contains("Invalid username or password!")) {
+                        setTextError(message);
+                    } else if (message.contains("Please verify your account first")) {
+                        VerifyAccountDialog dialog = new VerifyAccountDialog(LoginActivity.this);
+                        dialog.setCancelable(false);
+                        dialog.create();
+                        dialog.show();
+                    } else {
+                        setTextError(message);
+                    }
+                }
+            });
         }
     }
 

@@ -25,11 +25,11 @@ public interface DynamicWorkflowServices {
     Call<ResponseBody> login(@Body Map<String, String> fields);
 
     @Headers({"Content-Type:application/json"})
-    @POST(ConfigApi.Api.TEST_LOGIN)
-    Call<ResponseBody> testLogin(@Body TestLogin testLogin);
+    @POST(ConfigApi.Api.NEW_LOGIN)
+    Call<ResponseBody> newLogin(@Body TestLogin testLogin);
 
     @PUT(ConfigApi.Api.LOGOUT)
-    Call<ResponseBody> logout();
+    Call<ResponseBody> logout(@Query(value = "deviceToken", encoded = true) String deviceToken);
 
     @GET(ConfigApi.Api.GET_PROFILE)
     Call<ResponseBody> getProfile();
@@ -37,6 +37,9 @@ public interface DynamicWorkflowServices {
     @Headers({"Content-Type:application/json"})
     @PUT(ConfigApi.Api.UPDATE_PROFILE)
     Call<ResponseBody> updateProfile(@Body UpdateProfileModel model);
+
+    @PUT(ConfigApi.Api.UPDATE_AVATAR)
+    Call<ResponseBody> updateAvatar(@Query(value = "imagePath", encoded = true) String imagePath);
 
     @PUT(ConfigApi.Api.CHANGE_PASSWORD)
     Call<ResponseBody> changePassword(@Query(value = "oldPassword", encoded = true) String oldPassword, @Query(value = "newPassword", encoded = true) String newPassword);

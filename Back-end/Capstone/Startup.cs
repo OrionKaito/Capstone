@@ -156,6 +156,10 @@ namespace Capstone
             services.AddTransient<IConnectionTypeRepository, ConnectionTypeRepository>();
             services.AddTransient<IConnectionTypeService, ConnectionTypeService>();
 
+            //UserDevice
+            services.AddTransient<IUserDeviceRepository, UserDeviceRepository>();
+            services.AddTransient<IUserDeviceService, UserDeviceService>();
+
             #endregion
 
             // Auto Mapper Configurations
