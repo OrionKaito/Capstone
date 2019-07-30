@@ -18,6 +18,7 @@ export class NavbarComponent implements OnInit {
 
     listNoti: any=[];
     numberNoti: any;
+    noNoti:boolean;
 
     constructor(location: Location,  private element: ElementRef, private router: Router,
          private loadStaffAcountService: LoadStaffAcountService) {
@@ -26,12 +27,14 @@ export class NavbarComponent implements OnInit {
     }
 
     ngOnInit(){
-        // this.loadStaffAcountService.getNotiUser().toPromise().then(rep=>{
-        //     this.listNoti = rep;
-        // })
-        // this.loadStaffAcountService.getNumNotiUser().toPromise().then(rep=>{
-        //     this.numberNoti = rep;
-        // })
+        this.loadStaffAcountService.getNotiUser().toPromise().then(rep=>{
+            this.listNoti = rep;
+            console.log(this.listNoti);
+        })
+        this.loadStaffAcountService.getNumNotiUser().toPromise().then(rep=>{
+            this.numberNoti = rep;
+            if(this.numberNoti == 0) this.noNoti = true;
+        })
       this.listTitles = ROUTES.filter(listTitle => listTitle);
       const navbar: HTMLElement = this.element.nativeElement;
       this.toggleButton = navbar.getElementsByClassName('navbar-toggler')[0];

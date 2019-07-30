@@ -25,7 +25,7 @@ export class ManagePerGrComponent implements OnInit {
   model: any = {};
   errorMessage: string;
   listData: MatTableDataSource<any>;
-  displayedColumns: string[] = ['perName', 'grName', "isDeleted"];
+  displayedColumns: string[] = ['perName', 'grName', "groupID"];
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild(MatPaginator) paginator: MatPaginator;
   constructor(private toastr: ToastrService, private router: Router, private dialog: MatDialog,
@@ -36,6 +36,7 @@ export class ManagePerGrComponent implements OnInit {
   }
   callAll() {
     this.loadStaffAcountService.loadPermissionGroupData().toPromise().then(data => {
+      this.listGrPer = [];
       this.users = data;
      
       this.users.forEach(element => {
@@ -44,7 +45,7 @@ export class ManagePerGrComponent implements OnInit {
           saveListPerToString =  saveListPerToString + element.permissionName+", ";
         });
         saveListPerToString = saveListPerToString.substring(0, saveListPerToString.length-2)
-        this.listGrPer.push({nameGr: element.groupName, namePer: saveListPerToString});
+        this.listGrPer.push({nameGr: element.groupName, namePer: saveListPerToString, groupID: element.groupID});
       });
 
       this.listData = new MatTableDataSource(this.listGrPer);
@@ -95,13 +96,13 @@ export class ManagePerGrComponent implements OnInit {
   //     });
   // };
   AddOrEditWF(id: string) {
+    debugger;
     const dialogConfig = new MatDialogConfig();
     dialogConfig.autoFocus = true;
     dialogConfig.disableClose = true;
     dialogConfig.width = "50%";
     dialogConfig.data = id;
     this.dialog.open(AddManagePerGrComponent, dialogConfig).afterClosed().subscribe(res => {
-      console.log(res);
       this.callAll();
     });
     this.callAll();

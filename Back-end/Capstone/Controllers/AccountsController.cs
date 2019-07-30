@@ -67,6 +67,7 @@ namespace Capstone.Controllers
                         DateOfBirth = u.DateOfBirth,
                         Email = u.Email,
                         FullName = u.FullName,
+                        ImagePath = u.ImagePath == null ? "" : u.ImagePath,
                         Role = new RoleVM
                         {
                             ID = _userRoleService.GetByUserID(u.Id).RoleID,
@@ -111,6 +112,7 @@ namespace Capstone.Controllers
                         DateOfBirth = u.DateOfBirth,
                         Email = u.Email,
                         FullName = u.FullName,
+                        ImagePath = u.ImagePath == null ? "" : u.ImagePath,
                         Groups = _userGroupService.GetByUserID(u.Id)
                                 .Select(g => new GroupVM
                                 {
@@ -150,6 +152,7 @@ namespace Capstone.Controllers
                         DateOfBirth = u.DateOfBirth,
                         Email = u.Email,
                         FullName = u.FullName,
+                        ImagePath = u.ImagePath == null ? "" : u.ImagePath,
                         Groups = _userGroupService.GetByUserID(u.Id)
                                 .Select(g => new GroupVM
                                 {
@@ -468,6 +471,30 @@ namespace Capstone.Controllers
                     userInDB.IsDeleted = true;
                 }
 
+                var result = await _userManager.UpdateAsync(userInDB);
+
+                if (!result.Succeeded) return new BadRequestObjectResult(result.Errors);
+
+                return Ok(WebConstant.Success);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
+
+        [HttpPut("UpdateAvatar")]
+        public async Task<ActionResult> UpdateAvatar(string imagePath)
+        {
+            try
+            {
+                var currentUser = HttpContext.User;
+                var userID = currentUser.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier).Value;
+
+                var userInDB = _userManager.FindByIdAsync(userID).Result;
+                if (userInDB == null) return BadRequest(WebConstant.UserNotExist);
+
+                userInDB.ImagePath = imagePath;
                 var result = await _userManager.UpdateAsync(userInDB);
 
                 if (!result.Succeeded) return new BadRequestObjectResult(result.Errors);

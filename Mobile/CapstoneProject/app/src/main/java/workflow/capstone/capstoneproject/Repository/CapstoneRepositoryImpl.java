@@ -22,11 +22,13 @@ import workflow.capstone.capstoneproject.api.Request;
 import workflow.capstone.capstoneproject.api.RequestApprove;
 import workflow.capstone.capstoneproject.api.TestLogin;
 import workflow.capstone.capstoneproject.api.UpdateProfileModel;
+import workflow.capstone.capstoneproject.entities.MyRequest;
 import workflow.capstone.capstoneproject.entities.RequestForm;
 import workflow.capstone.capstoneproject.entities.HandleRequestForm;
 import workflow.capstone.capstoneproject.entities.Login;
 import workflow.capstone.capstoneproject.entities.Profile;
 import workflow.capstone.capstoneproject.entities.RequestResult;
+import workflow.capstone.capstoneproject.entities.RequestToHandle;
 import workflow.capstone.capstoneproject.entities.UserNotification;
 import workflow.capstone.capstoneproject.entities.WorkflowTemplate;
 import workflow.capstone.capstoneproject.retrofit.ClientApi;
@@ -390,9 +392,9 @@ public class CapstoneRepositoryImpl implements CapstoneRepository {
     }
 
     @Override
-    public void getNumberOfNotification(String token, int notificationType, final CallBackData<String> callBackData) {
-        Call<ResponseBody> serviceCall = clientApi.getDWServices(token).getNumberNotification(notificationType);
-        Log.e("URL=", clientApi.getDWServices(token).getNumberNotification(notificationType).request().url().toString());
+    public void getNumberOfNotification(String token, final CallBackData<String> callBackData) {
+        Call<ResponseBody> serviceCall = clientApi.getDWServices(token).getNumberNotification();
+        Log.e("URL=", clientApi.getDWServices(token).getNumberNotification().request().url().toString());
         serviceCall.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
@@ -466,6 +468,44 @@ public class CapstoneRepositoryImpl implements CapstoneRepository {
     }
 
     @Override
+    public void getRequestsToHandleByPermission(String token, final CallBackData<List<RequestToHandle>> callBackData) {
+        Call<ResponseBody> serviceCall = clientApi.getDWServices(token).getRequestsToHandleByPermission();
+        Log.e("URL=", clientApi.getDWServices(token).getRequestsToHandleByPermission().request().url().toString());
+        serviceCall.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                if (response != null && response.body() != null) {
+                    if (response.code() == 200) {
+                        try {
+                            String result = response.body().string();
+                            Type type = new TypeToken<List<RequestToHandle>>() {
+                            }.getType();
+                            List<RequestToHandle> responseResult = new Gson().fromJson(result, type);
+                            if (responseResult == null) {
+                                callBackData.onFail(response.message());
+                            }
+                            callBackData.onSuccess(responseResult);
+                        } catch (JsonSyntaxException jsonError) {
+                            jsonError.printStackTrace();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    } else {
+                        callBackData.onFail(response.message());
+                    }
+                } else if (response.code() == 400) {
+                    callBackData.onFail(response.message());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                callBackData.onFail(call.toString());
+            }
+        });
+    }
+
+    @Override
     public void getNotificationByType(String token, int notificationType, final CallBackData<List<UserNotification>> callBackData) {
         Call<ResponseBody> serviceCall = clientApi.getDWServices(token).getNotificationByType(notificationType);
         Log.e("URL=", clientApi.getDWServices(token).getNotificationByType(notificationType).request().url().toString());
@@ -479,6 +519,44 @@ public class CapstoneRepositoryImpl implements CapstoneRepository {
                             Type type = new TypeToken<List<UserNotification>>() {
                             }.getType();
                             List<UserNotification> responseResult = new Gson().fromJson(result, type);
+                            if (responseResult == null) {
+                                callBackData.onFail(response.message());
+                            }
+                            callBackData.onSuccess(responseResult);
+                        } catch (JsonSyntaxException jsonError) {
+                            jsonError.printStackTrace();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    } else {
+                        callBackData.onFail(response.message());
+                    }
+                } else if (response.code() == 400) {
+                    callBackData.onFail(response.message());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                callBackData.onFail(call.toString());
+            }
+        });
+    }
+
+    @Override
+    public void getMyRequest(String token, final CallBackData<List<MyRequest>> callBackData) {
+        Call<ResponseBody> serviceCall = clientApi.getDWServices(token).getMyRequest();
+        Log.e("URL=", clientApi.getDWServices(token).getMyRequest().request().url().toString());
+        serviceCall.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                if (response != null && response.body() != null) {
+                    if (response.code() == 200) {
+                        try {
+                            String result = response.body().string();
+                            Type type = new TypeToken<List<MyRequest>>() {
+                            }.getType();
+                            List<MyRequest> responseResult = new Gson().fromJson(result, type);
                             if (responseResult == null) {
                                 callBackData.onFail(response.message());
                             }
@@ -796,7 +874,11 @@ public class CapstoneRepositoryImpl implements CapstoneRepository {
                         callBackData.onFail(response.message());
                     }
                 } else if (response.code() == 400) {
-                    callBackData.onFail(response.message());
+                    try {
+                        callBackData.onFail(response.errorBody().string());
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
                 }
             }
 

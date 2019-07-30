@@ -22,6 +22,8 @@ import workflow.capstone.capstoneproject.R;
 import workflow.capstone.capstoneproject.activity.MainActivity;
 import workflow.capstone.capstoneproject.activity.ProfileActivity;
 import workflow.capstone.capstoneproject.adapter.NotificationAdapter;
+import workflow.capstone.capstoneproject.adapter.RequestToHandleAdapter;
+import workflow.capstone.capstoneproject.entities.RequestToHandle;
 import workflow.capstone.capstoneproject.entities.UserNotification;
 import workflow.capstone.capstoneproject.repository.CapstoneRepository;
 import workflow.capstone.capstoneproject.repository.CapstoneRepositoryImpl;
@@ -32,8 +34,8 @@ import workflow.capstone.capstoneproject.utils.DynamicWorkflowSharedPreferences;
 public class ListHandleRequestFragment extends Fragment {
 
     private CapstoneRepository capstoneRepository;
-    private NotificationAdapter notificationAdapter;
-    private List<UserNotification> notificationList;
+    private RequestToHandleAdapter requestToHandleAdapter;
+    private List<RequestToHandle> requestToHandleList;
     private ListView listView;
     private ImageView imgMenu;
     private CircleImageView imgAvatar;
@@ -78,29 +80,13 @@ public class ListHandleRequestFragment extends Fragment {
     private void loadNotifications() {
         String token = DynamicWorkflowSharedPreferences.getStoreJWT(getActivity(), ConstantDataManager.AUTHORIZATION_TOKEN);
         capstoneRepository = new CapstoneRepositoryImpl();
-//        capstoneRepository.getNotification(token, new CallBackData<List<UserNotification>>() {
-//            @Override
-//            public void onSuccess(List<UserNotification> userNotifications) {
-//                notificationList = userNotifications;
-//                notificationAdapter = new NotificationAdapter(notificationList, getContext());
-//                listView.setAdapter(notificationAdapter);
-//                onItemClick(listView);
-//            }
-//
-//            @Override
-//            public void onFail(String message) {
-//
-//            }
-//        });
-        capstoneRepository.getNotificationByType(token, 2, new CallBackData<List<UserNotification>>() {
+        capstoneRepository.getRequestsToHandleByPermission(token, new CallBackData<List<RequestToHandle>>() {
             @Override
-            public void onSuccess(List<UserNotification> userNotifications) {
-                notificationList = userNotifications;
-                if (getActivity() != null) {
-                    notificationAdapter = new NotificationAdapter(notificationList, getActivity(), false);
-                    listView.setAdapter(notificationAdapter);
-                    onItemClick(listView);
-                }
+            public void onSuccess(List<RequestToHandle> requestToHandles) {
+                requestToHandleList = requestToHandles;
+                requestToHandleAdapter = new RequestToHandleAdapter(requestToHandleList, getContext());
+                listView.setAdapter(requestToHandleAdapter);
+                onItemClick(listView);
             }
 
             @Override
@@ -116,8 +102,10 @@ public class ListHandleRequestFragment extends Fragment {
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
                 Fragment fragment = new HandleRequestFragment();
                 Bundle bundle = new Bundle();
-                UserNotification userNotification = (UserNotification) adapterView.getItemAtPosition(position);
-                String requestActionID = userNotification.getEventID();
+                RequestToHandle requestToHandle = (RequestToHandle) adapterView.getItemAtPosition(position);
+                String requestID = requestToHandle.getId();
+                String requestActionID = requestToHandle.getRequestActionID();
+                bundle.putString("requestID", requestID);
                 bundle.putString("requestActionID", requestActionID);
                 fragment.setArguments(bundle);
 

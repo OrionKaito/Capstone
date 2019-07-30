@@ -31,14 +31,16 @@
                         aria-haspopup="true" aria-expanded="false">
                             
                             <i class="material-icons">notifications</i>
-                            <!-- <span class="notification">{{numberNoti}}</span> -->
-                            <span class="notification">5</span>
+                            <span *ngIf="!noNoti" class="notification">{{numberNoti}}</span>
+                            <!-- <span class="notification">5</span> -->
                             <p>
                                 <span class="d-lg-none d-md-block">Notification</span>
                             </p>
                         </a>
                         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownMenuLink">
-                                <a class="dropdown-item" (click)="checkUserProfile()">User Profile</a>                       
+                                <a *ngFor="let item of listNoti"  class="dropdown-item">{{item.workflowName}} from {{item.actorName}}</a>                       
+                                <a *ngIf="noNoti"  class="dropdown-item">There are no more Notification.</a>                       
+
                         </div>
                     </li>
                 <!-- <li class="nav-item" (click)="logOut()" style="cursor: pointer"> -->

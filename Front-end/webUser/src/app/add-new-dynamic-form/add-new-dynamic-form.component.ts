@@ -1,5 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Inject } from '@angular/core';
 import { ComboElement } from 'app/useClass/combo-element';
+import { LoadStaffAcountService } from 'app/service/load-staff-acount.service';
+import { ToastrService } from 'ngx-toastr';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
 
 @Component({
   selector: 'app-add-new-dynamic-form',
@@ -8,11 +11,18 @@ import { ComboElement } from 'app/useClass/combo-element';
 })
 export class AddNewDynamicFormComponent implements OnInit {
 
-  constructor() { }
+  constructor(
+    @Inject(MAT_DIALOG_DATA) public data,
+    public dialogRef: MatDialogRef<AddNewDynamicFormComponent>,
+    private toastr: ToastrService,
+    private loadStaffAcountService: LoadStaffAcountService) { }
 
   listComboElement: any=[];
   nameHere: any;
   propertiesThis: any;
+  nameOfCb:any;
+  listCb: any =[];
+  nameForm: any;
   ngOnInit() {
     // let a = new ComboElement();
 
@@ -36,7 +46,11 @@ export class AddNewDynamicFormComponent implements OnInit {
         a.longText.name = name;
       }
       if(properties == 4){
-        a.inputFile.name = name;
+        a.comboBox.name = name;
+        this.listCb.forEach(element => {
+          a.comboBox.valueOfProper.push(element);
+        });
+        this.listCb = [];
       }
       if(properties == 5){
         a.inputCheckbox.name = name;
@@ -45,5 +59,24 @@ export class AddNewDynamicFormComponent implements OnInit {
       console.log(this.listComboElement);
 
   }
+  deleteThisRow(index){
+    this.listComboElement.splice(index,1);
+  }
+  addToCb(nameOfCb){
+    debugger;
+    this.listCb.push(nameOfCb);
+  }
+  createNewForm(){
+    let model = {
+      "name": this.nameForm,
+      "data": JSON.stringify(this.listComboElement)
+    }
+    this.loadStaffAcountService.createAction(model).toPromise().then(data =>{
+      this.toastr.success('Success! ' , '' );
+      this.dialogRef.close();
+    }, (err) => {
+        this.toastr.error("Error:" + err.message, "Something wrong!" );
+      });
+  } 
 
 }
