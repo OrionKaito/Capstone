@@ -282,6 +282,9 @@ namespace Capstone.Controllers
                 if (workFlowInDb == null) return BadRequest(WebConstant.NotFound);
 
                 workFlowInDb.Data = model.Data;
+                workFlowInDb.Name = model.Name;
+                workFlowInDb.Description = model.Description;
+                workFlowInDb.PermissionToUseID = model.PermissionToUseID;
                 _workFlowService.Save();
                 return Ok(WebConstant.Success);
             }
