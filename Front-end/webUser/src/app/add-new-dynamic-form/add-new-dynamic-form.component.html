@@ -1,82 +1,122 @@
-<h4 class="dispaly-4">Name form:  <input name="nameForm" type="text" [(ngModel)]="nameForm">
-  <div (click)="closeForm()" class="icon-head-pup">
-    <!-- <button type="button" class="btn btn-outline-dark ml-1" [mat-dialog-close]><i class="fa fa-close"></i> Close</button> -->
-    <button type="button" [mat-dialog-close]><i class="fa fa-close"></i>
-    </button>
-  </div>
-</h4>
-<hr>
-<div class="form-row">
-  <div class="col-md-6">
-    Name property:
-    <input name="nameHere" type="text" [(ngModel)]="nameHere">
-  </div>
-  <div class="col-md-6">
-    Type
-    <select name="propertiesThis" [(ngModel)]="propertiesThis">
-      <option value="0">-Select-</option>
-      <option value="1">Label</option>
-      <option value="2">Text</option>
-      <option value="3">Text Area</option>
-      <option value="4">Combo box</option>
-      <option value="5">Check Box</option>
-    </select>
-    <button class="icon-head-pup" (click)="addProperties(nameHere,propertiesThis)">Add</button>
-    <!-- <select *ngIf="propertiesThis == 4" name="comboBoxProper" [(ngModel)]="comboBoxProper" class="form-control">
+<h2 mat-dialog-title>Add new form</h2>
+<mat-dialog-content class="mat-typography">
+ <!-- <h4 class="dispaly-4">Name form:  <input name="nameForm" type="text" [(ngModel)]="nameForm"> -->
+
+    <mat-form-field class="example-full-width">
+        <input matInput placeholder="Name form" name="nameForm" type="text" [(ngModel)]="nameForm">
+      </mat-form-field>
+  
+    <!-- <div (click)="closeForm()" class="icon-head-pup">
+      <button type="button" [mat-dialog-close]><i class="fa fa-close"></i>
+      </button>
+    </div> -->
+  
+  <!-- </h4> -->
+  <!-- <hr> -->
+  <div class="form-row">
+    <!-- <div class="col-md-6">
+      Name property:
+      <input name="nameHere" type="text" [(ngModel)]="nameHere">
+    </div> -->
+
+    <mat-form-field class="example-full-width">
+        <input matInput placeholder="Name property" name="nameHere" type="text" [(ngModel)]="nameHere">
+      </mat-form-field>
+
+    <div class="col-md-6 d-flex">
+      <div>
+        <mat-form-field class="example-full-width">
+            <mat-label>Type</mat-label>
+            <mat-select name="propertiesThis" [(ngModel)]="propertiesThis">
+              <mat-option value="0">-Select-</mat-option>
+              <mat-option value="1">Text only</mat-option>
+              <mat-option value="2">Short Text</mat-option>
+              <mat-option value="3">Long Text</mat-option>
+              <mat-option value="4">Combo box</mat-option>
+              <mat-option value="5">Check Box</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+
+      <!-- Type
+      <select name="propertiesThis" [(ngModel)]="propertiesThis">
         <option value="0">-Select-</option>
-        
+        <option value="1">Text only</option>
+        <option value="2">Short Text</option>
+        <option value="3">Long Text</option>
+        <option value="4">Combo box</option>
+        <option value="5">Check Box</option>
       </select> -->
-  </div>
-</div>
-<div *ngIf="propertiesThis == 4" class="form-row">
-  <div class="col-md-6">
-    DEMO:
-    <select class="form-control">
-      <option value="0">-Select-</option>
-      <option *ngFor="let item of listCb">{{item}}</option>
-    </select>
-  </div>
-  <div class="col-md-6">
-    Add option:
-    <input name="nameOfCb" type="text" [(ngModel)]="nameOfCb">
-    <button class="icon-head-pup" (click)="addToCb(nameOfCb)">Add</button>
-  </div>
+    
+      <!-- <button class="icon-head-pup" (click)="addProperties(nameHere,propertiesThis)">Add</button> -->
+      <!-- <select *ngIf="propertiesThis == 4" name="comboBoxProper" [(ngModel)]="comboBoxProper" class="form-control">
+          <option value="0">-Select-</option>
+          
+        </select> -->
+    </div>
 
-</div>
-
-<hr>
-<!-- <form #form="ngForm" autocomplete="off" (submit)="onSubmit()"> -->
-
-<div *ngFor="let item of listComboElement; index as i" class="form-row">
-  <div *ngIf="item.textOnly.name" class="form-group col-md-6">
-    <h6>{{item.textOnly.name}}</h6>
-  </div>
-  <div *ngIf="item.shortText.name" class="form-group col-md-6">
-    <label>{{item.shortText.name}} </label>
-    <input [(ngModel)]="item.shortText.value" type="text" class="shortText-dynamicForm">
-  </div>
-  <div *ngIf="item.longText.name" class="form-group col-md-6">
-    <label>{{item.longText.name}} </label>
-    <input [(ngModel)]="item.longText.value" type="text" class="shortText-dynamicForm">
-  </div>
-  <div *ngIf="item.comboBox.name" class="form-row">
-    <label>{{item.comboBox.name}}</label>
-    <select class="form-control">
-      <option value="0">-Select-</option>
-      <option *ngFor="let ite of item.comboBox.valueOfProper">{{ite}}</option>
-    </select>
+    <div>
+        <button type="button" class="icon-head-pup" mdbBtn color="secondary" class="waves-light" aria-label="Close"
+        mat-dialog-close mdbWavesEffect (click)="addProperties(nameHere,propertiesThis)">Add</button>
+      </div>
 
   </div>
-  <div *ngIf="item.inputCheckbox.name" class="form-group col-md-6">
-    <label>{{item.inputCheckbox.name }}</label>
-    <input type="checkbox" />
+  <div *ngIf="propertiesThis == 4" class="form-row">
+    <div class="col-md-6">
+      DEMO:
+      <select class="form-control">
+        <option value="0">-Select-</option>
+        <option *ngFor="let item of listCb">{{item}}</option>
+      </select>
+    </div>
+    <div class="col-md-6">
+      Chosse:
+      <input name="nameOfCb" type="text" [(ngModel)]="nameOfCb">
+      <button class="icon-head-pup" (click)="addToCb(nameOfCb)">Add</button>
+    </div>
+  
   </div>
-  <div (click)="deleteThisRow(i)" class="icon-head-pup">
-    <i class="fa fa-close"></i>
+  
+  <hr>
+  <!-- <form #form="ngForm" autocomplete="off" (submit)="onSubmit()"> -->
+  
+  <div *ngFor="let item of listComboElement; index as i" class="form-row">
+    <div *ngIf="item.textOnly.name" class="form-group col-md-6">
+      <h6>{{item.textOnly.name}}</h6>
+    </div>
+    <div *ngIf="item.shortText.name" class="form-group col-md-6">
+      <label>{{item.shortText.name}} </label>
+      <input [(ngModel)]="item.shortText.value" type="text" class="shortText-dynamicForm">
+    </div>
+    <div *ngIf="item.longText.name" class="form-group col-md-6">
+      <label>{{item.longText.name}} </label>
+      <input [(ngModel)]="item.longText.value" type="text" class="shortText-dynamicForm">
+    </div>
+    <div *ngIf="item.comboBox.name" class="form-row">
+      <label>{{item.comboBox.name}}</label>
+      <select class="form-control">
+        <option value="0">-Select-</option>
+        <option *ngFor="let ite of item.comboBox.valueOfProper">{{ite}}</option>
+      </select>
+  
+    </div>
+    <div *ngIf="item.inputCheckbox.name" class="form-group col-md-6">
+      <label>{{item.inputCheckbox.name }}</label>
+      <input type="checkbox" />
+    </div>
+    <div (click)="deleteThisRow(i)" class="icon-head-pup">
+      <i class="fa fa-close"></i>
+    </div>
+  
   </div>
-
-</div>
-<hr>
-<div class="form-group">
-  <button (click)="createNewForm()" >Tạo form</button>
-</div>
+  <!-- <hr> -->
+  <!-- <div class="form-group">
+    <button (click)="createNewForm()" >Tạo form</button>
+  </div> -->
+  
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+    <button type="button" mdbBtn color="secondary" class="waves-light" aria-label="Close"
+    mat-dialog-close mdbWavesEffect>Close</button>
+  <button mdbBtn [mat-dialog-close]="true" mdbWavesEffect color="secondary" (click)="createNewForm()">Tạo form</button>
+</mat-dialog-actions>
