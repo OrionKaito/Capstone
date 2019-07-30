@@ -24,17 +24,21 @@ public class Profile implements Serializable {
     @Expose
     private String dateOfBirth;
 
-    @SerializedName("managerID")
+    @SerializedName("imagePath")
     @Expose
-    private String managerID;
+    private String imagePath;
+
+    @SerializedName("lineManagerID")
+    @Expose
+    private String lineManagerID;
 
     @SerializedName("managerName")
     @Expose
-    private Object managerName;
+    private String managerName;
 
-    @SerializedName("roles")
+    @SerializedName("role")
     @Expose
-    private List<Role> roles;
+    private Role role;
 
     @SerializedName("groups")
     @Expose
@@ -76,28 +80,36 @@ public class Profile implements Serializable {
         this.dateOfBirth = dateOfBirth;
     }
 
-    public String getManagerID() {
-        return managerID;
+    public String getImagePath() {
+        return imagePath;
     }
 
-    public void setManagerID(String managerID) {
-        this.managerID = managerID;
+    public void setImagePath(String imagePath) {
+        this.imagePath = imagePath;
     }
 
-    public Object getManagerName() {
+    public String getLineManagerID() {
+        return lineManagerID;
+    }
+
+    public void setLineManagerID(String lineManagerID) {
+        this.lineManagerID = lineManagerID;
+    }
+
+    public String getManagerName() {
         return managerName;
     }
 
-    public void setManagerName(Object managerName) {
+    public void setManagerName(String managerName) {
         this.managerName = managerName;
     }
 
-    public List<Role> getRoles() {
-        return roles;
+    public Role getRole() {
+        return role;
     }
 
-    public void setRoles(List<Role> roles) {
-        this.roles = roles;
+    public void setRole(Role role) {
+        this.role = role;
     }
 
     public List<Group> getGroups() {
@@ -115,5 +127,6 @@ public class Profile implements Serializable {
     public void setIsDeleted(Boolean isDeleted) {
         this.isDeleted = isDeleted;
     }
+
 
 }

@@ -31,6 +31,7 @@ namespace Capstone.Data
         //Notifications
         public DbSet<Notification> Notifications { get; set; }
         public DbSet<UserNotification> UserNotifications { get; set; }
+        public DbSet<UserDevice> UserDevices { get; set; }
 
         //Requests
         public DbSet<Request> Requests { get; set; }

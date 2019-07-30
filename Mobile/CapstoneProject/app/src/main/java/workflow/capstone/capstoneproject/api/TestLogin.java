@@ -3,7 +3,7 @@ package workflow.capstone.capstoneproject.api;
 public class TestLogin {
     private String userName;
     private String password;
-    private String deviceID;
+    private String deviceToken;
 
     public String getUserName() {
         return userName;
@@ -21,12 +21,11 @@ public class TestLogin {
         this.password = password;
     }
 
-    public String getDeviceID() {
-        return deviceID;
+    public String getDeviceToken() {
+        return deviceToken;
     }
 
-    public void setDeviceID(String deviceID) {
-        this.deviceID = deviceID;
+    public void setDeviceToken(String deviceToken) {
+        this.deviceToken = deviceToken;
     }
-
 }

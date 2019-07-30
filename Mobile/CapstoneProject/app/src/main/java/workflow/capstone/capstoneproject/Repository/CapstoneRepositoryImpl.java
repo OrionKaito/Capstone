@@ -35,7 +35,7 @@ import workflow.capstone.capstoneproject.retrofit.ClientApi;
 import workflow.capstone.capstoneproject.utils.CallBackData;
 import workflow.capstone.capstoneproject.utils.KProgressHUDManager;
 
-public class CapstoneRepositoryImpl implements CapstoneRepository {
+public class CapstoneRepositoryImpl implements CapstoneRepository  {
     ClientApi clientApi = new ClientApi();
 
     @Override
@@ -91,9 +91,9 @@ public class CapstoneRepositoryImpl implements CapstoneRepository {
     }
 
     @Override
-    public void testLogin(Context context, TestLogin testLogin, final CallBackData<Login> callBackData) {
-        Call<ResponseBody> serviceCall = clientApi.getDynamicWorkflowServices().testLogin(testLogin);
-        Log.e("URL=", clientApi.getDynamicWorkflowServices().testLogin(testLogin).request().url().toString());
+    public void newLogin(Context context, TestLogin testLogin, final CallBackData<Login> callBackData) {
+        Call<ResponseBody> serviceCall = clientApi.getDynamicWorkflowServices().newLogin(testLogin);
+        Log.e("URL=", clientApi.getDynamicWorkflowServices().newLogin(testLogin).request().url().toString());
         //show progress bar
         final KProgressHUD progressHUD = KProgressHUDManager.showProgressBar(context);
 
@@ -143,9 +143,9 @@ public class CapstoneRepositoryImpl implements CapstoneRepository {
     }
 
     @Override
-    public void logout(String token, final CallBackData<String> callBackData) {
-        Call<ResponseBody> serviceCall = clientApi.getDWServices(token).logout();
-        Log.e("URL=", clientApi.getDWServices(token).logout().request().url().toString());
+    public void logout(String token, String deviceToken, final CallBackData<String> callBackData) {
+        Call<ResponseBody> serviceCall = clientApi.getDWServices(token).logout(deviceToken);
+        Log.e("URL=", clientApi.getDWServices(token).logout(deviceToken).request().url().toString());
 
         serviceCall.enqueue(new Callback<ResponseBody>() {
             @Override
@@ -232,6 +232,46 @@ public class CapstoneRepositoryImpl implements CapstoneRepository {
         Log.e("URL=", clientApi.getDWServices(token).updateProfile(model).request().url().toString());
         final KProgressHUD progressHUD = KProgressHUDManager.showProgressBar(context);
 
+        serviceCall.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                progressHUD.dismiss();
+                if (response != null && response.body() != null) {
+                    if (response.code() == 200) {
+                        try {
+                            String result = response.body().string();
+                            Type type = new TypeToken<String>() {
+                            }.getType();
+                            String responseResult = new Gson().fromJson(result, type);
+                            if (responseResult == null) {
+                                callBackData.onFail(response.message());
+                            }
+                            callBackData.onSuccess(responseResult);
+                        } catch (JsonSyntaxException jsonError) {
+                            jsonError.printStackTrace();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    } else {
+                        callBackData.onFail(response.message());
+                    }
+                } else if (response.code() == 400) {
+                    callBackData.onFail(response.message());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                callBackData.onFail(call.toString());
+            }
+        });
+    }
+
+    @Override
+    public void updateAvatar(Context context, String token, String imagePath, final CallBackData<String> callBackData) {
+        Call<ResponseBody> serviceCall = clientApi.getDWServices(token).updateAvatar(imagePath);
+        Log.e("URL=", clientApi.getDWServices(token).updateAvatar(imagePath).request().url().toString());
+        final KProgressHUD progressHUD = KProgressHUDManager.showProgressBar(context);
         serviceCall.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
@@ -879,35 +919,6 @@ public class CapstoneRepositoryImpl implements CapstoneRepository {
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
-                }
-            }
-
-            @Override
-            public void onFailure(Call<ResponseBody> call, Throwable t) {
-                callBackData.onFail(call.toString());
-            }
-        });
-    }
-
-    @Override
-    public void downloadFileWithDynamicUrlSync(String fileUrl, final CallBackData<ResponseBody> callBackData) {
-        Call<ResponseBody> serviceCall = clientApi.getDynamicWorkflowServices().downloadFileWithDynamicUrlSync(fileUrl);
-        Log.e("URL=", clientApi.getDynamicWorkflowServices().downloadFileWithDynamicUrlSync(fileUrl).request().url().toString());
-        serviceCall.enqueue(new Callback<ResponseBody>() {
-            @Override
-            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                if (response != null && response.body() != null) {
-                    if (response.code() == 200) {
-                        try {
-                            callBackData.onSuccess(response.body());
-                        } catch (JsonSyntaxException jsonError) {
-                            jsonError.printStackTrace();
-                        }
-                    } else {
-                        callBackData.onFail(response.message());
-                    }
-                } else if (response.code() == 400) {
-                    callBackData.onFail(response.message());
                 }
             }
 
