@@ -29,9 +29,9 @@
             <mat-label>Type</mat-label>
             <mat-select name="propertiesThis" [(ngModel)]="propertiesThis">
               <mat-option value="0">-Select-</mat-option>
-              <mat-option value="1">Text only</mat-option>
-              <mat-option value="2">Short Text</mat-option>
-              <mat-option value="3">Long Text</mat-option>
+              <mat-option value="1">Label</mat-option>
+              <mat-option value="2">Text</mat-option>
+              <mat-option value="3">Text Area</mat-option>
               <mat-option value="4">Combo box</mat-option>
               <mat-option value="5">Check Box</mat-option>
             </mat-select>
@@ -56,8 +56,7 @@
     </div>
 
     <div>
-        <button type="button" class="icon-head-pup" mdbBtn color="secondary" class="waves-light" aria-label="Close"
-        mat-dialog-close mdbWavesEffect (click)="addProperties(nameHere,propertiesThis)">Add</button>
+        <button type="button" (click)="addProperties(nameHere,propertiesThis)">Add</button>
       </div>
 
   </div>
@@ -70,7 +69,7 @@
       </select>
     </div>
     <div class="col-md-6">
-      Chosse:
+      Add option:
       <input name="nameOfCb" type="text" [(ngModel)]="nameOfCb">
       <button class="icon-head-pup" (click)="addToCb(nameOfCb)">Add</button>
     </div>

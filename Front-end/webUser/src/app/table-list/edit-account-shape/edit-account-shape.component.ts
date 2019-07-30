@@ -13,6 +13,7 @@ import { ShapeService } from './shape.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { element } from '@angular/core/src/render3';
 import { AddNewDynamicFormComponent } from 'app/add-new-dynamic-form/add-new-dynamic-form.component';
+import { LoginService } from 'app/service/login.service';
 
 @Component({
   selector: 'app-edit-account-shape',
@@ -80,6 +81,7 @@ export class EditAccountShapeComponent implements OnInit {
     private shapeService: ShapeService,
     private formBuilder: FormBuilder,
     private activatedRoute: ActivatedRoute,
+    private LoginService: LoginService
   ) { }
   saveActiontype;
   ngOnInit() {
@@ -753,7 +755,7 @@ export class EditAccountShapeComponent implements OnInit {
 
   public openDialog(item) {
     // debugger;
-    
+
     this.listClass.forEach(element => {
       if (element.idArrow === item) {
         this.propertiesArr = element;
@@ -859,7 +861,7 @@ export class EditAccountShapeComponent implements OnInit {
   public clearConnect() {
     this.subClass = [];
     document.getElementById('body-svg').style.cursor = 'default';
-    
+
   }
 
   openDinamicForm(id) {
@@ -908,18 +910,29 @@ export class EditAccountShapeComponent implements OnInit {
       const json = JSON.stringify(exportJson2);
 
 
-      var a = { "id": this.saveIDofWF, "data": JSON.stringify(exportJson) };
+      var a = {
+        "id": this.saveIDofWF,
+        "data": JSON.stringify(exportJson),
+        "name": this.saveActiontype.name,
+        "description": this.saveActiontype.description,
+        "permissionToUseID": this.saveActiontype.permissionToUseID
+      };
       exportJson2.workFlowID = this.saveIDofWF;
-      var b = { id: this.saveIDofWF, "data": JSON.stringify(exportJson2) };
+      var b = {
+        "id": this.saveIDofWF,
+        "data": JSON.stringify(exportJson2),
 
-      this.shapeService.saveDraf(a).toPromise().then((res: any) => {
+      };
+
+      this.LoginService.editWF(a).toPromise().then((res: any) => {
         this.toastr.success("Lưu bản nháp WorkFlow thành công!");
 
       }, (err) => {
+        this.toastr.error("Please try again later!","Something Wrong!");
         console.log(err);
       });
     }
-    
+
   }
   saveWorkFlow() {
     let positionKey: any;
