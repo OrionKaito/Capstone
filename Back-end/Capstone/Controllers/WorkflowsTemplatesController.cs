@@ -77,10 +77,13 @@ namespace Capstone.Controllers
         }
 
         [HttpGet("GetWorkflowToUse")]
-        public ActionResult<IEnumerable<WorkFlowTemplateVM>> GetWorkflowToUse()
+        public ActionResult<IEnumerable<WorkFlowTemplatePaginVM>> GetWorkflowToUse(int? numberOfPage, int? NumberOfRecord)
         {
             try
             {
+                var page = numberOfPage ?? 1;
+                var count = NumberOfRecord ?? WebConstant.DefaultPageRecordCount;
+
                 var userID = HttpContext.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier).Value;
                 var permissionsOfUser = _permissionService.GetByUserID(userID);
 
@@ -96,7 +99,13 @@ namespace Capstone.Controllers
                     }
                 }
 
-                return Ok(workFlowTemplates);
+                WorkFlowTemplatePaginVM result = new WorkFlowTemplatePaginVM
+                {
+                    TotalRecord = workFlowTemplates.Count(),
+                    workFlowTemplates = workFlowTemplates.Skip((page - 1) * count).Take(count),
+                };
+
+                return Ok(result);
             }
             catch (Exception e)
             {
@@ -146,6 +155,7 @@ namespace Capstone.Controllers
 
                 workFlow = _mapper.Map<WorkFlowTemplate>(model);
                 workFlow.OwnerID = userID;
+                workFlow.CreateDate = DateTime.Now;
                 _workFlowService.Create(workFlow);
 
                 return StatusCode(201, workFlow.ID);
@@ -248,7 +258,25 @@ namespace Capstone.Controllers
 
                 foreach (var connection in model.Connections)
                 {
-                    var workflowConnection = _mapper.Map<WorkFlowTemplateActionConnection>(connection);
+                    var connectionTypeInDb = _connectionTypeService.GetByName(connection.Name);
+
+                    if (connectionTypeInDb == null) // kiểm tra connection type này có chưa
+                    {
+                        ConnectionType connectionType = new ConnectionType
+                        {
+                            Name = connection.Name,
+                        };
+                        _connectionTypeService.Create(connectionType);
+                        connectionTypeInDb = connectionType;
+                    }
+
+                    WorkFlowTemplateActionConnection workflowConnection = new WorkFlowTemplateActionConnection
+                    {
+                        ConnectionTypeID = connectionTypeInDb.ID,
+                        FromWorkFlowTemplateActionID = connection.FromWorkFlowTemplateActionID,
+                        ToWorkFlowTemplateActionID = connection.ToWorkFlowTemplateActionID,
+                    };
+
                     _workFlowTemplateActionConnectionService.Create(workflowConnection);
                 }
 

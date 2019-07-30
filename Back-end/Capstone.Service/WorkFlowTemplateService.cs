@@ -57,7 +57,7 @@ namespace Capstone.Service
 
         public IEnumerable<WorkFlowTemplate> GetByPermissionToUse(Guid ID)
         {
-            return _workFlowTemplateRepository.GetByPermissionToUse(ID);
+            return _workFlowTemplateRepository.GetByPermissionToUse(ID).OrderByDescending(w => w.CreateDate);
         }
 
         //public IEnumerable<WorkFlowTemplate> GetByPermissionToEdit(Guid ID)

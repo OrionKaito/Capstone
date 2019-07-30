@@ -5,7 +5,7 @@ namespace Capstone.ViewModel
 {
     public class RegistrationPaginVM
     {
-        public int TotalPage { get; set; }
+        public int TotalRecord { get; set; }
         public IEnumerable<RegistrationVM> Accounts { get; set; }
     }
 
