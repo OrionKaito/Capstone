@@ -77,7 +77,7 @@ namespace Capstone.Controllers
         }
 
         [HttpGet("GetWorkflowToUse")]
-        public ActionResult<IEnumerable<WorkFlowTemplateVM>> GetWorkflowToUse(int? numberOfPage, int? NumberOfRecord)
+        public ActionResult<IEnumerable<WorkFlowTemplatePaginVM>> GetWorkflowToUse(int? numberOfPage, int? NumberOfRecord)
         {
             try
             {
@@ -91,9 +91,7 @@ namespace Capstone.Controllers
 
                 foreach (var item in permissionsOfUser)
                 {
-                    var workflows = _workFlowService.GetByPermissionToUse(item.ID)
-                        .Skip((page - 1) * count)
-                        .Take(count);
+                    var workflows = _workFlowService.GetByPermissionToUse(item.ID);
 
                     foreach (var workflow in workflows)
                     {
@@ -101,7 +99,13 @@ namespace Capstone.Controllers
                     }
                 }
 
-                return Ok(workFlowTemplates);
+                WorkFlowTemplatePaginVM result = new WorkFlowTemplatePaginVM
+                {
+                    TotalRecord = workFlowTemplates.Count(),
+                    workFlowTemplates = workFlowTemplates.Skip((page - 1) * count).Take(count),
+                };
+
+                return Ok(result);
             }
             catch (Exception e)
             {
@@ -151,6 +155,7 @@ namespace Capstone.Controllers
 
                 workFlow = _mapper.Map<WorkFlowTemplate>(model);
                 workFlow.OwnerID = userID;
+                workFlow.CreateDate = DateTime.Now;
                 _workFlowService.Create(workFlow);
 
                 return StatusCode(201, workFlow.ID);

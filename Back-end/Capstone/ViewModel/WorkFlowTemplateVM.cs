@@ -3,6 +3,12 @@ using System.Collections.Generic;
 
 namespace Capstone.ViewModel
 {
+    public class WorkFlowTemplatePaginVM
+    {
+        public int TotalRecord { get; set; }
+        public IEnumerable<WorkFlowTemplateVM> workFlowTemplates { get; set; }
+    }
+
     public class WorkFlowTemplateVM
     {
         public Guid ID { get; set; }
