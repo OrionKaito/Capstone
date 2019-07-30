@@ -25,9 +25,17 @@ namespace Capstone.Controllers
         public ActionResult Test()
         {
             Dictionary<string, string> buttons = new Dictionary<string, string>();
-            buttons.Add("Accept", "localhost:1433");
-            buttons.Add("Deny", "localhost:1433");
-            buttons.Add("Send to Mangaer", "localhost:1433");
+
+            //Uri uriAddress = new Uri(UriPartial.Authority.ToString());
+            //Console.WriteLine(uriAddress.Fragment);
+            var domain = $"{Request.Scheme}://{Request.Host}{Request.PathBase}";
+
+            //var domainName = HttpContext. ..GetLeftPart(UriPartial.Authority);
+            buttons.Add("Accept", domain + "/api/Accounts");
+            buttons.Add("Deny", "http://www.example.com");
+            buttons.Add("Send to Mangaer", "http://www.example.com");
+
+
 
             List<string> names = new List<string>();
             List<string> links = new List<string>();
@@ -46,7 +54,7 @@ namespace Capstone.Controllers
             {
                 return BadRequest("Wrong" + e.Message);
             }
-            return Ok("success");
+            return Ok(domain);
         }
 
         // GET api/values

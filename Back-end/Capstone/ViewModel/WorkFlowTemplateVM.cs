@@ -3,6 +3,12 @@ using System.Collections.Generic;
 
 namespace Capstone.ViewModel
 {
+    public class WorkFlowTemplatePaginVM
+    {
+        public int TotalRecord { get; set; }
+        public IEnumerable<WorkFlowTemplateVM> workFlowTemplates { get; set; }
+    }
+
     public class WorkFlowTemplateVM
     {
         public Guid ID { get; set; }
@@ -42,12 +48,19 @@ namespace Capstone.ViewModel
         public bool IsEnd { get; set; }
     }
 
+    public class WorkFlowConnectionCM
+    {
+        public Guid FromWorkFlowTemplateActionID { get; set; }
+        public Guid ToWorkFlowTemplateActionID { get; set; }
+        public string Name { get; set; }
+    }
+
     public class SaveWowkFlowTemplateUM
     {
         public Guid WorkFlowTemplateID { get; set; }
         public string Data { get; set; }
         public IEnumerable<WorkFlowActionCM> Actions { get; set; }
-        public IEnumerable<WorkFlowTemplateActionConnectionCM> Connections { get; set; }
+        public IEnumerable<WorkFlowConnectionCM> Connections { get; set; }
     }
 
     public class SaveCraftTemplateUM
@@ -56,5 +69,6 @@ namespace Capstone.ViewModel
         public string Name { get; set; }
         public string Description { get; set; }
         public string Data { get; set; }
+        public Guid PermissionToUseID { get; set; }
     }
 }

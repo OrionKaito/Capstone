@@ -12,22 +12,43 @@
         android:background="@drawable/signinbg"
         android:scaleType="centerCrop"></FrameLayout>
 
-    <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
-        android:id="@+id/img_avatar"
+    <RelativeLayout
+        android:id="@+id/rl_avatar"
         android:layout_width="@dimen/dp100"
         android:layout_height="@dimen/dp100"
         android:layout_centerHorizontal="true"
         android:layout_gravity="center"
-        android:layout_marginTop="@dimen/dp128"
-        android:src="@drawable/avatar"
-        app:civ_border_color="@color/gray"
-        app:civ_border_width="1dp" />
+        android:layout_marginTop="@dimen/dp128">
+
+        <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/img_avatar"
+            android:layout_width="@dimen/dp100"
+            android:layout_height="@dimen/dp100"
+            android:src="@drawable/avatar"
+            app:civ_border_color="@color/gray"
+            app:civ_border_width="1dp" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentBottom="true"
+            android:background="@drawable/circle_camera"
+            android:padding="@dimen/dp4">
+
+            <ImageView
+                android:id="@+id/img_changeAvatar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/ic_camera" />
+        </LinearLayout>
+    </RelativeLayout>
 
     <TextView
         android:id="@+id/tv_full_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/img_avatar"
+        android:layout_below="@id/rl_avatar"
         android:layout_marginTop="@dimen/dp15"
         android:gravity="center"
         android:text="Your name"

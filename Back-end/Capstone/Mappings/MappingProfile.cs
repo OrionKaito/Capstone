@@ -185,6 +185,13 @@ namespace Capstone.Mappings
             CreateMap<WorkFlowTemplateActionConnection, WorkFlowTemplateActionConnectionUM>();
             CreateMap<WorkFlowTemplateActionConnectionUM, WorkFlowTemplateActionConnection>();
 
+            //UserDevice
+            CreateMap<UserDevice, UserDeviceVM>();
+            CreateMap<UserDeviceVM, UserDevice>();
+
+            CreateMap<UserDevice, UserDeviceUM>();
+            CreateMap<UserDeviceUM, UserDevice>();
+
         }
     }
 }

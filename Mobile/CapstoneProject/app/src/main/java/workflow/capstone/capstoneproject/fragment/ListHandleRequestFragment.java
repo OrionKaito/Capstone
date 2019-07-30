@@ -23,6 +23,7 @@ import workflow.capstone.capstoneproject.activity.MainActivity;
 import workflow.capstone.capstoneproject.activity.ProfileActivity;
 import workflow.capstone.capstoneproject.adapter.NotificationAdapter;
 import workflow.capstone.capstoneproject.adapter.RequestToHandleAdapter;
+import workflow.capstone.capstoneproject.entities.Profile;
 import workflow.capstone.capstoneproject.entities.RequestToHandle;
 import workflow.capstone.capstoneproject.entities.UserNotification;
 import workflow.capstone.capstoneproject.repository.CapstoneRepository;
@@ -52,8 +53,13 @@ public class ListHandleRequestFragment extends Fragment {
         listView = view.findViewById(R.id.list_notification);
 
         imgAvatar = view.findViewById(R.id.img_avatar);
-        Picasso.get().load("https://scontent.fsgn2-4.fna.fbcdn.net/v/t1.0-1/p160x160/51544827_1431384577001877_5331970394951778304_n.jpg?_nc_cat=109&_nc_oc=AQnco7rDhQqwfiIMn0yb5w1T_XbHhK4H7VHH2OkcvvJwPffe8ztui6o1jgmD0HV70sM_obUhA5ESdSz-trY9uwGu&_nc_ht=scontent.fsgn2-4.fna&oh=efcc572eee6bb9b41bc554297c98a4d6&oe=5DAD14A0")
+
+        Profile profile = DynamicWorkflowSharedPreferences.getStoredData(getContext(), ConstantDataManager.PROFILE_KEY, ConstantDataManager.PROFILE_NAME);
+        Picasso.get()
+                .load(ConstantDataManager.IMAGE_URL + profile.getImagePath())
+                .error(getResources().getDrawable(R.drawable.avatar))
                 .into(imgAvatar);
+
         imgAvatar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -84,8 +90,10 @@ public class ListHandleRequestFragment extends Fragment {
             @Override
             public void onSuccess(List<RequestToHandle> requestToHandles) {
                 requestToHandleList = requestToHandles;
-                requestToHandleAdapter = new RequestToHandleAdapter(requestToHandleList, getContext());
-                listView.setAdapter(requestToHandleAdapter);
+                if (getActivity() != null) {
+                    requestToHandleAdapter = new RequestToHandleAdapter(requestToHandleList, getActivity());
+                    listView.setAdapter(requestToHandleAdapter);
+                }
                 onItemClick(listView);
             }
 
