@@ -77,7 +77,7 @@
                                   </div>
                               </div>
                           </div> -->
-                          
+                          <a style="color: blue" (click)="openChangePassDiv()"><i>Change password</i></a>
                           <button mat-raised-button type="submit"  class="btn btn-danger pull-right">Save</button>
                           <div class="clearfix"></div>
                       </form>
@@ -109,7 +109,7 @@
           </div>
 
 
-          <div class="col-md-8">
+          <div *ngIf="openChangePass" class="col-md-8">
               <div class="card">
                   <div class="card-header card-header-danger">
                       <h4 class="card-title">Change password</h4>

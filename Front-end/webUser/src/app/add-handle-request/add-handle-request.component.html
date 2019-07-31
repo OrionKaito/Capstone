@@ -11,7 +11,7 @@
     initiatorName : {{initiatorName}}
   </div>
   <div class="form-row">
-    Time : 
+    Time :
     {{requestHandle.createDate | date:'yyyy-MM-dd HH:mm'}}
   </div>
   <div *ngFor="let item of requestActionHandleValue" class="form-row">
@@ -22,17 +22,14 @@
   </div>
   <div *ngFor="let item of requestActionHandleFile" class="form-row">
     <!-- <a href="{{item.path}}" target="_blank">{{item.name}}</a> -->
-      <a href="{{item.path}}" target="_blank" >{{item.name}}</a>
-      
+    <a href="{{item.path}}" target="_blank">{{item.name}}</a>
+
   </div>
 </form>
 <div class="form-row">
   Comment:
 </div>
-<div class="form-row">
-  <div class="form-group col-md-6"><input name="name" type="text" [(ngModel)]="cmt" class="form-control"></div>
-  <div class="form-group col-md-6"> <button (click)="addNewCmt()">Add comment</button> </div>
-</div>
+
 <div *ngFor="let item of cmtHandle">
   <div *ngFor="let item2 of item.requestValues">
     <div class="form-row"><strong> {{item.fullName}} </strong>({{item.userName}})
@@ -49,9 +46,13 @@
   <div class="form-row"> {{item}}
   </div>
 </div>
+<div class="form-row">
+  <div class="form-group col-md-6"><input name="name" type="text" [(ngModel)]="cmt" class="form-control"></div>
+  <div class="form-group col-md-6"> <button (click)="addNewCmt()">Add comment</button> </div>
+</div>
 <div class="form-group">
-    <button *ngFor="let item of buttons" id="item.nextStepID" (click)="sendReqNextStep(item.nextStepID)"
-      class="btn btn-dark"><i class="fa fa-database"></i> {{item.connectionTypeName}}</button>
-    <!-- <button id="ádasd"   > adsdasd</button>  -->
-    <!-- <button type="button" class="btn btn-outline-dark ml-1" [mat-dialog-close]><i class="fa fa-close"></i> Close</button> -->
-  </div>
+  <button *ngFor="let item of buttons" id="item.nextStepID" (click)="sendReqNextStep(item.nextStepID)"
+    class="btn btn-dark"><i class="fa fa-database"></i> {{item.connectionTypeName}}</button>
+  <!-- <button id="ádasd"   > adsdasd</button>  -->
+  <!-- <button type="button" class="btn btn-outline-dark ml-1" [mat-dialog-close]><i class="fa fa-close"></i> Close</button> -->
+</div>

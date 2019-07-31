@@ -28,7 +28,7 @@ export class LoginService {
   Login(model : any){  
     debugger;  
 
-     var a =this.Url + "api/Token/User";  
+     var a =this.Url + "/api/Token/NewLogin";  
    return  this.http.post(a,model, { observe: 'response' });  
   }  
   Register(model : any){
@@ -72,6 +72,12 @@ export class LoginService {
   BanOrUnbanAcc(id: string){
     const headers = new HttpHeaders({ 'Content-Type': 'application/json'}); 
     return this.http.put(this.Url + "api/Accounts/ToggleBanAccount?ID=" +id, {"ID": id},{ headers: headers });
+  }
+  BanOrUnbanPer(id){
+    var token = "Bearer " + localStorage.getItem("token");
+    var tokenHeader = new HttpHeaders({'Authorization': token});
+   
+    return this.http.delete( this.Url+"api/Permissions?ID="+id , {headers : tokenHeader , responseType: 'text' });
   }
   enabledDisableWF(id: string){
     const headers = new HttpHeaders({ 'Content-Type': 'application/json'}); 
