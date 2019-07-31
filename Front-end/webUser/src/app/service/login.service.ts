@@ -28,7 +28,7 @@ export class LoginService {
   Login(model : any){  
     debugger;  
 
-     var a =this.Url + "/api/Token/NewLogin";  
+     var a =this.Url + "api/Token/NewLogin";  
    return  this.http.post(a,model, { observe: 'response' });  
   }  
   Register(model : any){
