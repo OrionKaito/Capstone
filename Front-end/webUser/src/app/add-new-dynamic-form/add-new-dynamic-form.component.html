@@ -57,7 +57,7 @@
 
     <div>
         <button type="button" mdbWavesEffect mdbBtn color="secondary"
-         (click)="addProperties(nameHere,propertiesThis)">Add</button>
+         (click)="addProperties(nameHere,propertiesThis)">Add Property</button>
       </div>
 
   </div>
@@ -70,10 +70,13 @@
       </select> -->
 
       <mat-form-field class="example-full-width">
-          <mat-label>DEMO:</mat-label>
-          <mat-select>
+          <mat-label>Review</mat-label>
+          <mat-select value="0">
             <mat-option value="0">-Select-</mat-option>
-            <mat-option *ngFor="let item of listCb">{{item}}</mat-option>
+            <mat-option *ngFor="let item of listCb; index as j">{{item}}
+              <a (click)="deleteThisOption(j)" class="icon-head-pup">
+              <i class="fa fa-close"></i>
+              </a></mat-option>
           </mat-select>
         </mat-form-field>
 
@@ -85,7 +88,7 @@
           <input matInput placeholder="Add option:" name="nameOfCb" type="text" [(ngModel)]="nameOfCb">
         </mat-form-field>
       <button class="icon-head-pup" mdbWavesEffect mdbBtn color="secondary"
-      (click)="addToCb(nameOfCb)">Add</button>
+      (click)="addToCb(nameOfCb)">Add option</button>
     </div>
   
   </div>
@@ -129,7 +132,8 @@
       <mat-checkbox>{{item.inputCheckbox.name }}</mat-checkbox>
     </div>
     <div (click)="deleteThisRow(i)" class="icon-head-pup">
-      <i class="fa fa-close"></i>
+      <a>
+      <i class="fa fa-close"></i></a>
     </div>
   
   </div>

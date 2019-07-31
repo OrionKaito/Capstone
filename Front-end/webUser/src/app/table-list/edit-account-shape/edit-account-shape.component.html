@@ -86,11 +86,12 @@
         <!-- <td>Name arrow</td> -->
         <td class="d-flex align-items-center">
           <div class="mr-3">Name arrow: </div>
-          <mat-form-field style="width: 50%; ">
+          <input type="text" [(ngModel)]="propertiesArr.name">
+          <!-- <mat-form-field style="width: 50%; ">
             <mat-select name="propertiesArr.name" [disabled]="true" [(ngModel)]="propertiesArr.name">
               <mat-option  *ngFor="let item of listConnectionType" value="{{item.id}}">{{item.name}}</mat-option>
             </mat-select>
-          </mat-form-field>
+          </mat-form-field> -->
 
         </td>
       </tr>

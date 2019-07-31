@@ -128,7 +128,6 @@ export class LoginComponent implements OnInit {
     };
 
     forgetPass() {
-
         this.checkPage = false;
         this.LoginService.resetPassword(this.email).toPromise().then(
             data => {
