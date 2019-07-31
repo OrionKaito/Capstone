@@ -95,7 +95,9 @@ export class AddHandleRequestComponent implements OnInit {
   }
   addNewCmt(){
     var a = new String(this.cmt);
+
     this.listCmt.push(a);
+    this.cmt = "";
   }
 
 

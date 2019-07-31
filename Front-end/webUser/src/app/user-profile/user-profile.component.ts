@@ -15,10 +15,12 @@ export class UserProfileComponent implements OnInit {
 userDetail1: any=[];
 userDetail;
 changePass: any;
+openChangePass: any;
 
   constructor(private router: Router ,private toastr: ToastrService, private loginService: LoginService ) { }
 
   ngOnInit() {
+    this.openChangePass = false;
     this.changePass= {
       cur : "",
       new: "",
@@ -56,11 +58,19 @@ changePass: any;
     this.loginService.changePass(this.changePass.cur, this.changePass.new).subscribe(
       data=>{
         this.toastr.success("Change your password success!!!", "Success!");   
+        this.changePass= {
+          cur : "",
+          new: "",
+          re: ""
+        };
       },
       err=>{
         this.toastr.error("Error: " + err.message + ". Please try again!!", "Something wrong!");   
       }
     )
+  }
+  openChangePassDiv(){
+    this.openChangePass = !this.openChangePass;
   }
 
 }

@@ -24,6 +24,9 @@ export class AddNewDynamicFormComponent implements OnInit {
   listCb: any =[];
   nameForm: any;
   ngOnInit() {
+    this.nameHere ="";
+    this.propertiesThis = 0;
+    this.nameOfCb ="";
     // let a = new ComboElement();
 
     //   a.inputCheckbox.name = "ádsad";
@@ -34,39 +37,56 @@ export class AddNewDynamicFormComponent implements OnInit {
   }
 
   addProperties(name,properties){
-    console.log(this.nameHere);
-    debugger;
+
       let a = new ComboElement();
+      debugger;
+      if(name == "" || properties == 0 ) {
+        this.toastr.error("Please add name and type for property first.");   
+      } else{
       if(properties == 1){
         a.textOnly.name = name;
+        this.listComboElement.push(a);
       }
       if(properties == 2){
         a.shortText.name = name;
+        this.listComboElement.push(a);
       }
       if(properties == 3){
         a.longText.name = name;
+        this.listComboElement.push(a);
       }
       if(properties == 4){
         a.comboBox.name = name;
+        if(this.listCb.length == 0 ){
+          this.toastr.error("Please add option for combo box first.");  
+        } else {
         this.listCb.forEach(element => {
           a.comboBox.valueOfProper.push(element);
         });
         this.listCb = [];
+        this.listComboElement.push(a);
+
+      }
       }
       if(properties == 5){
         a.inputCheckbox.name = name;
+        this.listComboElement.push(a);
       }
-      this.listComboElement.push(a);
-      console.log(this.listComboElement);
+      
+    }
   }
 
   deleteThisRow(index){
     this.listComboElement.splice(index,1);
   }
   addToCb(nameOfCb){
-    debugger;
+    if(nameOfCb == "") {
+      this.toastr.error("Please add a valid option!");
+    } else{
     this.listCb.push(nameOfCb);
+    this.nameOfCb ="";
     this.toastr.success("Add option success");
+    }
   }
   createNewForm(){
     let model = {
@@ -80,5 +100,8 @@ export class AddNewDynamicFormComponent implements OnInit {
         this.toastr.error("Error:" + err.message, "Something wrong!" );
       });
   } 
+  deleteThisOption(j){
+    this.listCb.splice(j,1);
+  }
 
 }

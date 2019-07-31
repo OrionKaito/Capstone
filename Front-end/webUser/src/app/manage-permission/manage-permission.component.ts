@@ -53,16 +53,16 @@ export class ManagePermissionComponent implements OnInit {
   }
   banOrUnbanAcc(id) {
 
-    this.LoginService.BanOrUnbanAcc(id).subscribe(
+    this.LoginService.BanOrUnbanPer(id).subscribe(
       data => {
         console.log(data);
-
+        this.callAll();
       },
       err => {
         console.log(err);
       }
     )
-    location.reload();
+
   };
   register() {
     this.model.dateOfBirth = this.model.dateOfBirth.toString() + "T06:08:08-05:00";

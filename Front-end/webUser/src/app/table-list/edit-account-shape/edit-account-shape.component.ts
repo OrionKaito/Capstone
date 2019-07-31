@@ -85,7 +85,10 @@ export class EditAccountShapeComponent implements OnInit {
   ) { }
   saveActiontype;
   ngOnInit() {
-
+this.callAll();
+  }
+  callAll(){
+    
     this.properties = {
       name: "",
       description: "",
@@ -872,6 +875,7 @@ export class EditAccountShapeComponent implements OnInit {
     dialogConfig.data = [];
     this.dialog.open(AddNewDynamicFormComponent, dialogConfig).afterClosed().subscribe(res => {
       console.log(res);
+      this.callAll();
     });
 
   }
@@ -1019,11 +1023,11 @@ export class EditAccountShapeComponent implements OnInit {
         let b = {
           fromWorkFlowTemplateActionID: "",
           toWorkFlowTemplateActionID: "",
-          connectionTypeID: ""
+          name: ""
         };
         b.fromWorkFlowTemplateActionID = element.idDiv[0].toString();
         b.toWorkFlowTemplateActionID = element.idDiv[1].toString();
-        b.connectionTypeID = element.name.toString();
+        b.name = element.name.toString();
         jsonConnections.push(b);
       });
 
