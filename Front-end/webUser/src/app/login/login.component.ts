@@ -89,9 +89,10 @@ export class LoginComponent implements OnInit {
     login() {
         let tokenNoti = localStorage.getItem("tokenNoti");
         if (tokenNoti == null) { tokenNoti = "" };
-        let loginWithTkNoti = { userName: this.model.Username, password: this.model.Password, deviceID: tokenNoti };
+        let loginWithTkNoti = { userName: this.model.Username, password: this.model.Password, deviceToken: tokenNoti };
         debugger;
-        this.LoginService.Login(this.model).toPromise().then(
+        console.log(loginWithTkNoti);
+        this.LoginService.Login(loginWithTkNoti).toPromise().then(
             data => {
                 if (data.status == 200) {
                     this.dataNow = data.body;

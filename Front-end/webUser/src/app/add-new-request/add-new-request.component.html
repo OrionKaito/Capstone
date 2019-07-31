@@ -20,11 +20,11 @@
     </div>
     <div *ngIf="item.longText.name" class="form-group col-md-6">
       <label>{{item.longText.name}} </label>
-      <input [(ngModel)]="item.longText.value" type="text" class="shortText-dynamicForm">
+      <input  [(ngModel)]="item.longText.value" type="text" style="min-height: 80px" class="shortText-dynamicForm input">
     </div>
     <div *ngIf="item.comboBox.name" class="form-row">
       <label>{{item.comboBox.name}}</label>
-      <select [(ngModel)]="item.comboBox.value" class="form-control">
+      <select [(ngModel)]="item.comboBox.value" value="0" class="form-control">
         <option value="0">-Select-</option>
         <option *ngFor="let ite of item.comboBox.valueOfProper">{{ite}}</option>
       </select>
