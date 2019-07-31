@@ -18,19 +18,21 @@ import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import workflow.capstone.capstoneproject.api.Request;
-import workflow.capstone.capstoneproject.api.RequestApprove;
-import workflow.capstone.capstoneproject.api.TestLogin;
+import workflow.capstone.capstoneproject.api.LoginModel;
+import workflow.capstone.capstoneproject.api.RequestApproveModel;
+import workflow.capstone.capstoneproject.api.RequestModel;
+import workflow.capstone.capstoneproject.api.UpdateAvatarModel;
 import workflow.capstone.capstoneproject.api.UpdateProfileModel;
-import workflow.capstone.capstoneproject.entities.MyRequest;
-import workflow.capstone.capstoneproject.entities.RequestForm;
 import workflow.capstone.capstoneproject.entities.HandleRequestForm;
 import workflow.capstone.capstoneproject.entities.Login;
+import workflow.capstone.capstoneproject.entities.MyRequest;
 import workflow.capstone.capstoneproject.entities.Profile;
+import workflow.capstone.capstoneproject.entities.RequestForm;
 import workflow.capstone.capstoneproject.entities.RequestResult;
 import workflow.capstone.capstoneproject.entities.RequestToHandle;
 import workflow.capstone.capstoneproject.entities.UserNotification;
 import workflow.capstone.capstoneproject.entities.WorkflowTemplate;
+import workflow.capstone.capstoneproject.entities.WorkflowTemplatePaging;
 import workflow.capstone.capstoneproject.retrofit.ClientApi;
 import workflow.capstone.capstoneproject.utils.CallBackData;
 import workflow.capstone.capstoneproject.utils.KProgressHUDManager;
@@ -91,9 +93,9 @@ public class CapstoneRepositoryImpl implements CapstoneRepository  {
     }
 
     @Override
-    public void newLogin(Context context, TestLogin testLogin, final CallBackData<Login> callBackData) {
-        Call<ResponseBody> serviceCall = clientApi.getDynamicWorkflowServices().newLogin(testLogin);
-        Log.e("URL=", clientApi.getDynamicWorkflowServices().newLogin(testLogin).request().url().toString());
+    public void newLogin(Context context, LoginModel loginModel, final CallBackData<Login> callBackData) {
+        Call<ResponseBody> serviceCall = clientApi.getDynamicWorkflowServices().newLogin(loginModel);
+        Log.e("URL=", clientApi.getDynamicWorkflowServices().newLogin(loginModel).request().url().toString());
         //show progress bar
         final KProgressHUD progressHUD = KProgressHUDManager.showProgressBar(context);
 
@@ -268,9 +270,9 @@ public class CapstoneRepositoryImpl implements CapstoneRepository  {
     }
 
     @Override
-    public void updateAvatar(Context context, String token, String imagePath, final CallBackData<String> callBackData) {
-        Call<ResponseBody> serviceCall = clientApi.getDWServices(token).updateAvatar(imagePath);
-        Log.e("URL=", clientApi.getDWServices(token).updateAvatar(imagePath).request().url().toString());
+    public void updateAvatar(Context context, String token, UpdateAvatarModel updateAvatarModel, final CallBackData<String> callBackData) {
+        Call<ResponseBody> serviceCall = clientApi.getDWServices(token).updateAvatar(updateAvatarModel);
+        Log.e("URL=", clientApi.getDWServices(token).updateAvatar(updateAvatarModel).request().url().toString());
         final KProgressHUD progressHUD = KProgressHUDManager.showProgressBar(context);
         serviceCall.enqueue(new Callback<ResponseBody>() {
             @Override
@@ -394,9 +396,9 @@ public class CapstoneRepositoryImpl implements CapstoneRepository  {
     }
 
     @Override
-    public void getWorkflow(String token, final CallBackData<List<WorkflowTemplate>> callBackData) {
-        Call<ResponseBody> serviceCall = clientApi.getDWServices(token).getWorkflow();
-        Log.e("URL=", clientApi.getDWServices(token).getWorkflow().request().url().toString());
+    public void getWorkflow(String token, int numberOfPage, int numberOfRecord, final CallBackData<WorkflowTemplatePaging> callBackData) {
+        Call<ResponseBody> serviceCall = clientApi.getDWServices(token).getWorkflow(numberOfPage, numberOfRecord);
+        Log.e("URL=", clientApi.getDWServices(token).getWorkflow(numberOfPage, numberOfRecord).request().url().toString());
         serviceCall.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
@@ -404,9 +406,9 @@ public class CapstoneRepositoryImpl implements CapstoneRepository  {
                     if (response.code() == 200) {
                         try {
                             String result = response.body().string();
-                            Type type = new TypeToken<List<WorkflowTemplate>>() {
+                            Type type = new TypeToken<WorkflowTemplatePaging>() {
                             }.getType();
-                            List<WorkflowTemplate> responseResult = new Gson().fromJson(result, type);
+                            WorkflowTemplatePaging responseResult = new Gson().fromJson(result, type);
                             if (responseResult == null) {
                                 callBackData.onFail(response.message());
                             }
@@ -622,9 +624,9 @@ public class CapstoneRepositoryImpl implements CapstoneRepository  {
     }
 
     @Override
-    public void postRequest(String token, Request request, final CallBackData<String> callBackData) {
-        Call<ResponseBody> serviceCall = clientApi.getDWServices(token).postRequest(request);
-        Log.e("URL=", clientApi.getDWServices(token).postRequest(request).request().url().toString());
+    public void postRequest(String token, RequestModel requestModel, final CallBackData<String> callBackData) {
+        Call<ResponseBody> serviceCall = clientApi.getDWServices(token).postRequest(requestModel);
+        Log.e("URL=", clientApi.getDWServices(token).postRequest(requestModel).request().url().toString());
         serviceCall.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
@@ -888,9 +890,9 @@ public class CapstoneRepositoryImpl implements CapstoneRepository  {
     }
 
     @Override
-    public void approveRequest(String token, RequestApprove requestApprove, final CallBackData<String> callBackData) {
-        Call<ResponseBody> serviceCall = clientApi.getDWServices(token).approveRequest(requestApprove);
-        Log.e("URL=", clientApi.getDWServices(token).approveRequest(requestApprove).request().url().toString());
+    public void approveRequest(String token, RequestApproveModel requestApproveModel, final CallBackData<String> callBackData) {
+        Call<ResponseBody> serviceCall = clientApi.getDWServices(token).approveRequest(requestApproveModel);
+        Log.e("URL=", clientApi.getDWServices(token).approveRequest(requestApproveModel).request().url().toString());
         serviceCall.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {

@@ -28,7 +28,8 @@ namespace Capstone.Controllers
             , IPermissionService permissionService
             , IWorkFlowTemplateActionService workFlowTemplateActionService
             , IWorkFlowTemplateActionConnectionService workFlowTemplateActionConnectionService
-            , IRoleService roleService)
+            , IRoleService roleService
+            , IConnectionTypeService connectionTypeService)
         {
             _mapper = mapper;
             _workFlowService = workFlowService;
@@ -36,6 +37,7 @@ namespace Capstone.Controllers
             _workFlowTemplateActionService = workFlowTemplateActionService;
             _workFlowTemplateActionConnectionService = workFlowTemplateActionConnectionService;
             _roleService = roleService;
+            _connectionTypeService = connectionTypeService;
         }
 
         // GET: api/Workflows
