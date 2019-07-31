@@ -1,4 +1,4 @@
-<h2 mat-dialog-title>Add new form</h2>
+<h2 mat-dialog-title class="txtdeepshadow" >Add new form</h2>
 <mat-dialog-content class="mat-typography">
  <!-- <h4 class="dispaly-4">Name form:  <input name="nameForm" type="text" [(ngModel)]="nameForm"> -->
 
@@ -55,8 +55,8 @@
         </select> -->
     </div>
 
-    <div>
-        <button type="button" mdbWavesEffect mdbBtn color="secondary"
+    <div class="Addbtn-dynamic">
+        <button class="btn-dynamic" type="button" mdbWavesEffect mdbBtn color="secondary"
          (click)="addProperties(nameHere,propertiesThis)">Add Property</button>
       </div>
 
@@ -87,7 +87,7 @@
       <mat-form-field class="example-full-width">
           <input matInput placeholder="Add option:" name="nameOfCb" type="text" [(ngModel)]="nameOfCb">
         </mat-form-field>
-      <button class="icon-head-pup" mdbWavesEffect mdbBtn color="secondary"
+      <button class="icon-head-pup btn-dynamic" mdbWavesEffect mdbBtn color="secondary"
       (click)="addToCb(nameOfCb)">Add option</button>
     </div>
   
@@ -144,7 +144,7 @@
   
 </mat-dialog-content>
 <mat-dialog-actions align="end">
-    <button type="button" mdbBtn color="secondary" class="waves-light" aria-label="Close"
+    <button type="button" mdbBtn color="secondary" class="waves-light btn-dynamic"  aria-label="Close"
     mat-dialog-close mdbWavesEffect>Close</button>
-  <button mdbBtn [mat-dialog-close]="true" mdbWavesEffect color="secondary" (click)="createNewForm()">Tạo form</button>
+  <button mdbBtn [mat-dialog-close]="true" mdbWavesEffect color="secondary" class="btn-dynamic" (click)="createNewForm()">Tạo form</button>
 </mat-dialog-actions>
