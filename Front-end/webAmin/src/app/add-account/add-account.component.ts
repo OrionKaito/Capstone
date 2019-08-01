@@ -110,6 +110,7 @@ export class AddAccountComponent implements OnInit {
                 this.selectedItemGrs.push({ item_id: element.id, item_text: element.name });    
               });
               this.formData.roleID = this.recevieData.roles;
+              
               this.formData.roleID.forEach(element => {
                 this.selectedItemRoles.push({ item_id: element.id, item_text: element.name });    
               });

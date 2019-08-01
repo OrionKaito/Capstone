@@ -17,11 +17,9 @@ import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.iid.FirebaseInstanceId;
@@ -29,7 +27,6 @@ import com.google.firebase.iid.InstanceIdResult;
 import com.squareup.picasso.Picasso;
 
 import java.io.File;
-import java.util.List;
 
 import es.dmoral.toasty.Toasty;
 import okhttp3.MediaType;
@@ -37,8 +34,8 @@ import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 import workflow.capstone.capstoneproject.R;
 import workflow.capstone.capstoneproject.activity.LoginActivity;
-import workflow.capstone.capstoneproject.activity.MainActivity;
 import workflow.capstone.capstoneproject.activity.ProfileActivity;
+import workflow.capstone.capstoneproject.api.UpdateAvatarModel;
 import workflow.capstone.capstoneproject.entities.Profile;
 import workflow.capstone.capstoneproject.repository.CapstoneRepository;
 import workflow.capstone.capstoneproject.repository.CapstoneRepositoryImpl;
@@ -73,13 +70,19 @@ public class ProfileFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_profile, container, false);
 
         profile = DynamicWorkflowSharedPreferences.getStoredData(getContext(), ConstantDataManager.PROFILE_KEY, ConstantDataManager.PROFILE_NAME);
+        token = DynamicWorkflowSharedPreferences.getStoreJWT(getContext(), ConstantDataManager.AUTHORIZATION_TOKEN);
 
         initView(view);
 
-        Picasso.get()
-                .load(ConstantDataManager.IMAGE_URL + profile.getImagePath())
-                .error(getResources().getDrawable(R.drawable.avatar))
-                .into(imgAvatar);
+        if (profile.getImagePath().isEmpty()) {
+            Picasso.get()
+                    .load("https://scontent.fsgn5-7.fna.fbcdn.net/v/t31.0-1/c282.0.960.960a/p960x960/10506738_10150004552801856_220367501106153455_o.jpg?_nc_cat=1&_nc_oc=AQk4xtBQZvCEIqEbATAtZAKtIaeJ7hZd_YGsEKB0TF9590ta9lE-02XOAw_SNgh0KVY&_nc_ht=scontent.fsgn5-7.fna&oh=216ae69582d7e89f6c1b5de5b6e8a2d9&oe=5DDF5069")
+                    .into(imgAvatar);
+        } else {
+            Picasso.get()
+                    .load(ConstantDataManager.IMAGE_URL + profile.getImagePath())
+                    .into(imgAvatar);
+        }
 
         ProfileActivity.tvProfileTitle.setText("Profile");
 
@@ -126,7 +129,6 @@ public class ProfileFragment extends Fragment {
     }
 
     private void logout() {
-        token = DynamicWorkflowSharedPreferences.getStoreJWT(getContext(), ConstantDataManager.AUTHORIZATION_TOKEN);
         FirebaseInstanceId.getInstance().getInstanceId()
                 .addOnSuccessListener(new OnSuccessListener<InstanceIdResult>() {
                     @Override
@@ -205,11 +207,16 @@ public class ProfileFragment extends Fragment {
                         capstoneRepository.postRequestFile(token, multipartBody, new CallBackData<String[]>() {
                             @Override
                             public void onSuccess(final String[] strings) {
+                                UpdateAvatarModel updateAvatarModel = new UpdateAvatarModel(strings[0]);
                                 capstoneRepository = new CapstoneRepositoryImpl();
-                                capstoneRepository.updateAvatar(getContext(), token, strings[0], new CallBackData<String>() {
+                                capstoneRepository.updateAvatar(getContext(), token, updateAvatarModel, new CallBackData<String>() {
                                     @Override
                                     public void onSuccess(String s) {
                                         profile.setImagePath(strings[0]);
+                                        DynamicWorkflowSharedPreferences.storeData(getContext(), ConstantDataManager.PROFILE_KEY, ConstantDataManager.PROFILE_NAME, profile);
+                                        Picasso.get()
+                                                .load(ConstantDataManager.IMAGE_URL + profile.getImagePath())
+                                                .into(imgAvatar);
                                         Toasty.success(getContext(), s, Toasty.LENGTH_SHORT).show();
                                     }
 

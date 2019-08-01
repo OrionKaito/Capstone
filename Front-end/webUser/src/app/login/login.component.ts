@@ -6,6 +6,8 @@ import { Router } from '@angular/router';
 import { LoginService } from '../service/login.service';
 import { ROUTES } from 'app/components/sidebar/sidebar.component';
 import { LoadStaffAcountService } from 'app/service/load-staff-acount.service';
+import { ToastrService } from 'ngx-toastr';
+
 
 
 
@@ -16,72 +18,83 @@ import { LoadStaffAcountService } from 'app/service/load-staff-acount.service';
 })
 export class LoginComponent implements OnInit {
 
-  message: any;
-  model: any = {};
-  wrongPass: any;
-  dataNow: any = {};
-  errorMessage: any;
-  saveMe: any;
-  email: string;
-  formname: string;
-  title: string;
-  checkPage: boolean;
-  nameOfbtn: string;
-  nameOfsummit: string;
-  showCode: boolean;
-  ngsummitFun: string;
+    message: any;
+    model: any = {};
+    wrongPass: any;
+    dataNow: any = {};
+    errorMessage: any;
+    saveMe: any;
+    email: string;
+    formname: string;
+    title: string;
+    checkPage: boolean;
+    nameOfbtn: string;
+    nameOfsummit: string;
+    showCode: boolean;
+    ngsummitFun: string;
 
 
-  resetPassmodel: any;
-  constructor(private router: Router, private LoginService: LoginService, private loadStaffAcountService: LoadStaffAcountService ) { }
 
-  ngOnInit() {
-    this.loadStaffAcountService.getPermission();
-    this.loadStaffAcountService.receiveMessage();
-    this.message = this.loadStaffAcountService.currentMessage;
-    this.formname = 'loginForm';
-    this.title = 'Sign In';
-    this.nameOfbtn = 'Forget Password';
-    this.checkPage = true;
-    this.showCode = false;
-    this.nameOfsummit = 'Sign In';
-    this.ngsummitFun = 'forgetPass()';
-    sessionStorage.removeItem('userName');
-    sessionStorage.clear();
-    if (localStorage.getItem('token') != null && localStorage.getItem('saveMe') != null)
-      this.router.navigate(['/dashboard']);
+    resetPassmodel: any;
+    constructor(private toastr: ToastrService, private router: Router, private LoginService: LoginService, private loadStaffAcountService: LoadStaffAcountService) { }
 
-  }
-//   login() {
-//     debugger;
-//     let tokenNoti = localStorage.getItem("tokenNoti");
-//     if(tokenNoti == null){tokenNoti = ""};
-//     let loginWithTkNoti ={userName: this.model.Username, password: this.model.Password, deviceID:  tokenNoti};
-//     this.LoginService.Loginv2(loginWithTkNoti).toPromise().then(
-//       // this.LoginService.Login(this.model).toPromise().then(
-//       data => {
-//         if (data.status == 200) {
-//           this.dataNow = data.body;
-          
-//             var a = this.dataNow.token;
-//             debugger;
+    ngOnInit() {
 
-//             localStorage.setItem('token', a);
-//             this.router.navigate(['/dashboard']);
-//         }
-//         this.resetPassmodel = {
-//             email: '',
-//             code: '',
-//             password: ''
-//         }
-//     }
+        this.loadStaffAcountService.getPermission();
+        this.loadStaffAcountService.receiveMessage();
+        this.message = this.loadStaffAcountService.currentMessage;
+        this.formname = 'loginForm';
+        this.title = 'Sign In';
+        this.nameOfbtn = 'Forgot Password';
+        this.checkPage = true;
+        this.showCode = false;
+        this.nameOfsummit = 'Sign In';
+        this.ngsummitFun = 'forgetPass()';
+        sessionStorage.removeItem('userName');
+        sessionStorage.clear();
+        let haveRole = false;
+        this.loadStaffAcountService.checkRole().toPromise().then(res => {
+            haveRole = true;
+
+            let save = false;
+            if (localStorage.getItem('saveMe') == "true") {
+                save = true;
+            }
+            if (haveRole && save) this.router.navigate(['/create-request']);
+        }, err => {
+
+        });
+    }
+    //   login() {
+    //     debugger;
+    //     let tokenNoti = localStorage.getItem("tokenNoti");
+    //     if(tokenNoti == null){tokenNoti = ""};
+    //     let loginWithTkNoti ={userName: this.model.Username, password: this.model.Password, deviceID:  tokenNoti};
+    //     this.LoginService.Loginv2(loginWithTkNoti).toPromise().then(
+    //       // this.LoginService.Login(this.model).toPromise().then(
+    //       data => {
+    //         if (data.status == 200) {
+    //           this.dataNow = data.body;
+
+    //             var a = this.dataNow.token;
+    //             debugger;
+
+    //             localStorage.setItem('token', a);
+    //             this.router.navigate(['/dashboard']);
+    //         }
+    //         this.resetPassmodel = {
+    //             email: '',
+    //             code: '',
+    //             password: ''
+    //         }
+    //     }
 
     login() {
         let tokenNoti = localStorage.getItem("tokenNoti");
-        if(tokenNoti == null){tokenNoti = ""};
-        let loginWithTkNoti ={userName: this.model.Username, password: this.model.Password, deviceID:  tokenNoti};
+        if (tokenNoti == null) { tokenNoti = "" };
+        let loginWithTkNoti = { userName: this.model.Username, password: this.model.Password, deviceToken: tokenNoti };
         debugger;
-        this.LoginService.Login(this.model).toPromise().then(
+        this.LoginService.Login(loginWithTkNoti).toPromise().then(
             data => {
                 if (data.status == 200) {
                     this.dataNow = data.body;
@@ -90,7 +103,13 @@ export class LoginComponent implements OnInit {
                     debugger;
 
                     localStorage.setItem('token', a);
-                    this.router.navigate(['/dashboard']);
+                    if (this.saveMe) {
+                        localStorage.setItem('saveMe', "true");
+                    }
+                    else {
+                        localStorage.setItem('saveMe', "false");
+                    }
+                    this.router.navigate(['/create-request']);
                     debugger;
                 } else if (0) {
                     this.dataNow = data.body;
@@ -104,15 +123,13 @@ export class LoginComponent implements OnInit {
 
                 }
 
-            },
-            error => {
-                this.errorMessage = 'Invalid username or password!';
+            },err => {
+                this.toastr.error(err.error);
             });
 
     };
 
     forgetPass() {
-
         this.checkPage = false;
         this.LoginService.resetPassword(this.email).toPromise().then(
             data => {
@@ -155,7 +172,7 @@ export class LoginComponent implements OnInit {
             this.title = 'Send Email';
         } else {
             this.checkPage = true;
-            this.nameOfbtn = 'Forget Password';
+            this.nameOfbtn = 'Forgot Password';
             this.nameOfsummit = 'Sign In';
             this.errorMessage = '';
             this.title = 'Sign In';

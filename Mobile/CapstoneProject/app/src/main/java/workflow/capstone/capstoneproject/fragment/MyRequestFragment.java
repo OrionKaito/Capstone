@@ -55,10 +55,15 @@ public class MyRequestFragment extends Fragment {
         imgAvatar = view.findViewById(R.id.img_avatar);
 
         Profile profile = DynamicWorkflowSharedPreferences.getStoredData(getContext(), ConstantDataManager.PROFILE_KEY, ConstantDataManager.PROFILE_NAME);
-        Picasso.get()
-                .load(ConstantDataManager.IMAGE_URL + profile.getImagePath())
-                .error(getResources().getDrawable(R.drawable.avatar))
-                .into(imgAvatar);
+        if (profile.getImagePath().isEmpty()) {
+            Picasso.get()
+                    .load("https://scontent.fsgn5-7.fna.fbcdn.net/v/t31.0-1/c282.0.960.960a/p960x960/10506738_10150004552801856_220367501106153455_o.jpg?_nc_cat=1&_nc_oc=AQk4xtBQZvCEIqEbATAtZAKtIaeJ7hZd_YGsEKB0TF9590ta9lE-02XOAw_SNgh0KVY&_nc_ht=scontent.fsgn5-7.fna&oh=216ae69582d7e89f6c1b5de5b6e8a2d9&oe=5DDF5069")
+                    .into(imgAvatar);
+        } else {
+            Picasso.get()
+                    .load(ConstantDataManager.IMAGE_URL + profile.getImagePath())
+                    .into(imgAvatar);
+        }
 
         imgAvatar.setOnClickListener(new View.OnClickListener() {
             @Override

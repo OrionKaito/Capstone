@@ -32,7 +32,7 @@
 
   </div> -->
   <div class="form-row">
-    <label>Permission to use this Workflow</label>
+    <label>Permission to apply this Workflow</label>
     <select name="permissionUse" [(ngModel)]="formData.permissionToUseID" class="form-control">
       <option value="0">-Select-</option>
       <option *ngFor="let item of permissionList" value="{{item.id}}">{{item.name}}</option>

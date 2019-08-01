@@ -36,11 +36,18 @@ export class WorkflowOfUserComponent implements OnInit {
   callAll() {
     this.loadStaffAcountService.loadWorkflowForUserData().toPromise().then(data => {
       this.users = data;
-      this.listData = new MatTableDataSource(this.users);
+      let a = this.users.workFlowTemplates;
+      console.log("abc ", this.users);
+      this.listData = new MatTableDataSource(a);
       this.listData.sort = this.sort;
       this.listData.paginator = this.paginator;
+      console.log("xyz ", this.listData);
+    },
+    err=> {
+      console.log("abc ", this.users);
 
-    })
+    }
+    )
   }
 
   onSearchClear() {

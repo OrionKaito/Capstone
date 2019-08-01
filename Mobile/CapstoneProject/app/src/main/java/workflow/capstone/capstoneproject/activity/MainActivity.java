@@ -66,13 +66,13 @@ public class MainActivity extends AppCompatActivity {
 
         token = DynamicWorkflowSharedPreferences.getStoreJWT(context, ConstantDataManager.AUTHORIZATION_TOKEN);
 
-        initTabLayout();
         capstoneRepository = new CapstoneRepositoryImpl();
         capstoneRepository.getProfile(token, new CallBackData<List<Profile>>() {
             @Override
             public void onSuccess(List<Profile> listProfile) {
                 Profile profile = listProfile.get(0);
                 DynamicWorkflowSharedPreferences.storeData(context, ConstantDataManager.PROFILE_KEY, ConstantDataManager.PROFILE_NAME, profile);
+                initTabLayout();
             }
 
             @Override
