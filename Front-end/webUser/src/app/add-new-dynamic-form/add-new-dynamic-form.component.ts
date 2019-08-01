@@ -33,7 +33,7 @@ export class AddNewDynamicFormComponent implements OnInit {
     
     // this.listComboElement.push(a);
     // console.log(this.listComboElement);
-
+    
   }
 
   addProperties(name,properties){

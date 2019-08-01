@@ -22,6 +22,20 @@
     </div>
   </div>
   <div class="botton-left__table">
+
+      <div class="p-1 bd-highlight d-flex justify-content-center btn-group-toggle">
+          <button mdbBtn mdbWavesEffect (click)="openDinamicForm()">Add Form</button></div>
+        <div class="d-flex flex-column bd-highlight md-1">
+          <div class="p-1 bd-highlight d-flex justify-content-center">
+            <button mdbBtn mdbWavesEffect (click)="saveDraf()">Save draft</button></div>
+          <div class="p-1 bd-highlight d-flex justify-content-center">
+            <button mdbBtn mdbWavesEffect (click)="saveWorkFlow()">Save WorkFlow</button></div>
+          <div class="p-1 bd-highlight d-flex justify-content-center">
+            <button mdbBtn mdbWavesEffect (click)="checkConnection()">Check Connection</button></div>
+          <div class="p-1 bd-highlight d-flex justify-content-center">
+            <button mdbBtn mdbWavesEffect (click)="checkConnectionFe()">Check Connection fe</button></div>
+        </div>
+
     <h3 style="margin: 5px 5px 5px 5px; text-align: center"> Properties </h3>
     <table style="width:90% border=1px">
       <tr *ngIf="checkIsAction">
@@ -30,17 +44,18 @@
         </td> -->
         <td>
           <mat-form-field class="example-full-width">
-              <input matInput placeholder="Name" name="properties.name" [(ngModel)]="properties.name" type="text">
-            </mat-form-field>
-          </td>
+            <input matInput placeholder="Name" name="properties.name" [(ngModel)]="properties.name" type="text">
+          </mat-form-field>
+        </td>
       </tr>
       <tr *ngIf="checkIsAction">
 
-          <td>
-              <mat-form-field class="example-full-width">
-                  <input matInput placeholder="Description" name="properties.description" [(ngModel)]="properties.description" type="text">
-                </mat-form-field>
-              </td>
+        <td>
+          <mat-form-field class="example-full-width">
+            <input matInput placeholder="Description" name="properties.description" [(ngModel)]="properties.description"
+              type="text">
+          </mat-form-field>
+        </td>
 
         <!-- <td><label class="col-form-label-sm customlabel"> Description</label></td>
         <td><input class="edit-inut" name="properties.description" [(ngModel)]="properties.description" type="text">
@@ -52,12 +67,12 @@
             <option *ngFor="let item of listDropdown" value="{{item.id}}">{{item.name}}</option>
           </select></td> -->
 
-          <mat-form-field class="example-full-width">
-              <mat-label>Permission</mat-label>
-              <mat-select name="properties.permissionToUseID" [(ngModel)]="properties.permissionToUseID">
-                <mat-option  *ngFor="let item of listDropdown" value="{{item.id}}">{{item.name}}</mat-option>
-              </mat-select>
-            </mat-form-field>
+        <mat-form-field class="example-full-width">
+          <mat-label>Permission</mat-label>
+          <mat-select name="properties.permissionToUseID" [(ngModel)]="properties.permissionToUseID">
+            <mat-option *ngFor="let item of listDropdown" value="{{item.id}}">{{item.name}}</mat-option>
+          </mat-select>
+        </mat-form-field>
 
       </tr>
       <tr *ngIf="checkIsAction">
@@ -66,12 +81,12 @@
             <option *ngFor="let item of listActionType" value="{{item.id}}">{{item.name}}</option>
           </select></td> -->
 
-          <mat-form-field class="example-full-width">
-              <mat-label>Action Type</mat-label>
-              <mat-select name="properties.actionTypeID" [(ngModel)]="properties.actionTypeID">
-                <mat-option  *ngFor="let item of listActionType" value="{{item.id}}">{{item.name}}</mat-option>
-              </mat-select>
-            </mat-form-field>
+        <mat-form-field class="example-full-width">
+          <mat-label>Form</mat-label>
+          <mat-select name="properties.actionTypeID" [(ngModel)]="properties.actionTypeID">
+            <mat-option *ngFor="let item of listActionType" value="{{item.id}}">{{item.name}}</mat-option>
+          </mat-select>
+        </mat-form-field>
 
       </tr>
       <tr *ngIf="checkIsAction && !properties.isStart && !properties.isEnd">
@@ -97,23 +112,7 @@
       </tr>
     </table>
 
-    <div class="p-1 bd-highlight d-flex justify-content-center btn-group-toggle">
-        <button  mdbBtn mdbWavesEffect (click)="openDinamicForm()">Add Form</button></div>
-    <div class="d-flex flex-column bd-highlight md-1">
-      <div class="p-1 bd-highlight d-flex justify-content-center">
-        <button  mdbBtn mdbWavesEffect (click)="saveDraf()">Save draft</button></div>
-      <div class="p-1 bd-highlight d-flex justify-content-center"> 
-        <button  mdbBtn mdbWavesEffect (click)="saveWorkFlow()">Save WorkFlow</button></div>
-      <div class="p-1 bd-highlight d-flex justify-content-center">
-        <button  mdbBtn mdbWavesEffect (click)="checkConnection()">Check Connection</button></div>
-      <div class="p-1 bd-highlight d-flex justify-content-center"> 
-        <button  mdbBtn mdbWavesEffect (click)="checkConnectionFe()">Check Connection fe</button></div>
-        
 
-
-
-
-    </div>
 
   </div>
   <div class="row main">
@@ -133,8 +132,8 @@
         <div class="md-form form-sm" id="{{item.idInput}}">
           <input mdbInput type="text" name="item.name" [(ngModel)]="item.name" class="form-control form-control-sm"
             placeholder="input text">
-            <span *ngIf="item.class ==='example-box'">start</span>
-            <span *ngIf="item.class ==='example-box3'">end</span>
+          <!-- <span *ngIf="item.class ==='example-box'">start</span>
+            <span *ngIf="item.class ==='example-box3'">end</span> -->
 
           <!-- <form [formGroup]="secondFormGroup" id="{{item.idText}}">
             <mat-form-field>
@@ -153,8 +152,8 @@
         <mdb-icon fas icon="plus" class="draw-arrow" (click)="dropImageBottom(item)"></mdb-icon>
       </div>
 
-      <svg (click)="clearConnect()" id="body-svg" xmlns="http://www.w3.org/2000/svg" style="position:absolute;left:0px;top:0px" width="100%"
-        [attr.height]="heightSVG">
+      <svg (click)="clearConnect()" id="body-svg" xmlns="http://www.w3.org/2000/svg"
+        style="position:absolute;left:0px;top:0px" width="100%" [attr.height]="heightSVG">
         <defs>
           <marker id="arrowhead" viewBox="0 0 10 10" refX="70" refY="5" markerWidth="6" markerHeight="6" orient="auto">
             <path d="M 0 0 L 10 5 L 0 10 z" />

@@ -2,6 +2,8 @@
     <div class="modifymenu">
         <div (click)="drop(item)" *ngFor="let item of menuList; let i = index"
              class="{{item.class}} animated bounceInUp">
+             <!-- <strong *ngIf="item.class ==='example-box'">start</strong>
+             <strong *ngIf="item.class ==='example-box3'">end</strong> -->
         </div>
     </div>
 </div>

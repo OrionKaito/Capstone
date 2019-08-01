@@ -10,9 +10,9 @@ $MINT: linear-gradient(40deg, #ff6ec4, #7873f5) !important;
   // background-color: #111;
   // background: #eaeae1;
   // border-right: 1px solid #cbcbb4;
-  -webkit-box-shadow: 10px 7px 5px -4px rgba(0, 0, 0, 0.75);
-  -moz-box-shadow: 10px 7px 5px -4px rgba(0, 0, 0, 0.75);
-  box-shadow: 10px 7px 5px -4px rgba(0, 0, 0, 0.75);
+  // -webkit-box-shadow: 10px 7px 5px -4px rgba(0, 0, 0, 0.75);
+  // -moz-box-shadow: 10px 7px 5px -4px rgba(0, 0, 0, 0.75);
+  // box-shadow: 10px 7px 5px -4px rgba(0, 0, 0, 0.75);
   display: block;
   .example-box {
     width: 40px;
@@ -46,20 +46,23 @@ $MINT: linear-gradient(40deg, #ff6ec4, #7873f5) !important;
 
     border-radius: 4px;
     //position: relative;
-    z-index: 1;
+      z-index: 1;
       border-right: 20px solid transparent;
       border-left: 20px solid transparent ;
       border-bottom: 100px solid rgba(244,67,54,0.7);
   }
 
   .example-box3 {
-    width: 50px;
+    width: 40px;
     height: 40px;
+    border-radius: 50%;
     display: inline-block;
-   background-color: orangered!important;
-    border-radius: 20px;
-    margin-left: 5px;
     margin-top: 10px;
+    margin-left: 5px;
+
+   background-color: orangered!important;
+
+
   }
 
   .example-box4 {

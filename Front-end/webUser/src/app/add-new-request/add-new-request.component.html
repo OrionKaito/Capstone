@@ -39,12 +39,12 @@
 
 
 <form #form="ngForm" autocomplete="off" (submit)="onSubmit()">
-    <div class="form-row">
+    <!-- <div class="form-row">
       <div class="form-group col-md-6">
         <input name="name" [(ngModel)]="formValue" class="form-control"> 
       </div>
-      
-    </div>
+
+    </div> -->
     <div class="form-row">
       <div class="dropzone" dropzone (hovered)="toggleHover($event)" (dropped)="onDrop($event)" [class.hovering]="isHovering">
         <div class="file">
