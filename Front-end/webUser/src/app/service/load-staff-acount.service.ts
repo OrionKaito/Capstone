@@ -6,6 +6,7 @@ import * as firebase from 'firebase/app';
 import 'rxjs/add/operator/take';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { GlobalVar } from 'app/useClass/global-var';
+import { ToastrService } from 'ngx-toastr';
 
 
 @Injectable({
@@ -17,7 +18,10 @@ export class LoadStaffAcountService {
   Url: string;
   token: string;
 
-  constructor(private http: HttpClient, private db: AngularFireDatabase, private afAuth: AngularFireAuth) {
+  constructor(private toastr: ToastrService,
+    private http: HttpClient, 
+    private db: AngularFireDatabase, 
+    private afAuth: AngularFireAuth) {
 
 
     this.Url = GlobalVar.url;
@@ -49,6 +53,7 @@ export class LoadStaffAcountService {
   receiveMessage(){
     this.messaging.onMessage((payload)=>{
        console.log("Message received. ", payload);
+       this.toastr.info(payload.msg,payload.notis);
         this.currentMessage.next(payload);
     });
   }

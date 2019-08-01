@@ -10,7 +10,7 @@ export class MenuEditAccountShapeComponent implements OnInit {
 
   public menuList = [
     {
-      class: 'example-box aqua-gradient',
+      class: 'example-box',
       id: '',
       idInput: 'input1',
       idText: '',
@@ -18,7 +18,7 @@ export class MenuEditAccountShapeComponent implements OnInit {
       isEnd: false
     },
     {
-      class: 'example-box1 purple-gradient',
+      class: 'example-box1',
       id: '',
       idInput: 'input2',
       idText: '',
@@ -26,7 +26,7 @@ export class MenuEditAccountShapeComponent implements OnInit {
       isEnd: false
     },
     {
-      class: 'example-box3 aqua-gradient',
+      class: 'example-box3',
       id: '',
       idInput: 'input1',
       idText: '',

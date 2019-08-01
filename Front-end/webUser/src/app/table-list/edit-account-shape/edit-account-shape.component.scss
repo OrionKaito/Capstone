@@ -5,7 +5,7 @@
     overflow-x: hidden;
     padding: 5px;
     width: 16.6666667%;
-    height: 50%;
+    height: 90%;
     position:fixed;
      bottom:0 !important;
      left: 0;
@@ -16,6 +16,7 @@
     color: white;
   button {
     height: 35px !important;
+    width: 90%;
   }
     /deep/.mat-form-field {
       .mat-select-value-text {
@@ -164,7 +165,7 @@
     }
 
     .circular-menu.circular-menu-left .floating-btn {
-      background-color: hsl(217, 89%, 61%);
+      background-color: hsl(123, 89%, 61%);
     }
 
     .circular-menu.circular-menu-left:after {
@@ -254,7 +255,7 @@
         justify-content: center;
         align-items: center;
         text-align: center;
-        background: #fff;
+        background: #00bbff;
         border-radius: 50%;
         position: relative;
         z-index: 1;
@@ -344,8 +345,8 @@
         justify-content: center;
         align-items: center;
         text-align: center;
-        background: #fff;
-        border-radius: 30%;
+        background: orangered;
+        border-radius: 50%;
         margin-left: 10px;
         position: relative;
         z-index: 1;

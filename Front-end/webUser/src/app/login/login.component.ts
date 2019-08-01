@@ -6,6 +6,8 @@ import { Router } from '@angular/router';
 import { LoginService } from '../service/login.service';
 import { ROUTES } from 'app/components/sidebar/sidebar.component';
 import { LoadStaffAcountService } from 'app/service/load-staff-acount.service';
+import { ToastrService } from 'ngx-toastr';
+
 
 
 
@@ -34,15 +36,16 @@ export class LoginComponent implements OnInit {
 
 
     resetPassmodel: any;
-    constructor(private router: Router, private LoginService: LoginService, private loadStaffAcountService: LoadStaffAcountService) { }
+    constructor(private toastr: ToastrService, private router: Router, private LoginService: LoginService, private loadStaffAcountService: LoadStaffAcountService) { }
 
     ngOnInit() {
+
         this.loadStaffAcountService.getPermission();
         this.loadStaffAcountService.receiveMessage();
         this.message = this.loadStaffAcountService.currentMessage;
         this.formname = 'loginForm';
         this.title = 'Sign In';
-        this.nameOfbtn = 'Forget Password';
+        this.nameOfbtn = 'Forgot Password';
         this.checkPage = true;
         this.showCode = false;
         this.nameOfsummit = 'Sign In';
@@ -57,7 +60,7 @@ export class LoginComponent implements OnInit {
             if (localStorage.getItem('saveMe') == "true") {
                 save = true;
             }
-            if (haveRole && save) this.router.navigate(['/dashboard']);
+            if (haveRole && save) this.router.navigate(['/create-request']);
         }, err => {
 
         });
@@ -91,7 +94,6 @@ export class LoginComponent implements OnInit {
         if (tokenNoti == null) { tokenNoti = "" };
         let loginWithTkNoti = { userName: this.model.Username, password: this.model.Password, deviceToken: tokenNoti };
         debugger;
-        console.log(loginWithTkNoti);
         this.LoginService.Login(loginWithTkNoti).toPromise().then(
             data => {
                 if (data.status == 200) {
@@ -107,7 +109,7 @@ export class LoginComponent implements OnInit {
                     else {
                         localStorage.setItem('saveMe', "false");
                     }
-                    this.router.navigate(['/dashboard']);
+                    this.router.navigate(['/create-request']);
                     debugger;
                 } else if (0) {
                     this.dataNow = data.body;
@@ -121,9 +123,8 @@ export class LoginComponent implements OnInit {
 
                 }
 
-            },
-            error => {
-                this.errorMessage = 'Invalid username or password!';
+            },err => {
+                this.toastr.error(err.error);
             });
 
     };
@@ -171,7 +172,7 @@ export class LoginComponent implements OnInit {
             this.title = 'Send Email';
         } else {
             this.checkPage = true;
-            this.nameOfbtn = 'Forget Password';
+            this.nameOfbtn = 'Forgot Password';
             this.nameOfsummit = 'Sign In';
             this.errorMessage = '';
             this.title = 'Sign In';
