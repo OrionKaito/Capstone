@@ -73,7 +73,7 @@ namespace Capstone.Controllers
 
         // POST: api/Requests
         [HttpPost]
-        public async Task<ActionResult> PostRequest(RequestCM model)
+        public ActionResult PostRequest(RequestCM model)
         {
             if (!ModelState.IsValid) return BadRequest(ModelState);
 
@@ -180,7 +180,7 @@ namespace Capstone.Controllers
         }
 
         [HttpPost("ApproveRequest")]
-        public async Task<ActionResult> ApproveRequest(RequestApproveCM model)
+        public ActionResult ApproveRequest(RequestApproveCM model)
         {
             if (!ModelState.IsValid) return BadRequest(ModelState);
 
