@@ -22,7 +22,10 @@ $MINT: linear-gradient(40deg, #ff6ec4, #7873f5) !important;
     margin-top: 10px;
     background-color: #00bbff;
   }
-
+  .example-box:hover .horverTexS{
+    display: block;
+    opacity: 1;
+  }
   .example-box1 {
     width: 40px;
     height: 40px;
@@ -64,7 +67,10 @@ $MINT: linear-gradient(40deg, #ff6ec4, #7873f5) !important;
 
 
   }
-
+  .example-box3:hover .horverTexE{
+    display: block;
+    opacity: 1;
+  }
   .example-box4 {
     width: 0;
     height: 0;
@@ -95,5 +101,29 @@ $MINT: linear-gradient(40deg, #ff6ec4, #7873f5) !important;
     width: 100%;
   }
 
+  .horverTexS{
+    padding: 5px;
+    background-color: #00bbff;
+    position: absolute;
+    left: -95%;
+    top: 90%;
+    display: none;
+    border-radius: 10px;
+    opacity: 0;
+    text-align: center;
+  }
+
+
+  .horverTexE{
+    padding: 5px;
+    background-color: orangered;
+    position: absolute;
+    left: 85%;
+    top: 80%;
+    display: none;
+    border-radius: 10px;
+    opacity: 0;
+    text-align: center;
+  }
 }
 
