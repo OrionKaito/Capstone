@@ -5,7 +5,7 @@ import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
 
-public class ActionValue implements Serializable {
+public class ActionValueModel implements Serializable {
 
     @SerializedName("key")
     @Expose
@@ -15,7 +15,7 @@ public class ActionValue implements Serializable {
     @Expose
     private String value;
 
-    public ActionValue(String key, String value) {
+    public ActionValueModel(String key, String value) {
         this.key = key;
         this.value = value;
     }

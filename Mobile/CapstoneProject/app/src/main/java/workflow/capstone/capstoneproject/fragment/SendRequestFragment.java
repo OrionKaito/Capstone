@@ -30,7 +30,6 @@ import android.widget.ListView;
 import android.widget.Scroller;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -49,8 +48,8 @@ import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 import workflow.capstone.capstoneproject.R;
 import workflow.capstone.capstoneproject.adapter.ListFileNameAdapter;
-import workflow.capstone.capstoneproject.api.ActionValue;
-import workflow.capstone.capstoneproject.api.Request;
+import workflow.capstone.capstoneproject.api.ActionValueModel;
+import workflow.capstone.capstoneproject.api.RequestModel;
 import workflow.capstone.capstoneproject.entities.Connection;
 import workflow.capstone.capstoneproject.entities.DynamicForm.DynamicForm;
 import workflow.capstone.capstoneproject.entities.RequestForm;
@@ -410,42 +409,42 @@ public class SendRequestFragment extends Fragment {
             Type type = new TypeToken<List<DynamicForm>>() {
             }.getType();
             List<DynamicForm> dynamicFormList = new Gson().fromJson(data, type);
-            List<ActionValue> actionValueList = new ArrayList<>();
+            List<ActionValueModel> actionValueModelList = new ArrayList<>();
             for (int i = 0; i < dynamicFormList.size(); i++) {
                 String name = "task" + i;
                 if (!dynamicFormList.get(i).getTextOnly().getName().isEmpty()) {
                     TextView textView = (TextView) idsMap.get(name);
-                    ActionValue actionValue = new ActionValue(dynamicFormList.get(i).getTextOnly().getName(), textView.getText().toString());
-                    actionValueList.add(actionValue);
+                    ActionValueModel actionValueModel = new ActionValueModel(dynamicFormList.get(i).getTextOnly().getName(), textView.getText().toString());
+                    actionValueModelList.add(actionValueModel);
                 } else if (!dynamicFormList.get(i).getShortText().getName().isEmpty()) {
                     EditText editText = (EditText) idsMap.get(name);
-                    ActionValue actionValue = new ActionValue(dynamicFormList.get(i).getShortText().getName(), editText.getText().toString());
-                    actionValueList.add(actionValue);
+                    ActionValueModel actionValueModel = new ActionValueModel(dynamicFormList.get(i).getShortText().getName(), editText.getText().toString());
+                    actionValueModelList.add(actionValueModel);
                 } else if (!dynamicFormList.get(i).getLongText().getName().isEmpty()) {
                     EditText editText = (EditText) idsMap.get(name);
-                    ActionValue actionValue = new ActionValue(dynamicFormList.get(i).getLongText().getName(), editText.getText().toString());
-                    actionValueList.add(actionValue);
+                    ActionValueModel actionValueModel = new ActionValueModel(dynamicFormList.get(i).getLongText().getName(), editText.getText().toString());
+                    actionValueModelList.add(actionValueModel);
                 } else if (!dynamicFormList.get(i).getInputCheckbox().getName().isEmpty()) {
                     CheckBox checkBox = (CheckBox) idsMap.get(name);
-                    ActionValue actionValue = new ActionValue(dynamicFormList.get(i).getInputCheckbox().getName(), checkBox.isChecked() + "");
-                    actionValueList.add(actionValue);
+                    ActionValueModel actionValueModel = new ActionValueModel(dynamicFormList.get(i).getInputCheckbox().getName(), checkBox.isChecked() + "");
+                    actionValueModelList.add(actionValueModel);
                 } else if (!dynamicFormList.get(i).getComboBox().getName().isEmpty()) {
                     Spinner spinner = (Spinner) idsMap.get(name);
-                    ActionValue actionValue = new ActionValue(dynamicFormList.get(i).getComboBox().getName(), spinner.getSelectedItem().toString());
-                    actionValueList.add(actionValue);
+                    ActionValueModel actionValueModel = new ActionValueModel(dynamicFormList.get(i).getComboBox().getName(), spinner.getSelectedItem().toString());
+                    actionValueModelList.add(actionValueModel);
                 }
             }
 
-            Request request = new Request();
-            request.setDescription("");
-            request.setWorkFlowTemplateID(workFlowTemplateID);
-            request.setNextStepID(nextStepID);
-            request.setActionValues(actionValueList);
-            request.setImagePaths(listPath);
+            RequestModel requestModel = new RequestModel();
+            requestModel.setDescription("");
+            requestModel.setWorkFlowTemplateID(workFlowTemplateID);
+            requestModel.setNextStepID(nextStepID);
+            requestModel.setActionValueModels(actionValueModelList);
+            requestModel.setImagePaths(listPath);
 
             final KProgressHUD progressHUD = KProgressHUDManager.showProgressBar(getContext());
             capstoneRepository = new CapstoneRepositoryImpl();
-            capstoneRepository.postRequest(token, request, new CallBackData<String>() {
+            capstoneRepository.postRequest(token, requestModel, new CallBackData<String>() {
                 @Override
                 public void onSuccess(String s) {
                     FragmentUtils.back(getActivity());

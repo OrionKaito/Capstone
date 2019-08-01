@@ -195,12 +195,25 @@ namespace Capstone.Controllers
                     return BadRequest(WebConstant.RequestIsHandled);
                 }
 
+
                 //Begin transaction
                 _requestService.BeginTransaction();
 
                 var currentUser = HttpContext.User;
                 var userID = currentUser.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier).Value;
 
+                //Lấy permission để kiểm tra user có quyền không
+                List<Guid> userPermissions = new List<Guid>();
+                userPermissions = _permissionService.GetByUserID(userID).Select(u => u.ID).ToList();
+
+                var currentRequestAction = _requestActionService.GetByID(model.RequestActionID);
+
+                if (!userPermissions.Contains(currentRequestAction.WorkFlowTemplateAction.PermissionToUseID.GetValueOrDefault()))
+                {
+                    return BadRequest(WebConstant.AccessDined);
+                }
+
+                //Hết kiểm tra
                 var request = _requestService.GetByID(model.RequestID);
 
                 //RequestAction

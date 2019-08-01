@@ -1,6 +1,6 @@
 package workflow.capstone.capstoneproject.api;
 
-public class TestLogin {
+public class LoginModel {
     private String userName;
     private String password;
     private String deviceToken;

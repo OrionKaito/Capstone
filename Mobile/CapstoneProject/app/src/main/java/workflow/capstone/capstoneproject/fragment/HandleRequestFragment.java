@@ -9,7 +9,6 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
@@ -27,22 +26,15 @@ import android.widget.TextView;
 import com.kaopiz.kprogresshud.KProgressHUD;
 import com.squareup.picasso.Picasso;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
 import es.dmoral.toasty.Toasty;
-import okhttp3.ResponseBody;
 import workflow.capstone.capstoneproject.R;
-import workflow.capstone.capstoneproject.activity.MainActivity;
 import workflow.capstone.capstoneproject.adapter.CommentAdapter;
 import workflow.capstone.capstoneproject.adapter.HandleFileNameAdapter;
-import workflow.capstone.capstoneproject.api.ActionValue;
-import workflow.capstone.capstoneproject.api.RequestApprove;
+import workflow.capstone.capstoneproject.api.ActionValueModel;
+import workflow.capstone.capstoneproject.api.RequestApproveModel;
 import workflow.capstone.capstoneproject.entities.Comment;
 import workflow.capstone.capstoneproject.entities.Connection;
 import workflow.capstone.capstoneproject.entities.HandleRequestForm;
@@ -368,21 +360,21 @@ public class HandleRequestFragment extends Fragment {
     }
 
     private void handleRequest(String requestID, String nextStepID, int status) {
-        List<ActionValue> actionValueList = new ArrayList<>();
+        List<ActionValueModel> actionValueModelList = new ArrayList<>();
         for (int i = 0; i < stringCommentList.size(); i++) {
-            actionValueList.add(new ActionValue("comment " + i, stringCommentList.get(i)));
+            actionValueModelList.add(new ActionValueModel("comment " + i, stringCommentList.get(i)));
         }
 
-        RequestApprove requestApprove = new RequestApprove();
-        requestApprove.setRequestID(requestID);
-        requestApprove.setRequestActionID(requestActionID);
-        requestApprove.setNextStepID(nextStepID);
-        requestApprove.setStatus(status);
-        requestApprove.setActionValues(actionValueList);
+        RequestApproveModel requestApproveModel = new RequestApproveModel();
+        requestApproveModel.setRequestID(requestID);
+        requestApproveModel.setRequestActionID(requestActionID);
+        requestApproveModel.setNextStepID(nextStepID);
+        requestApproveModel.setStatus(status);
+        requestApproveModel.setActionValueModels(actionValueModelList);
 
         final KProgressHUD progressHUD = KProgressHUDManager.showProgressBar(getContext());
         capstoneRepository = new CapstoneRepositoryImpl();
-        capstoneRepository.approveRequest(token, requestApprove, new CallBackData<String>() {
+        capstoneRepository.approveRequest(token, requestApproveModel, new CallBackData<String>() {
             @Override
             public void onSuccess(String s) {
                 FragmentUtils.back(getActivity());
