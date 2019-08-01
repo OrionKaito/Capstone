@@ -14,6 +14,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { element } from '@angular/core/src/render3';
 import { AddNewDynamicFormComponent } from 'app/add-new-dynamic-form/add-new-dynamic-form.component';
 import { LoginService } from 'app/service/login.service';
+import { debug } from 'util';
 
 @Component({
   selector: 'app-edit-account-shape',
@@ -85,14 +86,15 @@ export class EditAccountShapeComponent implements OnInit {
   ) { }
   saveActiontype;
   ngOnInit() {
-this.callAll();
+    this.callAll();
   }
-  callAll(){
-    
+  callAll() {
+
     this.properties = {
       name: "",
       description: "",
       permissionToUseID: "0",
+      
       isApprovedByLineManager: false,
     }
     this.propertiesArr = {
@@ -157,11 +159,36 @@ this.callAll();
 
     })
   }
+  checkIdOfAction(start, end) {
+    let check = false;
+    this.listClass.forEach(element => {
+      if (element.idDiv[0] == start && element.idDiv[1] == end) {
+        check = true;
+      }
+
+    });
+    return check;
+  }
   // hình như là để vẽ mũi tên, k chắc lắm, hình như đúng rồi, haha
   //item này là của menuList1, menuList1 hình như là để chứa các hình
   public dropImageBottom(item) {
     //lấy id của hình ra, bỏ vô subClass
-    this.subClass.push(item.id);
+
+    if (this.subClass.length == 1) {
+      debugger;
+      if (this.subClass[0] == item.id) {
+        this.toastr.error("Cannot create arrow by itself!!!")
+        this.subClass = [];
+      } if (this.checkIdOfAction(this.subClass[0], item.id)) {
+        this.toastr.error("There is an arrow between 2 action aready!!!")
+        this.subClass = [];
+      } else {
+        this.subClass.push(item.id);
+      }
+    } else if (this.subClass.length < 1) {
+      this.subClass.push(item.id);
+    }
+    // this.subClass.push(item.id);
     if (this.subClass.length > 1) {
       //cả đoạn này chỉ để đặt tên cho mũi tên + ghi id  div kết nối
       if (this.subClass.length > 1) {
@@ -218,7 +245,20 @@ this.callAll();
     subEvent.isApprovedByLineManager = false;
     //subEvent.idText = 'form' + count;
     subEvent.formControlName = 'form' + count;
-    subEvent.actionTypeID = "";
+
+    if(subEvent.isStart){
+      subEvent.actionTypeID = 0;
+    }
+
+    if(subEvent.isStart || subEvent.isEnd){
+
+    } else {
+      subEvent.permissionToUseID = 0;
+    }
+
+
+    // subEvent.actionTypeID = "";
+
     // subEvent.dropdown = this.listDropdown;
 
 
@@ -245,11 +285,15 @@ this.callAll();
 
     // Show message
     if (this.menuList1.length < 2) {
-      this.toastr.info('Di chuyển hình !!', '', { timeOut: 5000 });
+      this.toastr.info('Move the action !!', '', { timeOut: 5000 });
       setTimeout(() => {
-        this.toastr.info('Nhấn delete để xóa !!', '', { timeOut: 5000 });
+        this.toastr.info('Blue shape is start action, !!', '', { timeOut: 7000 });
+        this.toastr.info('Red shape is end action, !!', '', { timeOut: 7000 });
+
       }, 2000);
     }
+    debugger;
+    console.log(this.menuList1);
   }
 
   //import json file từ máy
@@ -750,9 +794,9 @@ this.callAll();
       this.listArrow = [];
       this.listClass = [];
       this.enableDeleteArrow = false;
-      this.toastr.success('Xóa tất cả thành công !!');
+      this.toastr.success('Delete all success !!');
     } catch (error) {
-      this.toastr.error('Xóa tất cả thất bại !!');
+      this.toastr.error('Delete all fail!!');
     }
   }
 
@@ -831,8 +875,9 @@ this.callAll();
   }
 
   showProperties(item) {
-    // debugger;
+    debugger;
     this.menuList1.forEach(element => {
+
       if (element.id === item.id) {
         this.properties = element;
         this.checkIsAction = true;
@@ -880,182 +925,213 @@ this.callAll();
 
   }
   saveDraf() {
-    let positionKey: any;
-    let classKey: any;
+    if (this.menuList1.length > 0) {
+      let positionKey: any;
+      let classKey: any;
 
-    //const exportJson = [];
-    let exportJson: any = { action: [], arrow: [] };
-    let exportJson2: any = { workFlowID: String, action: [], arrow: [] };
+      //const exportJson = [];
+      let exportJson: any = { action: [], arrow: [] };
+      let exportJson2: any = { workFlowID: String, action: [], arrow: [] };
 
-    for (let i = 0; i < this.menuList1.length; i++) {
-      let obj;
-      positionKey = $('#' + this.menuList1[i].id);
-      // lọc ra những thằng làm đầu mũi tên
-      classKey = this.menuList1[i];
-      // thêm 2 thuộc tính
-      classKey.positionTop = positionKey.position().top;
-      classKey.positionLeft = positionKey.position().left;
-      exportJson.action.push(classKey);
-      exportJson2.action.push(classKey);
-
-
-    }
-    if (exportJson.length <= 0) {
-      this.toastr.error('Chưa có dữ liệu !!');
-    } else {
-      //đẩy mũi tên vô có 1 dòng vậy thôi à?
-      this.listClass.forEach(element => {
-        exportJson.arrow.push(element);
-        exportJson2.arrow.push(element);
-      })
-
-      exportJson2.workFlowID = this.saveIDofWF;
-      //lưu  lại
-      const json = JSON.stringify(exportJson2);
+      for (let i = 0; i < this.menuList1.length; i++) {
+        let obj;
+        positionKey = $('#' + this.menuList1[i].id);
+        // lọc ra những thằng làm đầu mũi tên
+        classKey = this.menuList1[i];
+        // thêm 2 thuộc tính
+        classKey.positionTop = positionKey.position().top;
+        classKey.positionLeft = positionKey.position().left;
+        exportJson.action.push(classKey);
+        exportJson2.action.push(classKey);
 
 
-      var a = {
-        "id": this.saveIDofWF,
-        "data": JSON.stringify(exportJson),
-        "name": this.saveActiontype.name,
-        "description": this.saveActiontype.description,
-        "permissionToUseID": this.saveActiontype.permissionToUseID
-      };
-      exportJson2.workFlowID = this.saveIDofWF;
-      var b = {
-        "id": this.saveIDofWF,
-        "data": JSON.stringify(exportJson2),
+      }
+      if (exportJson.length <= 0) {
+        this.toastr.error('Chưa có dữ liệu !!');
+      } else {
+        //đẩy mũi tên vô có 1 dòng vậy thôi à?
+        this.listClass.forEach(element => {
+          exportJson.arrow.push(element);
+          exportJson2.arrow.push(element);
+        })
 
-      };
-
-      this.LoginService.editWF(a).toPromise().then((res: any) => {
-        this.toastr.success("Lưu bản nháp WorkFlow thành công!");
-
-      }, (err) => {
-        this.toastr.error("Please try again later!","Something Wrong!");
-        console.log(err);
-      });
-    }
-
-  }
-  saveWorkFlow() {
-    let positionKey: any;
-    let classKey: any;
-
-    //const exportJson = [];
-    let exportJson: any = { action: [], arrow: [] };
-    let exportJson2: any = { workFlowID: String, action: [], arrow: [] };
-
-    for (let i = 0; i < this.menuList1.length; i++) {
-      let obj;
-      positionKey = $('#' + this.menuList1[i].id);
-      // lọc ra những thằng làm đầu mũi tên
-      classKey = this.menuList1[i];
-      // thêm 2 thuộc tính
-      classKey.positionTop = positionKey.position().top;
-      classKey.positionLeft = positionKey.position().left;
-      exportJson.action.push(classKey);
-      exportJson2.action.push(classKey);
+        exportJson2.workFlowID = this.saveIDofWF;
+        //lưu  lại
+        const json = JSON.stringify(exportJson2);
 
 
-    }
-    if (exportJson.length <= 0) {
-      this.toastr.error('Chưa có dữ liệu !!');
-    } else {
-      //đẩy mũi tên vô có 1 dòng vậy thôi à?
-      this.listClass.forEach(element => {
-        exportJson.arrow.push(element);
-        exportJson2.arrow.push(element);
-      })
-
-      exportJson2.workFlowID = this.saveIDofWF;
-      //lưu  lại
-      const json = JSON.stringify(exportJson2);
-
-      let jsonConnections: any = [];
-      let jsonActions: any = [];
-
-      exportJson.action.forEach(element => {
-
-
-        //tạo Guid ID new cho cái action rồi gắn cho mũi tên
-        let newIdAction = this.create_UUID();
-        exportJson.arrow.forEach(elementArr => {
-          if (elementArr.idDiv[0] == element.id) {
-            elementArr.idDiv[0] = newIdAction
-          }
-          if (elementArr.idDiv[1] == element.id) {
-            elementArr.idDiv[1] = newIdAction
-          }
-        });
-        element.id = newIdAction;
-
-        if (element.permissionToUseID != "" && element.permissionToUseID != "0" &&
-          element.permissionToUseID != null) {
-          let oneAction = {
-            id: element.id,
-            name: element.name,
-            description: element.description,
-            actionTypeID: element.actionTypeID,
-            permissionToUseID: element.permissionToUseID,
-            isApprovedByLineManager: element.isApprovedByLineManager,
-            isStart: element.isStart,
-            isEnd: element.isEnd
-          };
-          jsonActions.push(oneAction);
-        } else {
-          let oneAction = {
-            id: element.id,
-            name: element.name,
-            description: element.description,
-            actionTypeID: element.actionTypeID,
-            // permissionToUseID: element.permissionToUseID,
-            isApprovedByLineManager: element.isApprovedByLineManager,
-            isStart: element.isStart,
-            isEnd: element.isEnd
-          };
-          jsonActions.push(oneAction);
-        }
-      });
-
-
-      exportJson.arrow.forEach(element => {
-        let b = {
-          fromWorkFlowTemplateActionID: "",
-          toWorkFlowTemplateActionID: "",
-          name: ""
+        var a = {
+          "id": this.saveIDofWF,
+          "data": JSON.stringify(exportJson),
+          "name": this.saveActiontype.name,
+          "description": this.saveActiontype.description,
+          "permissionToUseID": this.saveActiontype.permissionToUseID
         };
-        b.fromWorkFlowTemplateActionID = element.idDiv[0].toString();
-        b.toWorkFlowTemplateActionID = element.idDiv[1].toString();
-        b.name = element.name.toString();
-        jsonConnections.push(b);
-      });
+        exportJson2.workFlowID = this.saveIDofWF;
+        var b = {
+          "id": this.saveIDofWF,
+          "data": JSON.stringify(exportJson2),
 
+        };
 
+        this.LoginService.editWF(a).toPromise().then((res: any) => {
+          this.toastr.success("Save draft WorkFlow success!");
 
-      let jsonData = JSON.stringify(exportJson);
-      let a = {
-        "workFlowTemplateID": this.saveIDofWF, "data": jsonData,
-        "actions": jsonActions, "connections": jsonConnections
-      };
-
-      exportJson2.workFlowID = this.saveIDofWF;
-      // debugger;
-      console.log("file json:")
-      console.log(JSON.stringify(a));
-
-      this.shapeService.saveWorkFlow(a).toPromise().then(
-        data => {
-          console.log("không có vo đau");
-          console.log(data);
-          if (data != "") {
-            this.toastr.success("Vui lòng Active WorkFlow để đưa vào hoạt động!", "Lưu WorkFlow thành công!");
-            this.router.navigate(['/manage-workflow']);
-          }
         }, (err) => {
-          this.toastr.error("Lỗi: " + err.message, "Có lỗi xảy ra");
+          this.toastr.error("Please try again later!", "Something Wrong!");
           console.log(err);
         });
+      }
+
+    }
+    else{
+      this.toastr.error("There are no data!");
+    }
+  }
+  checkDataFull(){
+    debugger;
+    let result = true;
+    this.menuList1.forEach(element => {
+      if(element.isStart){
+        if(element.name == "" || element.description == ""|| element.actionTypeID == ""|| element.actionTypeID == 0){
+          this.toastr.error("Please fill all fields in Start Action");
+          result = false;
+        }
+      } else if(element.isEnd){
+        if(element.name == "" || element.description == ""){
+          this.toastr.error("Please fill all fields in End Action");
+          result = false;
+        }
+      } else{
+        if(element.name == "" || element.description == ""|| element.permissionToUseID == "" || element.permissionToUseID == 0){
+          this.toastr.error("Please fill all fields in Actions");
+          result = false;
+        }
+      }
+    });
+    return result;
+  }
+  saveWorkFlow() {
+    debugger;
+    if (this.checkConnectionFe() && this.checkDataFull()) {
+      let positionKey: any;
+      let classKey: any;
+
+      //const exportJson = [];
+      let exportJson: any = { action: [], arrow: [] };
+      let exportJson2: any = { workFlowID: String, action: [], arrow: [] };
+
+      for (let i = 0; i < this.menuList1.length; i++) {
+        let obj;
+        positionKey = $('#' + this.menuList1[i].id);
+        // lọc ra những thằng làm đầu mũi tên
+        classKey = this.menuList1[i];
+        // thêm 2 thuộc tính
+        classKey.positionTop = positionKey.position().top;
+        classKey.positionLeft = positionKey.position().left;
+        exportJson.action.push(classKey);
+        exportJson2.action.push(classKey);
+
+
+      }
+      if (exportJson.length <= 0) {
+        this.toastr.error('Chưa có dữ liệu !!');
+      } else {
+        //đẩy mũi tên vô có 1 dòng vậy thôi à?
+        this.listClass.forEach(element => {
+          exportJson.arrow.push(element);
+          exportJson2.arrow.push(element);
+        })
+
+        exportJson2.workFlowID = this.saveIDofWF;
+        //lưu  lại
+        const json = JSON.stringify(exportJson2);
+
+        let jsonConnections: any = [];
+        let jsonActions: any = [];
+
+        exportJson.action.forEach(element => {
+
+
+          //tạo Guid ID new cho cái action rồi gắn cho mũi tên
+          let newIdAction = this.create_UUID();
+          exportJson.arrow.forEach(elementArr => {
+            if (elementArr.idDiv[0] == element.id) {
+              elementArr.idDiv[0] = newIdAction
+            }
+            if (elementArr.idDiv[1] == element.id) {
+              elementArr.idDiv[1] = newIdAction
+            }
+          });
+          element.id = newIdAction;
+
+          if (element.permissionToUseID != "" && element.permissionToUseID != "0" &&
+            element.permissionToUseID != null) {
+            let oneAction = {
+              id: element.id,
+              name: element.name,
+              description: element.description,
+              actionTypeID: element.actionTypeID,
+              permissionToUseID: element.permissionToUseID,
+              isApprovedByLineManager: element.isApprovedByLineManager,
+              isStart: element.isStart,
+              isEnd: element.isEnd
+            };
+            jsonActions.push(oneAction);
+          } else {
+            let oneAction = {
+              id: element.id,
+              name: element.name,
+              description: element.description,
+              actionTypeID: element.actionTypeID,
+              // permissionToUseID: element.permissionToUseID,
+              isApprovedByLineManager: element.isApprovedByLineManager,
+              isStart: element.isStart,
+              isEnd: element.isEnd
+            };
+            jsonActions.push(oneAction);
+          }
+        });
+
+
+        exportJson.arrow.forEach(element => {
+          let b = {
+            fromWorkFlowTemplateActionID: "",
+            toWorkFlowTemplateActionID: "",
+            name: ""
+          };
+          b.fromWorkFlowTemplateActionID = element.idDiv[0].toString();
+          b.toWorkFlowTemplateActionID = element.idDiv[1].toString();
+          b.name = element.name.toString();
+          jsonConnections.push(b);
+        });
+
+
+
+        let jsonData = JSON.stringify(exportJson);
+        let a = {
+          "workFlowTemplateID": this.saveIDofWF, "data": jsonData,
+          "actions": jsonActions, "connections": jsonConnections
+        };
+
+        exportJson2.workFlowID = this.saveIDofWF;
+        // debugger;
+        console.log("file json:")
+        console.log(JSON.stringify(a));
+
+        this.shapeService.saveWorkFlow(a).toPromise().then(
+          data => {
+            console.log("không có vo đau");
+            console.log(data);
+            if (data != "") {
+              this.toastr.success("Vui lòng Active WorkFlow để đưa vào hoạt động!", "Lưu WorkFlow thành công!");
+              this.router.navigate(['/manage-workflow']);
+            }
+          }, (err) => {
+            this.toastr.error("Lỗi: " + err.message, "Có lỗi xảy ra");
+            console.log(err);
+          });
+      }
     }
   }
   create_UUID() {
@@ -1139,6 +1215,7 @@ this.callAll();
 
   }
   checkConnectionFe() {
+    let result = false;
     let listNode: any = [];
     let listArr: any = [];
     this.menuList1.forEach(element => {
@@ -1148,8 +1225,10 @@ this.callAll();
       listArr.push({ from: element.idDiv[0], to: element.idDiv[1] });
     });
     if (this.checkStart(listNode, listArr) && this.checkEnd(listNode, listArr)) {
-      this.toastr.success("Sucess");
+      // this.toastr.success("Sucess");
+      result = true;
     }
+    return result;
   }
   checkStart(listNode, listArr) {
     let nodeNowHandling: any = [];

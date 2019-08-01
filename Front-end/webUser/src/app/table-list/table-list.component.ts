@@ -101,7 +101,7 @@ export class TableListComponent implements OnInit {
     // navigate qua trang edit với id của User
     // Mock IdUser
 
-    this.router.navigate(['edit-account/', id]);
+    this.router.navigate(['edit-workflow-by-tool/', id]);
   }
 
 }
