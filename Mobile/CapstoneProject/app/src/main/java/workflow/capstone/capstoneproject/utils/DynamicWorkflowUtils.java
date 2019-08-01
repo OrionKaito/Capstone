@@ -3,10 +3,14 @@ package workflow.capstone.capstoneproject.utils;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListAdapter;
 import android.widget.ListView;
+import android.widget.ProgressBar;
+
+import workflow.capstone.capstoneproject.R;
 
 public class DynamicWorkflowUtils {
 
@@ -27,7 +31,6 @@ public class DynamicWorkflowUtils {
         return false;
     }
 
-
     public static void setListViewHeightBasedOnChildren(ListView listView) {
         ListAdapter listAdapter = listView.getAdapter();
         if (listAdapter == null) {
@@ -47,6 +50,18 @@ public class DynamicWorkflowUtils {
         params.height = totalHeight + (listView.getDividerHeight() * (listAdapter.getCount() - 1));
         listView.setLayoutParams(params);
         listView.requestLayout();
+    }
+
+    public static void addListViewFooter(Context context, ListView listView){
+        View view = LayoutInflater.from(context).inflate(R.layout.footer_listview_progressbar, null);
+//        ProgressBar progressBar = view.findViewById(R.id.progress_bar);
+        listView.addFooterView(view);
+    }
+
+    public static void removeListViewFooter(Context context, ListView listView){
+        View view = LayoutInflater.from(context).inflate(R.layout.footer_listview_progressbar, null);
+//        ProgressBar progressBar = view.findViewById(R.id.progress_bar);
+        listView.removeFooterView(view);
     }
 
     public static boolean accept(String imageExtension)
