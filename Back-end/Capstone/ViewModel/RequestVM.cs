@@ -139,18 +139,7 @@ namespace Capstone.ViewModel
 
         public string Status { get; set; }
 
-        public IEnumerable<RequestResultStaffActionVM> StaffResult { get; set; }
-    }
-
-    public class RequestResultStaffActionVM
-    {
-        public string FullName { get; set; }
-
-        public string UserName { get; set; }
-
-        public DateTime CreateDate { get; set; }
-
-        public string Status { get; set; }
+        public IEnumerable<StaffRequestActionVM> StaffResult { get; set; }
     }
 
     public class MyRequestVM

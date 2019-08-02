@@ -360,7 +360,7 @@ namespace Capstone.Controllers
         {
             try
             {
-                //** Get WorkFlowName's Name **//
+                //Lấu ra request và request action
                 var requestAction = _requestActionService.GetByID(requestActionID);
                 var request = _requestService.GetByID(requestAction.RequestID);
 
@@ -378,27 +378,35 @@ namespace Capstone.Controllers
 
                 var workflow = _workFlowTemplateService.GetByID(request.WorkFlowTemplateID);
 
-                //** Get Final Status **//
+                //*Lấy kết quả cuối cùng
                 if (requestAction.NextStepID.GetValueOrDefault() == null) return BadRequest("NextStep's " + WebConstant.NotFound);
 
                 var status = _workFlowTemplateActionService.GetByID(requestAction.NextStepID.GetValueOrDefault()).Name;
 
-                //** Get List Staff Request Action **//
-                List<RequestResultStaffActionVM> staffResult = new List<RequestResultStaffActionVM>();
-                var startActionTemplate = _workFlowTemplateActionService.GetStartByWorkFlowID(request.WorkFlowTemplateID);
+                //Lấy phần thông tin của những người duyệt 
+                List<StaffRequestActionVM> staffResult = new List<StaffRequestActionVM>();
+                var startActionTemplate = _workFlowTemplateActionService.GetStartByWorkFlowID(workflow.ID);
                 var staffActions = _requestActionService.GetExceptStartAction(startActionTemplate.ID, request.ID);
 
                 foreach (var staffAction in staffActions)
                 {
+                    var staffRequestValuesss = _requestValueService.GetByRequestActionID(staffAction.ID).Select(r => new RequestValueVM
+                    {
+                        ID = r.ID,
+                        Key = r.Key,
+                        Value = r.Value,
+                    });
+
                     var staffWorkflowaction = _workFlowTemplateActionService.GetByID(staffAction.NextStepID.GetValueOrDefault());
 
                     var staffStatus = _workFlowTemplateActionService.GetByID(staffWorkflowaction.ID).Name;
 
-                    RequestResultStaffActionVM staffRequestAction = new RequestResultStaffActionVM()
+                    StaffRequestActionVM staffRequestAction = new StaffRequestActionVM()
                     {
-                        FullName = _userManager.FindByIdAsync(staffAction.ActorID).Result.FullName,
+                        FullName = staffAction.Actor.FullName,
                         UserName = _userManager.FindByIdAsync(staffAction.ActorID).Result.UserName,
                         CreateDate = staffAction.CreateDate,
+                        RequestValues = staffRequestValuesss,
                         Status = staffStatus,
                     };
 
