@@ -79,6 +79,45 @@ namespace Capstone.Controllers
             }
         }
 
+        [HttpGet("SearchWorkflowToUse")]
+        public ActionResult<IEnumerable<WorkFlowTemplatePaginVM>> SearchWorkflowToUse(int? numberOfPage, int? NumberOfRecord, string search)
+        {
+            try
+            {
+                var page = numberOfPage ?? 1;
+                var count = NumberOfRecord ?? WebConstant.DefaultPageRecordCount;
+
+                var userID = HttpContext.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier).Value;
+                var permissionsOfUser = _permissionService.GetByUserID(userID);
+
+                List<WorkFlowTemplateVM> workFlowTemplates = new List<WorkFlowTemplateVM>();
+
+                foreach (var item in permissionsOfUser)
+                {
+                    var workflows = _workFlowService.GetByPermissionToUse(item.ID);
+
+                    foreach (var workflow in workflows)
+                    {
+                        workFlowTemplates.Add(_mapper.Map<WorkFlowTemplateVM>(workflow));
+                    }
+                }
+
+                workFlowTemplates.OrderByDescending(w => w.CreateDate);
+
+                WorkFlowTemplatePaginVM result = new WorkFlowTemplatePaginVM
+                {
+                    TotalRecord = workFlowTemplates.Count(),
+                    WorkFlowTemplates = workFlowTemplates.Skip((page - 1) * count).Take(count),
+                };
+
+                return Ok(result);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
+
         [HttpGet("GetWorkflowToEdit")]
         public ActionResult<IEnumerable<WorkFlowTemplatePaginVM>> GetWorkflowToEdit(int? numberOfPage, int? NumberOfRecord)
         {
