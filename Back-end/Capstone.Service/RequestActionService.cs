@@ -47,7 +47,7 @@ namespace Capstone.Service
             return _requestActionRepository.GetStartAction(startActionTemplateID, requestID);
         }
 
-        public IEnumerable<RequestAction> GetExceptStartAction(Guid startActionTemplateID, Guid RequestID)
+        public IEnumerable<RequestAction> GetExceptStartAction(Guid startActionTemplateID, Guid requestID)
         {
             return _requestActionRepository.GetExceptStartAction(startActionTemplateID, requestID);
         }

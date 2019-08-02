@@ -345,7 +345,7 @@ namespace Capstone.Controllers
                     WorkFlowTemplateName = r.WorkFlowTemplate.Name,
                     IsCompleted = r.IsCompleted,
                     IsDeleted = r.IsDeleted,
-                });
+                }).OrderByDescending(r => r.CreateDate);
 
                 return Ok(requests);
             }
@@ -502,7 +502,7 @@ namespace Capstone.Controllers
                 WorkFlowTemplateID = r.WorkFlowTemplateID,
                 WorkFlowTemplateName = r.WorkFlowTemplate.Name,
                 RequestActionID = r.CurrentRequestActionID,
-            });
+            }).OrderByDescending(r => r.CreateDate);
 
             if (requests.IsNullOrEmpty())
             {

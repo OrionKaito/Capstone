@@ -17,6 +17,7 @@ namespace Capstone.ViewModel
         public string Description { get; set; }
         public string Data { get; set; }
         public Guid PermissionToUseID { get; set; }
+        public DateTime CreateDate { get; set; }
         public bool IsEnabled { get; set; }
     }
 
