@@ -40,6 +40,8 @@ export class HandleRequestComponent implements OnInit {
       this.listData.sort = this.sort;
       this.listData.paginator = this.paginator;
 
+    },err =>{
+      this.toastr.error(err.error);
     })
   }
 

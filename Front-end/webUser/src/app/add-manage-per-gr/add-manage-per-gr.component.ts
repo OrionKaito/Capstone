@@ -63,9 +63,13 @@ export class AddManagePerGrComponent implements OnInit {
           listPerNow.push({ id: element.permissionID, name: element.permissionName});
         });
         this.formData.permissionIDs = listPerNow;
+      },err =>{
+        this.toastr.error(err.error);
       })
 
 
+    },err =>{
+      this.toastr.error(err.error);
     })
 
     // debugger;

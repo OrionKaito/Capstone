@@ -34,6 +34,8 @@ export class AddPermissionComponent implements OnInit {
       this.loadStaffAcountService.loadPermissionByID(this.data).toPromise().then(res => {
         this.saveData = res;
         this.formData.name = this.saveData.name;
+      },err =>{
+        this.toastr.error(err.error);
       })
     }
     // this.loadStaffAcountService.loadGroupData().toPromise().then(res => {
@@ -78,6 +80,8 @@ export class AddPermissionComponent implements OnInit {
           resp => {
             console.log(resp.toString());
 
+          },err =>{
+            this.toastr.error(err.error);
           });
 
       } else {
@@ -94,6 +98,8 @@ export class AddPermissionComponent implements OnInit {
             else {
               //this.errorMessage = resp.toString();    
             }
+          },err =>{
+            this.toastr.error(err.error);
           });
       }
       this.toastr.success('Success! ', '');

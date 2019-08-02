@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { LoadStaffAcountService } from 'app/service/load-staff-acount.service';
 import { Router } from '@angular/router';
+import { ToastrService } from 'ngx-toastr';
 
 declare const $: any;
 declare interface RouteInfo {
@@ -13,7 +14,7 @@ export const ROUTES: RouteInfo[] = [
   // { path: '/dashboard', title: 'Dashboard',  icon: 'dashboard', class: '' },
   // { path: '/manage-workflow', title: 'Manage WorkFlow',  icon:'content_paste', class: '' },
   // { path: '/manage-permission', title: 'Manage Permission',  icon:'content_paste', class: '' },
-  // { path: '/your-request', title: 'Your request',  icon:'content_paste', class: '' },
+  // { path: '/your-request', title: 'My request',  icon:'content_paste', class: '' },
   // { path: '/manage-per-gr', title: 'Manage Permission Group',  icon:'content_paste', class: '' },
   // { path: '/create-request', title: 'Create Request',  icon:'content_paste', class: '' },
   // { path: '/handle-request', title: 'Handle Request',  icon:'content_paste', class: '' }
@@ -28,7 +29,7 @@ export class SidebarComponent implements OnInit {
   menuItems: any[];
   dataNow: any
 
-  constructor(private router: Router,private loadStaffAcountService: LoadStaffAcountService) { }
+  constructor(private toastr: ToastrService,private router: Router,private loadStaffAcountService: LoadStaffAcountService) { }
 
   ngOnInit() {
     this.loadStaffAcountService.checkRole().toPromise().then(rep => {
@@ -41,7 +42,7 @@ export class SidebarComponent implements OnInit {
         ROUTES.push(
           { path: '/create-request', title: 'Create Request', icon: 'content_paste', class: 'addLine' },
           { path: '/handle-request', title: 'Handle Request', icon: 'content_paste', class: 'addLine' },
-          { path: '/your-request', title: 'Your request', icon: 'content_paste', class: 'addLine' },
+          { path: '/your-request', title: 'My request', icon: 'content_paste', class: 'addLine' },
           { path: '/manage-workflow', title: 'Manage WorkFlow', icon: 'content_paste', class: 'addLine' },
           { path: '/manage-permission', title: 'Manage Permission', icon: 'content_paste', class: 'addLine' },
           { path: '/manage-per-gr', title: 'Manage Permission Group', icon: 'content_paste', class: 'addLine' }
@@ -55,7 +56,7 @@ export class SidebarComponent implements OnInit {
 
           { path: '/create-request', title: 'Create Request', icon: 'content_paste', class: '' },
           { path: '/handle-request', title: 'Handle Request', icon: 'content_paste', class: '' },
-          { path: '/your-request', title: 'Your request', icon: 'content_paste', class: '' }
+          { path: '/your-request', title: 'My request', icon: 'content_paste', class: '' }
         );
 
       }

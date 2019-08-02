@@ -4,6 +4,7 @@ import { AngularFirestore } from '@angular/fire/firestore';
 import { Observable } from 'rxjs';
 import { finalize, tap } from 'rxjs/operators';
 import { LoadStaffAcountService } from 'app/service/load-staff-acount.service';
+import { ToastrService } from 'ngx-toastr';
 
 
 @Component({
@@ -21,7 +22,7 @@ export class UploadTaskComponent implements OnInit {
   downloadURL: string;
   linkUrl: any;
 
-  constructor(private storage: AngularFireStorage, private db: AngularFirestore, private loadStaffAcountService: LoadStaffAcountService) { }
+  constructor(private toastr: ToastrService, private storage: AngularFireStorage, private db: AngularFirestore, private loadStaffAcountService: LoadStaffAcountService) { }
 
   ngOnInit() {
     this.startUpload();
@@ -37,6 +38,8 @@ export class UploadTaskComponent implements OnInit {
         this.linkUrl=res;
         this.downloadURL = this.linkUrl;
         this.returnURL.emit(this.downloadURL);
+      },err =>{
+        this.toastr.error(err.error);
       }
     )
 

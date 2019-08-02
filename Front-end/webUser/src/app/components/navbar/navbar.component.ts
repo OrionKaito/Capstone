@@ -3,6 +3,7 @@ import { ROUTES } from '../sidebar/sidebar.component';
 import {Location, LocationStrategy, PathLocationStrategy} from '@angular/common';
 import { Router } from '@angular/router';
 import { LoadStaffAcountService } from 'app/service/load-staff-acount.service';
+import { Toast, ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-navbar',
@@ -21,7 +22,8 @@ export class NavbarComponent implements OnInit {
     noNoti:boolean;
 
     constructor(location: Location,  private element: ElementRef, private router: Router,
-         private loadStaffAcountService: LoadStaffAcountService) {
+         private loadStaffAcountService: LoadStaffAcountService,
+         private toastr: ToastrService) {
       this.location = location;
           this.sidebarVisible = false;
     }
@@ -30,11 +32,15 @@ export class NavbarComponent implements OnInit {
         this.loadStaffAcountService.getNotiUser().toPromise().then(rep=>{
             this.listNoti = rep;
             console.log(this.listNoti);
-        })
+        },err =>{
+            this.toastr.error(err.error);
+          })
         this.loadStaffAcountService.getNumNotiUser().toPromise().then(rep=>{
             this.numberNoti = rep;
             if(this.numberNoti == 0) this.noNoti = true;
-        })
+        },err =>{
+            this.toastr.error(err.error);
+          })
       this.listTitles = ROUTES.filter(listTitle => listTitle);
       const navbar: HTMLElement = this.element.nativeElement;
       this.toggleButton = navbar.getElementsByClassName('navbar-toggler')[0];

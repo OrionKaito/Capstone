@@ -38,6 +38,8 @@ export class TableListComponent implements OnInit {
       this.listData = new MatTableDataSource(this.users);
       this.listData.sort = this.sort;
       this.listData.paginator = this.paginator;
+  },err =>{
+    this.toastr.error(err.error);
   })
   }
 

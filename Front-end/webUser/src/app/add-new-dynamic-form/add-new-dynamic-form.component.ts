@@ -24,6 +24,7 @@ export class AddNewDynamicFormComponent implements OnInit {
   listCb: any = [];
   nameForm: any;
   ngOnInit() {
+    this.nameForm="";
     this.nameHere = "";
     this.propertiesThis = 0;
     this.nameOfCb = "";
@@ -92,6 +93,8 @@ export class AddNewDynamicFormComponent implements OnInit {
 
     if (this.listComboElement.length == 0) {
       this.toastr.error("Please add some properties for dynamic form!");
+    } if(this.nameForm == ""){
+      this.toastr.error("Please input name of form!");
     } else {
       let model = {
         "name": this.nameForm,

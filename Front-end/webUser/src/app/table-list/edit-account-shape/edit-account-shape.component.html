@@ -47,7 +47,7 @@
           </mat-form-field>
         </td>
       </tr>
-      <tr *ngIf="checkIsAction">
+      <!-- <tr *ngIf="checkIsAction">
 
         <td>
           <mat-form-field class="example-full-width">
@@ -55,11 +55,7 @@
               type="text">
           </mat-form-field>
         </td>
-
-        <!-- <td><label class="col-form-label-sm customlabel"> Description</label></td>
-        <td><input class="edit-inut" name="properties.description" [(ngModel)]="properties.description" type="text">
-        </td> -->
-      </tr>
+      </tr> -->
       <tr *ngIf="checkIsAction && !properties.isApprovedByLineManager && !properties.isStart && !properties.isEnd">
         <!-- <td>Permission</td>
         <td><select name="properties.permissionToUseID" [(ngModel)]="properties.permissionToUseID">
@@ -118,7 +114,15 @@
     </table>
   </div>
   <div class="row main">
-    <div class="col-2 menu-left d-flex flex-column align-items-center" style="background-color:red">
+    <div class="col-2 menu-left d-flex flex-column align-items-center" style="background-color:white">
+      <!-- <div class="logo" > 
+          <a href="#" class="simple-text">    
+                <div class="logo-img">
+                    <img src="/assets/img/angular2-logo-red.png" style="width: 33.22%; height:100%"/>
+                </div>
+                D. Workflow
+                </a>
+      </div> -->
       <app-menu-edit-account-shape style="width: 100%; height: 100%;" (draw)="drop($event)">
       </app-menu-edit-account-shape>
 

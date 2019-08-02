@@ -48,8 +48,12 @@ export class AddAccountComponent implements OnInit {
 
           this.formData.permissionToUseID = this.recevieData.permissionToUseID;
           console.log(this.formData);
+        }, err =>{
+          this.toastr.error(err.error);
         })
       }
+    },err =>{
+      this.toastr.error(err.error);
     })
 
 

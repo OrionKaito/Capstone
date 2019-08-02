@@ -117,6 +117,8 @@ export class EditAccountShapeComponent implements OnInit {
             this.addImportEnd(a);
 
           }
+        },err =>{
+          this.toastr.error(err.error);
         });
       }
     });
@@ -134,6 +136,8 @@ export class EditAccountShapeComponent implements OnInit {
         });
       }
 
+    },err =>{
+      this.toastr.error(err.error);
     })
   }
   public getListConnectionType() {
@@ -145,6 +149,8 @@ export class EditAccountShapeComponent implements OnInit {
         });
       }
 
+    },err =>{
+      this.toastr.error(err.error);
     })
   }
   public getlistActionType() {
@@ -157,6 +163,8 @@ export class EditAccountShapeComponent implements OnInit {
         });
       }
 
+    },err =>{
+      this.toastr.error(err.error);
     })
   }
   checkIdOfAction(start, end) {
@@ -287,8 +295,8 @@ export class EditAccountShapeComponent implements OnInit {
     if (this.menuList1.length < 2) {
       this.toastr.info('Move the action !!', '', { timeOut: 5000 });
       setTimeout(() => {
-        this.toastr.info('Blue shape is start action, !!', '', { timeOut: 7000 });
-        this.toastr.info('Red shape is end action, !!', '', { timeOut: 7000 });
+        this.toastr.info('Blue shape is start action !!', '', { timeOut: 7000 });
+        this.toastr.info('Red shape is end action !!', '', { timeOut: 7000 });
 
       }, 2000);
     }
@@ -977,9 +985,8 @@ export class EditAccountShapeComponent implements OnInit {
         this.LoginService.editWF(a).toPromise().then((res: any) => {
           this.toastr.success("Save draft WorkFlow success!");
 
-        }, (err) => {
-          this.toastr.error("Please try again later!", "Something Wrong!");
-          console.log(err);
+        },err =>{
+          this.toastr.error(err.error);
         });
       }
 

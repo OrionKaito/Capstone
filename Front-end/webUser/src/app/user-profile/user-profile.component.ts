@@ -35,9 +35,8 @@ openChangePass: any;
         
         // this.userDetail.dateOfBirth = Date.parse(this.userDetail.dateOfBirth) ;
         // console.log(this.userDetail.dateOfBirth);
-      },
-      err => {
-        console.log(err);
+      },err =>{
+        this.toastr.error(err.error);
       }
     )
   }
