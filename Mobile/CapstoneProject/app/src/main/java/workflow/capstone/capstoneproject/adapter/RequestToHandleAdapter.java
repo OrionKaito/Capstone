@@ -33,6 +33,11 @@ public class RequestToHandleAdapter extends BaseAdapter {
         layoutInflater = LayoutInflater.from(mContext);
     }
 
+    public void AddListItemAdapter(List<RequestToHandle> listDataPlus) {
+        listData.addAll(listDataPlus);
+        this.notifyDataSetChanged();
+    }
+
     @Override
     public int getCount() {
         return listData.size();

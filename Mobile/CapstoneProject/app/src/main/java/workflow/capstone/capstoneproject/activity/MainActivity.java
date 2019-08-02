@@ -1,6 +1,7 @@
 package workflow.capstone.capstoneproject.activity;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -92,7 +93,16 @@ public class MainActivity extends AppCompatActivity {
 
         setupTabIcons();
         setOnChangeTab();
-        setCurrentTabFragment(0);
+        Intent intent = this.getIntent();
+
+        if (intent.getStringExtra("pushNotification") != null &&intent.getStringExtra("pushNotification").equals("Notification")) {
+            setCurrentTabFragment(3);
+            setUnselectedTab(0);
+            setUnselectedTab(1);
+            setUnselectedTab(2);
+        } else {
+            setCurrentTabFragment(0);
+        }
     }
 
     private void setupTabIcons() {
@@ -107,22 +117,6 @@ public class MainActivity extends AppCompatActivity {
         View taskView = tabLayout.getTabAt(2).getCustomView();
         imageViewTask = taskView.findViewById(R.id.task_icon);
         imageViewTask.setImageResource(R.drawable.ic_task_gray);
-//        taskBadge = taskView.findViewById(R.id.task_badge);
-//        capstoneRepository = new CapstoneRepositoryImpl();
-//        capstoneRepository.getNumberOfNotification(token, new CallBackData<String>() {
-//            @Override
-//            public void onSuccess(String s) {
-//                if (Integer.parseInt(s) > 0) {
-//                    taskBadge.setText(s);
-//                    taskBadge.setVisibility(View.VISIBLE);
-//                }
-//            }
-//
-//            @Override
-//            public void onFail(String message) {
-//
-//            }
-//        });
 
         //notification tab
         tabLayout.getTabAt(3).setCustomView(R.layout.notification_icon);
@@ -154,7 +148,6 @@ public class MainActivity extends AppCompatActivity {
             R.drawable.ic_notification_blue,
             R.drawable.ic_history_grey,
             R.drawable.ic_history_blue
-
     };
 
     private void setOnChangeTab() {
@@ -166,24 +159,7 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onTabUnselected(TabLayout.Tab tab) {
-                int tabIndex = tab.getPosition();
-                switch (tab.getPosition()) {
-                    case 0:
-                        tabLayout.getTabAt(tabIndex).setIcon(tabIcons[0]);
-                        break;
-                    case 1:
-                        tabLayout.getTabAt(tabIndex).setIcon(tabIcons[4]);
-                        break;
-                    case 2:
-                        imageViewTask.setImageResource(R.drawable.ic_task_gray);
-                        break;
-                    case 3:
-                        imageViewNotification.setImageResource(R.drawable.ic_notification_grey);
-                        notificationBadge.setVisibility(View.INVISIBLE);
-                        break;
-                    default:
-                        break;
-                }
+                setUnselectedTab(tab.getPosition());
             }
 
             @Override
@@ -211,6 +187,27 @@ public class MainActivity extends AppCompatActivity {
             case 3:
                 imageViewNotification.setImageResource(R.drawable.ic_notification_blue);
                 replaceFragment(listCompleteRequestFragment);
+                break;
+            default:
+                break;
+        }
+    }
+
+    private void setUnselectedTab(int tabPosition)
+    {
+        switch (tabPosition) {
+            case 0:
+                tabLayout.getTabAt(tabPosition).setIcon(tabIcons[0]);
+                break;
+            case 1:
+                tabLayout.getTabAt(tabPosition).setIcon(tabIcons[4]);
+                break;
+            case 2:
+                imageViewTask.setImageResource(R.drawable.ic_task_gray);
+                break;
+            case 3:
+                imageViewNotification.setImageResource(R.drawable.ic_notification_grey);
+                notificationBadge.setVisibility(View.INVISIBLE);
                 break;
             default:
                 break;

@@ -27,13 +27,16 @@ public class NotificationAdapter extends BaseAdapter {
     private LayoutInflater layoutInflater;
     private Context mContext;
     private String createDate;
-    private boolean check;
 
-    public NotificationAdapter(List<UserNotification> listData, Context mContext, boolean mCheck) {
+    public NotificationAdapter(List<UserNotification> listData, Context mContext) {
         this.listData = listData;
         this.mContext = mContext;
-        this.check = mCheck;
         layoutInflater = LayoutInflater.from(mContext);
+    }
+
+    public void AddListItemAdapter(List<UserNotification> listDataPlus) {
+        listData.addAll(listDataPlus);
+        this.notifyDataSetChanged();
     }
 
     @Override
@@ -82,16 +85,12 @@ public class NotificationAdapter extends BaseAdapter {
         }
         holder.tvCreateDate.setText(createDate);
 
-        if(check) {
-            if (userNotification.getIsRead()) {
-                holder.imgIsRead.setVisibility(View.VISIBLE);
-                holder.imgIsRead.setImageResource(R.drawable.ic_lens_gray_24dp);
-            } else {
-                holder.imgIsRead.setVisibility(View.VISIBLE);
-                holder.imgIsRead.setImageResource(R.drawable.ic_lens_green_24dp);
-            }
+        if (userNotification.getIsRead()) {
+            holder.imgIsRead.setVisibility(View.VISIBLE);
+            holder.imgIsRead.setImageResource(R.drawable.ic_lens_gray_24dp);
         } else {
-            holder.imgIsRead.setVisibility(View.GONE);
+            holder.imgIsRead.setVisibility(View.VISIBLE);
+            holder.imgIsRead.setImageResource(R.drawable.ic_lens_green_24dp);
         }
 
         return convertView;

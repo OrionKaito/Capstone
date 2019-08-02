@@ -49,17 +49,6 @@
         android:layout_height="@dimen/sp1"
         android:background="@color/light_gray" />
 
-    <TextView
-        android:id="@+id/tv_empty_request"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/dp20"
-        android:gravity="center"
-        android:text="You have not sent any requests."
-        android:textColor="@color/red"
-        android:textSize="@dimen/sp22"
-        android:visibility="gone" />
-
     <ListView
         android:id="@+id/list_my_request"
         android:layout_width="match_parent"

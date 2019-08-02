@@ -297,7 +297,6 @@ public class WorkflowFragment extends Fragment {
     }
 
     private void itemOnClick() {
-
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
