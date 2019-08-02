@@ -3,8 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".fragment.MyRequestFragment"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    tools:context=".fragment.MyRequestFragment">
 
     <RelativeLayout
         android:id="@+id/rl_home_menu"
@@ -32,14 +32,6 @@
             android:background="@drawable/ic_search_gray_24dp"
             android:visibility="gone" />
 
-        <!--<ImageView-->
-        <!--android:id="@+id/img_menu"-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:layout_alignParentRight="true"-->
-        <!--android:layout_centerVertical="true"-->
-        <!--android:layout_marginRight="@dimen/dp15"-->
-        <!--android:background="@drawable/ic_menu_grey" />-->
         <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
             android:id="@+id/img_avatar"
             android:layout_width="@dimen/dp32"
@@ -61,12 +53,13 @@
         android:id="@+id/tv_empty_request"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="You have not sent any requests."
-        android:textSize="@dimen/sp22"
         android:layout_marginTop="@dimen/dp20"
-        android:textColor="@color/red"
         android:gravity="center"
-        android:visibility="gone"/>
+        android:text="You have not sent any requests."
+        android:textColor="@color/red"
+        android:textSize="@dimen/sp22"
+        android:visibility="gone" />
+
     <ListView
         android:id="@+id/list_my_request"
         android:layout_width="match_parent"

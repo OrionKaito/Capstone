@@ -20,7 +20,6 @@ import workflow.capstone.capstoneproject.activity.MainActivity;
 public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
     private String TAG = "MyFirebaseMessagingService";
-    private String GROUP_KEY_DYNAMIC_WORKFLOW = "workflow.capstone.capstoneproject";
 
     public MyFirebaseMessagingService() {
     }

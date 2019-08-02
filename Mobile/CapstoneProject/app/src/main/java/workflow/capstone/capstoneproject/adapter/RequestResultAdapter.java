@@ -4,17 +4,20 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 import workflow.capstone.capstoneproject.R;
+import workflow.capstone.capstoneproject.entities.RequestValue;
 import workflow.capstone.capstoneproject.entities.StaffResult;
-import workflow.capstone.capstoneproject.utils.DynamicWorkflowUtils;
 
 public class RequestResultAdapter extends BaseAdapter {
 
@@ -53,7 +56,7 @@ public class RequestResultAdapter extends BaseAdapter {
             holder.tvUsername = convertView.findViewById(R.id.tv_username);
             holder.tvCreateDate = convertView.findViewById(R.id.tv_create_date);
             holder.tvStatus = convertView.findViewById(R.id.tv_status);
-//            holder.lineView = convertView.findViewById(R.id.line_view);
+            holder.lvComment = convertView.findViewById(R.id.lv_comment);
             convertView.setTag(holder);
         } else {
             holder = (ViewHolder) convertView.getTag();
@@ -62,10 +65,6 @@ public class RequestResultAdapter extends BaseAdapter {
         StaffResult staffResult = staffResultList.get(position);
         holder.tvStaffName.setText(staffResult.getFullName());
         holder.tvUsername.setText("( " + staffResult.getUserName() + " )");
-
-//        if (position == 0) {
-//            holder.lineView.setVisibility(View.VISIBLE);
-//        }
 
         String createDate = "";
         try {
@@ -79,6 +78,13 @@ public class RequestResultAdapter extends BaseAdapter {
             holder.tvCreateDate.setText(createDate);
         }
         holder.tvStatus.setText(staffResult.getStatus());
+
+        List<String> commentList = new ArrayList<>();
+        for (RequestValue requestValue : staffResult.getRequestValues()) {
+            commentList.add(requestValue.getValue());
+        }
+
+        holder.lvComment.setAdapter(new ArrayAdapter<>(mContext, android.R.layout.simple_list_item_1, android.R.id.text1, commentList));
         return convertView;
     }
 
@@ -87,6 +93,6 @@ public class RequestResultAdapter extends BaseAdapter {
         TextView tvUsername;
         TextView tvCreateDate;
         TextView tvStatus;
-//        View lineView;
+        ListView lvComment;
     }
 }

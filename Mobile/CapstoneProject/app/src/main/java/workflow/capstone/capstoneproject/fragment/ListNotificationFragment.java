@@ -10,7 +10,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ImageView;
 import android.widget.ListView;
 
 import com.squareup.picasso.Picasso;
@@ -19,7 +18,6 @@ import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import workflow.capstone.capstoneproject.R;
-import workflow.capstone.capstoneproject.activity.MainActivity;
 import workflow.capstone.capstoneproject.activity.ProfileActivity;
 import workflow.capstone.capstoneproject.adapter.NotificationAdapter;
 import workflow.capstone.capstoneproject.entities.Profile;
@@ -30,17 +28,16 @@ import workflow.capstone.capstoneproject.utils.CallBackData;
 import workflow.capstone.capstoneproject.utils.ConstantDataManager;
 import workflow.capstone.capstoneproject.utils.DynamicWorkflowSharedPreferences;
 
-public class ListCompleteRequestFragment extends Fragment {
+public class ListNotificationFragment extends Fragment {
 
     private CapstoneRepository capstoneRepository;
     private NotificationAdapter notificationAdapter;
     private List<UserNotification> notificationList;
     private ListView listView;
     private String token = null;
-    private ImageView imgMenu;
     private CircleImageView imgAvatar;
 
-    public ListCompleteRequestFragment() {
+    public ListNotificationFragment() {
         // Required empty public constructor
     }
 
@@ -49,7 +46,7 @@ public class ListCompleteRequestFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_list_complete_request, container, false);
+        View view = inflater.inflate(R.layout.fragment_list_notification, container, false);
         listView = view.findViewById(R.id.list_request_history);
         imgAvatar = view.findViewById(R.id.img_avatar);
 
@@ -73,22 +70,12 @@ public class ListCompleteRequestFragment extends Fragment {
             }
         });
 
-//        imgMenu = view.findViewById(R.id.img_menu);
-//        imgMenu.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Intent intent = new Intent(getActivity(), ProfileActivity.class);
-//                startActivity(intent);
-//                getActivity().overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
-//            }
-//        });
-
         token = DynamicWorkflowSharedPreferences.getStoreJWT(getContext(), ConstantDataManager.AUTHORIZATION_TOKEN);
-        loadCompleteRequest();
+        loadNotification();
         return view;
     }
 
-    private void loadCompleteRequest() {
+    private void loadNotification() {
         String token = DynamicWorkflowSharedPreferences.getStoreJWT(getActivity(), ConstantDataManager.AUTHORIZATION_TOKEN);
         capstoneRepository = new CapstoneRepositoryImpl();
         capstoneRepository.getNotification(token, new CallBackData<List<UserNotification>>() {
@@ -113,7 +100,7 @@ public class ListCompleteRequestFragment extends Fragment {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
-                Fragment fragment = new CompleteRequestFragment();
+                Fragment fragment = new DetailRequestFragment();
                 Bundle bundle = new Bundle();
                 UserNotification userNotification = (UserNotification) adapterView.getItemAtPosition(position);
                 String requestActionID = userNotification.getEventID();

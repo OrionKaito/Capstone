@@ -10,7 +10,6 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import workflow.capstone.capstoneproject.R;
@@ -26,7 +25,7 @@ import workflow.capstone.capstoneproject.utils.DynamicWorkflowSharedPreferences;
 import workflow.capstone.capstoneproject.utils.DynamicWorkflowUtils;
 import workflow.capstone.capstoneproject.utils.FragmentUtils;
 
-public class CompleteRequestFragment extends Fragment {
+public class DetailRequestFragment extends Fragment {
 
     private ImageView imgBack;
     private TextView tvRequestStatus;
@@ -36,7 +35,7 @@ public class CompleteRequestFragment extends Fragment {
     private ListView listViewStatusStaffHandle;
     private RequestResultAdapter requestResultAdapter;
 
-    public CompleteRequestFragment() {
+    public DetailRequestFragment() {
         // Required empty public constructor
     }
 
@@ -45,7 +44,7 @@ public class CompleteRequestFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_complete_request, container, false);
+        View view = inflater.inflate(R.layout.fragment_detail_request, container, false);
         initView(view);
 
         imgBack.setOnClickListener(new View.OnClickListener() {
@@ -66,7 +65,7 @@ public class CompleteRequestFragment extends Fragment {
     private void initView(View view) {
         imgBack = view.findViewById(R.id.img_Back);
         tvRequestStatus = view.findViewById(R.id.tv_request_status);
-        tvWorkFlowName = view.findViewById(R.id.tv_workflow_name);
+        tvWorkFlowName = view.findViewById(R.id.tv_workflow_name_title);
         listViewStatusStaffHandle = view.findViewById(R.id.list_status_staff_handle);
     }
 
@@ -78,24 +77,6 @@ public class CompleteRequestFragment extends Fragment {
                 tvWorkFlowName.setText(requestResult.getWorkFlowTemplateName());
                 tvRequestStatus.setText(requestResult.getStatus());
                 configListView(listViewStatusStaffHandle, requestResult.getStaffResult());
-
-                capstoneRepository = new CapstoneRepositoryImpl();
-                capstoneRepository.getNumberOfNotification(token, new CallBackData<String>() {
-                    @Override
-                    public void onSuccess(String s) {
-                        if (Integer.parseInt(s) > 0) {
-                            MainActivity.notificationBadge.setText(s);
-                            MainActivity.notificationBadge.setVisibility(View.VISIBLE);
-                        } else {
-                            MainActivity.notificationBadge.setVisibility(View.INVISIBLE);
-                        }
-                    }
-
-                    @Override
-                    public void onFail(String message) {
-
-                    }
-                });
             }
 
             @Override

@@ -1,7 +1,6 @@
 package workflow.capstone.capstoneproject.activity;
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -10,7 +9,6 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import net.yslibrary.android.keyboardvisibilityevent.KeyboardVisibilityEvent;
@@ -18,13 +16,12 @@ import net.yslibrary.android.keyboardvisibilityevent.KeyboardVisibilityEventList
 
 import java.util.List;
 
-import es.dmoral.toasty.Toasty;
 import workflow.capstone.capstoneproject.R;
 import workflow.capstone.capstoneproject.entities.Profile;
 import workflow.capstone.capstoneproject.fragment.ListHandleRequestFragment;
 import workflow.capstone.capstoneproject.fragment.MyRequestFragment;
 import workflow.capstone.capstoneproject.fragment.ProfileFragment;
-import workflow.capstone.capstoneproject.fragment.ListCompleteRequestFragment;
+import workflow.capstone.capstoneproject.fragment.ListNotificationFragment;
 import workflow.capstone.capstoneproject.fragment.WorkflowFragment;
 import workflow.capstone.capstoneproject.repository.CapstoneRepository;
 import workflow.capstone.capstoneproject.repository.CapstoneRepositoryImpl;
@@ -45,7 +42,7 @@ public class MainActivity extends AppCompatActivity {
     private FragmentTransaction fragmentTransaction;
 
     private WorkflowFragment workflowFragment;
-    private ListCompleteRequestFragment listCompleteRequestFragment;
+    private ListNotificationFragment listCompleteRequestFragment;
     private ListHandleRequestFragment listHandleRequestFragment;
     private MyRequestFragment myRequestFragment;
     private ProfileFragment profileFragment;
@@ -85,7 +82,7 @@ public class MainActivity extends AppCompatActivity {
     private void initTabLayout() {
         tabLayout = findViewById(R.id.tab_Layout);
         workflowFragment = new WorkflowFragment();
-        listCompleteRequestFragment = new ListCompleteRequestFragment();
+        listCompleteRequestFragment = new ListNotificationFragment();
         listHandleRequestFragment = new ListHandleRequestFragment();
         myRequestFragment = new MyRequestFragment();
         profileFragment = new ProfileFragment();
@@ -182,6 +179,7 @@ public class MainActivity extends AppCompatActivity {
                         break;
                     case 3:
                         imageViewNotification.setImageResource(R.drawable.ic_notification_grey);
+                        notificationBadge.setVisibility(View.INVISIBLE);
                         break;
                     default:
                         break;
