@@ -67,6 +67,7 @@ public class SendRequestFragment extends Fragment {
 
     private LinearLayout lnButton;
     private LinearLayout lnDynamicForm;
+    private TextView tvActionName;
     private ImageView imgBack;
     private ImageView imgUploadFile;
     private ImageView imgUploadImage;
@@ -181,6 +182,7 @@ public class SendRequestFragment extends Fragment {
     }
 
     private void initView(View view) {
+        tvActionName = view.findViewById(R.id.tv_action_title);
         lnDynamicForm = view.findViewById(R.id.ln_dynamic_form);
         lnButton = view.findViewById(R.id.ln_button);
         imgBack = view.findViewById(R.id.img_Back);
@@ -197,6 +199,9 @@ public class SendRequestFragment extends Fragment {
         capstoneRepository.getRequestForm(token, workFlowTemplateID, new CallBackData<RequestForm>() {
             @Override
             public void onSuccess(final RequestForm requestForm) {
+                //set title
+                tvActionName.setText(requestForm.getWorkFlowTemplateActionName());
+
                 //Build Dynamic form
                 buildDynamicForm(requestForm.getActionType().getData());
 
@@ -214,7 +219,7 @@ public class SendRequestFragment extends Fragment {
                             builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
-                                    sendRequest(workFlowTemplateID, connection.getNextStepID(), requestForm.getActionType().getData());
+                                    sendRequest(workFlowTemplateID, connection.getNextStepID(), requestForm.getWorkFlowTemplateActionID(), requestForm.getActionType().getData());
                                     dialog.dismiss();
                                 }
                             })
@@ -404,7 +409,7 @@ public class SendRequestFragment extends Fragment {
         }
     }
 
-    private void sendRequest(String workFlowTemplateID, String nextStepID, String data) {
+    private void sendRequest(String workFlowTemplateID, String nextStepID, String workFlowTemplateActionID, String data) {
         if (token != null) {
             Type type = new TypeToken<List<DynamicForm>>() {
             }.getType();
@@ -438,8 +443,9 @@ public class SendRequestFragment extends Fragment {
             RequestModel requestModel = new RequestModel();
             requestModel.setDescription("");
             requestModel.setWorkFlowTemplateID(workFlowTemplateID);
+            requestModel.setWorkFlowTemplateActionID(workFlowTemplateActionID);
             requestModel.setNextStepID(nextStepID);
-            requestModel.setActionValueModels(actionValueModelList);
+            requestModel.setActionValues(actionValueModelList);
             requestModel.setImagePaths(listPath);
 
             final KProgressHUD progressHUD = KProgressHUDManager.showProgressBar(getContext());

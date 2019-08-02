@@ -8,12 +8,18 @@ public class Connection {
     @SerializedName("nextStepID")
     @Expose
     private String nextStepID;
+
     @SerializedName("connectionID")
     @Expose
     private String connectionID;
+
     @SerializedName("connectionTypeName")
     @Expose
     private String connectionTypeName;
+
+    @SerializedName("nextStepTemplateActionID")
+    @Expose
+    private String nextStepTemplateActionID;
 
     public String getNextStepID() {
         return nextStepID;
@@ -37,6 +43,14 @@ public class Connection {
 
     public void setConnectionTypeName(String connectionTypeName) {
         this.connectionTypeName = connectionTypeName;
+    }
+
+    public String getNextStepTemplateActionID() {
+        return nextStepTemplateActionID;
+    }
+
+    public void setNextStepTemplateActionID(String nextStepTemplateActionID) {
+        this.nextStepTemplateActionID = nextStepTemplateActionID;
     }
 
 }

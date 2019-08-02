@@ -11,6 +11,7 @@ namespace Capstone.Service
         Task SendMail(string to, string subject, string message);
         string GenerateMessageSendConfirmCode(string username, string emailConfirmCode);
         string GenerateMessageApproveRequest(string userName, List<string> names, List<string> links);
+        string GenerateTestMessage();
     }
 
     public class EmailServicce : IEmailService
@@ -74,6 +75,19 @@ namespace Capstone.Service
             }
 
             body = body.Replace("{ListButton}", listButton);
+            return body;
+        }
+
+        public string GenerateTestMessage()
+        {
+            var currentDirectory = Path.Combine(Directory.GetCurrentDirectory());
+            var fullPath = currentDirectory + ".Service\\EmailTemplate\\Request.html";
+            string body = string.Empty;
+            using (StreamReader reader = new StreamReader(fullPath))
+            {
+                body = reader.ReadToEnd();
+            }
+
             return body;
         }
     }

@@ -45,14 +45,15 @@ namespace Capstone.Controllers
                 links.Add(button.Value.ToString());
             }
 
-            string message = _emailService.GenerateMessageApproveRequest("Kiet", names, links);
+            //string message = _emailService.GenerateMessageApproveRequest("Kiet", names, links);
+            string message = _emailService.GenerateTestMessage();
             try
             {
                 _emailService.SendMail("orionkaito@gmail.com", "Test", message);
             }
             catch (Exception e)
             {
-                return BadRequest("Wrong" + e.Message);
+                return BadRequest("Wrong " + e.Message);
             }
             return Ok(domain);
         }

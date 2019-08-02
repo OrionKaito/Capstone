@@ -13,7 +13,7 @@ namespace Capstone.Model
 
         public string InitiatorID { get; set; }
         [ForeignKey("InitiatorID")]
-        public virtual User User { get; set; }
+        public virtual User Initiator { get; set; }
 
         public Guid WorkFlowTemplateID { get; set; }
         [ForeignKey("WorkFlowTemplateID")]

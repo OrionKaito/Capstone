@@ -4,27 +4,35 @@ import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 public class RequestToHandle {
+
     @SerializedName("id")
     @Expose
     private String id;
+
     @SerializedName("description")
     @Expose
     private String description;
+
     @SerializedName("initiatorID")
     @Expose
     private String initiatorID;
+
     @SerializedName("initiatorName")
     @Expose
     private String initiatorName;
+
     @SerializedName("workFlowTemplateID")
     @Expose
     private String workFlowTemplateID;
+
     @SerializedName("workFlowTemplateName")
     @Expose
     private String workFlowTemplateName;
+
     @SerializedName("createDate")
     @Expose
     private String createDate;
+
     @SerializedName("requestActionID")
     @Expose
     private String requestActionID;
@@ -92,5 +100,4 @@ public class RequestToHandle {
     public void setRequestActionID(String requestActionID) {
         this.requestActionID = requestActionID;
     }
-
 }

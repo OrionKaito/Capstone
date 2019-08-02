@@ -52,18 +52,6 @@ public class DynamicWorkflowUtils {
         listView.requestLayout();
     }
 
-    public static void addListViewFooter(Context context, ListView listView){
-        View view = LayoutInflater.from(context).inflate(R.layout.footer_listview_progressbar, null);
-//        ProgressBar progressBar = view.findViewById(R.id.progress_bar);
-        listView.addFooterView(view);
-    }
-
-    public static void removeListViewFooter(Context context, ListView listView){
-        View view = LayoutInflater.from(context).inflate(R.layout.footer_listview_progressbar, null);
-//        ProgressBar progressBar = view.findViewById(R.id.progress_bar);
-        listView.removeFooterView(view);
-    }
-
     public static boolean accept(String imageExtension)
     {
         for (String extension : okFileExtensions)

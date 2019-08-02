@@ -12,6 +12,14 @@ public class RequestForm implements Serializable {
     @Expose
     private String workFlowName;
 
+    @SerializedName("workFlowTemplateActionID")
+    @Expose
+    private String workFlowTemplateActionID;
+
+    @SerializedName("workFlowTemplateActionName")
+    @Expose
+    private String workFlowTemplateActionName;
+
     @SerializedName("connections")
     @Expose
     private List<Connection> connections;
@@ -26,6 +34,22 @@ public class RequestForm implements Serializable {
 
     public void setWorkFlowName(String workFlowName) {
         this.workFlowName = workFlowName;
+    }
+
+    public String getWorkFlowTemplateActionID() {
+        return workFlowTemplateActionID;
+    }
+
+    public void setWorkFlowTemplateActionID(String workFlowTemplateActionID) {
+        this.workFlowTemplateActionID = workFlowTemplateActionID;
+    }
+
+    public String getWorkFlowTemplateActionName() {
+        return workFlowTemplateActionName;
+    }
+
+    public void setWorkFlowTemplateActionName(String workFlowTemplateActionName) {
+        this.workFlowTemplateActionName = workFlowTemplateActionName;
     }
 
     public List<Connection> getConnections() {

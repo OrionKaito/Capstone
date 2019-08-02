@@ -29,7 +29,7 @@
                 android:layout_marginRight="@dimen/dp5"
                 android:text="Workflow name"
                 android:textColor="@color/colortext"
-                android:textSize="@dimen/sp19"
+                android:textSize="@dimen/sp20"
                 android:textStyle="bold" />
 
             <TextView
@@ -37,22 +37,36 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:layout_marginLeft="@dimen/dp3"
+                android:layout_marginLeft="@dimen/dp5"
                 android:layout_marginRight="@dimen/dp5"
                 android:text="You recieve request from ActorName"
                 android:textColor="@color/colortext"
-                android:textSize="@dimen/sp19"
-                android:visibility="gone" />
+                android:textSize="@dimen/sp19" />
 
             <TextView
                 android:id="@+id/tv_complete"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/dp5"
                 android:layout_alignParentRight="true"
                 android:layout_marginRight="@dimen/dp30"
                 android:text="status"
                 android:textColor="@color/red"
-                android:textSize="@dimen/sp15" />
+                android:textSize="@dimen/sp18" />
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/tv_create_date"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginRight="@dimen/dp30"
+                    android:text="14/04/2019"
+                    android:textColor="@color/light_blue"
+                    android:textSize="@dimen/sp15" />
+            </RelativeLayout>
         </LinearLayout>
     </LinearLayout>
 

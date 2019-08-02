@@ -4,6 +4,11 @@ using System.Collections.Generic;
 
 namespace Capstone.ViewModel
 {
+    public class RequestPaginVM
+    {
+        public int TotalRecord { get; set; }
+        public IEnumerable<RequestVM> Requests { get; set; }
+    }
 
     public class RequestVM
     {
@@ -33,6 +38,8 @@ namespace Capstone.ViewModel
 
         //Request Action
         public Guid NextStepID { get; set; }
+
+        public Guid WorkFlowTemplateActionID { get; set; }
 
         //Request Value
         public IEnumerable<ActionValueVM> ActionValues { get; set; }
@@ -83,6 +90,10 @@ namespace Capstone.ViewModel
     {
         public string WorkFlowName { get; set; }
 
+        public string WorkFlowTemplateActionName { get; set; }
+
+        public Guid WorkFlowTemplateActionID { get; set; }
+
         public IEnumerable<ConnectionVM> Connections { get; set; }
 
         public ActionTypeVM ActionType { get; set; }
@@ -93,6 +104,10 @@ namespace Capstone.ViewModel
         public string InitiatorName { get; set; }
 
         public string WorkFlowTemplateName { get; set; }
+
+        public string WorkFlowTemplateActionName { get; set; }
+
+        public Guid WorkFlowTemplateActionID { get; set; }
 
         public RequestVM Request { get; set; }
 
@@ -131,18 +146,13 @@ namespace Capstone.ViewModel
 
         public string Status { get; set; }
 
-        public IEnumerable<RequestResultStaffActionVM> StaffResult { get; set; }
+        public IEnumerable<StaffRequestActionVM> StaffResult { get; set; }
     }
 
-    public class RequestResultStaffActionVM
+    public class MyRequestPaginVM
     {
-        public string FullName { get; set; }
-
-        public string UserName { get; set; }
-
-        public DateTime CreateDate { get; set; }
-
-        public string Status { get; set; }
+        public int TotalRecord { get; set; }
+        public IEnumerable<MyRequestVM> MyRequests { get; set; }
     }
 
     public class MyRequestVM

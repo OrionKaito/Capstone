@@ -6,24 +6,35 @@ import com.google.gson.annotations.SerializedName;
 import java.io.Serializable;
 
 public class WorkflowTemplate implements Serializable {
+
     @SerializedName("id")
     @Expose
     private String id;
+
     @SerializedName("ownerID")
     @Expose
     private String ownerID;
+
     @SerializedName("name")
     @Expose
     private String name;
+
     @SerializedName("description")
     @Expose
     private String description;
+
     @SerializedName("data")
     @Expose
     private String data;
+
     @SerializedName("permissionToUseID")
     @Expose
     private String permissionToUseID;
+
+    @SerializedName("createDate")
+    @Expose
+    private String createDate;
+
     @SerializedName("isEnabled")
     @Expose
     private Boolean isEnabled;
@@ -76,6 +87,14 @@ public class WorkflowTemplate implements Serializable {
         this.permissionToUseID = permissionToUseID;
     }
 
+    public String getCreateDate() {
+        return createDate;
+    }
+
+    public void setCreateDate(String createDate) {
+        this.createDate = createDate;
+    }
+
     public Boolean getIsEnabled() {
         return isEnabled;
     }
@@ -83,4 +102,5 @@ public class WorkflowTemplate implements Serializable {
     public void setIsEnabled(Boolean isEnabled) {
         this.isEnabled = isEnabled;
     }
+
 }
