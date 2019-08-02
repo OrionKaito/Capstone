@@ -40,44 +40,6 @@ namespace Capstone.Controllers
             _connectionTypeService = connectionTypeService;
         }
 
-        // GET: api/Workflows
-        [HttpGet]
-        public ActionResult<IEnumerable<WorkFlowTemplateVM>> GetWorkflowsTemplates()
-        {
-            try
-            {
-                List<WorkFlowTemplateVM> result = new List<WorkFlowTemplateVM>();
-                var workFlow = new WorkFlowTemplateVM();
-                var data = _workFlowService.GetAll();
-                foreach (var item in data)
-                {
-                    result.Add(_mapper.Map<WorkFlowTemplateVM>(item));
-                }
-                return Ok(result);
-            }
-            catch (Exception e)
-            {
-                return BadRequest(e.Message);
-            }
-        }
-
-        // GET: api/Workflows/5
-        [HttpGet("GetByID")]
-        public ActionResult<WorkFlowTemplateVM> GetWorkflowTemplate(Guid ID)
-        {
-            try
-            {
-                var data = _workFlowService.GetByID(ID);
-                if (data == null) return BadRequest(WebConstant.NotFound);
-                WorkFlowTemplateVM result = _mapper.Map<WorkFlowTemplateVM>(data);
-                return Ok(result);
-            }
-            catch (Exception e)
-            {
-                return BadRequest(e.Message);
-            }
-        }
-
         [HttpGet("GetWorkflowToUse")]
         public ActionResult<IEnumerable<WorkFlowTemplatePaginVM>> GetWorkflowToUse(int? numberOfPage, int? NumberOfRecord)
         {
@@ -100,6 +62,8 @@ namespace Capstone.Controllers
                         workFlowTemplates.Add(_mapper.Map<WorkFlowTemplateVM>(workflow));
                     }
                 }
+
+                workFlowTemplates.OrderByDescending(w => w.CreateDate);
 
                 WorkFlowTemplatePaginVM result = new WorkFlowTemplatePaginVM
                 {
@@ -133,6 +97,8 @@ namespace Capstone.Controllers
                         workFlowTemplates.Add(_mapper.Map<WorkFlowTemplateVM>(workflow));
                     }
                 }
+
+                workFlowTemplates.OrderByDescending(w => w.CreateDate);
 
                 return Ok(workFlowTemplates);
             }

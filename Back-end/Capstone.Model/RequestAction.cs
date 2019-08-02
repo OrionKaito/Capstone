@@ -17,11 +17,15 @@ namespace Capstone.Model
 
         public string ActorID { get; set; }
         [ForeignKey("ActorID")]
-        public virtual User User { get; set; }
+        public virtual User Actor { get; set; }
+
+        public Guid? WorkFlowTemplateActionID { get; set; }
+        [ForeignKey("WorkFlowTemplateActionID")]
+        public virtual WorkFlowTemplateAction WorkFlowTemplateAction { get; set; }
 
         public Guid? NextStepID { get; set; }
         [ForeignKey("NextStepID")]
-        public virtual WorkFlowTemplateAction WorkFlowTemplateAction { get; set; }
+        public virtual WorkFlowTemplateAction NextStep { get; set; }
 
         public bool IsDeleted { get; set; }
     }
