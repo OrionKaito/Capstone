@@ -47,7 +47,7 @@ openChangePass: any;
         this.toastr.success("Update your profile success!!!", "Success!");   
       },
       err=>{
-        this.toastr.error("Error: " + err.message + ". Please do it later!!", "Something wrong!");   
+        this.toastr.error("Error: " + err.error + ". Please do it later!!", "Something wrong!");   
       }
 
     )
@@ -65,7 +65,7 @@ openChangePass: any;
         };
       },
       err=>{
-        this.toastr.error("Error: " + err.message + ". Please try again!!", "Something wrong!");   
+        this.toastr.error("Error: " + err.error + ". Please try again!!", "Something wrong!");   
       }
     )
   }

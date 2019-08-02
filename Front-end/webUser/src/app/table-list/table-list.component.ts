@@ -80,7 +80,7 @@ export class TableListComponent implements OnInit {
         }
       },
       error => {
-        this.errorMessage = error.message;
+        this.errorMessage = error.error;
       });
   };
   AddOrEditWF(id: string) {

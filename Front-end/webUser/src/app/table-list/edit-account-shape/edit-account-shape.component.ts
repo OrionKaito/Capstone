@@ -1128,7 +1128,7 @@ export class EditAccountShapeComponent implements OnInit {
               this.router.navigate(['/manage-workflow']);
             }
           }, (err) => {
-            this.toastr.error("Lỗi: " + err.message, "Có lỗi xảy ra");
+            this.toastr.error("Lỗi: " + err.error, "Có lỗi xảy ra");
             console.log(err);
           });
       }

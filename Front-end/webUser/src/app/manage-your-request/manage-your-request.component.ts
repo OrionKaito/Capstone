@@ -77,7 +77,8 @@ export class ManageYourRequestComponent implements OnInit {
         }
       },
       error => {
-        this.errorMessage = error.message;
+        this.errorMessage = error.console.error();
+        ;
       });
   };
   SeeFullRequest(id: string) {

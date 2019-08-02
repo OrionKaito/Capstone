@@ -80,7 +80,7 @@ export class ManagePermissionComponent implements OnInit {
         }
       },
       error => {
-        this.errorMessage = error.message;
+        this.errorMessage = error.error;
       });
   };
   AddOrEditWF(id: string) {
