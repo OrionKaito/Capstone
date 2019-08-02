@@ -356,7 +356,7 @@ namespace Capstone.Controllers
                     MyRequests = requests.Skip((page - 1) * count).Take(count),
                 };
 
-                return Ok(requests);
+                return Ok(myRequestPaginVM);
             }
             catch (Exception e)
             {

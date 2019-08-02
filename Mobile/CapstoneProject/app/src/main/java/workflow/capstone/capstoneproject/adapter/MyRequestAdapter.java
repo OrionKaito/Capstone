@@ -27,6 +27,11 @@ public class MyRequestAdapter extends BaseAdapter {
         layoutInflater = LayoutInflater.from(mContext);
     }
 
+    public void AddListItemAdapter(List<MyRequest> listDataPlus) {
+        listData.addAll(listDataPlus);
+        this.notifyDataSetChanged();
+    }
+
     @Override
     public int getCount() {
         return listData.size();

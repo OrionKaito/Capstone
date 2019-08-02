@@ -1,19 +1,24 @@
 package workflow.capstone.capstoneproject.fragment;
 
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -22,20 +27,28 @@ import workflow.capstone.capstoneproject.activity.ProfileActivity;
 import workflow.capstone.capstoneproject.adapter.NotificationAdapter;
 import workflow.capstone.capstoneproject.entities.Profile;
 import workflow.capstone.capstoneproject.entities.UserNotification;
+import workflow.capstone.capstoneproject.entities.UserNotificationPaging;
 import workflow.capstone.capstoneproject.repository.CapstoneRepository;
 import workflow.capstone.capstoneproject.repository.CapstoneRepositoryImpl;
 import workflow.capstone.capstoneproject.utils.CallBackData;
 import workflow.capstone.capstoneproject.utils.ConstantDataManager;
 import workflow.capstone.capstoneproject.utils.DynamicWorkflowSharedPreferences;
+import workflow.capstone.capstoneproject.utils.DynamicWorkflowUtils;
 
 public class ListNotificationFragment extends Fragment {
 
     private CapstoneRepository capstoneRepository;
     private NotificationAdapter notificationAdapter;
-    private List<UserNotification> notificationList;
+    private List<UserNotification> notificationList = new ArrayList<>();
     private ListView listView;
-    private String token = null;
+    private String token;
     private CircleImageView imgAvatar;
+    private int numberOfPage = 1;
+    private boolean isLoading = false;
+    private boolean isNoNewData = false;
+    private MyHandler handler;
+    private View footerView;
+    private int totalRecord;
 
     public ListNotificationFragment() {
         // Required empty public constructor
@@ -47,9 +60,9 @@ public class ListNotificationFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_list_notification, container, false);
-        listView = view.findViewById(R.id.list_request_history);
-        imgAvatar = view.findViewById(R.id.img_avatar);
+        initView(view);
 
+        token = DynamicWorkflowSharedPreferences.getStoreJWT(getActivity(), ConstantDataManager.AUTHORIZATION_TOKEN);
         Profile profile = DynamicWorkflowSharedPreferences.getStoredData(getContext(), ConstantDataManager.PROFILE_KEY, ConstantDataManager.PROFILE_NAME);
         if (profile.getImagePath().isEmpty()) {
             Picasso.get()
@@ -70,23 +83,51 @@ public class ListNotificationFragment extends Fragment {
             }
         });
 
-        token = DynamicWorkflowSharedPreferences.getStoreJWT(getContext(), ConstantDataManager.AUTHORIZATION_TOKEN);
-        loadNotification();
+        notificationList.clear();
+        isNoNewData = false;
+        numberOfPage = 1;
+        //load notification when start app
+        loadNotification(1);
+
+        //load more notification
+        if (totalRecord > 10) {
+            loadMoreItems();
+        }
         return view;
     }
 
-    private void loadNotification() {
-        String token = DynamicWorkflowSharedPreferences.getStoreJWT(getActivity(), ConstantDataManager.AUTHORIZATION_TOKEN);
+    private void initView(View view) {
+        handler = new MyHandler();
+        listView = view.findViewById(R.id.list_request_history);
+        imgAvatar = view.findViewById(R.id.img_avatar);
+        LayoutInflater inflater = (LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        footerView = inflater.inflate(R.layout.footer_listview_progressbar, null);
+    }
+
+    private void loadNotification(final int page) {
         capstoneRepository = new CapstoneRepositoryImpl();
-        capstoneRepository.getNotification(token, new CallBackData<List<UserNotification>>() {
+        capstoneRepository.getNotification(token, page, ConstantDataManager.NUMBER_OF_RECORD, new CallBackData<UserNotificationPaging>() {
             @Override
-            public void onSuccess(List<UserNotification> userNotifications) {
-                notificationList = userNotifications;
-                if (getActivity() != null) {
-                    notificationAdapter = new NotificationAdapter(notificationList, getActivity(), true);
-                    listView.setAdapter(notificationAdapter);
+            public void onSuccess(UserNotificationPaging userNotificationPaging) {
+                totalRecord = userNotificationPaging.getTotalRecord();
+                if (userNotificationPaging.getUserNotifications().size() == 0) {
+                    isNoNewData = true;
+                    listView.removeFooterView(footerView);
+                } else if (page == 1) {
+                    listView.removeFooterView(footerView);
+                    notificationList = userNotificationPaging.getUserNotifications();
+                    if (getActivity() != null) {
+                        notificationAdapter = new NotificationAdapter(notificationList, getActivity());
+                        listView.setAdapter(notificationAdapter);
+                    }
+//                    DynamicWorkflowUtils.setListViewHeightBasedOnChildren(listView);
+                    onItemClick();
+                } else if (page != 1) {
+                    listView.removeFooterView(footerView);
+                    notificationAdapter.AddListItemAdapter(userNotificationPaging.getUserNotifications());
+//                    DynamicWorkflowUtils.setListViewHeightBasedOnChildren(listView);
+                    onItemClick();
                 }
-//                onItemClick(listView);
             }
 
             @Override
@@ -96,7 +137,63 @@ public class ListNotificationFragment extends Fragment {
         });
     }
 
-    private void onItemClick(final ListView listView) {
+    private void loadMoreItems() {
+        onItemClick();
+        listView.setOnScrollListener(new AbsListView.OnScrollListener() {
+            //scroll list view tới 1 vị trí nào đó
+            @Override
+            public void onScrollStateChanged(AbsListView view, int scrollState) {
+
+            }
+
+            //scroll list view
+            @Override
+            public void onScroll(AbsListView absListView, int firstItem, int visibleItem, int totalItem) {
+                //firstItem: item đầu tiên
+                //visibleItem: các item có thể nhìn thấy trong view này
+                //totalItem: tổng số lượng item trong listview
+                if (firstItem + visibleItem == totalItem && totalItem != 0 && isLoading == false && isNoNewData == false) {
+                    isLoading = true;
+                    Thread thread = new ThreadData();
+                    thread.start();
+                }
+            }
+        });
+    }
+
+    private class MyHandler extends Handler {
+        @Override
+        public void handleMessage(Message msg) {
+            switch (msg.what) {
+                case 0:
+                    listView.addFooterView(footerView);
+                    break;
+                case 1:
+                    loadNotification(++numberOfPage);
+                    isLoading = false;
+                    break;
+            }
+        }
+    }
+
+    private class ThreadData extends Thread {
+        @Override
+        public void run() {
+            handler.sendEmptyMessage(0);
+            try {
+                Thread.sleep(3000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
+            //liên kết giữa các thread với handler
+            Message message = handler.obtainMessage(1);
+            handler.sendMessage(message);
+            super.run();
+        }
+    }
+
+    private void onItemClick() {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {

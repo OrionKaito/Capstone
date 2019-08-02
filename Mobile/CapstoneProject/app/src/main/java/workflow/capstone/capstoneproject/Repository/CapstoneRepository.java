@@ -14,11 +14,14 @@ import workflow.capstone.capstoneproject.api.UpdateProfileModel;
 import workflow.capstone.capstoneproject.entities.HandleRequestForm;
 import workflow.capstone.capstoneproject.entities.Login;
 import workflow.capstone.capstoneproject.entities.MyRequest;
+import workflow.capstone.capstoneproject.entities.MyRequestPaging;
 import workflow.capstone.capstoneproject.entities.Profile;
 import workflow.capstone.capstoneproject.entities.RequestForm;
 import workflow.capstone.capstoneproject.entities.RequestResult;
 import workflow.capstone.capstoneproject.entities.RequestToHandle;
+import workflow.capstone.capstoneproject.entities.RequestToHandlePaging;
 import workflow.capstone.capstoneproject.entities.UserNotification;
+import workflow.capstone.capstoneproject.entities.UserNotificationPaging;
 import workflow.capstone.capstoneproject.entities.WorkflowTemplatePaging;
 import workflow.capstone.capstoneproject.utils.CallBackData;
 
@@ -47,13 +50,11 @@ public interface CapstoneRepository {
 
     void getNumberOfNotification(String token, CallBackData<String> callBackData);
 
-    void getNotification(String token, CallBackData<List<UserNotification>> callBackData);
+    void getNotification(String token, int numberOfPage, int numberOfRecord, CallBackData<UserNotificationPaging> callBackData);
 
-    void getRequestsToHandleByPermission(String token, CallBackData<List<RequestToHandle>> callBackData);
+    void getRequestsToHandleByPermission(String token, int numberOfPage, int numberOfRecord, CallBackData<RequestToHandlePaging> callBackData);
 
-    void getNotificationByType(String token, int notificationType, CallBackData<List<UserNotification>> callBackData);
-
-    void getMyRequest(String token, CallBackData<List<MyRequest>> callBackData);
+    void getMyRequest(String token, int numberOfPage, int numberOfRecord, CallBackData<MyRequestPaging> callBackData);
 
     void postRequest(String token, RequestModel requestModel, CallBackData<String> callBackData);
 
@@ -66,8 +67,6 @@ public interface CapstoneRepository {
     void getRequestForm(String token, String workflowTemplateID, CallBackData<RequestForm> callBackData);
 
     void getRequestHandleForm(String token, String requestActionID, CallBackData<HandleRequestForm> callBackData);
-
-    void getAccountByUserID(String ID, CallBackData<List<Profile>> callBackData);
 
     void approveRequest(String token, RequestApproveModel requestApproveModel, CallBackData<String> callBackData);
 
