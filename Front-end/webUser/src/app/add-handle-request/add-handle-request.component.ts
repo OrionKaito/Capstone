@@ -36,6 +36,11 @@ export class AddHandleRequestComponent implements OnInit {
   actionValues: any = [];
   workFlowTemplateID: any;
   gloUrl = GlobalVar.url;
+
+  
+  
+
+
   // formDataEdit = new AddGroupIdName();
   constructor( @Inject(MAT_DIALOG_DATA) public data,
     public dialogRef: MatDialogRef<AddHandleRequestComponent>, private toastr: ToastrService,
@@ -72,7 +77,7 @@ export class AddHandleRequestComponent implements OnInit {
 
 
   ngOnInit() {
-    debugger;
+
     console.log("vo day");
     this.workFlowTemplateID = this.data;
     console.log(this.data);
@@ -104,5 +109,9 @@ export class AddHandleRequestComponent implements OnInit {
     this.cmt = "";
   }
 
+
+
+ 
+  
 
 }
