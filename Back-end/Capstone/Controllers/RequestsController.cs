@@ -328,10 +328,13 @@ namespace Capstone.Controllers
         }
 
         [HttpGet("GetMyRequests")]
-        public ActionResult<IEnumerable<MyRequestVM>> GetMyRequests()
+        public ActionResult<IEnumerable<MyRequestPaginVM>> GetMyRequests(int? numberOfPage, int? NumberOfRecord)
         {
             try
             {
+                var page = numberOfPage ?? 1;
+                var count = NumberOfRecord ?? WebConstant.DefaultPageRecordCount;
+
                 var userID = HttpContext.User.Claims.FirstOrDefault(u => u.Type == ClaimTypes.NameIdentifier).Value;
 
                 var requests = _requestService.GetByUserID(userID).Select(r => new MyRequestVM
@@ -347,6 +350,12 @@ namespace Capstone.Controllers
                     IsDeleted = r.IsDeleted,
                 }).OrderByDescending(r => r.CreateDate);
 
+                MyRequestPaginVM myRequestPaginVM = new MyRequestPaginVM
+                {
+                    TotalRecord = requests.Count(),
+                    MyRequests = requests.Skip((page - 1) * count).Take(count),
+                };
+
                 return Ok(requests);
             }
             catch (Exception e)
@@ -356,7 +365,7 @@ namespace Capstone.Controllers
         }
 
         [HttpGet("GetRequestResult")]
-        public ActionResult<RequestResultVM> GetRequestResult(Guid requestActionID, Guid? userNotificationID)
+        public ActionResult<RequestResultVM> GetRequestResult(Guid requestActionID)
         {
             try
             {
@@ -365,16 +374,6 @@ namespace Capstone.Controllers
                 var request = _requestService.GetByID(requestAction.RequestID);
 
                 if (request == null) return BadRequest("RequestAction" + WebConstant.NotFound);
-
-                //Set lại trạng thái isRead của userNotification khi user click vào 
-                if (userNotificationID != null)
-                {
-                    var userNotification = _userNotificationService.GetByID(userNotificationID.GetValueOrDefault());
-
-                    if (userNotification == null) return BadRequest("UserNotification" + WebConstant.NotFound);
-                    userNotification.IsRead = true;
-                    _userNotificationService.Save();
-                }
 
                 var workflow = _workFlowTemplateService.GetByID(request.WorkFlowTemplateID);
 
@@ -442,7 +441,7 @@ namespace Capstone.Controllers
                 //Lấy form động
                 var actionType = _actionTypeService.GetByID(startActionTemplate.ActionTypeID.GetValueOrDefault());
 
-                //Lấy các connection để thiện các bước tiếp theo bằng button
+                //Lấy các connection để thể hiện các bước tiếp theo bằng button
                 var workFlowTemplateActionConnection = _workFlowTemplateActionConnectionService
                     .GetByFromWorkflowTemplateActionID(startActionTemplate.ID);
 
@@ -461,6 +460,8 @@ namespace Capstone.Controllers
                         ConnectionID = _connectionTypeService
                         .GetByID(item.ConnectionTypeID)
                         .ID
+
+
                     });
                 }
 
@@ -468,6 +469,7 @@ namespace Capstone.Controllers
                 {
                     WorkFlowName = _workFlowTemplateService.GetByID(workFlowTemplateID).Name,
                     WorkFlowTemplateActionName = startActionTemplate.Name,
+                    WorkFlowTemplateActionID = startActionTemplate.ID,
                     Connections = connections,
                     ActionType = _mapper.Map<ActionTypeVM>(actionType)
                 };
@@ -481,8 +483,10 @@ namespace Capstone.Controllers
         }
 
         [HttpGet("GetRequestsToHandleByPermission")]
-        public ActionResult<IEnumerable<RequestVM>> GetRequestsToHandleByPermission()
+        public ActionResult<IEnumerable<RequestPaginVM>> GetRequestsToHandleByPermission(int? numberOfPage, int? NumberOfRecord)
         {
+            var page = numberOfPage ?? 1;
+            var count = NumberOfRecord ?? WebConstant.DefaultPageRecordCount;
             //Lấy các permission của user
             var userID = HttpContext.User.Claims.FirstOrDefault(u => u.Type == ClaimTypes.NameIdentifier).Value;
             var permissions = _permissionService.GetByUserID(userID);
@@ -509,7 +513,13 @@ namespace Capstone.Controllers
                 return Ok(WebConstant.NoRequestYet);
             }
 
-            return Ok(requests);
+            RequestPaginVM requestPaginVM = new RequestPaginVM
+            {
+                TotalRecord = requests.Count(),
+                Requests = requests.Skip((page - 1) * count).Take(count),
+            };
+
+            return Ok(requestPaginVM);
         }
 
         [HttpGet("GetRequestHandleForm")]
@@ -525,7 +535,7 @@ namespace Capstone.Controllers
                 var startActionTemplate = _workFlowTemplateActionService.GetStartByWorkFlowID(request.WorkFlowTemplateID);
                 var userAction = _requestActionService.GetStartAction(startActionTemplate.ID, request.ID);
 
-                //Lấy file
+                //Lấy file của user
                 var requestFiles = _requestFileService.GetByRequestActionID(userAction.ID).Select(r => new RequestFileVM
                 {
                     ID = r.ID,
@@ -596,8 +606,6 @@ namespace Capstone.Controllers
                     {
                         NextStepID = connection.ToWorkFlowTemplateActionID,
 
-                        NextStepTemplateActionID = connection.ToWorkFlowTemplateAction.ID,
-
                         ConnectionTypeName = connection.ConnectionType.Name,
 
                         ConnectionID = connection.ConnectionType.ID
@@ -608,6 +616,7 @@ namespace Capstone.Controllers
                 {
                     InitiatorName = request.Initiator.FullName,
                     WorkFlowTemplateName = request.WorkFlowTemplate.Name,
+                    WorkFlowTemplateActionID = workFlowTemplateAction.ID,
                     WorkFlowTemplateActionName = workFlowTemplateAction.Name,
                     Connections = connections,
                     ActionType = _mapper.Map<ActionTypeVM>(actionType),

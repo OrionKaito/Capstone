@@ -55,6 +55,8 @@ export class AddHandleRequestComponent implements OnInit {
     this.loadStaffAcountService.sendReqHandle(mdSendReq).toPromise().then(data =>{
       this.toastr.success('Success! ' , '' );
       this.dialogRef.close();
+    },err =>{
+      this.toastr.error(err.error);
     }
     )
 
@@ -90,6 +92,8 @@ export class AddHandleRequestComponent implements OnInit {
       this.requestActionHandleValue = this.saveData.userRequestAction.requestValues;
       this.cmtHandle = this.saveData.staffRequestActions;
 
+    },err =>{
+      this.toastr.error(err.error);
     })
 
   }

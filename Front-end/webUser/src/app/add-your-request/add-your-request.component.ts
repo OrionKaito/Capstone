@@ -21,6 +21,8 @@ export class AddYourRequestComponent implements OnInit {
   ngOnInit() {
     this.loadStaffAcountService.getYourRequest(this.data).toPromise().then(res=>{
       this.yourRequest = res;
+    },err =>{
+      this.toastr.error(err.error);
     })
   }
 

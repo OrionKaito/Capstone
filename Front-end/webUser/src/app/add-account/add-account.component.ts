@@ -22,7 +22,9 @@ export class AddAccountComponent implements OnInit {
   constructor(
     @Inject(MAT_DIALOG_DATA) public data,
     public dialogRef: MatDialogRef<AddAccountComponent>,
-    private router: Router, private loadStaffAcountService: LoadStaffAcountService, private LoginService: LoginService, private toastr: ToastrService) { }
+    private router: Router,
+    private loadStaffAcountService: LoadStaffAcountService,
+    private LoginService: LoginService, private toastr: ToastrService) { }
   permissionList: any = [];
 
   groupList: any = [];
@@ -36,57 +38,67 @@ export class AddAccountComponent implements OnInit {
       this.permissionList = data;
       if (!this.createAcc) {
         this.loadStaffAcountService.loadWFByID(this.data).toPromise().then(data => {
-  
+
           this.recevieData = data;
           this.formData.name = this.recevieData.name;
           this.formData.id = this.recevieData.id;
           this.formData.data = this.recevieData.data;
           this.formData.description = this.recevieData.description;
-        //  this.formData.description = "Ádasd";
-       
+          //  this.formData.description = "Ádasd";
+
           this.formData.permissionToUseID = this.recevieData.permissionToUseID;
           console.log(this.formData);
+        }, err =>{
+          this.toastr.error(err.error);
         })
       }
+    },err =>{
+      this.toastr.error(err.error);
     })
-   
+
 
 
 
   }
   onSubmit() {
-
-    if(this.createAcc){
-    this.LoginService.addNewWF(this.formData).toPromise().then(
-      resp => {
-        if (resp != "") {
-          debugger;
-          this.toastr.success('Success! ', '');
-          this.dialogRef.close();
-        }
-        else {
-          //this.errorMessage = resp.toString();    
-        }
-      }, (err) =>{
-        this.toastr.error("Please try it again!", "Something wrong");
-      });
-
+    if (this.formData.name == "" ||
+      this.formData.description == "" ||
+      this.formData.permissionToUseID == "" ||
+      this.formData.permissionToUseID == "0") {
+      this.toastr.error("Please fill all fields!");
     } else {
-      this.LoginService.editWF(this.formData).toPromise().then(
-        resp => {
-          if (resp != "") {
-            debugger;
-            this.toastr.success('Success! ', '');
-            this.dialogRef.close();
-          }
-          else {
-            //this.errorMessage = resp.toString();    
-          }
-        }, (err) =>{
-          this.toastr.error("Please try it again!", "Something wrong");
-        });
-    }
+      if (this.createAcc) {
+        this.LoginService.addNewWF(this.formData).toPromise().then(
+          resp => {
+            if (resp != "") {
+              debugger;
+              this.toastr.success('Success! ', '');
+              this.dialogRef.close();
+            }
+            else {
+              //this.errorMessage = resp.toString();    
+            }
+          }, (err) => {
+            this.toastr.error("Please try it again!", "Something wrong");
+          });
 
+      } else {
+        this.LoginService.editWF(this.formData).toPromise().then(
+          resp => {
+            if (resp != "") {
+              debugger;
+              this.toastr.success('Success! ', '');
+              this.dialogRef.close();
+            }
+            else {
+              //this.errorMessage = resp.toString();    
+            }
+          }, (err) => {
+            this.toastr.error("Please try it again!", "Something wrong");
+          });
+      }
+
+    }
   }
 
 }

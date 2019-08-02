@@ -35,9 +35,8 @@ openChangePass: any;
         
         // this.userDetail.dateOfBirth = Date.parse(this.userDetail.dateOfBirth) ;
         // console.log(this.userDetail.dateOfBirth);
-      },
-      err => {
-        console.log(err);
+      },err =>{
+        this.toastr.error(err.error);
       }
     )
   }
@@ -47,7 +46,7 @@ openChangePass: any;
         this.toastr.success("Update your profile success!!!", "Success!");   
       },
       err=>{
-        this.toastr.error("Error: " + err.message + ". Please do it later!!", "Something wrong!");   
+        this.toastr.error("Error: " + err.error + ". Please do it later!!", "Something wrong!");   
       }
 
     )
@@ -65,7 +64,7 @@ openChangePass: any;
         };
       },
       err=>{
-        this.toastr.error("Error: " + err.message + ". Please try again!!", "Something wrong!");   
+        this.toastr.error("Error: " + err.error + ". Please try again!!", "Something wrong!");   
       }
     )
   }

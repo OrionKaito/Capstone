@@ -63,9 +63,13 @@ export class AddManagePerGrComponent implements OnInit {
           listPerNow.push({ id: element.permissionID, name: element.permissionName});
         });
         this.formData.permissionIDs = listPerNow;
+      },err =>{
+        this.toastr.error(err.error);
       })
 
 
+    },err =>{
+      this.toastr.error(err.error);
     })
 
     // debugger;
@@ -110,7 +114,7 @@ export class AddManagePerGrComponent implements OnInit {
           this.toastr.success("Success");
           this.dialogRef.close()
         }, err =>{
-          this.toastr.error(err.message, "Some thing wrong" );
+          this.toastr.error(err.error, "Some thing wrong" );
         });
 
 

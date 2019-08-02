@@ -37,63 +37,6 @@ namespace Capstone.Controllers
             _workFlowTemplateService = workFlowTemplateService;
         }
 
-        // POST: api/UserNotifications
-        [HttpPost]
-        public ActionResult PostUserNotification(UserNotificationCM model)
-        {
-            if (!ModelState.IsValid) return BadRequest(ModelState);
-
-            try
-            {
-                UserNotification userNotification = new UserNotification();
-                userNotification = _mapper.Map<UserNotification>(model);
-                _userNotificationService.Create(userNotification);
-                return StatusCode(201, userNotification.ID);
-            }
-            catch (Exception e)
-            {
-                return BadRequest(e.Message);
-            }
-        }
-
-        // GET: api/UserNotifications
-        [HttpGet]
-        public ActionResult<IEnumerable<UserNotificationVM>> GetUserNotifications()
-        {
-            try
-            {
-                List<UserNotificationVM> result = new List<UserNotificationVM>();
-                var data = _userNotificationService.GetAll();
-                foreach (var item in data)
-                {
-                    result.Add(_mapper.Map<UserNotificationVM>(item));
-                }
-                return Ok(result);
-            }
-            catch (Exception e)
-            {
-                return BadRequest(e.Message);
-            }
-        }
-
-        // GET: api/UserNotifications/5
-        [HttpGet("GetByID")]
-        public ActionResult<UserNotificationVM> GetUserNotification(Guid ID)
-        {
-            try
-            {
-                var rs = _userNotificationService.GetByID(ID);
-                if (rs == null) return NotFound(WebConstant.NotFound);
-
-                UserNotificationVM result = _mapper.Map<UserNotificationVM>(rs);
-                return Ok(result);
-            }
-            catch (Exception e)
-            {
-                return BadRequest(e.Message);
-            }
-        }
-
         // GET: api/UserNotifications
         //[HttpGet("GetNumberOfNotification")]
         //public ActionResult<int> GetNumberOfNotification(NotificationEnum notificationType)
@@ -267,25 +210,28 @@ namespace Capstone.Controllers
         }
 
         [HttpGet("GetNotificationByUser")]
-        public ActionResult GetNotificationByUser()
+        public ActionResult<IEnumerable<UserNotificationPaginVM>> GetNotificationByUser(int? numberOfPage, int? NumberOfRecord)
         {
+            var page = numberOfPage ?? 1;
+            var count = NumberOfRecord ?? WebConstant.DefaultPageRecordCount;
+
             var currentUser = HttpContext.User;
             var userID = currentUser.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier).Value;
 
             var userInDB = _userManager.FindByIdAsync(userID).Result;
             if (userInDB == null) return BadRequest(WebConstant.UserNotExist);
 
-            var notification = _userNotificationService.GetByUserID(userID);
+            var userNotification = _userNotificationService.GetByUserID(userID);
 
-            if (notification == null)
+            if (userNotification == null)
             {
                 return Ok(WebConstant.NoNotificationYet);
             }
 
-            var data = new List<NotificationViewModel>();
+            var data = new List<UserNotificationVM>();
             //var listUserInRequest = _requestService.GetByUserID(userID);
 
-            foreach (var item in notification)
+            foreach (var item in userNotification)
             {
                 var notificationInDb = _notificationService.GetByID(item.NotificationID);
                 var requestAction = _requestActionService.GetByID(notificationInDb.EventID);
@@ -293,11 +239,11 @@ namespace Capstone.Controllers
 
                 if (notificationInDb.NotificationType == NotificationEnum.ReceivedRequest)
                 {
-                    var result = new NotificationViewModel
+                    var result = new UserNotificationVM
                     {
-                        WorkflowName = _workFlowTemplateService.GetByID(request.WorkFlowTemplateID).Name,
+                        WorkflowName = request.WorkFlowTemplate.Name,
                         UserNotificationID = item.ID,
-                        ActorName = _userManager.FindByIdAsync(request.InitiatorID).Result.FullName,
+                        ActorName = request.Initiator.FullName,
                         EventID = notificationInDb.EventID,
                         Message = WebConstant.ReceivedRequestMessage,
                         NotificationType = notificationInDb.NotificationType,
@@ -310,11 +256,11 @@ namespace Capstone.Controllers
                 }
                 else if (notificationInDb.NotificationType == NotificationEnum.CompletedRequest)
                 {
-                    var result = new NotificationViewModel
+                    var result = new UserNotificationVM
                     {
-                        WorkflowName = _workFlowTemplateService.GetByID(request.WorkFlowTemplateID).Name,
+                        WorkflowName = request.WorkFlowTemplate.Name,
                         UserNotificationID = item.ID,
-                        ActorName = _userManager.FindByIdAsync(request.InitiatorID).Result.FullName,
+                        ActorName = request.Initiator.FullName,
                         EventID = notificationInDb.EventID,
                         Message = WebConstant.CompletedRequestMessage,
                         NotificationType = notificationInDb.NotificationType,
@@ -339,28 +285,13 @@ namespace Capstone.Controllers
             }
             _notificationService.Save();
 
-            return Ok(data);
-        }
-
-        // PUT: api/UserNotifications/5
-        [HttpPut]
-        public IActionResult PutUserNotification(UserNotificationUM model)
-        {
-            if (!ModelState.IsValid) return BadRequest(ModelState);
-
-            try
+            UserNotificationPaginVM userNotificationPaginVM = new UserNotificationPaginVM
             {
-                var userNotificationInDb = _userNotificationService.GetByID(model.ID);
-                if (userNotificationInDb == null) return NotFound(WebConstant.NotFound);
+                TotalRecord = data.Count(),
+                UserNotifications = data.Skip((page - 1) * count).Take(count),
+            };
 
-                _mapper.Map(model, userNotificationInDb);
-                _userNotificationService.Save();
-                return Ok(WebConstant.Success);
-            }
-            catch (Exception e)
-            {
-                return BadRequest(e.Message);
-            }
+            return Ok(userNotificationPaginVM);
         }
 
         // DELETE: api/UserNotifications/5
