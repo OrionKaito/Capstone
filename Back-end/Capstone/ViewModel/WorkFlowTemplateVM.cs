@@ -6,7 +6,7 @@ namespace Capstone.ViewModel
     public class WorkFlowTemplatePaginVM
     {
         public int TotalRecord { get; set; }
-        public IEnumerable<WorkFlowTemplateVM> workFlowTemplates { get; set; }
+        public IEnumerable<WorkFlowTemplateVM> WorkFlowTemplates { get; set; }
     }
 
     public class WorkFlowTemplateVM
