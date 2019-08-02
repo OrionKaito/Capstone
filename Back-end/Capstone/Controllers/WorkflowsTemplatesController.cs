@@ -40,6 +40,23 @@ namespace Capstone.Controllers
             _connectionTypeService = connectionTypeService;
         }
 
+        // GET: api/Workflows/5
+        [HttpGet("GetByID")]
+        public ActionResult<WorkFlowTemplateVM> GetWorkflowTemplate(Guid ID)
+        {
+            try
+            {
+                var data = _workFlowService.GetByID(ID);
+                if (data == null) return BadRequest(WebConstant.NotFound);
+                WorkFlowTemplateVM result = _mapper.Map<WorkFlowTemplateVM>(data);
+                return Ok(result);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
+
         [HttpGet("GetWorkflowToUse")]
         public ActionResult<IEnumerable<WorkFlowTemplatePaginVM>> GetWorkflowToUse(int? numberOfPage, int? NumberOfRecord)
         {
