@@ -15,10 +15,12 @@ namespace Capstone.Controllers
     public class ValuesController : ControllerBase
     {
         private readonly IEmailService _emailService;
+        private readonly IRequestValueService _requestValueService;
 
-        public ValuesController(IEmailService emailService)
+        public ValuesController(IEmailService emailService, IRequestValueService requestValueService)
         {
             _emailService = emailService;
+            _requestValueService = requestValueService;
         }
 
         [HttpGet("Test")]
@@ -49,7 +51,42 @@ namespace Capstone.Controllers
             string message = _emailService.GenerateTestMessage();
             try
             {
-                _emailService.SendMail("orionkaito@gmail.com", "Test", message);
+                _emailService.SendMail("kevinz2014st@gmail.com", "Test", message);
+            }
+            catch (Exception e)
+            {
+                return BadRequest("Wrong " + e.Message);
+            }
+            return Ok(domain);
+        }
+
+        [HttpGet("TestNew")]
+        public ActionResult TestNew()
+        {
+            var requestValue = _requestValueService.GetByRequestActionID(new Guid("e80dcf4a-da7d-4cfa-6b29-08d71742fd05"));
+
+            Dictionary<string, string> dynamicform = new Dictionary<string, string>();
+
+            foreach (var item in requestValue)
+            {
+                dynamicform.Add(item.Key, item.Value);
+            }
+
+            Dictionary<string, string> listButton = new Dictionary<string, string>();
+            listButton.Add("https://www.google.com/", "Go To Google");
+            listButton.Add("https://www.facebook.com/", "Go To Facebook");
+
+            //Uri uriAddress = new Uri(UriPartial.Authority.ToString());
+            //Console.WriteLine(uriAddress.Fragment);
+            var domain = $"{Request.Scheme}://{Request.Host}{Request.PathBase}";
+            
+            
+
+            //string message = _emailService.GenerateMessageApproveRequest("Kiet", names, links);
+            string message = _emailService.GenerateMessageTest("kevinz2014st@gmail.com","locnt","Quy trình nghỉ học","Phòng đào tạo duyệt", dynamicform, listButton);
+            try
+            {
+                _emailService.SendMail("kevinz2014st@gmail.com", "Test", message);
             }
             catch (Exception e)
             {
