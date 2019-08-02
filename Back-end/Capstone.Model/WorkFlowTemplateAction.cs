@@ -18,7 +18,7 @@ namespace Capstone.Model
         [ForeignKey("WorkFlowTemplateID")]
         public virtual WorkFlowTemplate WorkFlowTemplate { get; set; }
 
-        public Guid ActionTypeID { get; set; }
+        public Guid? ActionTypeID { get; set; }
         [ForeignKey("ActionTypeID")]
         public virtual ActionType ActionType { get; set; }
 

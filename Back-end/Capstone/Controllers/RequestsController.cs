@@ -440,7 +440,7 @@ namespace Capstone.Controllers
                 if (startActionTemplate == null) return BadRequest(WebConstant.NotFound);
 
                 //Lấy form động
-                var actionType = _actionTypeService.GetByID(startActionTemplate.ActionTypeID);
+                var actionType = _actionTypeService.GetByID(startActionTemplate.ActionTypeID.GetValueOrDefault());
 
                 //Lấy các connection để thiện các bước tiếp theo bằng button
                 var workFlowTemplateActionConnection = _workFlowTemplateActionConnectionService
