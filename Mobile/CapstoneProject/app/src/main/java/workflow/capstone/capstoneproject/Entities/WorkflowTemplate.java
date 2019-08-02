@@ -31,6 +31,10 @@ public class WorkflowTemplate implements Serializable {
     @Expose
     private String permissionToUseID;
 
+    @SerializedName("createDate")
+    @Expose
+    private String createDate;
+
     @SerializedName("isEnabled")
     @Expose
     private Boolean isEnabled;
@@ -83,6 +87,14 @@ public class WorkflowTemplate implements Serializable {
         this.permissionToUseID = permissionToUseID;
     }
 
+    public String getCreateDate() {
+        return createDate;
+    }
+
+    public void setCreateDate(String createDate) {
+        this.createDate = createDate;
+    }
+
     public Boolean getIsEnabled() {
         return isEnabled;
     }
@@ -90,4 +102,5 @@ public class WorkflowTemplate implements Serializable {
     public void setIsEnabled(Boolean isEnabled) {
         this.isEnabled = isEnabled;
     }
+
 }

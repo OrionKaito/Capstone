@@ -64,6 +64,7 @@ public class WorkflowFragment extends Fragment {
     private String token;
     private MyHandler handler;
     private View footerView;
+    private int totalRecord;
 
     public WorkflowFragment() {
         // Required empty public constructor
@@ -116,13 +117,15 @@ public class WorkflowFragment extends Fragment {
         });
 
         workflowList.clear();
-        isNoNewData = false ;
+        isNoNewData = false;
         numberOfPage = 1;
         //load workflow when start app
         loadWorkflow(numberOfPage);
 
         //load more workflow
-        loadMoreItems();
+        if (totalRecord > 10) {
+            loadMoreItems();
+        }
 
         //swipe to refresh list workflow
         swipeRefresh(view);
@@ -148,6 +151,7 @@ public class WorkflowFragment extends Fragment {
         capstoneRepository.getWorkflow(token, page, ConstantDataManager.NUMBER_OF_RECORD, new CallBackData<WorkflowTemplatePaging>() {
             @Override
             public void onSuccess(WorkflowTemplatePaging workflowTemplatePaging) {
+                totalRecord = workflowTemplatePaging.getTotalRecord();
                 if (workflowTemplatePaging.getWorkFlowTemplates().size() == 0) {
                     isNoNewData = true;
                     listView.removeFooterView(footerView);

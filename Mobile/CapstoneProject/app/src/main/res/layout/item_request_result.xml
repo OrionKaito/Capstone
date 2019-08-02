@@ -2,22 +2,9 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:layout_marginLeft="@dimen/dp10"
+    android:layout_marginRight="@dimen/dp10"
     android:orientation="vertical">
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center_vertical">
-
-        <TextView
-            android:id="@+id/tv_create_date"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/dp10"
-            android:layout_marginRight="@dimen/dp10"
-            android:textColor="@color/light_blue"
-            android:textSize="@dimen/sp13" />
-    </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -26,25 +13,18 @@
         android:orientation="vertical"
         android:layout_marginBottom="@dimen/dp5">
 
-        <View
-            android:id="@+id/line_view"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/dp3"
-            android:layout_marginTop="@dimen/dp5"
-            android:background="@color/gray"
-            android:visibility="gone" />
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center_vertical"
+            android:layout_marginLeft="@dimen/dp10"
             android:orientation="vertical">
 
             <TextView
                 android:id="@+id/tv_staff_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/dp10"
+                android:layout_marginLeft="@dimen/dp5"
                 android:layout_marginRight="@dimen/dp10"
                 android:textColor="@color/colortext"
                 android:textSize="@dimen/sp20"
@@ -54,7 +34,7 @@
                 android:id="@+id/tv_username"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/dp10"
+                android:layout_marginLeft="@dimen/dp5"
                 android:layout_marginTop="-5dp"
                 android:layout_marginRight="@dimen/dp10"
                 android:layout_marginBottom="@dimen/dp5"
@@ -62,17 +42,25 @@
                 android:textSize="@dimen/sp17" />
         </LinearLayout>
 
+        <TextView
+            android:id="@+id/tv_create_date"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/dp10"
+            android:layout_marginRight="@dimen/dp10"
+            android:textColor="@color/light_blue"
+            android:textSize="@dimen/sp15" />
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center_vertical"
             android:weightSum="10">
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/dp10"
-                android:layout_weight="7"
+                android:layout_weight="8"
                 android:text="Status:"
                 android:textColor="@color/colorAccent"
                 android:textSize="@dimen/sp18" />
@@ -81,18 +69,35 @@
                 android:id="@+id/tv_status"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="@dimen/dp5"
+                android:layout_marginLeft="@dimen/dp5"
                 android:layout_marginRight="@dimen/dp10"
-                android:layout_weight="3"
+                android:layout_weight="2"
                 android:textColor="@color/colortext"
                 android:textSize="@dimen/sp20" />
         </LinearLayout>
 
-        <View
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="@dimen/dp3"
-            android:layout_marginTop="@dimen/dp5"
-            android:background="@color/gray"
-            android:visibility="gone" />
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/dp10"
+                android:text="Comment:"
+                android:textColor="@color/colorAccent"
+                android:textSize="@dimen/sp18" />
+
+            <ListView
+                android:id="@+id/lv_comment"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="@dimen/dp15"
+                android:layout_marginLeft="@dimen/dp15"
+                android:textColor="@color/colortext"
+                android:textSize="@dimen/sp20" />
+        </LinearLayout>
+
     </LinearLayout>
 </LinearLayout>

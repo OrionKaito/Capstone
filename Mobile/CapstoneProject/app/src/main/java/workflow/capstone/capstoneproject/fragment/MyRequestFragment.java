@@ -24,14 +24,11 @@ import workflow.capstone.capstoneproject.activity.ProfileActivity;
 import workflow.capstone.capstoneproject.adapter.MyRequestAdapter;
 import workflow.capstone.capstoneproject.entities.MyRequest;
 import workflow.capstone.capstoneproject.entities.Profile;
-import workflow.capstone.capstoneproject.entities.RequestToHandle;
-import workflow.capstone.capstoneproject.entities.UserNotification;
 import workflow.capstone.capstoneproject.repository.CapstoneRepository;
 import workflow.capstone.capstoneproject.repository.CapstoneRepositoryImpl;
 import workflow.capstone.capstoneproject.utils.CallBackData;
 import workflow.capstone.capstoneproject.utils.ConstantDataManager;
 import workflow.capstone.capstoneproject.utils.DynamicWorkflowSharedPreferences;
-import workflow.capstone.capstoneproject.utils.DynamicWorkflowUtils;
 
 public class MyRequestFragment extends Fragment {
 
@@ -108,7 +105,7 @@ public class MyRequestFragment extends Fragment {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
-                Fragment fragment = new CompleteRequestFragment();
+                Fragment fragment = new DetailRequestFragment();
                 Bundle bundle = new Bundle();
                 MyRequest myRequest = (MyRequest) adapterView.getItemAtPosition(position);
                 String requestActionID = myRequest.getCurrentRequestActionID();

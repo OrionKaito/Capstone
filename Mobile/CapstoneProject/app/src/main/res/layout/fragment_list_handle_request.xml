@@ -34,14 +34,6 @@
             android:background="@drawable/ic_search_gray_24dp"
             android:visibility="gone" />
 
-        <!--<ImageView-->
-        <!--android:id="@+id/img_menu"-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:layout_alignParentRight="true"-->
-        <!--android:layout_centerVertical="true"-->
-        <!--android:layout_marginRight="@dimen/dp15"-->
-        <!--android:background="@drawable/ic_menu_grey" />-->
         <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
             android:id="@+id/img_avatar"
             android:layout_width="@dimen/dp32"

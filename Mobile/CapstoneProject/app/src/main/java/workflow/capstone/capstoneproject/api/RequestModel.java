@@ -19,9 +19,13 @@ public class RequestModel {
     @Expose
     private String nextStepID;
 
+    @SerializedName("workFlowTemplateActionID")
+    @Expose
+    private String workFlowTemplateActionID;
+
     @SerializedName("actionValues")
     @Expose
-    private List<ActionValueModel> actionValueModels;
+    private List<ActionValueModel> actionValues;
 
     @SerializedName("imagePaths")
     @Expose
@@ -51,12 +55,20 @@ public class RequestModel {
         this.nextStepID = nextStepID;
     }
 
-    public List<ActionValueModel> getActionValueModels() {
-        return actionValueModels;
+    public String getWorkFlowTemplateActionID() {
+        return workFlowTemplateActionID;
     }
 
-    public void setActionValueModels(List<ActionValueModel> actionValueModels) {
-        this.actionValueModels = actionValueModels;
+    public void setWorkFlowTemplateActionID(String workFlowTemplateActionID) {
+        this.workFlowTemplateActionID = workFlowTemplateActionID;
+    }
+
+    public List<ActionValueModel> getActionValues() {
+        return actionValues;
+    }
+
+    public void setActionValues(List<ActionValueModel> actionValues) {
+        this.actionValues = actionValues;
     }
 
     public List<String> getImagePaths() {
@@ -66,4 +78,5 @@ public class RequestModel {
     public void setImagePaths(List<String> imagePaths) {
         this.imagePaths = imagePaths;
     }
+
 }
