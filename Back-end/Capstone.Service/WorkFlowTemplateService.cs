@@ -10,7 +10,8 @@ namespace Capstone.Service
     public interface IWorkFlowTemplateService
     {
         IEnumerable<WorkFlowTemplate> GetAll();
-        IEnumerable<WorkFlowTemplate> GetByPermissionToUse(Guid ID);
+        IEnumerable<WorkFlowTemplate> GetByPermissionToUse(Guid permissionID);
+        IEnumerable<WorkFlowTemplate> SearchByNameOnPermissionToUse(string search, Guid permissionID);
         WorkFlowTemplate GetByID(Guid ID);
         WorkFlowTemplate GetByName(string name);
         void Create(WorkFlowTemplate workflow);
@@ -54,9 +55,14 @@ namespace Capstone.Service
             return _workFlowTemplateRepository.GetByName(name);
         }
 
-        public IEnumerable<WorkFlowTemplate> GetByPermissionToUse(Guid ID)
+        public IEnumerable<WorkFlowTemplate> GetByPermissionToUse(Guid permissionID)
         {
-            return _workFlowTemplateRepository.GetByPermissionToUse(ID).OrderByDescending(w => w.CreateDate);
+            return _workFlowTemplateRepository.GetByPermissionToUse(permissionID).OrderByDescending(w => w.CreateDate);
+        }
+
+        public IEnumerable<WorkFlowTemplate> SearchByNameOnPermissionToUse(string search, Guid permissionID)
+        {
+            return _workFlowTemplateRepository.SearchByNameOnPermissionToUse(permissionID, search);
         }
 
         public void Save()
