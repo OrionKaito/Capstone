@@ -59,8 +59,6 @@ namespace Capstone.Controllers
                 var users = _userManager.Users
                     .ToListAsync()
                     .Result
-                    .Skip((page - 1) * count)
-                    .Take(count)
                     .Select(u => new RegistrationVM
                     {
                         ID = u.Id,
@@ -86,8 +84,8 @@ namespace Capstone.Controllers
 
                 var data = new RegistrationPaginVM
                 {
-                    TotalRecord = _userManager.Users.ToListAsync().Result.Count,
-                    Accounts = users,
+                    TotalRecord = _userManager.Users.ToListAsync().Result.Count(),
+                    Accounts = users.Skip((page - 1) * count).Take(count),
                 };
 
                 return Ok(data);

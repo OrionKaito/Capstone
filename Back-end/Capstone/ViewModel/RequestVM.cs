@@ -4,6 +4,11 @@ using System.Collections.Generic;
 
 namespace Capstone.ViewModel
 {
+    public class RequestPaginVM
+    {
+        public int TotalRecord { get; set; }
+        public IEnumerable<RequestVM> Requests { get; set; }
+    }
 
     public class RequestVM
     {
@@ -79,8 +84,6 @@ namespace Capstone.ViewModel
         public Guid ConnectionID { get; set; }
 
         public string ConnectionTypeName { get; set; }
-
-        public Guid NextStepTemplateActionID { get; set; }
     }
 
     public class RequestFormVM
@@ -88,6 +91,8 @@ namespace Capstone.ViewModel
         public string WorkFlowName { get; set; }
 
         public string WorkFlowTemplateActionName { get; set; }
+
+        public Guid WorkFlowTemplateActionID { get; set; }
 
         public IEnumerable<ConnectionVM> Connections { get; set; }
 
@@ -101,6 +106,8 @@ namespace Capstone.ViewModel
         public string WorkFlowTemplateName { get; set; }
 
         public string WorkFlowTemplateActionName { get; set; }
+
+        public Guid WorkFlowTemplateActionID { get; set; }
 
         public RequestVM Request { get; set; }
 
@@ -140,6 +147,12 @@ namespace Capstone.ViewModel
         public string Status { get; set; }
 
         public IEnumerable<StaffRequestActionVM> StaffResult { get; set; }
+    }
+
+    public class MyRequestPaginVM
+    {
+        public int TotalRecord { get; set; }
+        public IEnumerable<MyRequestVM> MyRequests { get; set; }
     }
 
     public class MyRequestVM

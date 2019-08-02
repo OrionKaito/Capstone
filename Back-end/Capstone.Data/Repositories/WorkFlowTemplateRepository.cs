@@ -22,11 +22,6 @@ namespace Capstone.Data.Repositories
             return DbContext.WorkFlowTemplates.Where(w => w.Name.Equals(name)).FirstOrDefault();
         }
 
-        //public IEnumerable<WorkFlowTemplate> GetByPermissionToEdit(Guid permissionID)
-        //{
-        //    return DbContext.WorkFlowTemplates.Where(w => w.PermissionToEditID == permissionID && w.IsDeleted == false);
-        //}
-
         public IEnumerable<WorkFlowTemplate> GetByPermissionToUse(Guid permissionID)
         {
             return DbContext.WorkFlowTemplates.Where(w => w.PermissionToUseID == permissionID && w.IsDeleted == false && w.IsEnabled == true);

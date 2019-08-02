@@ -145,25 +145,9 @@ namespace Capstone.Mappings
             CreateMap<RequestFile, RequestFileUM>();
             CreateMap<RequestFileUM, RequestFile>();
 
-            //Notification
-            CreateMap<Notification, NotificationVM>();
-            CreateMap<NotificationVM, Notification>();
-
-            CreateMap<Notification, NotificationCM>();
-            CreateMap<NotificationCM, Notification>();
-
-            CreateMap<Notification, NotificationUM>();
-            CreateMap<NotificationUM, Notification>();
-
             //UserNotification
             CreateMap<UserNotification, UserNotificationVM>();
             CreateMap<UserNotificationVM, UserNotification>();
-
-            CreateMap<UserNotification, UserNotificationCM>();
-            CreateMap<UserNotificationCM, UserNotification>();
-
-            CreateMap<UserNotification, UserNotificationUM>();
-            CreateMap<UserNotificationUM, UserNotification>();
 
             //ConnectionType
             CreateMap<ConnectionType, ConnectionTypeVM>();
