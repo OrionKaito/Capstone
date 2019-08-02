@@ -74,16 +74,6 @@ public class ListHandleRequestFragment extends Fragment {
             }
         });
 
-//        imgMenu = view.findViewById(R.id.img_menu);
-//        imgMenu.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Intent intent = new Intent(getActivity(), ProfileActivity.class);
-//                startActivity(intent);
-//                getActivity().overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
-//            }
-//        });
-
         loadNotifications();
         return view;
     }

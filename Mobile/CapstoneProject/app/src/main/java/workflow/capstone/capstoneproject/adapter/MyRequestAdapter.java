@@ -75,7 +75,7 @@ public class MyRequestAdapter extends BaseAdapter {
         if (myRequest.getIsCompleted()) {
             holder.tvComplete.setText("Completed!");
         } else {
-            holder.tvComplete.setText("Not Completed!");
+            holder.tvComplete.setText("Pending...");
         }
 
         return convertView;
