@@ -63,16 +63,16 @@ public interface DynamicWorkflowServices {
     Call<ResponseBody> getNumberNotification();
 
     @GET(ConfigApi.Api.GET_NOTIFICATION)
-    Call<ResponseBody> getNotification();
+    Call<ResponseBody> getNotification(@Query(value = "numberOfPage", encoded = true) Integer numberOfPage, @Query(value = "NumberOfRecord", encoded = true) Integer NumberOfRecord);
 
     @GET(ConfigApi.Api.GET_REQUESTS_TO_HANDLE_BY_PERMISSION)
-    Call<ResponseBody> getRequestsToHandleByPermission();
+    Call<ResponseBody> getRequestsToHandleByPermission(@Query(value = "numberOfPage", encoded = true) Integer numberOfPage, @Query(value = "NumberOfRecord", encoded = true) Integer NumberOfRecord);
 
     @GET(ConfigApi.Api.GET_NOTIFICATION_BY_TYPE)
     Call<ResponseBody> getNotificationByType(@Query(value = "notificationType", encoded = true) int notificationType);
 
     @GET(ConfigApi.Api.GET_MY_REQUEST)
-    Call<ResponseBody> getMyRequest();
+    Call<ResponseBody> getMyRequest(@Query(value = "numberOfPage", encoded = true) Integer numberOfPage, @Query(value = "NumberOfRecord", encoded = true) Integer NumberOfRecord);
 
     @Headers({"Content-Type:application/json"})
     @POST(ConfigApi.Api.POST_REQUEST)

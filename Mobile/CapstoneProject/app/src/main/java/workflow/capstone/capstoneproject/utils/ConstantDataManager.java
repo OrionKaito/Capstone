@@ -5,6 +5,7 @@ public class ConstantDataManager {
     public static final String AUTHORIZATION_TOKEN = "authorization_token";
     public static final String PROFILE_KEY = "profile_key";
     public static final String PROFILE_NAME = "profile_name";
+    public static final String NO_NEW_DATA = "no_new_data";
 
     public static int SPLASH_DISPLAY_LENGTH = 1500;
     public static final int PICK_FILE_REQUEST = 1;

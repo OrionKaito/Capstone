@@ -82,7 +82,7 @@ export class AddNewRequestComponent implements OnInit {
       console.log(this.listURL);
       this.dialogRef.close();
     }, (err) => {
-        this.toastr.error("Error:" + err.message, "Something wrong!" );
+        this.toastr.error("Error:" + err.error, "Something wrong!" );
       });
     
   }
@@ -139,6 +139,8 @@ export class AddNewRequestComponent implements OnInit {
       this.formKey = this.saveData.actionType.name;
       this.dynamicForm = JSON.parse(this.saveData.actionType.data);
       console.log(this.formKey);
+    },err =>{
+      this.toastr.error(err.error);
     })
 
   }

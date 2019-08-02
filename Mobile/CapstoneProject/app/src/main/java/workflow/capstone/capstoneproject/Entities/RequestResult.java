@@ -17,7 +17,7 @@ public class RequestResult {
 
     @SerializedName("staffResult")
     @Expose
-    private List<StaffResult> staffResult = null;
+    private List<StaffResult> staffResult;
 
     public String getWorkFlowTemplateName() {
         return workFlowTemplateName;

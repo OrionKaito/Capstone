@@ -42,10 +42,8 @@ export class WorkflowOfUserComponent implements OnInit {
       this.listData.sort = this.sort;
       this.listData.paginator = this.paginator;
       console.log("xyz ", this.listData);
-    },
-    err=> {
-      console.log("abc ", this.users);
-
+    },err =>{
+      this.toastr.error(err.error);
     }
     )
   }

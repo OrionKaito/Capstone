@@ -1,11 +1,9 @@
 <h4 class="dispaly-4">Your old request
   <div (click)="closeForm()" class="icon-head-pup">
-    <button type="button" [mat-dialog-close] ><i class="fa fa-close"></i>
-      </button>
-</div>
+    <button class="close" type="button" [mat-dialog-close]><i class="fa fa-close"></i></button>
+  </div>
 </h4>
-<hr>
-
+<mat-dialog-content class="mat-typography">
   <div class="form-row">
     <div class="form-group col-md-6">
       <label>Name of WorkFlow</label>
@@ -14,14 +12,115 @@
   </div>
   <div class="form-row">
     <div class="form-group col-md-6">
-      <label>Status</label>
+      <label>Status </label>
       {{yourRequest.status}}
     </div>
   </div>
-  <!-- <div class="form-row">
-    <div class="form-group col-md-6">
-      <label>By:</label>
-      {{yourRequest.staffResult.fullName}}
-    </div>
-  </div> -->
+  <h3>Detail:</h3>
+  <ul class="timeline">
+    
+    <div *ngFor="let item of yourRequest.staffResult; index as ind">
 
+      <li ngIf="ind%4 == 0">
+        <div class="timeline-badge"><i class="glyphicon glyphicon-check"></i> ind</div>
+        <div class="timeline-panel">
+          <div class="timeline-heading">
+            <h4 class="timeline-title">{{item.status}}</h4>
+            <p><small class="text-muted"><i class="glyphicon glyphicon-time"></i> {{item.createDate}}</small></p>
+          </div>
+          <div class="timeline-body">
+            <p>By {{item.fullName}} ({{item.userName}})</p>
+          </div>
+        </div>
+      </li>
+
+      <li ngIf="ind%4 == 1" class="timeline-inverted">
+          <div class="timeline-badge warning"><i class="glyphicon glyphicon-credit-card"></i> ind</div>
+          <div class="timeline-panel">
+            <div class="timeline-heading">
+              <h4 class="timeline-title">{{item.status}}</h4>
+              <p><small class="text-muted"><i class="glyphicon glyphicon-time"></i> {{item.createDate}}</small></p>
+            </div>
+            <div class="timeline-body">
+              <p>By {{item.fullName}} ({{item.userName}})</p>
+            </div>
+          </div>
+        </li>
+
+        <li ngIf="ind%4 == 2">
+            <div class="timeline-badge danger"><i class="glyphicon glyphicon-check"></i> ind</div>
+            <div class="timeline-panel">
+              <div class="timeline-heading">
+                <h4 class="timeline-title">{{item.status}}</h4>
+                <p><small class="text-muted"><i class="glyphicon glyphicon-time"></i> {{item.createDate}}</small></p>
+              </div>
+              <div class="timeline-body">
+                <p>By {{item.fullName}} ({{item.userName}})</p>
+              </div>
+            </div>
+          </li>
+
+          <li ngIf="ind%4 == 3" class="timeline-inverted">
+              <div class="timeline-badge info"><i class="glyphicon glyphicon-check"></i> ind</div>
+              <div class="timeline-panel">
+                <div class="timeline-heading">
+                  <h4 class="timeline-title">{{item.status}}</h4>
+                  <p><small class="text-muted"><i class="glyphicon glyphicon-time"></i> {{item.createDate}}</small></p>
+                </div>
+                <div class="timeline-body">
+                  <p>By {{item.fullName}} ({{item.userName}})</p>
+                </div>
+              </div>
+            </li>
+
+    </div>
+    <!-- <li>
+      <div class="timeline-badge"><i class="glyphicon glyphicon-check"></i> 1</div>
+      <div class="timeline-panel">
+        <div class="timeline-heading">
+          <h4 class="timeline-title">Mussum ipsum cacilds</h4>
+          <p><small class="text-muted"><i class="glyphicon glyphicon-time"></i> 11 hours ago via Twitter</small></p>
+        </div>
+        <div class="timeline-body">
+          <p>xyzx</p>
+        </div>
+      </div>
+    </li>
+
+    <li class="timeline-inverted">
+      <div class="timeline-badge warning"><i class="glyphicon glyphicon-credit-card"></i></div>
+      <div class="timeline-panel">
+        <div class="timeline-heading">
+          <h4 class="timeline-title">Mussum ipsum cacilds</h4>
+        </div>
+        <div class="timeline-body">
+          <p>aaaaa</p>
+        </div>
+      </div>
+    </li>
+
+    <li>
+      <div class="timeline-badge danger"><i class="glyphicon glyphicon-credit-card"></i></div>
+      <div class="timeline-panel">
+        <div class="timeline-heading">
+          <h4 class="timeline-title">Mussum ipsum cacilds</h4>
+        </div>
+        <div class="timeline-body">
+          <p>aabc</p>
+        </div>
+      </div>
+    </li>
+
+    <li class="timeline-inverted">
+      <div class="timeline-badge danger"><i class="glyphicon glyphicon-credit-card"></i></div>
+      <div class="timeline-panel">
+        <div class="timeline-heading">
+          <h4 class="timeline-title">Mussum ipsum cacilds</h4>
+        </div>
+        <div class="timeline-body">
+          <p>aabc</p>
+        </div>
+      </div>
+    </li> -->
+  </ul>
+</mat-dialog-content>

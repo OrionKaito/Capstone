@@ -10,7 +10,6 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import net.yslibrary.android.keyboardvisibilityevent.KeyboardVisibilityEvent;
@@ -18,13 +17,12 @@ import net.yslibrary.android.keyboardvisibilityevent.KeyboardVisibilityEventList
 
 import java.util.List;
 
-import es.dmoral.toasty.Toasty;
 import workflow.capstone.capstoneproject.R;
 import workflow.capstone.capstoneproject.entities.Profile;
 import workflow.capstone.capstoneproject.fragment.ListHandleRequestFragment;
 import workflow.capstone.capstoneproject.fragment.MyRequestFragment;
 import workflow.capstone.capstoneproject.fragment.ProfileFragment;
-import workflow.capstone.capstoneproject.fragment.ListCompleteRequestFragment;
+import workflow.capstone.capstoneproject.fragment.ListNotificationFragment;
 import workflow.capstone.capstoneproject.fragment.WorkflowFragment;
 import workflow.capstone.capstoneproject.repository.CapstoneRepository;
 import workflow.capstone.capstoneproject.repository.CapstoneRepositoryImpl;
@@ -45,7 +43,7 @@ public class MainActivity extends AppCompatActivity {
     private FragmentTransaction fragmentTransaction;
 
     private WorkflowFragment workflowFragment;
-    private ListCompleteRequestFragment listCompleteRequestFragment;
+    private ListNotificationFragment listCompleteRequestFragment;
     private ListHandleRequestFragment listHandleRequestFragment;
     private MyRequestFragment myRequestFragment;
     private ProfileFragment profileFragment;
@@ -85,7 +83,7 @@ public class MainActivity extends AppCompatActivity {
     private void initTabLayout() {
         tabLayout = findViewById(R.id.tab_Layout);
         workflowFragment = new WorkflowFragment();
-        listCompleteRequestFragment = new ListCompleteRequestFragment();
+        listCompleteRequestFragment = new ListNotificationFragment();
         listHandleRequestFragment = new ListHandleRequestFragment();
         myRequestFragment = new MyRequestFragment();
         profileFragment = new ProfileFragment();
@@ -95,7 +93,16 @@ public class MainActivity extends AppCompatActivity {
 
         setupTabIcons();
         setOnChangeTab();
-        setCurrentTabFragment(0);
+        Intent intent = this.getIntent();
+
+        if (intent.getStringExtra("pushNotification") != null &&intent.getStringExtra("pushNotification").equals("Notification")) {
+            setCurrentTabFragment(3);
+            setUnselectedTab(0);
+            setUnselectedTab(1);
+            setUnselectedTab(2);
+        } else {
+            setCurrentTabFragment(0);
+        }
     }
 
     private void setupTabIcons() {
@@ -110,22 +117,6 @@ public class MainActivity extends AppCompatActivity {
         View taskView = tabLayout.getTabAt(2).getCustomView();
         imageViewTask = taskView.findViewById(R.id.task_icon);
         imageViewTask.setImageResource(R.drawable.ic_task_gray);
-//        taskBadge = taskView.findViewById(R.id.task_badge);
-//        capstoneRepository = new CapstoneRepositoryImpl();
-//        capstoneRepository.getNumberOfNotification(token, new CallBackData<String>() {
-//            @Override
-//            public void onSuccess(String s) {
-//                if (Integer.parseInt(s) > 0) {
-//                    taskBadge.setText(s);
-//                    taskBadge.setVisibility(View.VISIBLE);
-//                }
-//            }
-//
-//            @Override
-//            public void onFail(String message) {
-//
-//            }
-//        });
 
         //notification tab
         tabLayout.getTabAt(3).setCustomView(R.layout.notification_icon);
@@ -157,7 +148,6 @@ public class MainActivity extends AppCompatActivity {
             R.drawable.ic_notification_blue,
             R.drawable.ic_history_grey,
             R.drawable.ic_history_blue
-
     };
 
     private void setOnChangeTab() {
@@ -169,23 +159,7 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onTabUnselected(TabLayout.Tab tab) {
-                int tabIndex = tab.getPosition();
-                switch (tab.getPosition()) {
-                    case 0:
-                        tabLayout.getTabAt(tabIndex).setIcon(tabIcons[0]);
-                        break;
-                    case 1:
-                        tabLayout.getTabAt(tabIndex).setIcon(tabIcons[4]);
-                        break;
-                    case 2:
-                        imageViewTask.setImageResource(R.drawable.ic_task_gray);
-                        break;
-                    case 3:
-                        imageViewNotification.setImageResource(R.drawable.ic_notification_grey);
-                        break;
-                    default:
-                        break;
-                }
+                setUnselectedTab(tab.getPosition());
             }
 
             @Override
@@ -213,6 +187,27 @@ public class MainActivity extends AppCompatActivity {
             case 3:
                 imageViewNotification.setImageResource(R.drawable.ic_notification_blue);
                 replaceFragment(listCompleteRequestFragment);
+                break;
+            default:
+                break;
+        }
+    }
+
+    private void setUnselectedTab(int tabPosition)
+    {
+        switch (tabPosition) {
+            case 0:
+                tabLayout.getTabAt(tabPosition).setIcon(tabIcons[0]);
+                break;
+            case 1:
+                tabLayout.getTabAt(tabPosition).setIcon(tabIcons[4]);
+                break;
+            case 2:
+                imageViewTask.setImageResource(R.drawable.ic_task_gray);
+                break;
+            case 3:
+                imageViewNotification.setImageResource(R.drawable.ic_notification_grey);
+                notificationBadge.setVisibility(View.INVISIBLE);
                 break;
             default:
                 break;

@@ -37,7 +37,7 @@ export class LoginComponent {
         }    
       },    
       error => {    
-        this.errorMessage = error.message;    
+        this.errorMessage = error.error;    
       });    
   };    
  } 

@@ -8,6 +8,9 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 import workflow.capstone.capstoneproject.R;
@@ -19,6 +22,7 @@ public class WorkflowAdapter extends BaseAdapter {
     private List<WorkflowTemplate> listData;
     private LayoutInflater layoutInflater;
     private Context mContext;
+    private String createDate;
 
     public WorkflowAdapter(List<WorkflowTemplate> listData, Context mContext) {
         this.listData = listData;
@@ -54,25 +58,28 @@ public class WorkflowAdapter extends BaseAdapter {
             holder = new ViewHolder();
             holder.tvWorkflowName = convertView.findViewById(R.id.tv_workflow_name);
             holder.tvWorkflowDes = convertView.findViewById(R.id.tv_workflow_des);
-//            holder.lineView = convertView.findViewById(R.id.line_view);
+            holder.tvWorkflowCreateDate = convertView.findViewById(R.id.tv_workflow_create_date);
             convertView.setTag(holder);
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
+
         WorkflowTemplate workflowTemplate = this.listData.get(position);
         holder.tvWorkflowName.setText(workflowTemplate.getName().toUpperCase());
         holder.tvWorkflowDes.setText(workflowTemplate.getDescription());
-//        if (position == getCount() - 1) {
-//            holder.lineView.setVisibility(View.GONE);
-//        } else {
-//            holder.lineView.setVisibility(View.VISIBLE);
-//        }
+        try {
+            Date date = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss").parse(workflowTemplate.getCreateDate());
+            createDate = new SimpleDateFormat("MMM dd yyyy").format(date);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        holder.tvWorkflowCreateDate.setText(createDate);
         return convertView;
     }
 
     private class ViewHolder {
         TextView tvWorkflowName;
         TextView tvWorkflowDes;
-//        View lineView;
+        TextView tvWorkflowCreateDate;
     }
 }
