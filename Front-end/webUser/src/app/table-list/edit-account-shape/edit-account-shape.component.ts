@@ -87,6 +87,7 @@ export class EditAccountShapeComponent implements OnInit {
   saveActiontype;
   ngOnInit() {
     this.callAll();
+
   }
   callAll() {
 
@@ -834,25 +835,52 @@ export class EditAccountShapeComponent implements OnInit {
   }
 
   public deleteShape() {
+
     this.showModalConfirmDelete.hide();
     const item = localStorage.getItem('idShape');
+
     for (let i = 0; i < this.menuList1.length; i++) {
       if (this.menuList1[i].id === item) {
         this.menuList1.splice(i, 1);
       }
     }
+    let listFlag1: any=[];
+    let listFlag2: any=[];
 
     if (this.listClass.length > 0) {
-      for (let i = 0; i < this.listClass.length; i++) {
-        for (let e = 0; e < this.listClass[i].idDiv.length; e++) {
-          if (this.listClass[i].idDiv[e] === item) {
-            this.listArrow = this.listArrow.filter(id => id !== this.listClass[i].idArrow);
-            this.listClass.splice(i, 1);
-            return
+      for (let i = 0; i < this.listClass.length; i++) {  
+        debugger;
+          if (this.listClass[i].idDiv[0] === item || this.listClass[i].idDiv[1] === item) {
+          //  // this.listArrow = this.listArrow.filter(id => id !== this.listClass[i].idArrow);
+          //   this.listClass.splice(i, 1);
+          //   this.listArrow.splice(i, 1); 
+          } else {
+            listFlag1.push(this.listClass[i]);
+            listFlag2.push(this.listArrow[i]);
+
           }
-        }
       }
+      this.listClass = [];
+      this.listArrow = [];
+      this.listClass = listFlag1;
+      this.listArrow = listFlag2;
+
     }
+    console.log(this.menuList1);
+    console.log(this.listClass);
+
+
+    // if (this.listClass.length > 0) {
+    //   for (let i = 0; i < this.listClass.length; i++) {
+    //     for (let e = 0; e < this.listClass[i].idDiv.length; e++) {
+    //       if (this.listClass[i].idDiv[e] === item) {
+    //         this.listArrow = this.listArrow.filter(id => id !== this.listClass[i].idArrow);
+    //         this.listClass.splice(i, 1);
+    //         return
+    //       }
+    //     }
+    //   }
+    // }
 
   }
 
@@ -920,6 +948,7 @@ export class EditAccountShapeComponent implements OnInit {
 
   }
 
+  // tạo form động
   openDinamicForm(id) {
     const dialogConfig = new MatDialogConfig();
     dialogConfig.autoFocus = true;
