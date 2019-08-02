@@ -63,7 +63,7 @@ namespace Capstone.Service
             foreach (var request in requestNotComplete)
             {
                 var requestAction = _requestActionRepository.GetById(request.CurrentRequestActionID);
-                var permisisonOfRequest = requestAction.WorkFlowTemplateAction.PermissionToUseID.GetValueOrDefault();
+                var permisisonOfRequest = requestAction.NextStep.PermissionToUseID.GetValueOrDefault();
                 if (permissions.Contains(permisisonOfRequest))
                 {
                     result.Add(request);

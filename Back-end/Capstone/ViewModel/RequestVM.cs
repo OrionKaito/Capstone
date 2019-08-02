@@ -34,6 +34,8 @@ namespace Capstone.ViewModel
         //Request Action
         public Guid NextStepID { get; set; }
 
+        public Guid WorkFlowTemplateActionID { get; set; }
+
         //Request Value
         public IEnumerable<ActionValueVM> ActionValues { get; set; }
 
@@ -77,11 +79,15 @@ namespace Capstone.ViewModel
         public Guid ConnectionID { get; set; }
 
         public string ConnectionTypeName { get; set; }
+
+        public Guid NextStepTemplateActionID { get; set; }
     }
 
     public class RequestFormVM
     {
         public string WorkFlowName { get; set; }
+
+        public string WorkFlowTemplateActionName { get; set; }
 
         public IEnumerable<ConnectionVM> Connections { get; set; }
 
@@ -93,6 +99,8 @@ namespace Capstone.ViewModel
         public string InitiatorName { get; set; }
 
         public string WorkFlowTemplateName { get; set; }
+
+        public string WorkFlowTemplateActionName { get; set; }
 
         public RequestVM Request { get; set; }
 
@@ -131,18 +139,7 @@ namespace Capstone.ViewModel
 
         public string Status { get; set; }
 
-        public IEnumerable<RequestResultStaffActionVM> StaffResult { get; set; }
-    }
-
-    public class RequestResultStaffActionVM
-    {
-        public string FullName { get; set; }
-
-        public string UserName { get; set; }
-
-        public DateTime CreateDate { get; set; }
-
-        public string Status { get; set; }
+        public IEnumerable<StaffRequestActionVM> StaffResult { get; set; }
     }
 
     public class MyRequestVM
