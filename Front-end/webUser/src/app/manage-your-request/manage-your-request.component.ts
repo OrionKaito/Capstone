@@ -39,6 +39,8 @@ export class ManageYourRequestComponent implements OnInit {
       this.listData.sort = this.sort;
       this.listData.paginator = this.paginator;
 
+    },err =>{
+      this.toastr.error(err.error);
     })
   }
 
@@ -77,7 +79,8 @@ export class ManageYourRequestComponent implements OnInit {
         }
       },
       error => {
-        this.errorMessage = error.message;
+        this.errorMessage = error.console.error();
+        ;
       });
   };
   SeeFullRequest(id: string) {
@@ -86,7 +89,13 @@ export class ManageYourRequestComponent implements OnInit {
     dialogConfig.disableClose = true;
     dialogConfig.width = "50%";
     dialogConfig.data = id;
-    this.dialog.open(AddYourRequestComponent, dialogConfig).afterClosed().subscribe(res => {
+    dialogConfig.panelClass = 'custom-dialog-container';
+    dialogConfig.maxHeight ="80%",
+    // dialogConfig.maxHeight = "inherit";
+    // dialogConfig.scrollStrategy = true;
+    // dialogConfig.autoFocus = false;
+    
+    this.dialog.open(AddYourRequestComponent, dialogConfig ).afterClosed().subscribe(res => {
       console.log(res);
       this.callAll();
     });

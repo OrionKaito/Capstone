@@ -53,6 +53,7 @@ import workflow.capstone.capstoneproject.utils.KProgressHUDManager;
 
 public class HandleRequestFragment extends Fragment {
 
+    private TextView tvActionName;
     private ImageView imgSendComment;
     private EditText edtComment;
     private CapstoneRepository capstoneRepository;
@@ -113,6 +114,7 @@ public class HandleRequestFragment extends Fragment {
     }
 
     private void initView(View view) {
+        tvActionName = view.findViewById(R.id.tv_action_title);
         imgSendComment = view.findViewById(R.id.img_send_comment);
         edtComment = view.findViewById(R.id.edt_comment);
         listViewComment = view.findViewById(R.id.list_comment);
@@ -260,6 +262,9 @@ public class HandleRequestFragment extends Fragment {
         capstoneRepository.getRequestHandleForm(token, requestActionID, new CallBackData<HandleRequestForm>() {
             @Override
             public void onSuccess(final HandleRequestForm handleRequestForm) {
+                //set title
+                tvActionName.setText(handleRequestForm.getWorkFlowTemplateActionName());
+
                 final List<Connection> connectionList = handleRequestForm.getConnections();
 
                 //set InitiatorName
@@ -268,12 +273,9 @@ public class HandleRequestFragment extends Fragment {
                 //set Workflow Name
                 tvWorkFlowName.setText(handleRequestForm.getWorkFlowTemplateName());
 
-                //get message
+                //get form
                 List<RequestValue> requestValueUserList = handleRequestForm.getUserRequestAction().getRequestValues();
                 for (RequestValue requestValue : requestValueUserList) {
-//                    if (requestValue.getKey()) {
-//                        tvReason.setText(requestValue.getValue());
-//                    }
                     LinearLayout linearLayout = new LinearLayout(getActivity());
                     LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
                     params.setMargins(0,5,0,5);
@@ -378,27 +380,6 @@ public class HandleRequestFragment extends Fragment {
             @Override
             public void onSuccess(String s) {
                 FragmentUtils.back(getActivity());
-//                View taskView = MainActivity.tabLayout.getTabAt(2).getCustomView();
-//                MainActivity.imageViewTask = taskView.findViewById(R.id.task_icon);
-//                MainActivity.imageViewTask.setImageResource(R.drawable.ic_task_gray);
-//                MainActivity.taskBadge = taskView.findViewById(R.id.task_badge);
-//                capstoneRepository = new CapstoneRepositoryImpl();
-//                capstoneRepository.getNumberOfNotification(token, new CallBackData<String>() {
-//                    @Override
-//                    public void onSuccess(String s) {
-//                        if (Integer.parseInt(s) > 0) {
-//                            MainActivity.taskBadge.setText(s);
-//                            MainActivity.taskBadge.setVisibility(View.VISIBLE);
-//                        } else {
-//                            MainActivity.taskBadge.setVisibility(View.INVISIBLE);
-//                        }
-//                    }
-//
-//                    @Override
-//                    public void onFail(String message) {
-//
-//                    }
-//                });
                 progressHUD.dismiss();
                 Toasty.success(getContext(), R.string.handle_success, Toasty.LENGTH_SHORT).show();
             }

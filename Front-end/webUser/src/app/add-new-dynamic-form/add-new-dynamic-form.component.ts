@@ -17,91 +17,99 @@ export class AddNewDynamicFormComponent implements OnInit {
     private toastr: ToastrService,
     private loadStaffAcountService: LoadStaffAcountService) { }
 
-  listComboElement: any=[];
+  listComboElement: any = [];
   nameHere: any;
   propertiesThis: any;
-  nameOfCb:any;
-  listCb: any =[];
+  nameOfCb: any;
+  listCb: any = [];
   nameForm: any;
   ngOnInit() {
-    this.nameHere ="";
+    this.nameForm="";
+    this.nameHere = "";
     this.propertiesThis = 0;
-    this.nameOfCb ="";
+    this.nameOfCb = "";
     // let a = new ComboElement();
 
     //   a.inputCheckbox.name = "ádsad";
-    
+
     // this.listComboElement.push(a);
     // console.log(this.listComboElement);
-    
+
   }
 
-  addProperties(name,properties){
+  addProperties(name, properties) {
 
-      let a = new ComboElement();
-      debugger;
-      if(name == "" || properties == 0 ) {
-        this.toastr.error("Please add name and type for property first.");   
-      } else{
-      if(properties == 1){
+    let a = new ComboElement();
+    debugger;
+    if (name == "" || properties == 0) {
+      this.toastr.error("Please add name and type for property first.");
+    } else {
+      if (properties == 1) {
         a.textOnly.name = name;
         this.listComboElement.push(a);
       }
-      if(properties == 2){
+      if (properties == 2) {
         a.shortText.name = name;
         this.listComboElement.push(a);
       }
-      if(properties == 3){
+      if (properties == 3) {
         a.longText.name = name;
         this.listComboElement.push(a);
       }
-      if(properties == 4){
+      if (properties == 4) {
         a.comboBox.name = name;
-        if(this.listCb.length == 0 ){
-          this.toastr.error("Please add option for combo box first.");  
+        if (this.listCb.length == 0) {
+          this.toastr.error("Please add option for combo box first.");
         } else {
-        this.listCb.forEach(element => {
-          a.comboBox.valueOfProper.push(element);
-        });
-        this.listCb = [];
-        this.listComboElement.push(a);
+          this.listCb.forEach(element => {
+            a.comboBox.valueOfProper.push(element);
+          });
+          this.listCb = [];
+          this.listComboElement.push(a);
 
+        }
       }
-      }
-      if(properties == 5){
+      if (properties == 5) {
         a.inputCheckbox.name = name;
         this.listComboElement.push(a);
       }
-      
+
     }
   }
 
-  deleteThisRow(index){
-    this.listComboElement.splice(index,1);
+  deleteThisRow(index) {
+    this.listComboElement.splice(index, 1);
   }
-  addToCb(nameOfCb){
-    if(nameOfCb == "") {
+  addToCb(nameOfCb) {
+    if (nameOfCb == "") {
       this.toastr.error("Please add a valid option!");
-    } else{
-    this.listCb.push(nameOfCb);
-    this.nameOfCb ="";
-    this.toastr.success("Add option success");
+    } else {
+      this.listCb.push(nameOfCb);
+      this.nameOfCb = "";
+      this.toastr.success("Add option success");
     }
   }
-  createNewForm(){
-    let model = {
-      "name": this.nameForm,
-      "data": JSON.stringify(this.listComboElement)
-    }
-    this.loadStaffAcountService.createAction(model).toPromise().then(data =>{
-      this.toastr.success('Success! ' , '' );
-      this.dialogRef.close();
-    }, (err) => {
-        this.toastr.error("Error:" + err.message, "Something wrong!" );
+  createNewForm() {
+
+    if (this.listComboElement.length == 0) {
+      this.toastr.error("Please add some properties for dynamic form!");
+    } if(this.nameForm == ""){
+      this.toastr.error("Please input name of form!");
+    } else {
+      let model = {
+        "name": this.nameForm,
+        "data": JSON.stringify(this.listComboElement)
+      }
+      this.loadStaffAcountService.createAction(model).toPromise().then(data => {
+        this.toastr.success('Success! ', '');
+        this.dialogRef.close();
+      }, (err) => {
+        this.toastr.error("Error:" + err.error, "Something wrong!");
       });
-  } 
-  deleteThisOption(j){
-    this.listCb.splice(j,1);
+    }
+  }
+  deleteThisOption(j) {
+    this.listCb.splice(j, 1);
   }
 
 }

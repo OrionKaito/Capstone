@@ -3,6 +3,8 @@ package workflow.capstone.capstoneproject.entities;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.util.List;
+
 public class StaffResult {
 
     @SerializedName("fullName")
@@ -20,6 +22,10 @@ public class StaffResult {
     @SerializedName("status")
     @Expose
     private String status;
+
+    @SerializedName("requestValues")
+    @Expose
+    private List<RequestValue> requestValues;
 
     public String getFullName() {
         return fullName;
@@ -51,6 +57,14 @@ public class StaffResult {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public List<RequestValue> getRequestValues() {
+        return requestValues;
+    }
+
+    public void setRequestValues(List<RequestValue> requestValues) {
+        this.requestValues = requestValues;
     }
 
 }
