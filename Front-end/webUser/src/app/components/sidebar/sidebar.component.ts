@@ -39,12 +39,12 @@ export class SidebarComponent implements OnInit {
 
         }
         ROUTES.push(
-          { path: '/create-request', title: 'Create Request', icon: 'content_paste', class: '' },
-          { path: '/handle-request', title: 'Handle Request', icon: 'content_paste', class: '' },
-          { path: '/your-request', title: 'Your request', icon: 'content_paste', class: '' },
-          { path: '/manage-workflow', title: 'Manage WorkFlow', icon: 'content_paste', class: '' },
-          { path: '/manage-permission', title: 'Manage Permission', icon: 'content_paste', class: '' },      
-          { path: '/manage-per-gr', title: 'Manage Permission Group', icon: 'content_paste', class: '' }
+          { path: '/create-request', title: 'Create Request', icon: 'content_paste', class: 'addLine' },
+          { path: '/handle-request', title: 'Handle Request', icon: 'content_paste', class: 'addLine' },
+          { path: '/your-request', title: 'Your request', icon: 'content_paste', class: 'addLine' },
+          { path: '/manage-workflow', title: 'Manage WorkFlow', icon: 'content_paste', class: 'addLine' },
+          { path: '/manage-permission', title: 'Manage Permission', icon: 'content_paste', class: 'addLine' },
+          { path: '/manage-per-gr', title: 'Manage Permission Group', icon: 'content_paste', class: 'addLine' }
         );
 
       } else {
