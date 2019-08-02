@@ -38,6 +38,8 @@ export class TableListComponent implements OnInit {
       this.listData = new MatTableDataSource(this.users);
       this.listData.sort = this.sort;
       this.listData.paginator = this.paginator;
+  },err =>{
+    this.toastr.error(err.error);
   })
   }
 
@@ -80,7 +82,7 @@ export class TableListComponent implements OnInit {
         }
       },
       error => {
-        this.errorMessage = error.message;
+        this.errorMessage = error.error;
       });
   };
   AddOrEditWF(id: string) {
@@ -101,7 +103,7 @@ export class TableListComponent implements OnInit {
     // navigate qua trang edit với id của User
     // Mock IdUser
 
-    this.router.navigate(['edit-account/', id]);
+    this.router.navigate(['edit-workflow-by-tool/', id]);
   }
 
 }

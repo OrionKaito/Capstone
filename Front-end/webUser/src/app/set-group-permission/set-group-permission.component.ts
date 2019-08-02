@@ -39,6 +39,8 @@ export class SetGroupPermissionComponent implements OnInit {
       this.listData.sort = this.sort;
       this.listData.paginator = this.paginator;
 
+    },err =>{
+      this.toastr.error(err.error);
     })
   }
 
@@ -78,7 +80,7 @@ export class SetGroupPermissionComponent implements OnInit {
         }
       },
       error => {
-        this.errorMessage = error.message;
+        this.errorMessage = error.error;
       });
   };
   AddOrEditWF(id: string) {

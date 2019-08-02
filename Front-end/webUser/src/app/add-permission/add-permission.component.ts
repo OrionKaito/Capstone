@@ -28,16 +28,14 @@ export class AddPermissionComponent implements OnInit {
     private router: Router, private loadStaffAcountService: LoadStaffAcountService) { }
 
   ngOnInit() {
-  
-
-
-
-
+    this.formData.name = "";
     if (this.data != null && this.data != "null") this.createGroup = false;
     if (!this.createGroup) {
       this.loadStaffAcountService.loadPermissionByID(this.data).toPromise().then(res => {
         this.saveData = res;
         this.formData.name = this.saveData.name;
+      },err =>{
+        this.toastr.error(err.error);
       })
     }
     // this.loadStaffAcountService.loadGroupData().toPromise().then(res => {
@@ -47,14 +45,14 @@ export class AddPermissionComponent implements OnInit {
     //   this.saveData1.forEach(element => {
     //     this.dropdownList.push({ item_id: element.id, item_text: element.name });
     //   });
-      
+
     //   console.log(this.dropdownList);
     // })
     // this.selectedItems = [
     //   // { item_id: 3, item_text: 'Pune' },
     //   // { item_id: 4, item_text: 'Navsari' }
     // ];
-    
+
     // this.dropdownSettings = {
     //   singleSelection: false,
     //   idField: 'item_id',
@@ -73,31 +71,40 @@ export class AddPermissionComponent implements OnInit {
     console.log(items);
   }
   onSubmit() {
-    if (this.createGroup) {
-      this.loadStaffAcountService.addPermission(this.formData).toPromise().then(
-        resp => {
-          console.log(resp.toString());
-
-        });
-
+    debugger;
+    if (this.formData.name == "") {
+      this.toastr.error("Please fill all fields!");
     } else {
-      this.formDataEdit.name = this.formData.name;
-      this.formDataEdit.id = this.data;
-      this.loadStaffAcountService.editPermission(this.formDataEdit).toPromise().then(
-        resp => {
-          console.log(resp.toString());
-          debugger;
+      if (this.createGroup) {
+        this.loadStaffAcountService.addPermission(this.formData).toPromise().then(
+          resp => {
+            console.log(resp.toString());
 
-          if (resp != "") {
+          },err =>{
+            this.toastr.error(err.error);
+          });
+
+      } else {
+        this.formDataEdit.name = this.formData.name;
+        this.formDataEdit.id = this.data;
+        this.loadStaffAcountService.editPermission(this.formDataEdit).toPromise().then(
+          resp => {
+            console.log(resp.toString());
             debugger;
-          }
-          else {
-            //this.errorMessage = resp.toString();    
-          }
-        });
+
+            if (resp != "") {
+              debugger;
+            }
+            else {
+              //this.errorMessage = resp.toString();    
+            }
+          },err =>{
+            this.toastr.error(err.error);
+          });
+      }
+      this.toastr.success('Success! ', '');
+      this.dialogRef.close();
     }
-    this.toastr.success('Success! ', '');
-    this.dialogRef.close();
   }
 
 
