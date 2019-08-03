@@ -79,7 +79,7 @@ export class AddAccountComponent implements OnInit {
               //this.errorMessage = resp.toString();    
             }
           }, (err) => {
-            this.toastr.error("Please try it again!", "Something wrong");
+            this.toastr.error(err.error);
           });
 
       } else {
@@ -94,7 +94,7 @@ export class AddAccountComponent implements OnInit {
               //this.errorMessage = resp.toString();    
             }
           }, (err) => {
-            this.toastr.error("Please try it again!", "Something wrong");
+            this.toastr.error(err.error);
           });
       }
 

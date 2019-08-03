@@ -1,6 +1,7 @@
 package workflow.capstone.capstoneproject.adapter;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -79,8 +80,10 @@ public class MyRequestAdapter extends BaseAdapter {
 
         if (myRequest.getIsCompleted()) {
             holder.tvComplete.setText("Completed!");
+            holder.tvComplete.setTextColor(Color.GREEN);
         } else {
             holder.tvComplete.setText("Pending...");
+            holder.tvComplete.setTextColor(Color.YELLOW);
         }
 
         return convertView;
