@@ -53,7 +53,7 @@ export class LoadStaffAcountService {
   receiveMessage(){
     this.messaging.onMessage((payload)=>{
        console.log("Message received. ", payload);
-       this.toastr.info(payload.msg,payload.notis);
+       this.toastr.info(payload.data.body,payload.data.title);
         this.currentMessage.next(payload);
     });
   }
