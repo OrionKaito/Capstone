@@ -81,7 +81,7 @@
           <mat-label>Form</mat-label>
           <mat-select name="properties.actionTypeID"  [(ngModel)]="properties.actionTypeID">
             <mat-option value="0">---Select form---</mat-option>
-            <mat-option *ngFor="let item of listActionType" value="{{item.id}}">{{item.name}}</mat-option>
+            <mat-option *ngFor="let item of listActionType" value="{{item.id}}"> {{item.name}} </mat-option>
           </mat-select>
 
 
@@ -191,7 +191,7 @@
         <h4 class="modal-title w-100" id="myModalLabel">Dialog Confirm</h4>
       </div>
       <div class="modal-body">
-        Xóa mủi tên vừa chọn ??
+        Do you realy want to delete seleted arrow?
       </div>
       <div class="modal-footer justify-content-center">
         <button type="button" mdbBtn color="secondary" class="waves-light" aria-label="Close"
