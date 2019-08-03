@@ -34,7 +34,7 @@
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
                 android:textColor="@color/white"
-                android:textSize="@dimen/sp20"/>
+                android:textSize="@dimen/sp20" />
 
         </RelativeLayout>
 
@@ -86,8 +86,8 @@
                 android:layout_marginTop="@dimen/dp10"
                 android:gravity="center"
                 android:orientation="horizontal"
-                android:weightSum="10"
-                android:visibility="gone">
+                android:visibility="gone"
+                android:weightSum="10">
 
                 <TextView
                     android:layout_width="match_parent"
@@ -99,7 +99,6 @@
                     android:textSize="@dimen/sp15" />
 
                 <EditText
-                    android:padding="@dimen/dp7"
                     android:id="@+id/edt_Reason"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -110,6 +109,7 @@
                     android:inputType="textMultiLine"
                     android:maxLines="8"
                     android:minLines="8"
+                    android:padding="@dimen/dp7"
                     android:scrollbars="vertical"
                     android:textColor="@color/colortext"
                     android:textSize="@dimen/sp18" />
@@ -182,6 +182,7 @@
                         android:layout_weight="3"
                         android:divider="#00000000"
                         android:footerDividersEnabled="false"
+                        android:scrollbars="none"
                         android:visibility="visible">
 
                     </ListView>

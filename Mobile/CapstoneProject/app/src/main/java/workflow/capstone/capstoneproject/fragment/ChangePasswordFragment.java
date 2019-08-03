@@ -45,12 +45,6 @@ public class ChangePasswordFragment extends Fragment {
         token = DynamicWorkflowSharedPreferences.getStoreJWT(getContext(), ConstantDataManager.AUTHORIZATION_TOKEN);
 
         ProfileActivity.tvProfileTitle.setText("Change Password");
-//        imgBack.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                FragmentUtils.back(getActivity());
-//            }
-//        });
 
         btnChangePassword.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -86,7 +80,6 @@ public class ChangePasswordFragment extends Fragment {
         edtOldPassword = view.findViewById(R.id.edt_current_password);
         edtPassword = view.findViewById(R.id.edt_password);
         edtConfirmPassword = view.findViewById(R.id.edt_confirm_password);
-//        imgBack = view.findViewById(R.id.img_Back);
         btnChangePassword = view.findViewById(R.id.btn_change_pass);
     }
 

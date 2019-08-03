@@ -1,6 +1,8 @@
 package workflow.capstone.capstoneproject.adapter;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,16 +16,21 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Random;
 
+import de.hdodenhof.circleimageview.CircleImageView;
 import workflow.capstone.capstoneproject.R;
+import workflow.capstone.capstoneproject.entities.Comment;
 import workflow.capstone.capstoneproject.entities.RequestValue;
 import workflow.capstone.capstoneproject.entities.StaffResult;
+import workflow.capstone.capstoneproject.utils.DynamicWorkflowUtils;
 
 public class RequestResultAdapter extends BaseAdapter {
 
     private Context mContext;
     private List<StaffResult> staffResultList;
     private LayoutInflater layoutInflater;
+    private CommentAdapter commentAdapter;
 
     public RequestResultAdapter(Context mContext, List<StaffResult> staffResultList) {
         this.mContext = mContext;
@@ -46,6 +53,7 @@ public class RequestResultAdapter extends BaseAdapter {
         return 0;
     }
 
+    @SuppressLint("ResourceType")
     @Override
     public View getView(final int position, View convertView, ViewGroup viewGroup) {
         ViewHolder holder;
@@ -53,8 +61,8 @@ public class RequestResultAdapter extends BaseAdapter {
             convertView = layoutInflater.inflate(R.layout.item_request_result, null);
             holder = new ViewHolder();
             holder.tvStaffName = convertView.findViewById(R.id.tv_staff_name);
-            holder.tvUsername = convertView.findViewById(R.id.tv_username);
-            holder.tvCreateDate = convertView.findViewById(R.id.tv_create_date);
+            holder.tvStaffUsername = convertView.findViewById(R.id.tv_staff_username);
+            holder.tvDateApprove = convertView.findViewById(R.id.tv_date_approve);
             holder.tvStatus = convertView.findViewById(R.id.tv_status);
             holder.lvComment = convertView.findViewById(R.id.lv_comment);
             convertView.setTag(holder);
@@ -64,34 +72,39 @@ public class RequestResultAdapter extends BaseAdapter {
 
         StaffResult staffResult = staffResultList.get(position);
         holder.tvStaffName.setText(staffResult.getFullName());
-        holder.tvUsername.setText("( " + staffResult.getUserName() + " )");
+        holder.tvStaffUsername.setText("( " + staffResult.getUserName() + " )");
 
-        String createDate = "";
+        String dateApprove = "";
         try {
             Date date = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss").parse(staffResult.getCreateDate());
-            createDate = new SimpleDateFormat("MMM dd yyyy' at 'hh:mm a").format(date);
+            dateApprove = new SimpleDateFormat("MMM dd yyyy' at 'hh:mm a").format(date);
         } catch (ParseException e) {
             e.printStackTrace();
         }
 
-        if(!createDate.equals("")) {
-            holder.tvCreateDate.setText(createDate);
+        if (!dateApprove.equals("")) {
+            holder.tvDateApprove.setText(dateApprove);
         }
         holder.tvStatus.setText(staffResult.getStatus());
 
-        List<String> commentList = new ArrayList<>();
+        List<Comment> commentList = new ArrayList<>();
         for (RequestValue requestValue : staffResult.getRequestValues()) {
-            commentList.add(requestValue.getValue());
+            commentList.add(new Comment(requestValue.getValue(), staffResult.getFullName(), dateApprove));
         }
 
-        holder.lvComment.setAdapter(new ArrayAdapter<>(mContext, android.R.layout.simple_list_item_1, android.R.id.text1, commentList));
+        commentAdapter = new CommentAdapter(commentList, mContext);
+
+        commentAdapter.notifyDataSetChanged();
+        holder.lvComment.setAdapter(commentAdapter);
+        holder.lvComment.setClickable(false);
+        DynamicWorkflowUtils.setListViewHeightBasedOnChildren(holder.lvComment);
         return convertView;
     }
 
     private class ViewHolder {
         TextView tvStaffName;
-        TextView tvUsername;
-        TextView tvCreateDate;
+        TextView tvStaffUsername;
+        TextView tvDateApprove;
         TextView tvStatus;
         ListView lvComment;
     }

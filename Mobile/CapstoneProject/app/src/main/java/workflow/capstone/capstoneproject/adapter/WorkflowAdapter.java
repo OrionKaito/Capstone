@@ -65,7 +65,7 @@ public class WorkflowAdapter extends BaseAdapter {
         }
 
         WorkflowTemplate workflowTemplate = this.listData.get(position);
-        holder.tvWorkflowName.setText(workflowTemplate.getName().toUpperCase());
+        holder.tvWorkflowName.setText(workflowTemplate.getName());
         holder.tvWorkflowDes.setText(workflowTemplate.getDescription());
         try {
             Date date = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss").parse(workflowTemplate.getCreateDate());

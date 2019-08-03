@@ -83,7 +83,7 @@ public class MyRequestAdapter extends BaseAdapter {
             holder.tvComplete.setTextColor(Color.GREEN);
         } else {
             holder.tvComplete.setText("Pending...");
-            holder.tvComplete.setTextColor(Color.YELLOW);
+            holder.tvComplete.setTextColor(Color.parseColor("#ff8000"));
         }
 
         return convertView;
