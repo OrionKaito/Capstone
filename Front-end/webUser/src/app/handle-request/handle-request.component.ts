@@ -36,14 +36,15 @@ export class HandleRequestComponent implements OnInit {
     this.loadStaffAcountService.loadHandlingRequest().toPromise().then(data => {
       console.log(data);
       this.users = data;
+      let a=this.users.requests;
       console.log(this.users.requests);
-      this.listData = new MatTableDataSource(this.users[0].requests);
+      this.listData = new MatTableDataSource(a);
       this.listData.sort = this.sort;
       this.listData.paginator = this.paginator;
 
     },err =>{
       console.log(err);
-      this.toastr.error(err.error);
+      // this.toastr.error(err.error);
     })
   }
 

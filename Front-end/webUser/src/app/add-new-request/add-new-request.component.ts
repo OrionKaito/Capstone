@@ -33,6 +33,7 @@ export class AddNewRequestComponent implements OnInit {
   actionValues: any = [];
   workFlowTemplateID: any;
   dynamicForm:any;
+  workFlowTemplateActionID:any;
   // formDataEdit = new AddGroupIdName();
   constructor(private storage: AngularFireStorage, private db: AngularFirestore, @Inject(MAT_DIALOG_DATA) public data,
     public dialogRef: MatDialogRef<AddNewRequestComponent>, private toastr: ToastrService,
@@ -72,7 +73,7 @@ export class AddNewRequestComponent implements OnInit {
 
 
     //this.actionValues.push({ "key": this.formKey, "value": this.formValue})
-    var mdSendReq = new SendRequest("", this.actionValues, this.listURL, this.workFlowTemplateID.toString(), nextStepID.toString());
+    var mdSendReq = new SendRequest("", this.actionValues, this.listURL, this.workFlowTemplateID.toString(), nextStepID.toString(), this.workFlowTemplateActionID);
     console.log(JSON.stringify(mdSendReq));
     
     this.loadStaffAcountService.sendReq(mdSendReq).toPromise().then(data =>{
@@ -132,12 +133,12 @@ export class AddNewRequestComponent implements OnInit {
 
     this.workFlowTemplateID = this.data;
     this.loadStaffAcountService.getRequestForm(this.workFlowTemplateID).toPromise().then(res => {
-      
       this.saveData = res;
       console.log(this.saveData);
       this.buttons = this.saveData.connections;
       this.formKey = this.saveData.actionType.name;
       this.dynamicForm = JSON.parse(this.saveData.actionType.data);
+      this.workFlowTemplateActionID = this.saveData.workFlowTemplateActionID;
       console.log(this.formKey);
     },err =>{
       this.toastr.error(err.error);
