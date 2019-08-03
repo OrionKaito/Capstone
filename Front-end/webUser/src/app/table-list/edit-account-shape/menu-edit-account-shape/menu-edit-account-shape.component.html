@@ -1,9 +1,19 @@
+<div class="sidebar">
+    <div class="logo">
+        <a href="#" class="simple-text">
+            <div class="logo-img">
+                <img src="/assets/img/angular2-logo-red.png"/>
+            </div>
+            D. Workflow
+        </a>
+    </div>
+</div>
 <div class="menu-main d-flex flex-column align-items-center">
     <div class="modifymenu">
         <div (click)="drop(item)" *ngFor="let item of menuList; let i = index"
              class="{{item.class}} animated bounceInUp">
-            <strong class ="horverTexS">Start Action</strong>
-            <strong class ="horverTexE">End Action</strong>
+            <strong class="horverTexS">Start Action</strong>
+            <strong class="horverTexE">End Action</strong>
         </div>
 
     </div>

@@ -1,4 +1,17 @@
-
+.customdialog{
+    position: fixed;
+    max-height: 80%!important;
+    width: 70%;
+    min-height: 70% !important;
+    top: 10%;
+    left: 50%;
+    transform: translateX(-50%);
+    overflow-y: auto;
+    overflow-x: hidden;
+    background-color: white;
+    border-radius: 5px;
+    padding: 20px;
+}
 .icon-head-pup {
     float: right;
 }
@@ -7,6 +20,8 @@
     border: none!important;
     position: absolute;
     z-index: 1300!important;
+    right: 10px;
+    top: 5px;
 }
 .close:hover {
     opacity: .5!important;
@@ -20,6 +35,7 @@
     text-align: center;
     margin-right: 10px;
     min-width: 16%;
+    border-radius: 5px;
 }
 .content-info{
     text-align: center;
@@ -43,12 +59,12 @@
     width: 100%;
     margin-top: 5px;
 }
-//.comment-box{
-//    text-align: LE;
-//    padding: 5px;
-//    border: 1px solid #000055;
-//    border-radius: 20px;
-//    background-color: #F5FFFA;
-//    color: black;
-// }
-//
+.comment-box{
+    padding: 5px 10px 5px 10px;
+    border-radius: 10px;
+    background-color: #F5FFFA;
+    color: black;
+    margin-left: 5%;
+    margin-top: 10px;
+ }
+
