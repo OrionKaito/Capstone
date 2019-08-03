@@ -131,6 +131,7 @@ export class EditAccountShapeComponent implements OnInit {
   //lấy list permission
   public getDropdownList() {
     this.shapeService.getDropdownList().toPromise().then((res: any) => {
+      this.listDropdown = [];
       if (res) {
         this.getListPer = res;
         this.getListPer.forEach(item => {
@@ -158,6 +159,7 @@ export class EditAccountShapeComponent implements OnInit {
   public getlistActionType() {
     this.shapeService.getActiontype().toPromise().then((res: any) => {
       // debugger;
+      this.listActionType = [];
       if (res) {
         this.getListAction = res;
         this.getListAction.forEach(item => {
@@ -958,9 +960,9 @@ export class EditAccountShapeComponent implements OnInit {
     dialogConfig.data = [];
     this.dialog.open(AddNewDynamicFormComponent, dialogConfig).afterClosed().subscribe(res => {
       console.log(res);
-      this.callAll();
+      this.getlistActionType();
     });
-    this.callAll();
+    this.getlistActionType();
   }
   saveDraf() {
     if (this.menuList1.length > 0) {

@@ -23,7 +23,7 @@ export class ManageYourRequestComponent implements OnInit {
   model: any = {};
   errorMessage: string;
   listData: MatTableDataSource<any>;
-  displayedColumns: string[] = ['name', 'namewf', "isDeleted"];
+  displayedColumns: string[] = ['namewf', 'name', 'status', 'createTime', "isDeleted"];
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild(MatPaginator) paginator: MatPaginator;
   constructor(private toastr: ToastrService, private router: Router, private dialog: MatDialog,
@@ -36,10 +36,10 @@ export class ManageYourRequestComponent implements OnInit {
     this.loadStaffAcountService.loadYourRequest().toPromise().then(data => {
 
       this.requests = data;
-      this.listData = new MatTableDataSource(this.requests.myRequests);
+      let a=this.requests.myRequests;
+      this.listData = new MatTableDataSource(a);
       this.listData.sort = this.sort;
       this.listData.paginator = this.paginator;
-
     },err =>{
       this.toastr.error(err.error);
     })

@@ -5,7 +5,7 @@
               <div class="card">
                   <div class="card-header card-header-danger">
                       <div class="hal-div">
-                          <h4 class="card-title ">Your request list</h4>
+                          <h4 class="card-title ">My request </h4>
                           <p class="card-category">List of your request recently</p>
                       </div>
                       <div class="hal2-div">
@@ -39,18 +39,30 @@
                           <mat-table [dataSource]="listData" matSort>
 
                               <ng-container matColumnDef="name">
-                                  <mat-header-cell *matHeaderCellDef mat-sort-header>Name action</mat-header-cell>
+                                  <mat-header-cell *matHeaderCellDef mat-sort-header>Curren Action</mat-header-cell>
                                   <mat-cell *matCellDef="let element">{{element.currentRequestActionName}} </mat-cell>
                               </ng-container>
                               <ng-container matColumnDef="namewf">
-                                <mat-header-cell *matHeaderCellDef mat-sort-header>Name workflow</mat-header-cell>
+                                <mat-header-cell *matHeaderCellDef mat-sort-header>Name Workflow</mat-header-cell>
                                 <mat-cell *matCellDef="let element">{{element.workFlowTemplateName}}</mat-cell>
+                            </ng-container>
+                            <ng-container matColumnDef="status">
+                                <mat-header-cell *matHeaderCellDef mat-sort-header>Status</mat-header-cell>
+                                <mat-cell *matCellDef="let element" >
+                                    <ng-container *ngIf="element.isCompleted">Completed</ng-container>
+                                    <ng-container *ngIf="!element.isCompleted">Pending</ng-container>
+                                </mat-cell>
+                            </ng-container>
+                            <ng-container matColumnDef="createTime">
+                                <mat-header-cell *matHeaderCellDef mat-sort-header>Time Create </mat-header-cell>
+                                <mat-cell *matCellDef="let element" (click)="CreateRequestOfWF(element.id)">
+                                    {{element.createDate  | date:'dd/MM/yyyy hh:mm a' }}</mat-cell>
                             </ng-container>
                               <ng-container matColumnDef="isDeleted">
                                   <mat-header-cell *matHeaderCellDef></mat-header-cell>
                                   <mat-cell *matCellDef="let element">
                                       <button (click)="SeeFullRequest(element.currentRequestActionID)" mat-icon-button
-                                          matTooltip="Full your request">
+                                          matTooltip="Full information">
                                           <mat-icon id="element.id">description</mat-icon>
                                       </button>
                                   </mat-cell>

@@ -155,7 +155,7 @@ export class LoadStaffAcountService {
     return this.http.post(this.Url + "api/Permissions", model, { responseType: 'text' });
   }
   editPermission(model: any) {
-    return this.http.put(this.Url + "api/Permissions", model);
+    return this.http.put(this.Url + "api/Permissions", model, { responseType: 'text' });
   }
   loadPermissionByID(id) {
     return this.http.get(this.Url + "api/Permissions/GetByID?ID=" + id);

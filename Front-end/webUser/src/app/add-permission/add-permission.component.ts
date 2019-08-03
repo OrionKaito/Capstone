@@ -89,9 +89,7 @@ export class AddPermissionComponent implements OnInit {
         this.formDataEdit.id = this.data;
         this.loadStaffAcountService.editPermission(this.formDataEdit).toPromise().then(
           resp => {
-            console.log(resp.toString());
-            debugger;
-
+            this.toastr.success('Success! ', '');
             if (resp != "") {
               debugger;
             }
@@ -102,7 +100,7 @@ export class AddPermissionComponent implements OnInit {
             this.toastr.error(err.error);
           });
       }
-      this.toastr.success('Success! ', '');
+
       this.dialogRef.close();
     }
   }
