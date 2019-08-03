@@ -51,7 +51,6 @@
                 android:layout_alignParentRight="true"
                 android:layout_marginRight="@dimen/dp30"
                 android:text="status"
-                android:textColor="@color/red"
                 android:textSize="@dimen/sp18" />
             <RelativeLayout
                 android:layout_width="match_parent"

@@ -12,6 +12,7 @@ namespace Capstone.Service
         string GenerateMessageSendConfirmCode(string username, string emailConfirmCode);
         string GenerateMessageApproveRequest(string userName, List<string> names, List<string> links);
         string GenerateTestMessage();
+        string GenerateMessageTest(string userEmail, string fromUser, string workflowName, string workflowActionName, Dictionary<string, string> dynamicForm, Dictionary<string, string> buttons);
     }
 
     public class EmailServicce : IEmailService
@@ -38,7 +39,7 @@ namespace Capstone.Service
         public string GenerateMessageSendConfirmCode(string userName, string emailConfirmCode)
         {
             var currentDirectory = Path.Combine(Directory.GetCurrentDirectory());
-            var fullPath = currentDirectory + ".Service\\EmailTemplate\\ConfirmCode.html";
+            var fullPath = currentDirectory + "\\EmailTemplate\\ConfirmCode.html";
             string body = string.Empty;
             using (StreamReader reader = new StreamReader(fullPath))
             {
@@ -52,7 +53,7 @@ namespace Capstone.Service
         public string GenerateMessageApproveRequest(string userName, List<string> names, List<string> links)
         {
             var currentDirectory = Path.Combine(Directory.GetCurrentDirectory());
-            var fullPath = currentDirectory + ".Service\\EmailTemplate\\ApproveRequest.html";
+            var fullPath = currentDirectory + "\\EmailTemplate\\ApproveRequest.html";
             string body = string.Empty;
             using (StreamReader reader = new StreamReader(fullPath))
             {
@@ -61,7 +62,7 @@ namespace Capstone.Service
             body = body.Replace("{Username}", userName);
 
             //Lấy template cho button
-            fullPath = currentDirectory + ".Service\\EmailTemplate\\Button.html";
+            fullPath = currentDirectory + "\\EmailTemplate\\Button.html";
             string listButton = string.Empty;
 
             for (int i = 0; i < names.Count; i++)
@@ -81,12 +82,61 @@ namespace Capstone.Service
         public string GenerateTestMessage()
         {
             var currentDirectory = Path.Combine(Directory.GetCurrentDirectory());
-            var fullPath = currentDirectory + ".Service\\EmailTemplate\\Request.html";
+            var fullPath = currentDirectory + "\\EmailTemplate\\Request.html";
             string body = string.Empty;
             using (StreamReader reader = new StreamReader(fullPath))
             {
                 body = reader.ReadToEnd();
             }
+
+            return body;
+        }
+
+        public string GenerateMessageTest(string userEmail, string fromUser, string workflowName, string workflowActionName, Dictionary<string, string> dynamicForm, Dictionary<string, string> buttons)
+        {
+            var currentDirectory = Path.Combine(Directory.GetCurrentDirectory());
+            var fullPath = currentDirectory + "\\EmailTemplate\\Request.html";
+            string body = string.Empty;
+            using (StreamReader reader = new StreamReader(fullPath))
+            {
+                body = reader.ReadToEnd();
+            }
+            
+            //Lấy template cho dynamicform
+            fullPath = currentDirectory + "\\EmailTemplate\\DynamicForm.html";
+            string listForm = string.Empty;
+
+            foreach (var item in dynamicForm)
+            {
+                using (StreamReader reader = new StreamReader(fullPath))
+                {
+                    listForm += reader.ReadToEnd();
+                }
+                listForm = listForm.Replace("{Key}", item.Key.ToString());
+                listForm = listForm.Replace("{Value}", item.Value.ToString());
+            }
+
+            //Lấy template cho button
+            fullPath = currentDirectory + "\\EmailTemplate\\Button.html";
+            string listButton = string.Empty;
+
+            foreach (var button in buttons)
+            {
+                using (StreamReader reader = new StreamReader(fullPath))
+                {
+                    listButton += reader.ReadToEnd();
+                }
+                listButton = listButton.Replace("{ButtonLink}", button.Key.ToString());
+                listButton = listButton.Replace("{ButtonName}", button.Value.ToString());
+            }
+
+
+            body = body.Replace("{DynamicForm}", listForm);
+            body = body.Replace("{ListButton}", listButton);
+            body = body.Replace("{useremail}", userEmail);
+            body = body.Replace("{fromuser}", fromUser);
+            body = body.Replace("{workflowname}", workflowName);
+            body = body.Replace("{workflowactionname}", workflowActionName);
 
             return body;
         }

@@ -42,7 +42,7 @@ namespace Capstone.ViewModel
         public Guid Id { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
-        public Guid ActionTypeID { get; set; }
+        public Guid? ActionTypeID { get; set; }
         public Guid? PermissionToUseID { get; set; }
         public bool IsApprovedByLineManager { get; set; }
         public bool IsStart { get; set; }
