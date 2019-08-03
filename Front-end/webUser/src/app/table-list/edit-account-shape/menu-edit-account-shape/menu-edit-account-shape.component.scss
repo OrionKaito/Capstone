@@ -1,9 +1,64 @@
 $MINT: linear-gradient(40deg, #ff6ec4, #7873f5) !important;
-
+.sidebar {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 2;
+  width: 16.666667%;
+  background: #fff;
+  box-shadow: 0 16px 38px -12px rgba(0, 0, 0, 0.56), 0 4px 25px 0px rgba(0, 0, 0, 0.12), 0 8px 10px -5px rgba(0, 0, 0, 0.2);
+  max-height: 11%;
+}
+.sidebar .logo {
+  padding: 15px 0px;
+  margin: 0;
+  display: block;
+  position: relative;
+  z-index: 4;
+}
+.caret, .sidebar a {
+  transition: all 150ms ease-in;
+}
+.sidebar .logo .simple-text {
+  text-transform: uppercase;
+  padding: 5px 0px;
+  display: inline-block;
+  font-size: 1em;
+  color: #3C4858;
+  white-space: nowrap;
+  font-weight: 400;
+  line-height: 30px;
+  overflow: hidden;
+  text-align: center;
+  display: block;
+}
+.sidebar .logo:after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  right: 15px;
+  height: 1px;
+  width: calc(100% - 30px);
+  background-color: rgba(180, 180, 180, 0.3);
+}
+.sidebar .logo-img {
+  width: 30px;
+  display: block;
+  max-height: 30px;
+  margin-left: 10px;
+  margin-right: 15px;
+}
+.sidebar .logo-img img {
+  width: 35px;
+  top: 16px;
+  position: absolute;
+}
 .menu-main {
   width: 16.666667%;
   height: 10%;
   position: fixed;
+  top: 11%;
   box-sizing: border-box;
   --higru:#1A2A3A;
   background: var(--higru);  
