@@ -19,10 +19,10 @@
   <h3>Detail:</h3>
   <ul class="timeline">
     
-    <div *ngFor="let item of yourRequest.staffResult; index as ind">
+    <ng-container *ngFor="let item of yourRequest.staffResult; index as ind">
 
-      <li ngIf="ind%4 == 0">
-        <div class="timeline-badge"><i class="glyphicon glyphicon-check"></i> ind</div>
+      <li *ngIf="ind%4 == 0">
+        <div class="timeline-badge"><i class="glyphicon glyphicon-check"></i> {{ind}}</div>
         <div class="timeline-panel">
           <div class="timeline-heading">
             <h4 class="timeline-title">{{item.status}}</h4>
@@ -34,8 +34,8 @@
         </div>
       </li>
 
-      <li ngIf="ind%4 == 1" class="timeline-inverted">
-          <div class="timeline-badge warning"><i class="glyphicon glyphicon-credit-card"></i> ind</div>
+      <li *ngIf="ind%4 == 1" class="timeline-inverted">
+          <div class="timeline-badge warning"><i class="glyphicon glyphicon-credit-card"></i> {{ind}}</div>
           <div class="timeline-panel">
             <div class="timeline-heading">
               <h4 class="timeline-title">{{item.status}}</h4>
@@ -47,8 +47,8 @@
           </div>
         </li>
 
-        <li ngIf="ind%4 == 2">
-            <div class="timeline-badge danger"><i class="glyphicon glyphicon-check"></i> ind</div>
+        <li *ngIf="ind%4 == 2">
+            <div class="timeline-badge danger"><i class="glyphicon glyphicon-check"></i> {{ind}}</div>
             <div class="timeline-panel">
               <div class="timeline-heading">
                 <h4 class="timeline-title">{{item.status}}</h4>
@@ -60,8 +60,8 @@
             </div>
           </li>
 
-          <li ngIf="ind%4 == 3" class="timeline-inverted">
-              <div class="timeline-badge info"><i class="glyphicon glyphicon-check"></i> ind</div>
+          <li *ngIf="ind%4 == 3" class="timeline-inverted">
+              <div class="timeline-badge info"><i class="glyphicon glyphicon-check"></i>{{ind}}</div>
               <div class="timeline-panel">
                 <div class="timeline-heading">
                   <h4 class="timeline-title">{{item.status}}</h4>
@@ -73,7 +73,8 @@
               </div>
             </li>
 
-    </div>
+    </ng-container>
+
     <!-- <li>
       <div class="timeline-badge"><i class="glyphicon glyphicon-check"></i> 1</div>
       <div class="timeline-panel">

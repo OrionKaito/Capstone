@@ -36,6 +36,7 @@ export class TableListComponent implements OnInit {
      this.loadStaffAcountService.loadWorkFlow().toPromise().then(data => {
       this.users= data;
       this.listData = new MatTableDataSource(this.users);
+      // this.listData = new MatTableDataSource(this.users.workFlowTemplates);
       this.listData.sort = this.sort;
       this.listData.paginator = this.paginator;
   },err =>{
@@ -94,6 +95,7 @@ export class TableListComponent implements OnInit {
     this.dialog.open(AddAccountComponent, dialogConfig).afterClosed().subscribe(res => {
       this.callAll();
     });
+    this.callAll();
   }
   EditWFAtTool() {
 
