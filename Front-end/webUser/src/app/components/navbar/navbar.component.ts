@@ -30,7 +30,9 @@ export class NavbarComponent implements OnInit {
 
     ngOnInit(){
         this.loadStaffAcountService.getNotiUser().toPromise().then(rep=>{
-            this.listNoti = rep;
+            let a : any;
+            a = rep;
+            this.listNoti = a.userNotifications;
             console.log(this.listNoti);
         },err =>{
             this.toastr.error(err.error);

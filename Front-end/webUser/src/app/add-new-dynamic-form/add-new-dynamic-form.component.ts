@@ -46,14 +46,18 @@ export class AddNewDynamicFormComponent implements OnInit {
     } else {
       if (properties == 1) {
         a.textOnly.name = name;
+        a.textOnly.class = "textOnlyClass";
         this.listComboElement.push(a);
       }
       if (properties == 2) {
         a.shortText.name = name;
+        a.shortText.class = "shortTextClass";
         this.listComboElement.push(a);
+
       }
       if (properties == 3) {
         a.longText.name = name;
+        a.longText.class = "longTextClass";
         this.listComboElement.push(a);
       }
       if (properties == 4) {

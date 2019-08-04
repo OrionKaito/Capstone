@@ -95,8 +95,9 @@ export class EditAccountShapeComponent implements OnInit {
       name: "",
       description: "",
       permissionToUseID: "0",
-      
       isApprovedByLineManager: false,
+    
+
     }
     this.propertiesArr = {
       name: ""
@@ -959,7 +960,7 @@ export class EditAccountShapeComponent implements OnInit {
       console.log(res);
       this.callAll();
     });
-
+    this.callAll();
   }
   saveDraf() {
     if (this.menuList1.length > 0) {
@@ -1107,7 +1108,9 @@ export class EditAccountShapeComponent implements OnInit {
               id: element.id,
               name: element.name,
               description: element.description,
-              actionTypeID: element.actionTypeID,
+              // actionTypeID: element.actionTypeID,
+                //sẽ xóa ở đây
+              actionTypeID:"32e45f6c-9976-4a5a-b0bc-08d71776929b",
               permissionToUseID: element.permissionToUseID,
               isApprovedByLineManager: element.isApprovedByLineManager,
               isStart: element.isStart,
@@ -1118,8 +1121,11 @@ export class EditAccountShapeComponent implements OnInit {
             let oneAction = {
               id: element.id,
               name: element.name,
+             
               description: element.description,
-              actionTypeID: element.actionTypeID,
+              //actionTypeID: element.actionTypeID,
+                //sẽ xóa ở đây
+              actionTypeID:"32e45f6c-9976-4a5a-b0bc-08d71776929b",
               // permissionToUseID: element.permissionToUseID,
               isApprovedByLineManager: element.isApprovedByLineManager,
               isStart: element.isStart,

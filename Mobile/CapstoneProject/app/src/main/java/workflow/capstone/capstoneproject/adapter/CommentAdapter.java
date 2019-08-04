@@ -47,6 +47,7 @@ public class CommentAdapter extends BaseAdapter {
             holder = new ViewHolder();
             holder.tvComment = convertView.findViewById(R.id.tv_comment);
             holder.tvFullName = convertView.findViewById(R.id.tv_full_name);
+            holder.tvCommentDate = convertView.findViewById(R.id.tv_comment_date);
             convertView.setTag(holder);
         } else {
             holder = (ViewHolder) convertView.getTag();
@@ -56,11 +57,13 @@ public class CommentAdapter extends BaseAdapter {
 
         holder.tvFullName.setText(comment.getFullName());
         holder.tvComment.setText(comment.getComment());
+        holder.tvCommentDate.setText(comment.getDate());
         return convertView;
     }
 
     private class ViewHolder {
         TextView tvComment;
         TextView tvFullName;
+        TextView tvCommentDate;
     }
 }

@@ -34,8 +34,9 @@ export class ManageYourRequestComponent implements OnInit {
   }
   callAll() {
     this.loadStaffAcountService.loadYourRequest().toPromise().then(data => {
+
       this.requests = data;
-      this.listData = new MatTableDataSource(this.requests);
+      this.listData = new MatTableDataSource(this.requests.myRequests);
       this.listData.sort = this.sort;
       this.listData.paginator = this.paginator;
 

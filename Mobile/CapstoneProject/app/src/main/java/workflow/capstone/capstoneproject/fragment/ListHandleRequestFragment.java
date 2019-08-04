@@ -125,12 +125,10 @@ public class ListHandleRequestFragment extends Fragment {
                         requestToHandleAdapter = new RequestToHandleAdapter(requestToHandleList, getActivity());
                         listView.setAdapter(requestToHandleAdapter);
                     }
-//                    DynamicWorkflowUtils.setListViewHeightBasedOnChildren(listView);
                     onItemClick();
                 } else if (page != 1) {
                     listView.removeFooterView(footerView);
                     requestToHandleAdapter.AddListItemAdapter(requestToHandlePaging.getRequests());
-//                    DynamicWorkflowUtils.setListViewHeightBasedOnChildren(listView);
                     onItemClick();
                 }
             }

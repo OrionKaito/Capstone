@@ -26,7 +26,11 @@ import android.widget.TextView;
 import com.kaopiz.kprogresshud.KProgressHUD;
 import com.squareup.picasso.Picasso;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import es.dmoral.toasty.Toasty;
@@ -73,7 +77,6 @@ public class HandleRequestFragment extends Fragment {
     private String token = null;
     private TextView tvInitiatorName;
     private TextView tvWorkFlowName;
-    private TextView tvReason;
     private DownloadManager downloadManager;
     private String requestActionID;
     private LinearLayout lnRequestForm;
@@ -124,7 +127,6 @@ public class HandleRequestFragment extends Fragment {
         tvInitiatorName = view.findViewById(R.id.tv_initiator_name);
         tvWorkFlowName = view.findViewById(R.id.tv_name_of_workflow);
         lnRequestForm = view.findViewById(R.id.ln_request_form);
-//        tvReason = view.findViewById(R.id.tv_reason);
     }
 
     private void updateListComment() {
@@ -133,7 +135,12 @@ public class HandleRequestFragment extends Fragment {
 
         Profile profile = DynamicWorkflowSharedPreferences.getStoredData(getContext(), ConstantDataManager.PROFILE_KEY, ConstantDataManager.PROFILE_NAME);
         fullName = profile.getFullName();
-        Comment comment = new Comment(stringComment, fullName);
+
+        //get current date
+        Date currentTime = Calendar.getInstance().getTime();
+        String date = new SimpleDateFormat("MMM dd yyyy' at 'hh:mm a").format(currentTime);
+        Comment comment = new Comment(stringComment, fullName, date);
+
         edtComment.setText("");
         commentList.add(comment);
         if (getActivity() != null) {
@@ -180,10 +187,10 @@ public class HandleRequestFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 final String fileNameUrl = fileUrl.get(position);
-                final String imageName = fileNameList.get(position);
                 String imageExtension = fileNameUrl.substring(fileNameUrl.lastIndexOf(".") + 1);
                 boolean checkIsImage = DynamicWorkflowUtils.accept(imageExtension);
 
+                //check nếu là image thì hiển thị, ngược lại download file
                 if (checkIsImage) {
                     AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
                     builder.setPositiveButton("Close", new DialogInterface.OnClickListener() {
@@ -206,11 +213,8 @@ public class HandleRequestFragment extends Fragment {
                             Picasso.get()
                                     .load(fileNameUrl)
                                     .into(image);
-//                            image.setBackground(getResources().getDrawable(R.drawable.ic_notification_grey));
 
-                            float imageWidthInPX = (float) image.getWidth();
-
-                            LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
+                            LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
                             image.setLayoutParams(layoutParams);
 
 
@@ -218,13 +222,11 @@ public class HandleRequestFragment extends Fragment {
                     });
                     dialog.show();
                 } else {
-//                    downloadFile(fileNameUrl, imageName);
                     new AlertDialog.Builder(getContext())
                             .setTitle("Download file.")
                             .setMessage("Are you sure you want to download this file?")
                             .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int which) {
-//                                    downloadFile(fileNameUrl, imageName);
                                     downloadFileWithDownloadManager(fileNameUrl);
                                     dialog.dismiss();
                                 }
@@ -284,29 +286,46 @@ public class HandleRequestFragment extends Fragment {
                     linearLayout.setBackgroundResource(R.color.white);
                     linearLayout.setWeightSum(10);
 
-                    TextView textViewKey = new TextView(getActivity());
-                    textViewKey.setText(requestValue.getKey());
-                    textViewKey.setTextSize(15.0f);
-                    textViewKey.setTextColor(getResources().getColor(R.color.colorAccent));
-                    textViewKey.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT, 7.0f));
-                    linearLayout.addView(textViewKey);
+                    if (requestValue.getValue().isEmpty()) {
+                        //label
+                        TextView textViewKey = new TextView(getActivity());
+                        textViewKey.setText(requestValue.getKey());
+                        textViewKey.setTextSize(15.0f);
+                        textViewKey.setTextColor(getResources().getColor(R.color.colortext));
+                        textViewKey.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                        linearLayout.addView(textViewKey);
+                    } else {
+                        TextView textViewKey = new TextView(getActivity());
+                        textViewKey.setText(requestValue.getKey());
+                        textViewKey.setTextSize(15.0f);
+                        textViewKey.setTextColor(getResources().getColor(R.color.colorAccent));
+                        textViewKey.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT, 7.0f));
+                        linearLayout.addView(textViewKey);
 
-                    TextView textViewName = new TextView(getActivity());
-                    textViewName.setText(requestValue.getValue());
-                    textViewName.setTextSize(18.0f);
-                    textViewName.setTextColor(getResources().getColor(R.color.colortext));
-                    textViewName.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT, 3.0f));
-                    linearLayout.addView(textViewName);
+                        TextView textViewName = new TextView(getActivity());
+                        textViewName.setText(requestValue.getValue());
+                        textViewName.setTextSize(18.0f);
+                        textViewName.setTextColor(getResources().getColor(R.color.colortext));
+                        textViewName.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT, 3.0f));
+                        linearLayout.addView(textViewName);
+                    }
 
                     lnRequestForm.addView(linearLayout);
                 }
 
-                //get comment
+                //get comment from api
                 List<StaffRequestAction> staffRequestActionList = handleRequestForm.getStaffRequestActions();
                 for (StaffRequestAction staffRequestAction : staffRequestActionList) {
                     List<RequestValue> requestValueStaffList = staffRequestAction.getRequestValues();
                     for (RequestValue requestValue : requestValueStaffList) {
-                        commentList.add(new Comment(requestValue.getValue(), DynamicWorkflowUtils.mapNameWithUserName(staffRequestAction.getFullName(), staffRequestAction.getUserName())));
+                        String createDate = "";
+                        try {
+                            Date date = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss").parse(staffRequestAction.getCreateDate());
+                            createDate = new SimpleDateFormat("MMM dd yyyy' at 'hh:mm a").format(date);
+                        } catch (ParseException e) {
+                            e.printStackTrace();
+                        }
+                        commentList.add(new Comment(requestValue.getValue(), staffRequestAction.getFullName(), createDate));
                     }
                 }
                 getListComment();
