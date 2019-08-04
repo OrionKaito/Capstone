@@ -10,6 +10,9 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 import workflow.capstone.capstoneproject.R;
@@ -34,6 +37,8 @@ public class DetailRequestFragment extends Fragment {
     private CapstoneRepository capstoneRepository;
     private ListView listViewStatusStaffHandle;
     private RequestResultAdapter requestResultAdapter;
+    private TextView tvHistoryApprove;
+    private TextView tvCreateDate;
 
     public DetailRequestFragment() {
         // Required empty public constructor
@@ -59,6 +64,16 @@ public class DetailRequestFragment extends Fragment {
         final Bundle bundle = getArguments();
         getRequestResult(bundle.getString("requestActionID"), bundle.getString("userNotificationID"));
 
+        String createDate = "";
+
+        try {
+            Date date = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss").parse(bundle.getString("createDate"));
+            createDate = new SimpleDateFormat("MMM dd yyyy' at 'hh:mm a").format(date);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        tvCreateDate.setText(createDate);
+
         return view;
     }
 
@@ -67,6 +82,8 @@ public class DetailRequestFragment extends Fragment {
         tvRequestStatus = view.findViewById(R.id.tv_request_status);
         tvWorkFlowName = view.findViewById(R.id.tv_workflow_name_title);
         listViewStatusStaffHandle = view.findViewById(R.id.list_status_staff_handle);
+        tvHistoryApprove = view.findViewById(R.id.tv_history_approve);
+        tvCreateDate = view.findViewById(R.id.tv_create_date);
     }
 
     private void getRequestResult(String requestActionID, String userNotificationID) {
@@ -76,7 +93,11 @@ public class DetailRequestFragment extends Fragment {
             public void onSuccess(RequestResult requestResult) {
                 tvWorkFlowName.setText(requestResult.getWorkFlowTemplateName());
                 tvRequestStatus.setText(requestResult.getStatus());
-                configListView(listViewStatusStaffHandle, requestResult.getStaffResult());
+//                if (requestResult.getStaffResult().isEmpty()) {
+//                    tvHistoryApprove.setVisibility(View.GONE);
+//                } else {
+                configListView(requestResult.getStaffResult());
+//                }
             }
 
             @Override
@@ -86,11 +107,12 @@ public class DetailRequestFragment extends Fragment {
         });
     }
 
-    private void configListView(ListView listView, List<StaffResult> staffResultList) {
+    private void configListView(List<StaffResult> staffResultList) {
         if (getActivity() != null) {
             requestResultAdapter = new RequestResultAdapter(getActivity(), staffResultList);
-            listView.setAdapter(requestResultAdapter);
-            DynamicWorkflowUtils.setListViewHeightBasedOnChildren(listView);
+            listViewStatusStaffHandle.setAdapter(requestResultAdapter);
+            listViewStatusStaffHandle.setClickable(false);
+//            DynamicWorkflowUtils.setListViewHeightBasedOnChildren(listViewStatusStaffHandle);
         }
     }
 
