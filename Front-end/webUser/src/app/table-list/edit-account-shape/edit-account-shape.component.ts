@@ -1053,13 +1053,14 @@ export class EditAccountShapeComponent implements OnInit {
   saveWorkFlow() {
     debugger;
     if (this.checkConnectionFe() && this.checkDataFull()) {
+
       let positionKey: any;
       let classKey: any;
 
       //const exportJson = [];
       let exportJson: any = { action: [], arrow: [] };
       let exportJson2: any = { workFlowID: String, action: [], arrow: [] };
-
+      this.removeBorder('ada60187-037a-4b7c-a0da-d5544b82655a');
       for (let i = 0; i < this.menuList1.length; i++) {
         let obj;
         positionKey = $('#' + this.menuList1[i].id);
@@ -1176,6 +1177,8 @@ export class EditAccountShapeComponent implements OnInit {
             console.log(err);
           });
       }
+    }else{
+      this.addBorder('ada60187-037a-4b7c-a0da-d5544b82655a');
     }
   }
   create_UUID() {
@@ -1442,4 +1445,16 @@ export class EditAccountShapeComponent implements OnInit {
     });
     return retu;
   }
+
+  addBorder(actionId: any){
+    $('#'+ actionId).css({
+      border: '2px solid darkred'
+    })
+  }
+    removeBorder(actionId: any){
+    $('#'+ actionId).css({
+      border: 'none'
+    })
+  }
+
 }
