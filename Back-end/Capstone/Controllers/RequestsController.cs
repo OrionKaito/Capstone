@@ -5,6 +5,7 @@ using Capstone.Service;
 using Capstone.ViewModel;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -33,6 +34,8 @@ namespace Capstone.Controllers
         private readonly IPermissionService _permissionService;
         private readonly UserManager<User> _userManager;
         private readonly IUserDeviceService _userDeviceService;
+        private readonly IEmailService _emailService;
+        private readonly IConfiguration _configuration;
 
         public RequestsController(IActionTypeService actionTypeService
             , IMapper mapper
@@ -50,7 +53,8 @@ namespace Capstone.Controllers
             , IWorkFlowTemplateService workFlowTemplateService
             , IPermissionService permissionService
             , IUserDeviceService userDeviceService
-            )
+            , IEmailService emailService
+            , IConfiguration configuration)
         {
             _actionTypeService = actionTypeService;
             _mapper = mapper;
@@ -68,6 +72,8 @@ namespace Capstone.Controllers
             _workFlowTemplateService = workFlowTemplateService;
             _permissionService = permissionService;
             _userDeviceService = userDeviceService;
+            _emailService = emailService;
+            _configuration = configuration;
         }
 
         // POST: api/Requests
@@ -153,7 +159,7 @@ namespace Capstone.Controllers
                     //Push notification
                     PushNotificationToUser(userID, "Received Request", WebConstant.ReceivedRequestMessage, notification);
                 }
-                else
+                if (workflowTemplateAction.PermissionToUseID.HasValue)
                 {
                     var users = _userService.getUsersByPermissionID(workflowTemplateAction.PermissionToUseID.GetValueOrDefault());
 
@@ -166,7 +172,44 @@ namespace Capstone.Controllers
                         }
                     }
                 }
+                if (!workflowTemplateAction.ToEmail.IsNullOrEmpty())
+                {
+                    var requestValue = _requestValueService.GetByRequestActionID(requestAction.ID);
 
+                    Dictionary<string, string> dynamicform = new Dictionary<string, string>();
+
+                    foreach (var item in requestValue)
+                    {
+                        dynamicform.Add(item.Key, item.Value);
+                    }
+
+                    Dictionary<string, string> listButton = new Dictionary<string, string>();
+                    var connections = _workFlowTemplateActionConnectionService.GetByFromWorkflowTemplateActionID(workflowTemplateAction.ID);
+                    foreach (var connection in connections)
+                    {
+                        listButton.Add(_configuration["UrlCapstoneMvc"]
+                                + "/home/ApproveRequest/?RequestID="
+                                + request.ID
+                                + "&RequestActionID="
+                                + requestAction.ID
+                                + "&Status="
+                                + StatusEnum.Pending
+                                + "&NextStepID="
+                                + connection.ToWorkFlowTemplateActionID
+                                + "&ActorEmail="
+                                + workflowTemplateAction.ToEmail, connection.ConnectionType.Name);
+                    }
+
+                    string message = _emailService.GenerateMessageTest(workflowTemplateAction.ToEmail
+                        , "Dynamic Workflow"
+                        , _workFlowTemplateService.GetByID(request.WorkFlowTemplateID).Name
+                        , workflowTemplateAction.Name
+                        , dynamicform
+                        , listButton);
+
+                    _emailService.SendMail(workflowTemplateAction.ToEmail, "You receive", message);
+
+                }
                 //End transaction
                 _requestService.CommitTransaction();
 
@@ -186,16 +229,6 @@ namespace Capstone.Controllers
 
             try
             {
-                //Get Notification By RequestActionID
-                var notificationByRequestActionID = _notificationService.GetByRequestActionID(model.RequestActionID);
-
-                //check if IsHandled request
-                if (notificationByRequestActionID.IsHandled == true)
-                {
-                    return BadRequest(WebConstant.RequestIsHandled);
-                }
-
-
                 //Begin transaction
                 _requestService.BeginTransaction();
 
@@ -212,6 +245,15 @@ namespace Capstone.Controllers
                 {
                     return BadRequest(WebConstant.AccessDined);
                 }
+
+                //Kiểm tra request action đã được xử lý chưa
+                if (currentRequestAction.Status == StatusEnum.Handled)
+                {
+                    return BadRequest(WebConstant.RequestIsHandled);
+                }
+
+                //Cập nhật đã xử lý
+                currentRequestAction.Status = StatusEnum.Handled;
 
                 //Hết kiểm tra
                 var request = _requestService.GetByID(model.RequestID);
@@ -273,19 +315,57 @@ namespace Capstone.Controllers
                             PushNotificationToUser(managerID, "Received Request", WebConstant.ReceivedRequestMessage, notification);
                         }
                     }
-
                     //Lấy các user có permission xử lý action để gửi notification
-                    var users = _userService.getUsersByPermissionID(nextStep.PermissionToUseID.GetValueOrDefault());
-
-                    if (users.IsNullOrEmpty())
+                    if (nextStep.PermissionToUseID.HasValue)
                     {
-                        foreach (var user in users)
+                        var users = _userService.getUsersByPermissionID(nextStep.PermissionToUseID.GetValueOrDefault());
+
+                        if (users != null && users.Any())
                         {
-                            //Push notification
-                            PushNotificationToUser(user.Id, "Received Request", WebConstant.ReceivedRequestMessage, notification);
+                            foreach (var user in users)
+                            {
+                                //Push notification
+                                PushNotificationToUser(user.Id, "Received Request", WebConstant.ReceivedRequestMessage, notification);
+                            }
                         }
                     }
+                    if (!nextStep.ToEmail.IsNullOrEmpty())
+                    {
+                        var requestValue = _requestValueService.GetByRequestActionID(requestAction.ID);
 
+                        Dictionary<string, string> dynamicform = new Dictionary<string, string>();
+
+                        foreach (var item in requestValue)
+                        {
+                            dynamicform.Add(item.Key, item.Value);
+                        }
+
+                        Dictionary<string, string> listButton = new Dictionary<string, string>();
+                        var connections = _workFlowTemplateActionConnectionService.GetByFromWorkflowTemplateActionID(nextStep.ID);
+                        foreach (var connection in connections)
+                        {
+                            listButton.Add(_configuration["UrlCapstoneMvc"]
+                                + "/home/ApproveRequest/?RequestID="
+                                + request.ID
+                                + "&RequestActionID="
+                                + requestAction.ID
+                                + "&Status="
+                                + StatusEnum.Pending
+                                + "&NextStepID="
+                                + connection.ToWorkFlowTemplateActionID
+                                + "&ActorEmail="
+                                + nextStep.ToEmail, connection.ConnectionType.Name);
+                        }
+
+                        string message = _emailService.GenerateMessageTest(nextStep.ToEmail
+                            , "Dynamic Workflow"
+                            , _workFlowTemplateService.GetByID(request.WorkFlowTemplateID).Name
+                            , nextStep.Name
+                            , dynamicform
+                            , listButton);
+
+                        _emailService.SendMail(nextStep.ToEmail, "You receive", message);
+                    }
                 }
                 else // Nếu nó là action cuối cùng (kết quả) thì gửi về cho người gửi request
                 {
@@ -311,8 +391,6 @@ namespace Capstone.Controllers
                     PushNotificationToUser(ownerID, "Completed Request", WebConstant.CompletedRequestMessage, notification);
                 }
 
-                //set IsHandled
-                notificationByRequestActionID.IsHandled = true;
                 _notificationService.Save();
 
                 //End transaction
