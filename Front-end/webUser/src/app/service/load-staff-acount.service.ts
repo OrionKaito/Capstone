@@ -229,5 +229,11 @@ export class LoadStaffAcountService {
     var tokenHeader = new HttpHeaders({'Authorization': token});
     return this.http.get(this.Url + "api/Requests/GetRequestResult?requestActionID=" +id, {headers : tokenHeader});
   }
+  validateAcc(model){
+    return this.http.post(this.Url + "api/Accounts/ConfirmEmail?code=" + model.code + "&email=" +model.email, model, {responseType: "text" });
+   // return this.http.post(this.Url + "api/Accounts/ConfirmEmail", model);
+
+  }
+  
 
 }

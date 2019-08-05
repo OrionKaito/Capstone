@@ -7,6 +7,7 @@ import { LoginService } from '../service/login.service';
 import { ROUTES } from 'app/components/sidebar/sidebar.component';
 import { LoadStaffAcountService } from 'app/service/load-staff-acount.service';
 import { ToastrService } from 'ngx-toastr';
+import Swal from 'sweetalert2';
 
 
 
@@ -16,8 +17,9 @@ import { ToastrService } from 'ngx-toastr';
     templateUrl: './login.component.html',
     styleUrls: ['./login.component.scss']
 })
-export class LoginComponent implements OnInit {
 
+export class LoginComponent implements OnInit {
+    m=false;
     message: any;
     model: any = {};
     wrongPass: any;
@@ -43,6 +45,7 @@ export class LoginComponent implements OnInit {
         this.loadStaffAcountService.getPermission();
         this.loadStaffAcountService.receiveMessage();
         this.message = this.loadStaffAcountService.currentMessage;
+
         this.formname = 'loginForm';
         this.title = 'Sign In';
         this.nameOfbtn = 'Forgot Password';
@@ -62,34 +65,12 @@ export class LoginComponent implements OnInit {
             }
             if (haveRole && save) this.router.navigate(['/create-request']);
         }
-        // ,err =>{
-        //     this.toastr.error(err.error);
-        //   }
-          );
+            // ,err =>{
+            //     this.toastr.error(err.error);
+            //   }
+        );
     }
-    //   login() {
-    //     debugger;
-    //     let tokenNoti = localStorage.getItem("tokenNoti");
-    //     if(tokenNoti == null){tokenNoti = ""};
-    //     let loginWithTkNoti ={userName: this.model.Username, password: this.model.Password, deviceID:  tokenNoti};
-    //     this.LoginService.Loginv2(loginWithTkNoti).toPromise().then(
-    //       // this.LoginService.Login(this.model).toPromise().then(
-    //       data => {
-    //         if (data.status == 200) {
-    //           this.dataNow = data.body;
 
-    //             var a = this.dataNow.token;
-    //             debugger;
-
-    //             localStorage.setItem('token', a);
-    //             this.router.navigate(['/dashboard']);
-    //         }
-    //         this.resetPassmodel = {
-    //             email: '',
-    //             code: '',
-    //             password: ''
-    //         }
-    //     }
 
     login() {
         let tokenNoti = localStorage.getItem("tokenNoti");
@@ -113,20 +94,27 @@ export class LoginComponent implements OnInit {
                     }
                     this.router.navigate(['/create-request']);
                     debugger;
-                } else if (0) {
-                    this.dataNow = data.body;
-                    if (this.dataNow == 'Invalid username or password!') {
-                        this.errorMessage = 'Invalid username or password!';
-                    } else if (this.dataNow == 'Please verify your account first!') {
+                }
+            }, err => {
 
-                    } else if (this.dataNow == 'Account is banned!') {
-                        this.errorMessage = 'Account is banned!';
-                    }
 
+                let errNow = err.error;
+                if (errNow.startsWith("Invali")) {
+                    this.toastr.error(err.error);
+                } else if (errNow.startsWith("Please verify your")) {
+                    this.confirmEmail();
+ 
+                } else if (errNow.startsWith("Account is banned")) {
+                    Swal.fire({
+                        type: 'error',
+                        title: 'Your account had been baned',
+                        text: 'Sorry, your account had been baned, please contact with your line manage to know the issue! ',
+                        footer: 'We apologize for this inconvenience.'
+                    })
                 }
 
-            },err => {
-                this.toastr.error(err.error);
+
+
             });
 
     };
@@ -181,4 +169,31 @@ export class LoginComponent implements OnInit {
         }
     }
 
+async confirmEmail(){
+
+    const { value: formValues } = await Swal.fire({
+        title: 'Please verify your account first:',
+        html:
+            '<input id="swal-input1" placeholder="Your email" class="swal2-input">' +
+            '<input id="swal-input2"  placeholder="Code" class="swal2-input">',
+        focusConfirm: true,
+        showLoaderOnConfirm: true,
+        showCloseButton: true,
+        preConfirm: () => {
+            let a = {
+                email: (<HTMLInputElement>document.getElementById('swal-input1')).value.toString(),
+                code: (<HTMLInputElement>document.getElementById('swal-input2')).value.toString()
+            }
+            this.loadStaffAcountService.validateAcc(a).toPromise().then(res => {
+                this.toastr.success("Success!!");
+                this.m= true;
+                return true;
+            }, err => {
+                this.m= false;
+                this.toastr.error(err.error);
+                
+            })
+        }
+    })
+ }
 }

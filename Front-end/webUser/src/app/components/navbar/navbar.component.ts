@@ -20,6 +20,7 @@ export class NavbarComponent implements OnInit {
     listNoti: any=[];
     numberNoti: any;
     noNoti:boolean;
+    noNotiMore:boolean;
 
     constructor(location: Location,  private element: ElementRef, private router: Router,
          private loadStaffAcountService: LoadStaffAcountService,
@@ -40,6 +41,7 @@ export class NavbarComponent implements OnInit {
         this.loadStaffAcountService.getNumNotiUser().toPromise().then(rep=>{
             this.numberNoti = rep;
             if(this.numberNoti == 0) this.noNoti = true;
+            if(this.listNoti.length == 0) this.noNotiMore = true;
         },err =>{
             this.toastr.error(err.error);
           })
