@@ -69,7 +69,6 @@ public class ListFileNameAdapter extends BaseAdapter {
                 notifyDataSetChanged();
             }
         });
-//        Toast.makeText(mContext, "image: " + image, Toast.LENGTH_SHORT).show();
         return convertView;
     }
 

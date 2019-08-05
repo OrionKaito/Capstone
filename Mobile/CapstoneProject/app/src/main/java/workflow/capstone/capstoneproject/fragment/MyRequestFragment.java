@@ -203,6 +203,7 @@ public class MyRequestFragment extends Fragment {
                 String requestActionID = myRequest.getCurrentRequestActionID();
                 bundle.putString("requestActionID", requestActionID);
                 bundle.putString("userNotificationID", null);
+                bundle.putString("createDate", myRequest.getCreateDate());
                 fragment.setArguments(bundle);
 
                 FragmentManager fragmentManager = getActivity().getSupportFragmentManager();

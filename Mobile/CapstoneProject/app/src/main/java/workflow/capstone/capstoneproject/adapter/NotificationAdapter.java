@@ -86,10 +86,8 @@ public class NotificationAdapter extends BaseAdapter {
         holder.tvCreateDate.setText(createDate);
 
         if (userNotification.getIsRead()) {
-            holder.imgIsRead.setVisibility(View.VISIBLE);
             holder.imgIsRead.setImageResource(R.drawable.ic_lens_gray_24dp);
         } else {
-            holder.imgIsRead.setVisibility(View.VISIBLE);
             holder.imgIsRead.setImageResource(R.drawable.ic_lens_green_24dp);
         }
 
