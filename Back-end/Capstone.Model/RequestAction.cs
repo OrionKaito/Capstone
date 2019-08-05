@@ -19,6 +19,8 @@ namespace Capstone.Model
         [ForeignKey("ActorID")]
         public virtual User Actor { get; set; }
 
+        public string ActorEmail { get; set; }
+
         public Guid? WorkFlowTemplateActionID { get; set; }
         [ForeignKey("WorkFlowTemplateActionID")]
         public virtual WorkFlowTemplateAction WorkFlowTemplateAction { get; set; }
