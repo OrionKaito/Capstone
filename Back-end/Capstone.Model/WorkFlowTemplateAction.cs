@@ -11,6 +11,7 @@ namespace Capstone.Model
         public string Name { get; set; }
         public string Description { get; set; }
         public bool IsApprovedByLineManager { get; set; }
+        public string ToEmail { get; set; }
         public bool IsStart { get; set; }
         public bool IsEnd { get; set; }
 
@@ -24,7 +25,7 @@ namespace Capstone.Model
 
         public Guid? PermissionToUseID { get; set; }
         [ForeignKey("PermissionToUseID")]
-        public virtual Permission Permission { get; set; }
+        public virtual Permission PermissionToUse { get; set; }
 
         public bool IsDeleted { get; set; }
     }
