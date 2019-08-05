@@ -254,7 +254,7 @@ public class SendRequestFragment extends Fragment {
             if (!dynamicFormList.get(i).getTextOnly().getName().isEmpty()) {
                 LinearLayout linearLayoutLabel = new LinearLayout(getActivity());
                 LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-                params.setMargins(0,5,0,5);
+                params.setMargins(0, 5, 0, 5);
                 linearLayoutLabel.setLayoutParams(params);
                 linearLayoutLabel.setOrientation(LinearLayout.VERTICAL);
                 linearLayoutLabel.setBackgroundResource(R.color.white);
@@ -269,17 +269,14 @@ public class SendRequestFragment extends Fragment {
                 linearLayoutLabel.addView(textView);
                 lnDynamicForm.addView(linearLayoutLabel);
 
-//                View lineView = new View(getActivity());
-//                LinearLayout.LayoutParams viewParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 1);
-//                viewParams.setMargins(10,10,10,10);
-//                lineView.setLayoutParams(viewParams);
-//                lineView.setBackgroundColor(getResources().getColor(R.color.colortext));
-//                lnDynamicForm.addView(lineView);
-
             } else if (!dynamicFormList.get(i).getShortText().getName().isEmpty()) {
                 EditText editText = new EditText(getActivity());
                 //set layout_weight cho edittext
                 editText.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT, 3.0f));
+                editText.setVerticalScrollBarEnabled(true);
+                editText.setMinLines(1);
+                editText.setMaxLines(1);
+                editText.setPadding(10, 20, 10, 20);
                 editText.setBackgroundColor(getResources().getColor(R.color.edit_text_background));
                 editText.setBackgroundResource(R.drawable.border_radius);
 
@@ -294,9 +291,11 @@ public class SendRequestFragment extends Fragment {
                 editText.setVerticalScrollBarEnabled(true);
                 editText.setMinLines(5);
                 editText.setMaxLines(5);
+                editText.setPadding(10, 10, 10, 10);
                 editText.setGravity(Gravity.TOP);
                 editText.setBackgroundColor(getResources().getColor(R.color.edit_text_background));
                 editText.setBackgroundResource(R.drawable.border_radius);
+
                 putIdToMap(editText, i);
 
                 configView(dynamicFormList.get(i).getLongText().getName(), editText);
@@ -330,7 +329,7 @@ public class SendRequestFragment extends Fragment {
     private void configView(String textViewName, View view2) {
         LinearLayout linearLayout = new LinearLayout(getActivity());
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        params.setMargins(0,5,0,5);
+        params.setMargins(0, 10, 0, 10);
         linearLayout.setLayoutParams(params);
         linearLayout.setOrientation(LinearLayout.HORIZONTAL);
         linearLayout.setBackgroundResource(R.color.white);
@@ -340,21 +339,13 @@ public class SendRequestFragment extends Fragment {
         //set layout_weight cho textview
         textView.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT, 7.0f));
         textView.setText(textViewName);
-        textView.setTextSize(17.0f);
+        textView.setTextSize(16.0f);
         textView.setTextColor(getResources().getColor(R.color.colorAccent));
 
         //add child view to linear layout
         linearLayout.addView(textView);
         linearLayout.addView(view2);
         lnDynamicForm.addView(linearLayout);
-
-        //add line view underline linear layout
-//        View lineView = new View(getActivity());
-//        LinearLayout.LayoutParams viewParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 2);
-//        viewParams.setMargins(10,10,10,10);
-//        lineView.setLayoutParams(viewParams);
-//        lineView.setBackgroundColor(getResources().getColor(R.color.colortext));
-//        lnDynamicForm.addView(lineView);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
@@ -415,29 +406,50 @@ public class SendRequestFragment extends Fragment {
             }.getType();
             List<DynamicForm> dynamicFormList = new Gson().fromJson(data, type);
             List<ActionValueModel> actionValueModelList = new ArrayList<>();
+            boolean checkIsEmpty = false;
             for (int i = 0; i < dynamicFormList.size(); i++) {
                 String name = "task" + i;
                 if (!dynamicFormList.get(i).getTextOnly().getName().isEmpty()) {
-                    TextView textView = (TextView) idsMap.get(name);
-                    ActionValueModel actionValueModel = new ActionValueModel(dynamicFormList.get(i).getTextOnly().getName(), textView.getText().toString());
+                    ActionValueModel actionValueModel = new ActionValueModel(dynamicFormList.get(i).getTextOnly().getName(), "");
                     actionValueModelList.add(actionValueModel);
                 } else if (!dynamicFormList.get(i).getShortText().getName().isEmpty()) {
                     EditText editText = (EditText) idsMap.get(name);
-                    ActionValueModel actionValueModel = new ActionValueModel(dynamicFormList.get(i).getShortText().getName(), editText.getText().toString());
-                    actionValueModelList.add(actionValueModel);
+                    String text = editText.getText().toString();
+                    if (text.isEmpty()) {
+                        checkIsEmpty = true;
+                    } else {
+                        ActionValueModel actionValueModel = new ActionValueModel(dynamicFormList.get(i).getShortText().getName(), text);
+                        actionValueModelList.add(actionValueModel);
+                    }
                 } else if (!dynamicFormList.get(i).getLongText().getName().isEmpty()) {
                     EditText editText = (EditText) idsMap.get(name);
-                    ActionValueModel actionValueModel = new ActionValueModel(dynamicFormList.get(i).getLongText().getName(), editText.getText().toString());
-                    actionValueModelList.add(actionValueModel);
+                    String text = editText.getText().toString();
+                    if (text.isEmpty()) {
+                        checkIsEmpty = true;
+                    } else {
+                        ActionValueModel actionValueModel = new ActionValueModel(dynamicFormList.get(i).getLongText().getName(), text);
+                        actionValueModelList.add(actionValueModel);
+                    }
                 } else if (!dynamicFormList.get(i).getInputCheckbox().getName().isEmpty()) {
                     CheckBox checkBox = (CheckBox) idsMap.get(name);
-                    ActionValueModel actionValueModel = new ActionValueModel(dynamicFormList.get(i).getInputCheckbox().getName(), checkBox.isChecked() + "");
+                    boolean check = checkBox.isChecked();
+                    ActionValueModel actionValueModel;
+                    if (check) {
+                        actionValueModel = new ActionValueModel(dynamicFormList.get(i).getInputCheckbox().getName(), "Yes");
+                    } else {
+                        actionValueModel = new ActionValueModel(dynamicFormList.get(i).getInputCheckbox().getName(), "No");
+                    }
                     actionValueModelList.add(actionValueModel);
                 } else if (!dynamicFormList.get(i).getComboBox().getName().isEmpty()) {
                     Spinner spinner = (Spinner) idsMap.get(name);
                     ActionValueModel actionValueModel = new ActionValueModel(dynamicFormList.get(i).getComboBox().getName(), spinner.getSelectedItem().toString());
                     actionValueModelList.add(actionValueModel);
                 }
+            }
+
+            if (checkIsEmpty) {
+                Toasty.error(getContext(), getResources().getString(R.string.input_all_fields), Toasty.LENGTH_SHORT).show();
+                return;
             }
 
             RequestModel requestModel = new RequestModel();

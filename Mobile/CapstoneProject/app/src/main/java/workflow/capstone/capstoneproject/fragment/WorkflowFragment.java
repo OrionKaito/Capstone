@@ -76,13 +76,13 @@ public class WorkflowFragment extends Fragment {
         // Inflate the layout for this fragment
         final View view = inflater.inflate(R.layout.fragment_workflow, container, false);
         initView(view);
-        imgSearch.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                lnOpenSearchTab.setVisibility(View.VISIBLE);
-                imgSearch.setVisibility(View.GONE);
-            }
-        });
+//        imgSearch.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                lnOpenSearchTab.setVisibility(View.VISIBLE);
+//                imgSearch.setVisibility(View.GONE);
+//            }
+//        });
 
         token = DynamicWorkflowSharedPreferences.getStoreJWT(getActivity(), ConstantDataManager.AUTHORIZATION_TOKEN);
 

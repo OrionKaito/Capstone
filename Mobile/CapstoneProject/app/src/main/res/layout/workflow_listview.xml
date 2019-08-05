@@ -38,6 +38,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/dp3"
                     android:textColor="@color/colortext"
+                    android:textStyle="bold"
                     android:textSize="@dimen/sp20" />
             </LinearLayout>
 
@@ -53,7 +54,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/dp3"
                     android:textColor="@color/colortext"
-                    android:textSize="@dimen/sp16" />
+                    android:textSize="@dimen/sp19" />
             </LinearLayout>
 
             <RelativeLayout
@@ -70,7 +71,7 @@
                     android:layout_marginLeft="@dimen/dp3"
                     android:layout_marginRight="@dimen/dp20"
                     android:textColor="@color/light_blue"
-                    android:textSize="@dimen/sp13" />
+                    android:textSize="@dimen/sp15" />
             </RelativeLayout>
         </LinearLayout>
     </LinearLayout>

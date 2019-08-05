@@ -33,7 +33,6 @@ import workflow.capstone.capstoneproject.repository.CapstoneRepositoryImpl;
 import workflow.capstone.capstoneproject.utils.CallBackData;
 import workflow.capstone.capstoneproject.utils.ConstantDataManager;
 import workflow.capstone.capstoneproject.utils.DynamicWorkflowSharedPreferences;
-import workflow.capstone.capstoneproject.utils.DynamicWorkflowUtils;
 
 public class ListNotificationFragment extends Fragment {
 
@@ -126,7 +125,7 @@ public class ListNotificationFragment extends Fragment {
                     listView.removeFooterView(footerView);
                     notificationAdapter.AddListItemAdapter(userNotificationPaging.getUserNotifications());
 //                    DynamicWorkflowUtils.setListViewHeightBasedOnChildren(listView);
-                    onItemClick();
+//                    onItemClick();
                 }
             }
 
@@ -138,7 +137,7 @@ public class ListNotificationFragment extends Fragment {
     }
 
     private void loadMoreItems() {
-        onItemClick();
+//        onItemClick();
         listView.setOnScrollListener(new AbsListView.OnScrollListener() {
             //scroll list view tới 1 vị trí nào đó
             @Override
