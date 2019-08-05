@@ -38,7 +38,7 @@
   
                                 <ng-container matColumnDef="name">
                                     <mat-header-cell *matHeaderCellDef mat-sort-header>Name of request</mat-header-cell>
-                                    <mat-cell *matCellDef="let element"  (click)="CreateRequestOfWF(element.requestActionID)">{{element.workFlowTemplateName}} from <strong>: {{element.initiatorName}}</strong></mat-cell>
+                                    <mat-cell *matCellDef="let element" matTooltip="{{element.description}}" (click)="CreateRequestOfWF(element.requestActionID)">{{element.workFlowTemplateName}} from <strong>: {{element.initiatorName}}</strong></mat-cell>
                                 </ng-container>
                                 <ng-container matColumnDef="time">
                                     <mat-header-cell *matHeaderCellDef mat-sort-header>Time send request</mat-header-cell>

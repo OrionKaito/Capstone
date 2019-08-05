@@ -155,7 +155,7 @@ export class LoadStaffAcountService {
     return this.http.post(this.Url + "api/Permissions", model, { responseType: 'text' });
   }
   editPermission(model: any) {
-    return this.http.put(this.Url + "api/Permissions", model);
+    return this.http.put(this.Url + "api/Permissions", model, { responseType: 'text' });
   }
   loadPermissionByID(id) {
     return this.http.get(this.Url + "api/Permissions/GetByID?ID=" + id);
@@ -229,5 +229,11 @@ export class LoadStaffAcountService {
     var tokenHeader = new HttpHeaders({'Authorization': token});
     return this.http.get(this.Url + "api/Requests/GetRequestResult?requestActionID=" +id, {headers : tokenHeader});
   }
+  validateAcc(model){
+    return this.http.post(this.Url + "api/Accounts/ConfirmEmail?code=" + model.code + "&email=" +model.email, model, {responseType: "text" });
+   // return this.http.post(this.Url + "api/Accounts/ConfirmEmail", model);
+
+  }
+  
 
 }
