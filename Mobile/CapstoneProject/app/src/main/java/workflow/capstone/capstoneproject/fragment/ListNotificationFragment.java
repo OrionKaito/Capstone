@@ -120,7 +120,7 @@ public class ListNotificationFragment extends Fragment {
                         listView.setAdapter(notificationAdapter);
                     }
 //                    DynamicWorkflowUtils.setListViewHeightBasedOnChildren(listView);
-                    onItemClick();
+//                    onItemClick();
                 } else if (page != 1) {
                     listView.removeFooterView(footerView);
                     notificationAdapter.AddListItemAdapter(userNotificationPaging.getUserNotifications());
