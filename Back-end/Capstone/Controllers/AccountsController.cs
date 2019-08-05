@@ -228,7 +228,7 @@ namespace Capstone.Controllers
 
                     var message = _emailService.GenerateMessageSendConfirmCode(user.UserName, user.EmailConfirmCode);
 
-                    await _emailService.SendMail(user.Email, "Activation Code to Verify Email Address", message);
+                    await _emailService.SendMail(user.Email, "Activation Code to Verify Email Address", message, null);
 
                     //End transaction
                     _userService.CommitTransaction();
@@ -287,7 +287,7 @@ namespace Capstone.Controllers
 
                 if (!result.Succeeded) return new BadRequestObjectResult(result.Errors);
                 var message = _emailService.GenerateMessageSendConfirmCode(userInDB.UserName, userInDB.EmailConfirmCode);
-                await _emailService.SendMail(email, "Request To Change Password", message);
+                await _emailService.SendMail(email, "Request To Change Password", message, null);
 
                 return Ok(WebConstant.Success);
             }

@@ -1,6 +1,7 @@
 ﻿using Capstone.Helper;
 using Capstone.Model;
 using Capstone.Service;
+using Capstone.ViewModel;
 using CapstoneMvc.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -71,7 +72,7 @@ namespace CapstoneMvc.Controllers
             return View();
         }
 
-        public IActionResult ApproveRequest(RequestApproveCM model)
+        public IActionResult ApproveRequest(CapstoneMvc.Models.RequestApproveCM model)
         {
             if (!ModelState.IsValid) return BadRequest(ModelState);
 
@@ -105,6 +106,28 @@ namespace CapstoneMvc.Controllers
                     NextStepID = model.NextStepID,
                     CreateDate = DateTime.Now,
                 };
+
+                //Lấy phần thông tin của người gửi request
+                var startActionTemplate = _workFlowTemplateActionService.GetStartByWorkFlowID(request.WorkFlowTemplateID);
+                var userAction = _requestActionService.GetStartAction(startActionTemplate.ID, request.ID);
+
+                //Lấy file của user
+                var requestFiles = _requestFileService.GetByRequestActionID(userAction.ID).Select(r => new RequestFileVM
+                {
+                    ID = r.ID,
+                    Path = r.Path,
+                    IsDeleted = r.IsDeleted,
+                });
+
+                //list file path to send email
+                List<string> filePaths = new List<string>();
+                if (!requestFiles.IsNullOrEmpty())
+                {
+                    foreach (var requestFile in requestFiles)
+                    {
+                        filePaths.Add(requestFile.Path);
+                    }
+                }
 
                 _requestActionService.Create(requestAction);
 
@@ -189,7 +212,7 @@ namespace CapstoneMvc.Controllers
                             , dynamicform
                             , listButton);
 
-                        _emailService.SendMail(nextStep.ToEmail, "You receive", message);
+                        _emailService.SendMail(nextStep.ToEmail, "You receive", message, filePaths);
                     }
                 }
                 else // Nếu nó là action cuối cùng (kết quả) thì gửi về cho người gửi request

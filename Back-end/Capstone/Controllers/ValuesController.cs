@@ -48,7 +48,7 @@ namespace Capstone.Controllers
             //string message = _emailService.GenerateTestMessage();
             try
             {
-                _emailService.SendMail("orionkaito@gmail.com", "Test", message);
+                _emailService.SendMail("orionkaito@gmail.com", "Test", message, null);
             }
             catch (Exception e)
             {
@@ -83,7 +83,7 @@ namespace Capstone.Controllers
             string message = _emailService.GenerateMessageTest("orionkaito@gmail.com", "locnt", "Quy trình nghỉ học", "Phòng đào tạo duyệt", dynamicform, listButton);
             try
             {
-                _emailService.SendMail("orionkaito@gmail.com", "Test", message);
+                _emailService.SendMail("orionkaito@gmail.com", "Test", message, null);
             }
             catch (Exception e)
             {
