@@ -48,29 +48,41 @@ export class AddNewRequestComponent implements OnInit {
   }
   sendReqNextStep(nextStepID){
     debugger;
-
+    let b= true;
     this.dynamicForm.forEach(element => {
+      let a = true;
       if(element.textOnly.name.toString() != "" ){
+        
         this.actionValues.push({ "key": element.textOnly.name.toString(), "value": ""});
       }
       if(element.shortText.name.toString() != "" ){
+        if(element.textOnly.value=="" ||element.textOnly.value=="0") {a = false};
         this.actionValues.push({ "key": element.shortText.name.toString(), "value": element.shortText.value.toString()});
       }
       if(element.longText.name.toString() != "" ){
+        if(element.longText.value=="" ||element.longText.value=="0") {a = false};
         this.actionValues.push({ "key": element.longText.name.toString(), "value": element.longText.value.toString()});
       }
       if(element.comboBox.name.toString() != "" ){
+        if(element.comboBox.value=="" ||element.comboBox.value=="0") {a = false};
         this.actionValues.push({ "key": element.comboBox.name.toString(), "value": element.comboBox.value.toString()});
       }
       if(element.inputCheckbox.name.toString() != "" ){
-        this.actionValues.push({ "key": element.inputCheckbox.name.toString(), "value": element.inputCheckbox.value.toString()});
+        if(element.inputCheckbox.value){
+        this.actionValues.push({ "key": element.inputCheckbox.name.toString(), "value": "Yes"}); }
+        else {
+          this.actionValues.push({ "key": element.inputCheckbox.name.toString(), "value": "No"});
+        }
       }
-      
+
+      if(!a) {
+        b= false;
+      }
+
     });
-    
-
-
-
+    if(!b){
+      this.toastr.error("Please input all field!");
+    } else {
 
     //this.actionValues.push({ "key": this.formKey, "value": this.formValue})
     var mdSendReq = new SendRequest("", this.actionValues, this.listURL, this.workFlowTemplateID.toString(), nextStepID.toString(), this.workFlowTemplateActionID);
@@ -85,7 +97,7 @@ export class AddNewRequestComponent implements OnInit {
     }, (err) => {
         this.toastr.error("Error:" + err.error, "Something wrong!" );
       });
-    
+    }
   }
   
   onDrop(files: FileList) {

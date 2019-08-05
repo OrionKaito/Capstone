@@ -15,6 +15,7 @@ import { element } from '@angular/core/src/render3';
 import { AddNewDynamicFormComponent } from 'app/add-new-dynamic-form/add-new-dynamic-form.component';
 import { LoginService } from 'app/service/login.service';
 import { debug } from 'util';
+import { elementAt } from 'rxjs/operators';
 
 @Component({
   selector: 'app-edit-account-shape',
@@ -25,6 +26,8 @@ export class EditAccountShapeComponent implements OnInit {
   @ViewChild('basicModal') public showModalOnClick: ModalDirective;
   @ViewChild('confirmDelete') public showModalConfirmDelete: ModalDirective;
 
+  appoveByMail: any;
+  approveByPer: any;
   checkConnectionResult: any;
   properties: any;
   propertiesArr: any;
@@ -90,14 +93,14 @@ export class EditAccountShapeComponent implements OnInit {
 
   }
   callAll() {
-
+    this.appoveByMail = false;
+    this.approveByPer = false;
     this.properties = {
       name: "",
       description: "",
       permissionToUseID: "0",
       isApprovedByLineManager: false,
-    
-
+      email: ""
     }
     this.propertiesArr = {
       name: ""
@@ -115,9 +118,7 @@ export class EditAccountShapeComponent implements OnInit {
             console.log(b);
             var a = JSON.parse(this.saveActiontype.data);
             console.log(a);
-            // var c = a.json;
             this.addImportEnd(a);
-
           }
         },err =>{
           this.toastr.error(err.error);
@@ -131,6 +132,7 @@ export class EditAccountShapeComponent implements OnInit {
   //lấy list permission
   public getDropdownList() {
     this.shapeService.getDropdownList().toPromise().then((res: any) => {
+      this.listDropdown = [];
       if (res) {
         this.getListPer = res;
         this.getListPer.forEach(item => {
@@ -158,6 +160,7 @@ export class EditAccountShapeComponent implements OnInit {
   public getlistActionType() {
     this.shapeService.getActiontype().toPromise().then((res: any) => {
       // debugger;
+      this.listActionType = [];
       if (res) {
         this.getListAction = res;
         this.getListAction.forEach(item => {
@@ -958,9 +961,9 @@ export class EditAccountShapeComponent implements OnInit {
     dialogConfig.data = [];
     this.dialog.open(AddNewDynamicFormComponent, dialogConfig).afterClosed().subscribe(res => {
       console.log(res);
-      this.callAll();
+      this.getlistActionType();
     });
-    this.callAll();
+    this.getlistActionType();
   }
   saveDraf() {
     if (this.menuList1.length > 0) {
@@ -1040,7 +1043,13 @@ export class EditAccountShapeComponent implements OnInit {
           result = false;
         }
       } else{
-        if(element.name == "" || element.description == ""|| element.permissionToUseID == "" || element.permissionToUseID == 0){
+        console.log("1",element.permissionToUseID);
+        console.log("2",element.toEmail);
+        console.log("3",element.isApprovedByLineManager);
+
+        if(element.name == "" || element.description == ""|| 
+        ((element.permissionToUseID == "" || element.permissionToUseID == 0)
+        && element.toEmail == "" && !element.isApprovedByLineManager)){
           this.toastr.error("Please fill all fields in Actions");
           result = false;
         }
@@ -1050,14 +1059,17 @@ export class EditAccountShapeComponent implements OnInit {
   }
   saveWorkFlow() {
     debugger;
+    console.log("sub clas", this.menuList1);
     if (this.checkConnectionFe() && this.checkDataFull()) {
+
       let positionKey: any;
       let classKey: any;
 
       //const exportJson = [];
       let exportJson: any = { action: [], arrow: [] };
       let exportJson2: any = { workFlowID: String, action: [], arrow: [] };
-
+      this.removeBorder('ada60187-037a-4b7c-a0da-d5544b82655a');
+      
       for (let i = 0; i < this.menuList1.length; i++) {
         let obj;
         positionKey = $('#' + this.menuList1[i].id);
@@ -1068,8 +1080,6 @@ export class EditAccountShapeComponent implements OnInit {
         classKey.positionLeft = positionKey.position().left;
         exportJson.action.push(classKey);
         exportJson2.action.push(classKey);
-
-
       }
       if (exportJson.length <= 0) {
         this.toastr.error('Chưa có dữ liệu !!');
@@ -1102,19 +1112,20 @@ export class EditAccountShapeComponent implements OnInit {
           });
           element.id = newIdAction;
 
-          if (element.permissionToUseID != "" && element.permissionToUseID != "0" &&
-            element.permissionToUseID != null) {
+          if ((element.permissionToUseID != "" && element.permissionToUseID != "0" &&
+            element.permissionToUseID != null)&& element.approveByPer) {
             let oneAction = {
               id: element.id,
               name: element.name,
               description: element.description,
-              // actionTypeID: element.actionTypeID,
+               actionTypeID: element.actionTypeID,
                 //sẽ xóa ở đây
-              actionTypeID:"32e45f6c-9976-4a5a-b0bc-08d71776929b",
+             // actionTypeID:"32e45f6c-9976-4a5a-b0bc-08d71776929b",
               permissionToUseID: element.permissionToUseID,
               isApprovedByLineManager: element.isApprovedByLineManager,
               isStart: element.isStart,
-              isEnd: element.isEnd
+              isEnd: element.isEnd,
+              toEmail: element.toEmail
             };
             jsonActions.push(oneAction);
           } else {
@@ -1123,13 +1134,14 @@ export class EditAccountShapeComponent implements OnInit {
               name: element.name,
              
               description: element.description,
-              //actionTypeID: element.actionTypeID,
+              actionTypeID: element.actionTypeID,
                 //sẽ xóa ở đây
-              actionTypeID:"32e45f6c-9976-4a5a-b0bc-08d71776929b",
-              // permissionToUseID: element.permissionToUseID,
+             // actionTypeID:"32e45f6c-9976-4a5a-b0bc-08d71776929b",
+              //permissionToUseID: null,
               isApprovedByLineManager: element.isApprovedByLineManager,
               isStart: element.isStart,
-              isEnd: element.isEnd
+              isEnd: element.isEnd,
+              toEmail: element.toEmail
             };
             jsonActions.push(oneAction);
           }
@@ -1174,6 +1186,8 @@ export class EditAccountShapeComponent implements OnInit {
             console.log(err);
           });
       }
+    }else{
+      this.addBorder('ada60187-037a-4b7c-a0da-d5544b82655a');
     }
   }
   create_UUID() {
@@ -1440,4 +1454,16 @@ export class EditAccountShapeComponent implements OnInit {
     });
     return retu;
   }
+
+  addBorder(actionId: any){
+    $('#'+ actionId).css({
+      border: '2px solid darkred'
+    })
+  }
+    removeBorder(actionId: any){
+    $('#'+ actionId).css({
+      border: 'none'
+    })
+  }
+
 }
