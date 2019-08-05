@@ -1,15 +1,10 @@
-
-
-
-import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
-import { LoginService } from '../service/login.service';
-import { ROUTES } from 'app/components/sidebar/sidebar.component';
-import { LoadStaffAcountService } from 'app/service/load-staff-acount.service';
-import { ToastrService } from 'ngx-toastr';
+import {Component, OnInit} from '@angular/core';
+import {Router} from '@angular/router';
+import {LoginService} from '../service/login.service';
+import {ROUTES} from 'app/components/sidebar/sidebar.component';
+import {LoadStaffAcountService} from 'app/service/load-staff-acount.service';
+import {ToastrService} from 'ngx-toastr';
 import Swal from 'sweetalert2';
-
-
 
 
 @Component({
@@ -19,7 +14,7 @@ import Swal from 'sweetalert2';
 })
 
 export class LoginComponent implements OnInit {
-    m=false;
+    m = false;
     message: any;
     model: any = {};
     wrongPass: any;
@@ -36,9 +31,10 @@ export class LoginComponent implements OnInit {
     ngsummitFun: string;
 
 
-
     resetPassmodel: any;
-    constructor(private toastr: ToastrService, private router: Router, private LoginService: LoginService, private loadStaffAcountService: LoadStaffAcountService) { }
+
+    constructor(private toastr: ToastrService, private router: Router, private LoginService: LoginService, private loadStaffAcountService: LoadStaffAcountService) {
+    }
 
     ngOnInit() {
 
@@ -57,14 +53,16 @@ export class LoginComponent implements OnInit {
         sessionStorage.clear();
         let haveRole = false;
         this.loadStaffAcountService.checkRole().toPromise().then(res => {
-            haveRole = true;
+                haveRole = true;
 
-            let save = false;
-            if (localStorage.getItem('saveMe') == "true") {
-                save = true;
+                let save = false;
+                if (localStorage.getItem('saveMe') == 'true') {
+                    save = true;
+                }
+                if (haveRole && save) {
+                    this.router.navigate(['/create-request']);
+                }
             }
-            if (haveRole && save) this.router.navigate(['/create-request']);
-        }
             // ,err =>{
             //     this.toastr.error(err.error);
             //   }
@@ -73,9 +71,12 @@ export class LoginComponent implements OnInit {
 
 
     login() {
-        let tokenNoti = localStorage.getItem("tokenNoti");
-        if (tokenNoti == null) { tokenNoti = "" };
-        let loginWithTkNoti = { userName: this.model.Username, password: this.model.Password, deviceToken: tokenNoti };
+        let tokenNoti = localStorage.getItem('tokenNoti');
+        if (tokenNoti == null) {
+            tokenNoti = ''
+        }
+        ;
+        let loginWithTkNoti = {userName: this.model.Username, password: this.model.Password, deviceToken: tokenNoti};
         debugger;
         this.LoginService.Login(loginWithTkNoti).toPromise().then(
             data => {
@@ -87,10 +88,9 @@ export class LoginComponent implements OnInit {
 
                     localStorage.setItem('token', a);
                     if (this.saveMe) {
-                        localStorage.setItem('saveMe', "true");
-                    }
-                    else {
-                        localStorage.setItem('saveMe', "false");
+                        localStorage.setItem('saveMe', 'true');
+                    } else {
+                        localStorage.setItem('saveMe', 'false');
                     }
                     this.router.navigate(['/create-request']);
                     debugger;
@@ -99,12 +99,12 @@ export class LoginComponent implements OnInit {
 
 
                 let errNow = err.error;
-                if (errNow.startsWith("Invali")) {
+                if (errNow.startsWith('Invali')) {
                     this.toastr.error(err.error);
-                } else if (errNow.startsWith("Please verify your")) {
+                } else if (errNow.startsWith('Please verify your')) {
                     this.confirmEmail();
- 
-                } else if (errNow.startsWith("Account is banned")) {
+
+                } else if (errNow.startsWith('Account is banned')) {
                     Swal.fire({
                         type: 'error',
                         title: 'Your account had been baned',
@@ -112,7 +112,6 @@ export class LoginComponent implements OnInit {
                         footer: 'We apologize for this inconvenience.'
                     })
                 }
-
 
 
             });
@@ -169,31 +168,31 @@ export class LoginComponent implements OnInit {
         }
     }
 
-async confirmEmail(){
+    async confirmEmail() {
 
-    const { value: formValues } = await Swal.fire({
-        title: 'Please verify your account first:',
-        html:
-            '<input id="swal-input1" placeholder="Your email" class="swal2-input">' +
-            '<input id="swal-input2"  placeholder="Code" class="swal2-input">',
-        focusConfirm: true,
-        showLoaderOnConfirm: true,
-        showCloseButton: true,
-        preConfirm: () => {
-            let a = {
-                email: (<HTMLInputElement>document.getElementById('swal-input1')).value.toString(),
-                code: (<HTMLInputElement>document.getElementById('swal-input2')).value.toString()
+        const {value: formValues} = await Swal.fire({
+            title: 'Please verify your account first:',
+            html:
+                '<input id="swal-input1" placeholder="Your email" class="swal2-input">' +
+                '<input id="swal-input2"  placeholder="Code" class="swal2-input">',
+            focusConfirm: true,
+            showLoaderOnConfirm: true,
+            showCloseButton: true,
+            preConfirm: () => {
+                let a = {
+                    email: (<HTMLInputElement>document.getElementById('swal-input1')).value.toString(),
+                    code: (<HTMLInputElement>document.getElementById('swal-input2')).value.toString()
+                }
+                this.loadStaffAcountService.validateAcc(a).toPromise().then(res => {
+                    this.toastr.success('Success!!');
+                    this.m = true;
+                    return true;
+                }, err => {
+                    this.m = false;
+                    this.toastr.error(err.error);
+
+                })
             }
-            this.loadStaffAcountService.validateAcc(a).toPromise().then(res => {
-                this.toastr.success("Success!!");
-                this.m= true;
-                return true;
-            }, err => {
-                this.m= false;
-                this.toastr.error(err.error);
-                
-            })
-        }
-    })
- }
+        })
+    }
 }
