@@ -1210,7 +1210,7 @@ export class EditAccountShapeComponent implements OnInit {
 
             this.listErrorAction.forEach(el => {
                 console.log(el);
-                document.getElementById(el).style.border = '3px solid #9c27b0';
+                document.getElementById(el).style.border = '5px solid #9c27b0';
             });
             errRl.forEach(el => {
                 document.getElementById(el).style.border = '3px solid transparent';
