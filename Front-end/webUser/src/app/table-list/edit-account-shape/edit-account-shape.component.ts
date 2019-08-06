@@ -1212,6 +1212,10 @@ export class EditAccountShapeComponent implements OnInit {
                 console.log(el);
                 document.getElementById(el).style.border = '3px solid #9c27b0';
             });
+            errRl.forEach(el => {
+                document.getElementById(el).style.border = '3px solid transparent';
+                console.log(el);
+            });
             this.toastr.error('Action not usefull please try again with Arrow');
             // console.log(errRl);
         }
