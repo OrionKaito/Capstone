@@ -51,5 +51,12 @@ export class LoginService {
     const headers = new HttpHeaders({ 'Content-Type': 'application/json'});
     return this.http.put(this.Url + "/api/Accounts/ToggleBanAccount?ID=" +id, {headers: headers });
   }
+  changePass(cur: any, newP: any ){
+    debugger;
+    var token = "Bearer " + localStorage.getItem("token");
+    var tokenHeader = new HttpHeaders({'Authorization': token});
+    let thisURL= this.Url + "api/Accounts/ChangePassword?oldPassword="+ cur +"&newPassword="+ newP;
+    return this.http.put( thisURL, {"oldPassword": cur, "newPassword": newP} , {headers : tokenHeader , responseType: 'text' });
+  }
  
 }  

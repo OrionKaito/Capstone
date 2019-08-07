@@ -24,7 +24,7 @@ export class TableListComponent implements OnInit {
   model: any = {};
   errorMessage: string;
   listData: MatTableDataSource<any>;
-  displayedColumns: string[] = ['fullName', 'email', "dateOfBirth", "role", "group", "manage", "isDeleted"];
+  displayedColumns: string[] = ['fullName', "role", "group", "manage", "isDeleted"];
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild(MatPaginator) paginator: MatPaginator;
   constructor(private toastr: ToastrService, private router: Router, private dialog: MatDialog,

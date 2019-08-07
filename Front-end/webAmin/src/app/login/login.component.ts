@@ -30,7 +30,7 @@ export class LoginComponent implements OnInit {
         if(data != "")    
         {     
           localStorage.setItem('token',data);
-          this.router.navigate(['/dashboard']);
+          this.router.navigate(['/manage-user']);
           debugger;    
         }    
         else{    

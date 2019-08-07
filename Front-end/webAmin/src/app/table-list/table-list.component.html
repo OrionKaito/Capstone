@@ -39,12 +39,12 @@
 
                                 <ng-container matColumnDef="fullName">
                                     <mat-header-cell *matHeaderCellDef mat-sort-header>Full name</mat-header-cell>
-                                    <mat-cell *matCellDef="let element">{{element.fullName}}</mat-cell>
+                                    <mat-cell *matCellDef="let element" matTooltip="{{element.email}}">{{element.fullName}} </mat-cell>
                                 </ng-container>
-                                <ng-container matColumnDef="email">
+                                <!-- <ng-container matColumnDef="email">
                                     <mat-header-cell *matHeaderCellDef mat-sort-header>Email</mat-header-cell>
                                     <mat-cell *matCellDef="let element">{{element.email}}</mat-cell>
-                                </ng-container>
+                                </ng-container> -->
                                  <ng-container matColumnDef="manage">
                                     <mat-header-cell *matHeaderCellDef mat-sort-header>Manage</mat-header-cell>
                                     <mat-cell *matCellDef="let element">{{element.managerName}}</mat-cell>
