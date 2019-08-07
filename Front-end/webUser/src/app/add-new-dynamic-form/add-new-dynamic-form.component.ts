@@ -2,8 +2,16 @@ import { Component, OnInit, Inject } from '@angular/core';
 import { ComboElement } from 'app/useClass/combo-element';
 import { LoadStaffAcountService } from 'app/service/load-staff-acount.service';
 import { ToastrService } from 'ngx-toastr';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
+import {ErrorStateMatcher, MAT_DIALOG_DATA, MatDialogRef} from '@angular/material';
+import {FormControl, FormGroupDirective, NgForm, Validators} from '@angular/forms';
+import {constructor} from 'sizzle';
 
+export class MyErrorStateMatcher implements ErrorStateMatcher {
+  isErrorState(control: FormControl | null, form: FormGroupDirective | NgForm | null): boolean {
+    const isSubmitted = form && form.submitted;
+    return !!(control && control.invalid && (control.dirty || control.touched || isSubmitted));
+  }
+}
 @Component({
   selector: 'app-add-new-dynamic-form',
   templateUrl: './add-new-dynamic-form.component.html',
@@ -115,5 +123,15 @@ export class AddNewDynamicFormComponent implements OnInit {
   deleteThisOption(j) {
     this.listCb.splice(j, 1);
   }
+  validateInput = new FormControl('', [Validators.required]);
+  validatePro = new FormControl('', [Validators.required]);
+  addobtion = new FormControl('', [Validators.required]);
+  selectFormControl = new FormControl('', Validators.required);
+  // tslint:disable-next-line:member-ordering
 
+
+
+
+  // tslint:disable-next-line:member-ordering
+  matcher = new MyErrorStateMatcher();
 }
