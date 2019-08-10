@@ -218,7 +218,7 @@ namespace Capstone.Controllers
                         , dynamicform
                         , listButton);
 
-                    _emailService.SendMail(workflowTemplateAction.ToEmail, "You receive", message, filePaths);
+                    _emailService.SendMail(workflowTemplateAction.ToEmail, "You receive request.", message, filePaths);
 
                 }
                 //End transaction

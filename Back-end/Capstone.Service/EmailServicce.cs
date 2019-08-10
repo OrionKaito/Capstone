@@ -38,7 +38,7 @@ namespace Capstone.Service
             var currentDirectory = Path.Combine(Directory.GetCurrentDirectory());
 
             //kiểm tra list file path empty
-            if (filePaths != null && !filePaths.Any())
+            if (filePaths.Any())
             {
                 foreach (var filePath in filePaths)
                 {
