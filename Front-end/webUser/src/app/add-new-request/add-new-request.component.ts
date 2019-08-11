@@ -8,6 +8,7 @@ import { AngularFirestore } from '@angular/fire/firestore';
 import { Observable } from 'rxjs';
 import { tap, finalize } from 'rxjs/operators';
 import { SendRequest } from 'app/useClass/send-request';
+import {FormControl, Validators} from '@angular/forms';
 
 @Component({
   selector: 'app-add-new-request',
@@ -157,6 +158,8 @@ export class AddNewRequestComponent implements OnInit {
     })
 
   }
+  validateInput = new FormControl('', [Validators.required]);
+  validateInput1 = new FormControl('', [Validators.required]);
   onSubmit() {
     //   this.loadStaffAcountService.addPermission(this.formData).toPromise().then(    
     //     resp => {    
