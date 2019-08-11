@@ -249,8 +249,7 @@ namespace Capstone.Controllers
                         NotificationType = notificationInDb.NotificationType,
                         NotificationTypeName = notificationInDb.NotificationType.ToString(),
                         CreateDate = notificationInDb.CreateDate,
-                        IsRead = item.IsRead,
-                        IsHandled = notificationInDb.IsHandled
+                        IsRead = item.IsRead
                     };
                     data.Add(result);
                 }
@@ -266,8 +265,7 @@ namespace Capstone.Controllers
                         NotificationType = notificationInDb.NotificationType,
                         NotificationTypeName = notificationInDb.NotificationType.ToString(),
                         CreateDate = notificationInDb.CreateDate,
-                        IsRead = item.IsRead,
-                        IsHandled = notificationInDb.IsHandled
+                        IsRead = item.IsRead
                     };
                     data.Add(result);
                 }
