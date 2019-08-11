@@ -248,7 +248,7 @@
         height: 120px;
         margin-top: 10px;
         margin-bottom: 20px;
-        border: solid 1px #ccc;
+        //border: solid 1px #ccc;
         color: rgba(0, 0, 0, 0.87);
         cursor: move;
         display: flex;
@@ -277,7 +277,7 @@
         height: 120px;
         margin-top: 10px;
         margin-bottom: 20px;
-        border: solid 1px black;
+        //border: solid 1px black;
         color: rgba(0, 0, 0, 0.87);
         cursor: move;
         display: flex;
@@ -339,7 +339,7 @@
         height: 120px;
         margin-top: 10px;
         margin-bottom: 20px;
-        border: solid 1px #ccc;
+        //border: solid 1px #ccc;
         color: rgba(0, 0, 0, 0.87);
         cursor: move;
         display: flex;
@@ -496,4 +496,7 @@
 
 ::-webkit-scrollbar-thumb:hover {
   background: #999999;
+}
+.addcallBorder{
+  border: 3px solid transparent;
 }

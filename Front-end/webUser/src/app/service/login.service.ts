@@ -88,7 +88,6 @@ export class LoginService {
     return this.http.post(this.Url + 'api/Accounts/ForgotPassword?email=' + email, {'email': email} ,{ responseType: 'text'});
   }
   sendCodeConfig(code: string, email: string, password: string ) {
-
     return this.http.put(this.Url + 'api/Accounts/ConfirmForgotPassword?code=' + code + '&email=' + email + '&password=' + password,
         {'code': code, 'email': email, 'password': password}, { responseType: 'text'});
   }

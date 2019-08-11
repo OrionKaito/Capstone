@@ -15,7 +15,20 @@ import {
 } from '@agm/core';
 import { AdminLayoutComponent } from './layouts/admin-layout/admin-layout.component';
 import { CommonModule } from '@angular/common';
-import { MatTableModule, MatTabsModule, MatCheckboxModule, MatIconModule, MatPaginatorModule, MatSortModule, MatDialogModule, MatSelectModule, MatFormFieldModule, MatChipsModule, MatInputModule } from '@angular/material';
+import {
+    MatTableModule,
+    MatTabsModule,
+    MatCheckboxModule,
+    MatIconModule,
+    MatPaginatorModule,
+    MatSortModule,
+    MatDialogModule,
+    MatSelectModule,
+    MatFormFieldModule,
+    MatChipsModule,
+    MatInputModule,
+    MatCardModule, MatMenuModule
+} from '@angular/material';
 import { CdkTable, CdkTableModule } from '@angular/cdk/table';
 import { AddAccountComponent } from './add-account/add-account.component';
 import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
@@ -56,41 +69,41 @@ const config = {
 
 };
 @NgModule({
-  imports: [
-    
-    NgMultiSelectDropDownModule.forRoot(),
-    ToastrModule.forRoot(),
-    AngularFireModule.initializeApp(config),
-    AngularFirestoreModule, // firestore
-    AngularFireAuthModule, // auth
-    AngularFireStorageModule, // storage
-    AngularFireDatabaseModule,
-    BrowserAnimationsModule,
-    CommonModule,
-    MatIconModule,
-    CdkTableModule,
-    MatPaginatorModule,
-    MatSortModule,
-    FormsModule,
-    HttpModule,
-    ComponentsModule,
-    HttpClientModule,
-    MatDialogModule,
-    MatCheckboxModule,
-    RouterModule,
-    AppRoutingModule,
-    FormsModule,
-    ReactiveFormsModule,
-    MatTableModule,
-    AgmCoreModule.forRoot({
-      apiKey: 'YOUR_GOOGLE_MAPS_API_KEY'
-    }),
-    ButtonsModule, WavesModule, CollapseModule, InputsModule, IconsModule,
-    MatSelectModule, MatFormFieldModule, MatChipsModule, MatInputModule,
-    MDBBootstrapModule.forRoot()
+    imports: [
+
+        NgMultiSelectDropDownModule.forRoot(),
+        ToastrModule.forRoot(),
+        AngularFireModule.initializeApp(config),
+        AngularFirestoreModule, // firestore
+        AngularFireAuthModule, // auth
+        AngularFireStorageModule, // storage
+        AngularFireDatabaseModule,
+        BrowserAnimationsModule,
+        CommonModule,
+        MatIconModule,
+        CdkTableModule,
+        MatPaginatorModule,
+        MatSortModule,
+        FormsModule,
+        HttpModule,
+        ComponentsModule,
+        HttpClientModule,
+        MatDialogModule,
+        MatCheckboxModule,
+        RouterModule,
+        AppRoutingModule,
+        FormsModule,
+        ReactiveFormsModule,
+        MatTableModule,
+        AgmCoreModule.forRoot({
+            apiKey: 'YOUR_GOOGLE_MAPS_API_KEY'
+        }),
+        ButtonsModule, WavesModule, CollapseModule, InputsModule, IconsModule,
+        MatSelectModule, MatFormFieldModule, MatChipsModule, MatInputModule,
+        MDBBootstrapModule.forRoot(), MatCardModule, MatMenuModule
 
 
-  ],
+    ],
   exports: [
     MatPaginatorModule,
     MatSortModule

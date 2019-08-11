@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';    
 import { Router } from '@angular/router';    
-import { LoginService } from '../service/login.service';    
-  
+import { LoginService } from '../service/login.service';
+import { ToastrService } from 'ngx-toastr';
     
 @Component({    
   selector: 'app-login',    
@@ -13,7 +13,7 @@ export class LoginComponent implements OnInit {
   model : any={};      
   errorMessage:string;    
 
-  constructor(private router:Router,private LoginService:LoginService) { }    
+  constructor(private toastr: ToastrService,private router:Router,private LoginService:LoginService) { }
     
   ngOnInit() {    
     sessionStorage.removeItem('userName');    
@@ -30,17 +30,18 @@ export class LoginComponent implements OnInit {
         if(data != "")    
         {     
           localStorage.setItem('token',data);
-          this.router.navigate(['/dashboard']);
+          this.router.navigate(['/manage-user']);
           debugger;    
         }    
         else{    
           this.errorMessage = data;    
         }    
       },    
-      error => {    
+      err => {
+          let error = err.error;
+          this.toastr.error(error);
         this.errorMessage = error.message;    
       });    
       
   };    
  } 
- 

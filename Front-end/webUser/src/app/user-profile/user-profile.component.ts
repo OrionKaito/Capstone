@@ -4,7 +4,7 @@ import { LoginService } from 'app/service/login.service';
 import { Router } from '@angular/router';
 import { DatePipe } from '@angular/common';
 import { ToastrService } from 'ngx-toastr';
-
+import {FormControl, Validators} from '@angular/forms';
 
 @Component({
   selector: 'app-user-profile',
@@ -71,5 +71,16 @@ openChangePass: any;
   openChangePassDiv(){
     this.openChangePass = !this.openChangePass;
   }
-
+  OldpassFormControl = new FormControl('', [
+    Validators.required,
+    Validators.minLength(6),
+  ]);
+  NewpassFormControl = new FormControl('', [
+    Validators.required,
+    Validators.minLength(6),
+  ]);
+  RepassFormControl = new FormControl('', [
+    Validators.required,
+    Validators.minLength(6),
+  ]);
 }

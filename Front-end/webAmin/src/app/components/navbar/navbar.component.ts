@@ -124,4 +124,7 @@ export class NavbarComponent implements OnInit {
       }
       return 'Dashboard';
     }
+    checkUserProfile() {
+        this.router.navigate(['/user-profile']);
+      }
 }
