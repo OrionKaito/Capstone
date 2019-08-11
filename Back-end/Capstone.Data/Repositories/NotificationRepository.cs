@@ -24,7 +24,7 @@ namespace Capstone.Data.Repositories
 
         public IEnumerable<Notification> GetByNotificationTypeAndIsHandled(NotificationEnum notificationType)
         {
-            return DbContext.Notifications.Where(n => n.NotificationType == notificationType && n.IsHandled == false).ToList();
+            return DbContext.Notifications.Where(n => n.NotificationType == notificationType).ToList();
         }
     }
 }

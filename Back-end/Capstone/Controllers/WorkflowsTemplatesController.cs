@@ -227,6 +227,11 @@ namespace Capstone.Controllers
         {
             var workFlowInDb = _workFlowService.GetByID(ID);
             if (workFlowInDb == null) return BadRequest(WebConstant.NotFound);
+            
+            if (workFlowInDb.IsCheckConnection == false)
+            {
+                return BadRequest(WebConstant.ToggleWorkflowFail);
+            }
 
             try
             {
@@ -276,6 +281,8 @@ namespace Capstone.Controllers
                         Name = workFlowInDB.Name,
                         OwnerID = workFlowInDB.OwnerID,
                         PermissionToUseID = workFlowInDB.PermissionToUseID,
+                        CreateDate = DateTime.Now,
+                        IsCheckConnection = true
                     };
                     _workFlowService.Create(workFlow);
 

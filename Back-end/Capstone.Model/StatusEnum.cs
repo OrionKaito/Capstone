@@ -4,5 +4,6 @@
     {
         Pending = 1,
         Handled = 2,
+        Hangfire = 3
     }
 }
