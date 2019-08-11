@@ -21,6 +21,7 @@ namespace Capstone.Model
         [ForeignKey("PermissionToUseID")]
         public virtual Permission PermissionToUse { get; set; }
 
+        public bool IsCheckConnection { get; set; }
         public bool IsEnabled { get; set; }
         public bool IsDeleted { get; set; }
     }
