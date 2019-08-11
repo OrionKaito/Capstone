@@ -31,7 +31,7 @@ export class LoginComponent implements OnInit {
     ngsummitFun: string;
 
 
-    resetPassmodel: any;
+    resetPassmodel: any = {};
 
     constructor(private toastr: ToastrService, private router: Router, private LoginService: LoginService, private loadStaffAcountService: LoadStaffAcountService) {
     }
@@ -125,11 +125,11 @@ export class LoginComponent implements OnInit {
                 this.showCode = true;
                 this.nameOfsummit = 'Send code';
                 this.ngsummitFun = '';
-                this.errorMessage = data;
+                this.toastr.success(data);
                 this.title = 'Change Password';
             },
             err => {
-                this.errorMessage = 'Email Incorret';
+                this.toastr.error("You entered the wrong email");
                 this.showCode = false;
                 this.ngsummitFun = 'forgetPass()';
             }
@@ -137,17 +137,18 @@ export class LoginComponent implements OnInit {
     };
 
     resetPass() {
+
         this.errorMessage = '';
-        this.LoginService.sendCodeConfig(this.resetPassmodel.code, this.resetPassmodel.email, this.resetPassmodel.password).toPromise().then(
+        this.LoginService.sendCodeConfig(this.resetPassmodel.code, this.email, this.resetPassmodel.password).toPromise().then(
             data => {
-                this.errorMessage = 'change Password' + data;
                 this.checkPage = true;
                 this.showCode = false;
-                console.log(data);
+                this.toastr.success(data + '!!');
+                this.title = 'Sign In';
+                this.nameOfsummit = 'Sign In';
             },
             err => {
-                this.errorMessage = 'Error code'
-                console.log(this.errorMessage);
+                this.toastr.error('Incorrect Email!!');
             }
         )
     }
