@@ -18,15 +18,21 @@
     <div *ngIf="item.shortText.name" class="form-group col-md-10">
         <mat-form-field class="fix-padding">
             <!--            <label class="label-modify col-md-4">{{item.shortText.name}} </label>-->
-            <input style="margin-top: 5px" matInput [(ngModel)]="item.shortText.value" type="text" class="shortText-dynamicForm col-md-8"
+            <input [formControl]="validateInput" style="margin-top: 5px" matInput [(ngModel)]="item.shortText.value" type="text" class="shortText-dynamicForm col-md-8"
                    placeholder="{{item.shortText.name}}">
+            <mat-error *ngIf="validateInput.hasError('required')">
+                Form Name is <strong>required</strong>
+            </mat-error>
         </mat-form-field>
     </div>
     <div *ngIf="item.longText.name" class="form-group col-md-10">
         <!--        <label placeholder="Leave a comment" class="label-modify"> </label>-->
         <mat-form-field>
-            <textarea matInput [(ngModel)]="item.longText.value" type="text"
+            <textarea [formControl]="validateInput1" matInput [(ngModel)]="item.longText.value" type="text"
                       placeholder="{{item.longText.name}}" class="shortText-dynamicForm input"></textarea>
+            <mat-error *ngIf="validateInput1.hasError('required')">
+                Form Name is <strong>required</strong>
+            </mat-error>
         </mat-form-field>
     </div>
     <div *ngIf="item.comboBox.name" class="form-row col-md-6">
