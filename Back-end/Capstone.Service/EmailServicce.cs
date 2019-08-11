@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Net;
 using System.Net.Mail;
 using System.Threading.Tasks;
@@ -8,7 +9,7 @@ namespace Capstone.Service
 {
     public interface IEmailService
     {
-        Task SendMail(string to, string subject, string message);
+        Task SendMail(string to, string subject, string message, List<string> filePaths);
         string GenerateMessageSendConfirmCode(string username, string emailConfirmCode);
         string GenerateMessageApproveRequest(string userName, List<string> names, List<string> links);
         string GenerateTestMessage();
@@ -19,7 +20,7 @@ namespace Capstone.Service
     {
         public EmailServicce() { }
 
-        public async Task SendMail(string to, string subject, string message)
+        public async Task SendMail(string to, string subject, string message, List<string> filePaths)
         {
             SmtpClient smtp = new SmtpClient();
             smtp.Host = "smtp.gmail.com";
@@ -33,6 +34,18 @@ namespace Capstone.Service
             msg.IsBodyHtml = true;
             msg.To.Add(to);
             msg.From = new MailAddress("DynamicWorkFlow Team <dynamicworkflowteam@gmail.com>");
+
+            var currentDirectory = Path.Combine(Directory.GetCurrentDirectory());
+
+            //kiểm tra list file path empty
+            if (filePaths.Any())
+            {
+                foreach (var filePath in filePaths)
+                {
+                    msg.Attachments.Add(new Attachment(currentDirectory + "\\" + filePath));
+                }
+            }
+
             smtp.Send(msg);
         }
 

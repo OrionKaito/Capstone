@@ -50,6 +50,26 @@ namespace Capstone.Controllers
             try
             {
                 List<PermissionVM> result = new List<PermissionVM>();
+                var data = _permissionService.GetIsDelete();
+                foreach (var item in data)
+                {
+                    result.Add(_mapper.Map<PermissionVM>(item));
+                }
+                return Ok(result);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
+
+        // GET: api/Permissions
+        [HttpGet("GetAllPermission")]
+        public ActionResult<IEnumerable<PermissionVM>> GetAllPermissions()
+        {
+            try
+            {
+                List<PermissionVM> result = new List<PermissionVM>();
                 var data = _permissionService.GetAll();
                 foreach (var item in data)
                 {
