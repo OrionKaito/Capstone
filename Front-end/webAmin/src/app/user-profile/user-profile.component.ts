@@ -29,8 +29,9 @@ openChangePass: any;
     debugger;
     this.loginService.getUserProfile().toPromise().then(
       resp =>{
-        debugger;
+
         this.userDetail1 = resp;
+        console.log(this.userDetail1);
         this.userDetail = this.userDetail1[0];
         
         // this.userDetail.dateOfBirth = Date.parse(this.userDetail.dateOfBirth) ;
