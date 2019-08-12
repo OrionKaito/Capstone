@@ -59,7 +59,7 @@ namespace Capstone
             services.AddCors(options =>
             {
                 options.AddPolicy("CorsPolicy",
-                builder => builder.WithOrigins("http://localhost:4200")
+                builder => builder.WithOrigins("*")
                 .AllowAnyMethod()
                 .AllowAnyHeader()
                 .AllowCredentials());
@@ -82,6 +82,7 @@ namespace Capstone
 
             // Add the processing server as IHostedService
             services.AddHangfireServer();
+
             services.AddDbContext<CapstoneEntities>(
                         options => options.UseLazyLoadingProxies()
                         .UseSqlServer(Configuration.GetConnectionString("CapstoneEntities")));
@@ -263,16 +264,30 @@ namespace Capstone
                 // the default hsts value is 30 days. you may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
+
             app.UseHangfireDashboard();
+
+            //using (var connection = JobStorage.Current.GetConnection())
+            //{
+            //    foreach (var recurringJob in connection.GetRecurringJobs())
+            //    {
+            //        RecurringJob.RemoveIfExists(recurringJob.Id);
+            //    }
+            //}
+
+            //backgroundJobs.Schedule<IHangfireService>(u => u.checkAndChange(), TimeSpan.FromMinutes(1));
+
+            List<RecurringJobDto> list;
             using (var connection = JobStorage.Current.GetConnection())
             {
-                foreach (var recurringJob in connection.GetRecurringJobs())
-                {
-                    RecurringJob.RemoveIfExists(recurringJob.Id);
-                }
+                list = connection.GetRecurringJobs();
             }
 
-            backgroundJobs.Schedule<IHangfireService>(u => u.checkAndChange(), TimeSpan.FromMinutes(1));
+            var job = list?.FirstOrDefault(j => j.Id == "test");  // jobId is the recurring job ID, whatever that is
+            if (job != null && !string.IsNullOrEmpty(job.LastJobId))
+            {
+                BackgroundJob.Delete(job.LastJobId);
+            }
 
             app.UseStaticFiles();
             app.UseStaticFiles(new StaticFileOptions()

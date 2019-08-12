@@ -145,6 +145,17 @@ namespace Capstone.Controllers
                     _requestFileService.Create(requestFile);
                 }
 
+
+                //list file path to send email
+                List<string> filePaths = new List<string>();
+                if (!model.ImagePaths.IsNullOrEmpty())
+                {
+                    foreach (var path in model.ImagePaths)
+                    {
+                        filePaths.Add(path);
+                    }
+                }
+
                 //Notification
                 Notification notification = new Notification
                 {
@@ -212,7 +223,7 @@ namespace Capstone.Controllers
                         , dynamicform
                         , listButton);
 
-                    _emailService.SendMail(workflowTemplateAction.ToEmail, "You receive", message);
+                    _emailService.SendMail(workflowTemplateAction.ToEmail, "You receive request.", message, filePaths);
 
                 }
                 //End transaction
@@ -275,6 +286,28 @@ namespace Capstone.Controllers
                 };
 
                 _requestActionService.Create(requestAction);
+
+                //Lấy phần thông tin của người gửi request
+                var startActionTemplate = _workFlowTemplateActionService.GetStartByWorkFlowID(request.WorkFlowTemplateID);
+                var userAction = _requestActionService.GetStartAction(startActionTemplate.ID, request.ID);
+
+                //Lấy file của user
+                var requestFiles = _requestFileService.GetByRequestActionID(userAction.ID).Select(r => new RequestFileVM
+                {
+                    ID = r.ID,
+                    Path = r.Path,
+                    IsDeleted = r.IsDeleted,
+                });
+
+                //list file path to send email
+                List<string> filePaths = new List<string>();
+                if (!requestFiles.IsNullOrEmpty())
+                {
+                    foreach (var requestFile in requestFiles)
+                    {
+                        filePaths.Add(requestFile.Path);
+                    }
+                }
 
                 //RequestValue
                 foreach (var value in model.ActionValues)
@@ -368,7 +401,7 @@ namespace Capstone.Controllers
                             , dynamicform
                             , listButton);
 
-                        _emailService.SendMail(nextStep.ToEmail, "You receive", message);
+                        _emailService.SendMail(nextStep.ToEmail, "You receive", message, filePaths);
                     }
                 }
                 else // Nếu nó là action cuối cùng (kết quả) thì gửi về cho người gửi request

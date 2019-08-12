@@ -1,8 +1,11 @@
 ﻿using Capstone.Helper;
 using Capstone.Service;
+using Hangfire;
+using Hangfire.Storage;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Capstone.Controllers
@@ -13,11 +16,13 @@ namespace Capstone.Controllers
     {
         private readonly IEmailService _emailService;
         private readonly IRequestValueService _requestValueService;
+        private readonly IBackgroundJobClient _backgroundJob;
 
-        public ValuesController(IEmailService emailService, IRequestValueService requestValueService)
+        public ValuesController(IEmailService emailService, IRequestValueService requestValueService, IBackgroundJobClient backgroundJob)
         {
             _emailService = emailService;
             _requestValueService = requestValueService;
+            _backgroundJob = backgroundJob;
         }
 
         [HttpGet("Test")]
@@ -48,7 +53,7 @@ namespace Capstone.Controllers
             //string message = _emailService.GenerateTestMessage();
             try
             {
-                _emailService.SendMail("orionkaito@gmail.com", "Test", message);
+                _emailService.SendMail("orionkaito@gmail.com", "Test", message, new List<string>());
             }
             catch (Exception e)
             {
@@ -83,13 +88,20 @@ namespace Capstone.Controllers
             string message = _emailService.GenerateMessageTest("orionkaito@gmail.com", "locnt", "Quy trình nghỉ học", "Phòng đào tạo duyệt", dynamicform, listButton);
             try
             {
-                _emailService.SendMail("orionkaito@gmail.com", "Test", message);
+                _emailService.SendMail("orionkaito@gmail.com", "Test", message, new List<string>());
             }
             catch (Exception e)
             {
                 return BadRequest("Wrong " + e.Message);
             }
             return Ok(domain);
+        }
+
+        [HttpGet("TestHandfire")]
+        public ActionResult TestHandfire()
+        {
+            RecurringJob.AddOrUpdate("test",() => _emailService.SendMail("kevinz2014st@gmail.com","test hangfire", "hangfire test", new List<string>()), "*/5 * * * *");
+            return Ok();
         }
 
         // POST api/values

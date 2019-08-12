@@ -4,8 +4,11 @@
 <mat-dialog-content class="mat-typography">
     <!-- <h4 class="dispaly-4">Name form:  <input name="nameForm" type="text" [(ngModel)]="nameForm"> -->
 
-    <mat-form-field class="example-full-width">
-        <input matInput placeholder="Name form" name="nameForm" type="text" [(ngModel)]="nameForm">
+    <mat-form-field>
+        <input [formControl]="validateInput" matInput placeholder="Name form" name="nameForm" type="text" [(ngModel)]="nameForm">
+        <mat-error *ngIf="validateInput.hasError('required')">
+            Form Name is <strong>required</strong>
+        </mat-error>
     </mat-form-field>
 
     <!-- <div (click)="closeForm()" class="icon-head-pup">
@@ -22,7 +25,10 @@
         </div> -->
 
         <mat-form-field class="example-full-width">
-            <input matInput placeholder="Name property" name="nameHere" type="text" [(ngModel)]="nameHere">
+            <input [formControl]="validatePro" matInput placeholder="Name property" name="nameHere" type="text" [(ngModel)]="nameHere">
+            <mat-error *ngIf="validatePro.hasError('required')">
+                Name property is <strong>required</strong>
+            </mat-error>
         </mat-form-field>
 
         <div class="col-md-6 d-flex">
@@ -68,7 +74,10 @@
             <!-- Add option:
             <input name="nameOfCb" type="text" [(ngModel)]="nameOfCb"> -->
             <mat-form-field class="example-full-width">
-                <input matInput placeholder="Add option:" name="nameOfCb" type="text" [(ngModel)]="nameOfCb">
+                <input [formControl]="addobtion" matInput placeholder="Add option:" name="nameOfCb" type="text" [(ngModel)]="nameOfCb">
+                <mat-error *ngIf="addobtion.hasError('required')">
+                    Add obtion property is <strong>required</strong>
+                </mat-error>
             </mat-form-field>
 
         </div>

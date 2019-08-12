@@ -120,21 +120,34 @@
                           <div class="row">
                               <div class="col-md-6">
                                   <mat-form-field class="example-full-width">
-                                    <input matInput name="{{changePass.cur}}" [(ngModel)]='changePass.cur'  placeholder="Current:" type="password">
+                                    <input matInput [formControl]="OldpassFormControl" name="{{changePass.cur}}" [(ngModel)]='changePass.cur'  placeholder="Current:" type="password">
+                                      <mat-error *ngIf="OldpassFormControl.hasError('Password') && !OldpassFormControl.hasError('required')">
+                                          Please enter password min length equal
+                                      </mat-error>
+                                      <mat-error *ngIf="OldpassFormControl.hasError('required')">
+                                          Password is <strong>required</strong>
+                                      </mat-error>
+                                  </mat-form-field>
+
+                                </div>
+                          </div>
+                          <div class="row">
+                              <div class="col-md-6">
+                                  <mat-form-field class="example-full-width">
+                                    <input matInput [formControl]="NewpassFormControl" name="{{changePass.new}}" [(ngModel)]='changePass.new'  placeholder="New:" type="password">
+                                      <mat-error *ngIf="NewpassFormControl.hasError('required')">
+                                          New Password is <strong>required</strong>
+                                      </mat-error>
                                   </mat-form-field>
                                 </div>
                           </div>
                           <div class="row">
                               <div class="col-md-6">
                                   <mat-form-field class="example-full-width">
-                                    <input matInput name="{{changePass.new}}" [(ngModel)]='changePass.new'  placeholder="New:" type="password">
-                                  </mat-form-field>
-                                </div>
-                          </div>
-                          <div class="row">
-                              <div class="col-md-6">
-                                  <mat-form-field class="example-full-width">
-                                    <input matInput name="{{changePass.re}}" [(ngModel)]='changePass.re'  placeholder="Retype new:" type="password">
+                                    <input matInput [formControl]="RepassFormControl" name="{{changePass.re}}" [(ngModel)]='changePass.re'  placeholder="Retype new:" type="password">
+                                      <mat-error *ngIf="RepassFormControl.hasError('required')">
+                                          Password is <strong>required</strong>
+                                      </mat-error>
                                   </mat-form-field>
                                 </div>
                           </div>               
