@@ -3,6 +3,7 @@ using Capstone.Helper;
 using Capstone.Model;
 using Capstone.Service;
 using Capstone.ViewModel;
+using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
@@ -36,6 +37,7 @@ namespace Capstone.Controllers
         private readonly IUserDeviceService _userDeviceService;
         private readonly IEmailService _emailService;
         private readonly IConfiguration _configuration;
+        private readonly IDataProtector _dataProtector;
 
         public RequestsController(IActionTypeService actionTypeService
             , IMapper mapper
@@ -54,7 +56,8 @@ namespace Capstone.Controllers
             , IPermissionService permissionService
             , IUserDeviceService userDeviceService
             , IEmailService emailService
-            , IConfiguration configuration)
+            , IConfiguration configuration
+            , IDataProtectionProvider provider)
         {
             _actionTypeService = actionTypeService;
             _mapper = mapper;
@@ -74,6 +77,7 @@ namespace Capstone.Controllers
             _userDeviceService = userDeviceService;
             _emailService = emailService;
             _configuration = configuration;
+            _dataProtector = provider.CreateProtector(WebConstant.Purpose);
         }
 
         // POST: api/Requests
@@ -185,19 +189,20 @@ namespace Capstone.Controllers
 
                     Dictionary<string, string> listButton = new Dictionary<string, string>();
                     var connections = _workFlowTemplateActionConnectionService.GetByFromWorkflowTemplateActionID(workflowTemplateAction.ID);
+                    string url = "";
                     foreach (var connection in connections)
                     {
-                        listButton.Add(_configuration["UrlCapstoneMvc"]
-                                + "/home/ApproveRequest/?RequestID="
-                                + request.ID
-                                + "&RequestActionID="
-                                + requestAction.ID
-                                + "&Status="
-                                + StatusEnum.Pending
-                                + "&NextStepID="
-                                + connection.ToWorkFlowTemplateActionID
-                                + "&ActorEmail="
-                                + workflowTemplateAction.ToEmail, connection.ConnectionType.Name);
+                        url = (_configuration["UrlCapstoneMvc"]
+                                + "/home/ApproveRequest/?content="
+                                + _dataProtector.Protect("RequestID="
+                                    + request.ID
+                                    + "&RequestActionID="
+                                    + requestAction.ID
+                                    + "&NextStepID="
+                                    + connection.ToWorkFlowTemplateActionID)
+                                );
+
+                        listButton.Add(url, connection.ConnectionType.Name);
                     }
 
                     string message = _emailService.GenerateMessageTest(workflowTemplateAction.ToEmail
@@ -266,6 +271,7 @@ namespace Capstone.Controllers
                     ActorID = userID,
                     NextStepID = model.NextStepID,
                     CreateDate = DateTime.Now,
+                    WorkFlowTemplateActionID = model.NextStepID,
                 };
 
                 _requestActionService.Create(requestAction);
@@ -349,8 +355,6 @@ namespace Capstone.Controllers
                                 + request.ID
                                 + "&RequestActionID="
                                 + requestAction.ID
-                                + "&Status="
-                                + StatusEnum.Pending
                                 + "&NextStepID="
                                 + connection.ToWorkFlowTemplateActionID
                                 + "&ActorEmail="

@@ -10,6 +10,10 @@
         public static string Roles = "roles";
         public static string Groups = "groups";
         public static string Resources = "Resources";
+        public static string Purpose = "Capstone.Purpose";
+        public static string RequestID = "RequestID";
+        public static string RequestActionID = "RequestActionID";
+        public static string NextStepID = "NextStepID";
 
         //Return messages
         public static string Success = "Success.";
