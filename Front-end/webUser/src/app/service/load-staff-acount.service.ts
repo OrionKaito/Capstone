@@ -211,7 +211,7 @@ export class LoadStaffAcountService {
   createAction(action){
     var token = "Bearer " + localStorage.getItem("token");
     var tokenHeader = new HttpHeaders({'Authorization': token});
-    return this.http.post(this.Url + "api/ActionTypes", action, {headers : tokenHeader });
+    return this.http.post(this.Url + "api/ActionTypes", action, {headers : tokenHeader, responseType: "text" });
   }
   loadPermissionByGr(id){
     var token = "Bearer " + localStorage.getItem("token");

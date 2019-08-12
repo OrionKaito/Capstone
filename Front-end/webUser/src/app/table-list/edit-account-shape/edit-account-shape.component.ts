@@ -165,10 +165,10 @@ export class EditAccountShapeComponent implements OnInit {
         })
     }
 
-    public getlistActionType() {
+    public getlistActionType(){
         this.shapeService.getActiontype().toPromise().then((res: any) => {
-            // debugger;
             this.listActionType = [];
+
             if (res) {
                 this.getListAction = res;
                 this.getListAction.forEach(item => {
@@ -963,16 +963,19 @@ export class EditAccountShapeComponent implements OnInit {
 
     // tạo form động
     openDinamicForm(id) {
+
         const dialogConfig = new MatDialogConfig();
         dialogConfig.autoFocus = true;
         // dialogConfig.disableClose = true;
         dialogConfig.width = '50%';
+        dialogConfig.maxHeight= "80%";
         dialogConfig.data = [];
         this.dialog.open(AddNewDynamicFormComponent, dialogConfig).afterClosed().subscribe(res => {
             console.log(res);
             this.getlistActionType();
         });
         this.getlistActionType();
+
     }
 
     saveDraf() {
@@ -1189,11 +1192,11 @@ export class EditAccountShapeComponent implements OnInit {
                         console.log('không có vo đau');
                         console.log(data);
                         if (data != '') {
-                            this.toastr.success('Vui lòng Active WorkFlow để đưa vào hoạt động!', 'Lưu WorkFlow thành công!');
+                            this.toastr.success('Please Active WorkFlow to user can use it!', 'Save WorkFlow Success!');
                             this.router.navigate(['/manage-workflow']);
                         }
                     }, (err) => {
-                        this.toastr.error('Lỗi: ' + err.error, 'Có lỗi xảy ra');
+                        this.toastr.error('Err ' + err.error);
                         console.log(err);
                     });
             }
