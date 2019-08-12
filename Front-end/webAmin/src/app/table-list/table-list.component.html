@@ -66,13 +66,13 @@
                                     <mat-header-cell *matHeaderCellDef></mat-header-cell>
                                     <mat-cell *matCellDef="let element">
                                         <td *ngIf="element.isDeleted;  else elseBlock">
-                                            <button (click)="banOrUnbanAcc(element.id)" mat-icon-button color="primary"
+                                            <button (click)="banOrUnbanAcc(element.id)" mat-icon-button color="warn"
                                                 matTooltip="Un-Ban ACcount">
-                                                <mat-icon id="element.id">check_circle_outline</mat-icon>
+                                                <mat-icon id="element.id">block</mat-icon>
                                             </button></td>
                                         <ng-template #elseBlock><button (click)="banOrUnbanAcc(element.id)"
-                                                mat-icon-button color="warn" matTooltip="Ban ACcount">
-                                                <mat-icon id="element.id">block</mat-icon>
+                                                mat-icon-button color="primary" matTooltip="Ban ACcount">
+                                                <mat-icon id="element.id">check_circle_outline</mat-icon>
                                             </button>
                                         </ng-template>
                                         <button (click)="AddAccountItem(element.id)" mat-icon-button

@@ -35,7 +35,7 @@ export class ManagePermissionComponent implements OnInit {
     this.callAll();
   }
   callAll() {
-    this.loadStaffAcountService.loadPermissionData().toPromise().then(data => {
+    this.loadStaffAcountService.loadAllPermissionData().toPromise().then(data => {
       this.users = data;
       this.listData = new MatTableDataSource(this.users);
       this.listData.sort = this.sort;
@@ -54,9 +54,9 @@ export class ManagePermissionComponent implements OnInit {
   }
   banOrUnbanAcc(id) {
 
-    this.LoginService.BanOrUnbanPer(id).subscribe(
+    this.LoginService.BanOrUnbanPer(id).toPromise().then(
       data => {
-        console.log(data);
+        this.toastr.success(data);
         this.callAll();
       },
       err => {
