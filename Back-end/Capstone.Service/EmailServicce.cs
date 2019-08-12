@@ -45,8 +45,7 @@ namespace Capstone.Service
                     msg.Attachments.Add(new Attachment(currentDirectory + "\\" + filePath));
                 }
             }
-
-            smtp.Send(msg);
+            smtp.SendMailAsync(msg);
         }
 
         public string GenerateMessageSendConfirmCode(string userName, string emailConfirmCode)
@@ -114,7 +113,7 @@ namespace Capstone.Service
             {
                 body = reader.ReadToEnd();
             }
-            
+
             //Lấy template cho dynamicform
             fullPath = currentDirectory + "\\EmailTemplate\\DynamicForm.html";
             string listForm = string.Empty;

@@ -1,11 +1,8 @@
-﻿using Capstone.Helper;
-using Capstone.Service;
+﻿using Capstone.Service;
 using Hangfire;
-using Hangfire.Storage;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace Capstone.Controllers
@@ -97,12 +94,12 @@ namespace Capstone.Controllers
             return Ok(domain);
         }
 
-        [HttpGet("TestHandfire")]
-        public ActionResult TestHandfire()
-        {
-            RecurringJob.AddOrUpdate("test",() => _emailService.SendMail("kevinz2014st@gmail.com","test hangfire", "hangfire test", new List<string>()), "*/5 * * * *");
-            return Ok();
-        }
+        //[HttpGet("TestHandfire")]
+        //public ActionResult TestHandfire()
+        //{
+        //    RecurringJob.AddOrUpdate("test",() => _emailService.SendMail("kevinz2014st@gmail.com","test hangfire", "hangfire test", new List<string>()), "*/5 * * * *");
+        //    return Ok();
+        //}
 
         // POST api/values
         [HttpPost("PushNotificationToDevice")]

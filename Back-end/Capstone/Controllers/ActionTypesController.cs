@@ -1,11 +1,10 @@
 ﻿using AutoMapper;
-using Capstone.Helper;
 using Capstone.Model;
 using Capstone.Service;
+using Capstone.Service.Helper;
 using Capstone.ViewModel;
 using Microsoft.AspNetCore.Mvc;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 
 namespace Capstone.Controllers

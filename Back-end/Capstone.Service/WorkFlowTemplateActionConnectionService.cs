@@ -42,9 +42,7 @@ namespace Capstone.Service
 
         public WorkFlowTemplateActionConnection GetByFromIDAndToID(Guid fromID, Guid toID)
         {
-            return _workFlowTemplateActionConnectionRepository
-                .GetMany(r => r.FromWorkFlowTemplateActionID == fromID && r.ToWorkFlowTemplateActionID == toID)
-                .FirstOrDefault();
+            return _workFlowTemplateActionConnectionRepository.GetByFromIDAndToID(fromID, toID);
         }
 
         public IEnumerable<WorkFlowTemplateActionConnection> GetByFromWorkflowTemplateActionID(Guid ID)

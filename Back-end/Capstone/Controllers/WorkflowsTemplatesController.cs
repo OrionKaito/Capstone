@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
-using Capstone.Helper;
 using Capstone.Model;
 using Capstone.Service;
+using Capstone.Service.Helper;
 using Capstone.ViewModel;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -290,6 +290,7 @@ namespace Capstone.Controllers
                 }
                 else
                 {
+                    workFlowInDB.IsCheckConnection = true;
                     workFlowInDB.Data = model.Data;
                 }
 
@@ -319,6 +320,8 @@ namespace Capstone.Controllers
                         ConnectionTypeID = connectionTypeInDb.ID,
                         FromWorkFlowTemplateActionID = connection.FromWorkFlowTemplateActionID,
                         ToWorkFlowTemplateActionID = connection.ToWorkFlowTemplateActionID,
+                        TimeInterval = connection.TimeInterval,
+                        Type = connection.Type
                     };
 
                     _workFlowTemplateActionConnectionService.Create(workflowConnection);
