@@ -24,7 +24,7 @@ export class TableListComponent implements OnInit {
   model: any = {};
   errorMessage: string;
   listData: MatTableDataSource<any>;
-  displayedColumns: string[] = ['fullName', 'email', "dateOfBirth", "role", "group", "manage", "isDeleted"];
+  displayedColumns: string[] = ['fullName', "role", "group", "manage", "isDeleted"];
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild(MatPaginator) paginator: MatPaginator;
   constructor(private toastr: ToastrService, private router: Router, private dialog: MatDialog,
@@ -76,7 +76,7 @@ export class TableListComponent implements OnInit {
       //     })
       //   });
     }, err=>{
-      console.log(err.message);
+      console.log(err.error);
     })
   }
 
@@ -109,17 +109,19 @@ export class TableListComponent implements OnInit {
         debugger;
 
         if (resp != "") {
-          debugger;
-          location.reload();
+
+          this.callAll();
         }
         else {
           this.errorMessage = resp.toString();
         }
       },
       error => {
-        this.errorMessage = error.message;
+        this.toastr.error(error.error);
       });
   };
+
+
   AddAccountItem(id: string) {
     const dialogConfig = new MatDialogConfig();
     dialogConfig.autoFocus = true;

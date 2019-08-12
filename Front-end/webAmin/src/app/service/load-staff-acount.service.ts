@@ -21,7 +21,6 @@ export class LoadStaffAcountService {
     return this.http.delete(this.Url + "/api/PermissionOfRoles?ID=" + id);
   }
   loadRoleData() {
-    debugger;
     return this.http.get(this.Url + "/api/Roles");
   }
   deleteRole(id: string) {

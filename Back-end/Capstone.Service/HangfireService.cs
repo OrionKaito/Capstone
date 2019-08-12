@@ -2,6 +2,7 @@
 using Capstone.Data.Repositories;
 using Capstone.Model;
 using Capstone.Service.Helper;
+using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using System;
@@ -32,6 +33,7 @@ namespace Capstone.Service
         private readonly IConfiguration _configuration;
         private readonly IRequestValueService _requestValueService;
         private readonly IRequestFileService _requestFileService;
+        private readonly IDataProtector _dataProtector;
 
         public HangfireService(IUnitOfWork unitOfWork, IRequestRepository requestRepository
             , IRequestActionRepository requestActionRepository
@@ -46,7 +48,8 @@ namespace Capstone.Service
             , IRequestFileService requestFileService
             , IWorkFlowTemplateRepository workFlowTemplateRepository
             , UserManager<User> userManager
-            , IUserService userService)
+            , IUserService userService
+            , IDataProtectionProvider provider)
         {
             _unitOfWork = unitOfWork;
             _requestRepository = requestRepository;
@@ -64,6 +67,7 @@ namespace Capstone.Service
             _workFlowTemplateRepository = workFlowTemplateRepository;
             _userService = userService;
             _userManager = userManager;
+            _dataProtector = provider.CreateProtector(WebConstant.Purpose);
         }
 
         public void HandleByHangfire()
@@ -141,17 +145,19 @@ namespace Capstone.Service
 
                         Dictionary<string, string> listButton = new Dictionary<string, string>();
                         var connections = _workFlowTemplateActionConnectionRepository.GetByFromWorkflowTemplateActionID(workflowTemplateAction.ID);
+                        string url = "";
                         foreach (var connection in connections)
                         {
-                            listButton.Add(_configuration["UrlCapstoneMvc"]
-                                    + "/home/ApproveRequest/?RequestID="
-                                    + requestAction.Request.ID
-                                    + "&RequestActionID="
-                                    + requestAction.ID
-                                    + "&NextStepID="
-                                    + connection.ToWorkFlowTemplateActionID
-                                    + "&ActorEmail="
-                                    + workflowTemplateAction.ToEmail, connection.ConnectionType.Name);
+                            url = (_configuration["UrlCapstoneMvc"]
+                                    + "/home/ApproveRequest/?content="
+                                    + _dataProtector.Protect("RequestID="
+                                        + requestAction.Request.ID
+                                        + "&RequestActionID="
+                                        + requestAction.ID
+                                        + "&NextStepID="
+                                        + connection.ToWorkFlowTemplateActionID)
+                                    );
+                            listButton.Add(url, connection.ConnectionType.Name);
                         }
 
                         string message = _emailService.GenerateMessageTest(workflowTemplateAction.ToEmail
@@ -209,5 +215,5 @@ namespace Capstone.Service
             }
         }
     }
-    
+
 }

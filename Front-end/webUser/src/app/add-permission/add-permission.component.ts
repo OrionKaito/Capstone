@@ -5,6 +5,7 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
 import { Router } from '@angular/router';
 import { LoadStaffAcountService } from 'app/service/load-staff-acount.service';
 import { ToastrService } from 'ngx-toastr';
+import {FormControl, Validators} from '@angular/forms';
 @Component({
   selector: 'app-add-permission',
   templateUrl: './add-permission.component.html',
@@ -104,7 +105,9 @@ export class AddPermissionComponent implements OnInit {
       this.dialogRef.close();
     }
   }
-
+  descriptionFormControl = new FormControl('', [
+    Validators.required
+  ]);
 
 
 }

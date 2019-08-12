@@ -3,6 +3,7 @@ using Capstone.Service;
 using Capstone.Service.Helper;
 using Capstone.ViewModel;
 using CapstoneMvc.Models;
+using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
@@ -31,6 +32,7 @@ namespace CapstoneMvc.Controllers
         private readonly IUserDeviceService _userDeviceService;
         private readonly IEmailService _emailService;
         private readonly IConfiguration _configuration;
+        private readonly IDataProtector _dataProtector;
 
         public HomeController(IRequestService requestService
             , IRequestActionService requestActionService
@@ -47,7 +49,8 @@ namespace CapstoneMvc.Controllers
             , UserManager<User> userManager
             , IUserDeviceService userDeviceService
             , IEmailService emailService
-            , IConfiguration configuration)
+            , IConfiguration configuration
+            , IDataProtectionProvider provider)
         {
             _requestService = requestService;
             _requestActionService = requestActionService;
@@ -65,6 +68,7 @@ namespace CapstoneMvc.Controllers
             _userDeviceService = userDeviceService;
             _emailService = emailService;
             _configuration = configuration;
+            _dataProtector = provider.CreateProtector(WebConstant.Purpose);
         }
 
         public IActionResult Index()
@@ -72,7 +76,7 @@ namespace CapstoneMvc.Controllers
             return View();
         }
 
-        public IActionResult ApproveRequest(CapstoneMvc.Models.RequestApproveCM model)
+        public IActionResult ApproveRequest(string content)
         {
             if (!ModelState.IsValid) return BadRequest(ModelState);
 
@@ -80,6 +84,16 @@ namespace CapstoneMvc.Controllers
             {
                 //Begin transaction
                 _requestService.BeginTransaction();
+
+                //Decrypt chuỗi content
+                content = _dataProtector.Unprotect(content);
+
+                RequestApproveByMailCM model = new RequestApproveByMailCM
+                {
+                    RequestID = Guid.Parse(content.Substring(content.IndexOf(WebConstant.RequestID) + WebConstant.RequestID.Count() + 1, 36)),
+                    RequestActionID = Guid.Parse(content.Substring(content.IndexOf(WebConstant.RequestActionID) + WebConstant.RequestActionID.Count() + 1, 36)),
+                    NextStepID = Guid.Parse(content.Substring(content.IndexOf(WebConstant.NextStepID) + WebConstant.NextStepID.Count() + 1, 36)),
+                };
 
                 var currentRequestAction = _requestActionService.GetByID(model.RequestActionID);
                 if (currentRequestAction.Status == StatusEnum.Handled)
@@ -102,9 +116,10 @@ namespace CapstoneMvc.Controllers
                 {
                     Status = StatusEnum.Pending,
                     RequestID = model.RequestID,
-                    ActorEmail = model.ActorEmail,
+                    ActorEmail = "Hahaha",
                     NextStepID = model.NextStepID,
                     CreateDate = DateTime.Now,
+                    WorkFlowTemplateActionID = model.NextStepID,
                 };
 
                 //Lấy phần thông tin của người gửi request
@@ -178,7 +193,6 @@ namespace CapstoneMvc.Controllers
                         if (nextStep.PermissionToUseID.HasValue)
                         {
                             var users = _userService.GetUsersByPermissionID(nextStep.PermissionToUseID.GetValueOrDefault());
-
                             if (users != null && users.Any())
                             {
                                 foreach (var user in users)
@@ -208,8 +222,6 @@ namespace CapstoneMvc.Controllers
                                     + request.ID
                                     + "&RequestActionID="
                                     + requestAction.ID
-                                    + "&Status="
-                                    + StatusEnum.Pending
                                     + "&NextStepID="
                                     + connection.ToWorkFlowTemplateActionID
                                     + "&ActorEmail="
@@ -256,7 +268,8 @@ namespace CapstoneMvc.Controllers
 
                 Message messageResult = new Message
                 {
-                    strMessage = "Submit success!",
+                    strMessage = "Your " + requestAction.WorkFlowTemplateAction.Name + " for request " + request.WorkFlowTemplate.Name
+                    + " of " + request.Initiator.FullName + " successfully.",
                 };
                 //End transaction
                 return View(messageResult);

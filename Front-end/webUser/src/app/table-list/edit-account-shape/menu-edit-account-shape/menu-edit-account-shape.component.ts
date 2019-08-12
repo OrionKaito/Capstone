@@ -1,4 +1,5 @@
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-menu-edit-account-shape',
@@ -57,7 +58,7 @@ export class MenuEditAccountShapeComponent implements OnInit {
     // },
   ];
 
-  constructor() { }
+  constructor( private router: Router) { }
 
   ngOnInit() {
   }
@@ -67,6 +68,10 @@ export class MenuEditAccountShapeComponent implements OnInit {
     subEvent.id = '';
     // Bắt Output cho component cha
    this.draw.emit(subEvent);
+  }
+  moveToHome(){
+    this.router.navigate(['/create-request']);
+    
   }
 
 }

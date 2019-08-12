@@ -29,7 +29,7 @@ export class SidebarComponent implements OnInit {
   menuItems: any[];
   dataNow: any
 
-  constructor(private toastr: ToastrService,private router: Router,private loadStaffAcountService: LoadStaffAcountService) { }
+  constructor(private toastr: ToastrService, private router: Router,private loadStaffAcountService: LoadStaffAcountService) { }
 
   ngOnInit() {
     this.loadStaffAcountService.checkRole().toPromise().then(rep => {
