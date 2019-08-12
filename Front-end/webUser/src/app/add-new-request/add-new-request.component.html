@@ -18,7 +18,7 @@
     <div *ngIf="item.shortText.name" class="form-group col-md-10">
         <mat-form-field class="fix-padding">
             <!--            <label class="label-modify col-md-4">{{item.shortText.name}} </label>-->
-            <input [formControl]="validateInput" style="margin-top: 5px" matInput [(ngModel)]="item.shortText.value" type="text" class="shortText-dynamicForm col-md-8"
+            <input style="margin-top: 5px" matInput [(ngModel)]="item.shortText.value" type="text" class="shortText-dynamicForm col-md-8"
                    placeholder="{{item.shortText.name}}">
             <mat-error *ngIf="validateInput.hasError('required')">
                 Form Name is <strong>required</strong>
@@ -28,7 +28,7 @@
     <div *ngIf="item.longText.name" class="form-group col-md-10">
         <!--        <label placeholder="Leave a comment" class="label-modify"> </label>-->
         <mat-form-field>
-            <textarea [formControl]="validateInput1" matInput [(ngModel)]="item.longText.value" type="text"
+            <textarea matInput [(ngModel)]="item.longText.value" type="text"
                       placeholder="{{item.longText.name}}" class="shortText-dynamicForm input"></textarea>
             <mat-error *ngIf="validateInput1.hasError('required')">
                 Form Name is <strong>required</strong>
@@ -36,16 +36,15 @@
         </mat-form-field>
     </div>
     <div *ngIf="item.comboBox.name" class="form-row col-md-6">
-        <!--        <label class="label-modify">{{item.comboBox.name}}</label>-->
-        <mat-menu #menu="matMenu"> [(ngModel)]="item.comboBox.value" value="0" class="form-control">
+               <label class="label-modify">{{item.comboBox.name}}</label>
+        <select [(ngModel)]="item.comboBox.value" class="form-control">
             <option value="0">-Select-</option>
-            <option *ngFor="let ite of item.comboBox.valueOfProper">{{ite}}</option>
-        </mat-menu>
-
+            <option *ngFor="let ite of item.comboBox.valueOfProper" value="{{ite}}">{{ite}}</option>
+        </select>
     </div>
     <div *ngIf="item.inputCheckbox.name" class="form-group col-md-6">
-        <label class="">{{item.inputCheckbox.name }}</label>
-        <mat-checkbox style="margin-left: 10px;" [(ngModel)]="item.inputCheckbox.value"></mat-checkbox>
+        <mat-checkbox style="margin-right: 10px;" [(ngModel)]="item.inputCheckbox.value"></mat-checkbox>
+        <label>   {{item.inputCheckbox.name }}</label>
     </div>
 
 </div>

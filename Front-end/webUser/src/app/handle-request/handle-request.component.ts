@@ -32,6 +32,7 @@ export class HandleRequestComponent implements OnInit {
   ngOnInit() {
     this.callAll();
   }
+  
   callAll() {
     this.loadStaffAcountService.loadHandlingRequest().toPromise().then(data => {
       console.log(data);

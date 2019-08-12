@@ -82,7 +82,7 @@ export class LoginService {
   }
   enabledDisableWF(id: string){
     const headers = new HttpHeaders({ 'Content-Type': 'application/json'}); 
-    return this.http.put(this.Url + "api/WorkflowsTemplates/ToggleEnable?ID=" +id, {"ID": id},{ headers: headers });
+    return this.http.put(this.Url + "api/WorkflowsTemplates/ToggleEnable?ID=" +id, {"ID": id},{ headers: headers , responseType: 'text' });
   }
   resetPassword(email: string){
     return this.http.post(this.Url + 'api/Accounts/ForgotPassword?email=' + email, {'email': email} ,{ responseType: 'text'});

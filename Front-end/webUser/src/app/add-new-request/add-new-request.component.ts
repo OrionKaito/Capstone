@@ -147,7 +147,7 @@ export class AddNewRequestComponent implements OnInit {
     this.workFlowTemplateID = this.data;
     this.loadStaffAcountService.getRequestForm(this.workFlowTemplateID).toPromise().then(res => {
       this.saveData = res;
-      console.log(this.saveData);
+      console.log("savedata" , this.saveData);
       this.buttons = this.saveData.connections;
       this.formKey = this.saveData.actionType.name;
       this.dynamicForm = JSON.parse(this.saveData.actionType.data);

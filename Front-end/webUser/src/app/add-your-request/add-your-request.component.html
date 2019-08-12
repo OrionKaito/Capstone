@@ -30,7 +30,8 @@
           </div>
           <div class="timeline-body">
             <p>By {{item.fullName}} ({{item.userName}})</p>
-            <p *ngFor="let item1 of item.requestValues">{{item1.key}}:{{item1.value}} </p>
+            <p>Comment</p>
+            <p *ngFor="let item1 of item.requestValues">{{item1.value}} </p>
           </div>
         </div>
       </li>
