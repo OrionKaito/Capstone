@@ -165,6 +165,7 @@ namespace Capstone.Service
                             , _workFlowTemplateRepository.GetById(requestAction.Request.WorkFlowTemplateID).Name
                             , workflowTemplateAction.Name
                             , dynamicform
+                            , null
                             , listButton);
 
                         _emailService.SendMail(workflowTemplateAction.ToEmail, "You receive request.", message, new List<string>());

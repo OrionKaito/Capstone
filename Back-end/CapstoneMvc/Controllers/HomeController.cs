@@ -204,28 +204,44 @@ namespace CapstoneMvc.Controllers
                         }
                         if (!nextStep.ToEmail.IsNullOrEmpty())
                         {
-                            var requestValue = _requestValueService.GetByRequestActionID(requestAction.ID);
-
+                            //lấy giá trị form mà user input
+                            var userRequestValue = _requestValueService.GetByRequestActionID(userAction.ID);
                             Dictionary<string, string> dynamicform = new Dictionary<string, string>();
 
-                            foreach (var item in requestValue)
+                            foreach (var item in userRequestValue)
                             {
                                 dynamicform.Add(item.Key, item.Value);
                             }
 
+                            //lấy comment của staff
+                            var staffRequestValue = _requestValueService.GetByRequestActionID(requestAction.ID);
+                            Dictionary<string, string> comments = new Dictionary<string, string>();
+                            if (!staffRequestValue.IsNullOrEmpty())
+                            {
+                                comments.Add("Name", _userManager.FindByIdAsync(requestAction.ActorID).Result.FullName);
+                                int i = 0;
+                                foreach (var item in staffRequestValue)
+                                {
+                                    i++;
+                                    comments.Add(item.Key + i, item.Value);
+                                }
+                            }
+                            
                             Dictionary<string, string> listButton = new Dictionary<string, string>();
                             var connections = _workFlowTemplateActionConnectionService.GetByFromWorkflowTemplateActionID(nextStep.ID);
+                            string url = "";
                             foreach (var connection in connections)
                             {
-                                listButton.Add(_configuration["UrlCapstoneMvc"]
-                                    + "/home/ApproveRequest/?RequestID="
-                                    + request.ID
-                                    + "&RequestActionID="
-                                    + requestAction.ID
-                                    + "&NextStepID="
-                                    + connection.ToWorkFlowTemplateActionID
-                                    + "&ActorEmail="
-                                    + nextStep.ToEmail, connection.ConnectionType.Name);
+                                url = (_configuration["UrlCapstoneMvc"]
+                                        + "/home/ApproveRequest/?content="
+                                        + _dataProtector.Protect("RequestID="
+                                            + request.ID
+                                            + "&RequestActionID="
+                                            + requestAction.ID
+                                            + "&NextStepID="
+                                            + connection.ToWorkFlowTemplateActionID)
+                                        );
+                                listButton.Add(url, connection.ConnectionType.Name);
                             }
 
                             string message = _emailService.GenerateMessageTest(nextStep.ToEmail
@@ -233,6 +249,7 @@ namespace CapstoneMvc.Controllers
                                 , _workFlowTemplateService.GetByID(request.WorkFlowTemplateID).Name
                                 , nextStep.Name
                                 , dynamicform
+                                , comments
                                 , listButton);
 
                             _emailService.SendMail(nextStep.ToEmail, "You receive", message, filePaths);

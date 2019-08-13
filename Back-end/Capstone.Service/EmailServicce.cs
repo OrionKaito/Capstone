@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using Capstone.Service.Helper;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -13,7 +14,13 @@ namespace Capstone.Service
         string GenerateMessageSendConfirmCode(string username, string emailConfirmCode);
         string GenerateMessageApproveRequest(string userName, List<string> names, List<string> links);
         string GenerateTestMessage();
-        string GenerateMessageTest(string userEmail, string fromUser, string workflowName, string workflowActionName, Dictionary<string, string> dynamicForm, Dictionary<string, string> buttons);
+        string GenerateMessageTest(string userEmail
+            , string fromUser
+            , string workflowName
+            , string workflowActionName
+            , Dictionary<string, string> dynamicForm
+            , Dictionary<string, string> comments
+            , Dictionary<string, string> buttons);
     }
 
     public class EmailServicce : IEmailService
@@ -104,7 +111,8 @@ namespace Capstone.Service
             return body;
         }
 
-        public string GenerateMessageTest(string userEmail, string fromUser, string workflowName, string workflowActionName, Dictionary<string, string> dynamicForm, Dictionary<string, string> buttons)
+        public string GenerateMessageTest(string userEmail, string fromUser, string workflowName, string workflowActionName
+            , Dictionary<string, string> dynamicForm, Dictionary<string, string> comments, Dictionary<string, string> buttons)
         {
             var currentDirectory = Path.Combine(Directory.GetCurrentDirectory());
             var fullPath = currentDirectory + "\\EmailTemplate\\Request.html";
@@ -128,6 +136,31 @@ namespace Capstone.Service
                 listForm = listForm.Replace("{Value}", item.Value.ToString());
             }
 
+            //Lấy template cho comment
+            fullPath = currentDirectory + "\\EmailTemplate\\Comment.html";
+            string listComment = string.Empty;
+
+            if (!comments.IsNullOrEmpty())
+            {
+                string userName = "";
+                foreach (var item in comments)
+                {
+                    using (StreamReader reader = new StreamReader(fullPath))
+                    {
+                        listComment += reader.ReadToEnd();
+                    }
+                    if (item.Key.Equals("Name"))
+                    {
+                        userName = item.Value.ToString();
+                    } else
+                    {
+                        listComment = listComment.Replace("{UserComment}", userName);
+                        listComment = listComment.Replace("{Comment}", item.Value.ToString());
+                    }
+                    
+                }
+            }
+
             //Lấy template cho button
             fullPath = currentDirectory + "\\EmailTemplate\\Button.html";
             string listButton = string.Empty;
@@ -144,6 +177,7 @@ namespace Capstone.Service
 
 
             body = body.Replace("{DynamicForm}", listForm);
+            body = body.Replace("{Comment}", listComment);
             body = body.Replace("{ListButton}", listButton);
             body = body.Replace("{useremail}", userEmail);
             body = body.Replace("{fromuser}", fromUser);

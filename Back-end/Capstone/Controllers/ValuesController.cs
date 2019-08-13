@@ -82,7 +82,7 @@ namespace Capstone.Controllers
 
 
             //string message = _emailService.GenerateMessageApproveRequest("Kiet", names, links);
-            string message = _emailService.GenerateMessageTest("orionkaito@gmail.com", "locnt", "Quy trình nghỉ học", "Phòng đào tạo duyệt", dynamicform, listButton);
+            string message = _emailService.GenerateMessageTest("orionkaito@gmail.com", "locnt", "Quy trình nghỉ học", "Phòng đào tạo duyệt", dynamicform, null, listButton);
             try
             {
                 _emailService.SendMail("orionkaito@gmail.com", "Test", message, new List<string>());
