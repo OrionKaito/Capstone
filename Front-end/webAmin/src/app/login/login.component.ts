@@ -19,7 +19,7 @@ export class LoginComponent implements OnInit {
     sessionStorage.removeItem('userName');    
     sessionStorage.clear();
     if(localStorage.getItem('token')!= null)
-    this.router.navigate(['/dashboard']);
+    this.router.navigate(['/manage-user']);
        
   }    
   login(){    
