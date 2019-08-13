@@ -65,7 +65,7 @@
 
         <mat-form-field class="example-full-width">
           <mat-label>Form</mat-label>
-          <mat-select name="properties.actionTypeID"  [(ngModel)]="properties.actionTypeID">
+          <mat-select name="properties.actionTypeID" [(ngModel)]="properties.actionTypeID">
             <mat-option value="0">---Select form---</mat-option>
             <mat-option *ngFor="let item of listActionType" value="{{item.id}}"> {{item.name}} </mat-option>
           </mat-select>
@@ -78,11 +78,11 @@
       </tr>
       <tr *ngIf="checkIsAction && !properties.isStart && !properties.isEnd">
         <td colspan="2"> <input class="edit-inut" name="properties.isApprovedByLineManager"
-            [(ngModel)]="properties.isApprovedByLineManager" type="checkbox">Approve by Line Manager  </td>
+            [(ngModel)]="properties.isApprovedByLineManager" type="checkbox">Approve by Line Manager </td>
       </tr>
       <tr *ngIf="checkIsAction && !properties.isStart && !properties.isEnd">
-        <td colspan="2"><input class="edit-inut" name="approveByPer"
-            [(ngModel)]="properties.approveByPer" type="checkbox">Approve by Permission</td>
+        <td colspan="2"><input class="edit-inut" name="approveByPer" [(ngModel)]="properties.approveByPer"
+            type="checkbox">Approve by Permission</td>
       </tr>
       <tr *ngIf="checkIsAction && properties.approveByPer && !properties.isStart && !properties.isEnd">
         <!-- <td>Permission</td>
@@ -104,10 +104,10 @@
             [(ngModel)]="properties.appoveByMail" type="checkbox">Approve by Email</td>
       </tr>
 
-      <tr *ngIf="properties.appoveByMail">
+      <tr *ngIf="checkIsAction && properties.appoveByMail">
 
         <mat-form-field class="example-full-width">
-          <input matInput placeholder="Email" name="properties.toEmail" [(ngModel)]="properties.toEmail" type="text"> 
+          <input matInput placeholder="Email" name="properties.toEmail" [(ngModel)]="properties.toEmail" type="text">
         </mat-form-field>
 
       </tr>
@@ -125,10 +125,38 @@
               <mat-option  *ngFor="let item of listConnectionType" value="{{item.id}}">{{item.name}}</mat-option>
             </mat-select>
           </mat-form-field> -->
-
+          <!-- <div class="mr-3">Timer (Time delay): </div>
+          <input type="number" [(ngModel)]="propertiesArr.timeNumber">
+          <select [(ngModel)]="propertiesArr.typeTime">
+            <option value="1">Ngày </option>
+            <option value="2">Giờ </option>
+            <option value="3">Phút </option>
+          </select> -->
         </td>
       </tr>
-    </table>
+      <tr *ngIf="checkIsArrow">
+          <!-- <td>Name arrow</td> -->
+          <td class="d-flex align-items-center">
+
+            <div class="mr-3">Timer (Time delay): </div>
+            <input type="number" [(ngModel)]="propertiesArr.timeNumber">
+
+          </td>
+        </tr>
+        <tr *ngIf="checkIsArrow">
+            <!-- <td>Name arrow</td> -->
+            <td class="d-flex align-items-center">
+  
+              <div class="mr-3">Type</div>
+    
+              <select [(ngModel)]="propertiesArr.typeTime">
+                <option value="1">Ngày </option>
+                <option value="2">Giờ </option>
+                <option value="3">Phút </option>
+              </select>
+            </td>
+          </tr>
+    </table>  
   </div>
   <div class="row main">
     <div class="col-2 menu-left d-flex flex-column align-items-center" style="background-color:white">

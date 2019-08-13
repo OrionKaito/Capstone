@@ -223,7 +223,9 @@ export class EditAccountShapeComponent implements OnInit {
                     this.listClass.push({
                         idDiv: this.subClass,
                         idArrow: this.create_UUID().toString(),
-                        name: 'arrow' + count
+                        name: 'arrow' + count,
+                        timeNumber: 0,
+                        typeTime: 1
 
                     });
                 } else {
@@ -237,7 +239,9 @@ export class EditAccountShapeComponent implements OnInit {
                         // idArrow: 2 điểm có một mủi tên
                         // idArrow: 'arrow' + this.listClass.length
                         idArrow: this.create_UUID().toString(),
-                        name: 'arrow' + (+count + 1)
+                        name: 'arrow' + (+count + 1),
+                        timeNumber: 0,
+                        typeTime: 1
                     });
                 }
                 // Gọi hàm vẽ mủi tên
@@ -1162,16 +1166,20 @@ export class EditAccountShapeComponent implements OnInit {
                     }
                 });
 
-
+            
                 exportJson.arrow.forEach(element => {
                     let b = {
                         fromWorkFlowTemplateActionID: '',
                         toWorkFlowTemplateActionID: '',
-                        name: ''
+                        name: '',
+                        timeNumber: "",
+                        typeTime: ""
                     };
                     b.fromWorkFlowTemplateActionID = element.idDiv[0].toString();
                     b.toWorkFlowTemplateActionID = element.idDiv[1].toString();
                     b.name = element.name.toString();
+                    b.timeNumber = element.timeNumber.toString();
+                    b.typeTime = element.typeTime.toString();
                     jsonConnections.push(b);
                 });
 
