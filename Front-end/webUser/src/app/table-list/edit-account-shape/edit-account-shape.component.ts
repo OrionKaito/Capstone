@@ -223,9 +223,7 @@ export class EditAccountShapeComponent implements OnInit {
                     this.listClass.push({
                         idDiv: this.subClass,
                         idArrow: this.create_UUID().toString(),
-                        name: 'arrow' + count,
-                        timeNumber: 0,
-                        typeTime: 1
+                        name: 'arrow' + count
 
                     });
                 } else {
@@ -239,9 +237,7 @@ export class EditAccountShapeComponent implements OnInit {
                         // idArrow: 2 điểm có một mủi tên
                         // idArrow: 'arrow' + this.listClass.length
                         idArrow: this.create_UUID().toString(),
-                        name: 'arrow' + (+count + 1),
-                        timeNumber: 0,
-                        typeTime: 1
+                        name: 'arrow' + (+count + 1)
                     });
                 }
                 // Gọi hàm vẽ mủi tên
@@ -882,8 +878,8 @@ export class EditAccountShapeComponent implements OnInit {
             this.listArrow = listFlag2;
 
         }
-        console.log(this.menuList1);
-        console.log(this.listClass);
+        // console.log(this.menuList1);
+        // console.log(this.listClass);
 
 
         // if (this.listClass.length > 0) {
@@ -1166,20 +1162,16 @@ export class EditAccountShapeComponent implements OnInit {
                     }
                 });
 
-            
+
                 exportJson.arrow.forEach(element => {
                     let b = {
                         fromWorkFlowTemplateActionID: '',
                         toWorkFlowTemplateActionID: '',
-                        name: '',
-                        timeNumber: "",
-                        typeTime: ""
+                        name: ''
                     };
                     b.fromWorkFlowTemplateActionID = element.idDiv[0].toString();
                     b.toWorkFlowTemplateActionID = element.idDiv[1].toString();
                     b.name = element.name.toString();
-                    b.timeNumber = element.timeNumber.toString();
-                    b.typeTime = element.typeTime.toString();
                     jsonConnections.push(b);
                 });
 
@@ -1194,18 +1186,17 @@ export class EditAccountShapeComponent implements OnInit {
                 // debugger;
                 console.log('file json:')
                 console.log(JSON.stringify(a));
-
                 this.shapeService.saveWorkFlow(a).toPromise().then(
                     data => {
                         console.log('không có vo đau');
-                        console.log(data);
+                        // console.log(data);
                         if (data != '') {
                             this.toastr.success('Please Active WorkFlow to user can use it!', 'Save WorkFlow Success!');
                             this.router.navigate(['/manage-workflow']);
                         }
                     }, (err) => {
                         this.toastr.error('Err ' + err.error);
-                        console.log(err);
+                        // console.log(err);
                     });
             }
         } else {

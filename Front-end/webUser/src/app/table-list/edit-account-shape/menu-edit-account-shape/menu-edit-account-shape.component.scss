@@ -60,7 +60,7 @@ $MINT: linear-gradient(40deg, #ff6ec4, #7873f5) !important;
   position: fixed;
   top: 11%;
   box-sizing: border-box;
-  --higru:#1A2A3A;
+  --higru:#ccc;
   background: var(--higru);  
   // background-color: #111;
   // background: #eaeae1;
@@ -75,7 +75,23 @@ $MINT: linear-gradient(40deg, #ff6ec4, #7873f5) !important;
     border-radius: 50%;
     display: inline-block;
     margin-top: 10px;
-    background-color: #00bbff;
+    background-color: #ffffff;
+    border: 5px solid black;
+
+  }
+
+  .example-box:after {
+    content: '';
+    width: 20px;
+    height: 20px;
+    border: 1px solid #cccccc;
+    border-radius: 50%;
+    background-color: #cccccc;
+    opacity: .4;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    top: 5px;
   }
   .example-box:hover .horverTexS{
     display: block;
@@ -88,6 +104,18 @@ $MINT: linear-gradient(40deg, #ff6ec4, #7873f5) !important;
     background: #fff;
     margin-left: 5px;
     margin-top: 10px;
+    /* Rotate */
+    -webkit-transform: rotate(-45deg);
+    -moz-transform: rotate(-45deg);
+    -ms-transform: rotate(-45deg);
+    -o-transform: rotate(-45deg);
+    transform: rotate(-45deg);
+    /* Rotate Origin */
+    -webkit-transform-origin: 0 100%;
+    -moz-transform-origin: 0 100%;
+    -ms-transform-origin: 0 100%;
+    -o-transform-origin: 0 100%;
+    transform-origin: 0 100%;
   }
 
   .example-box2 {
@@ -118,8 +146,9 @@ $MINT: linear-gradient(40deg, #ff6ec4, #7873f5) !important;
     display: inline-block;
     margin-top: 10px;
     margin-left: 5px;
-
-   background-color: orangered!important;
+    background-color: #ffffff;
+    border: 5px solid black;
+   //background-color: orangered!important;
 
 
   }
