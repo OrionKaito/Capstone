@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
-using Capstone.Helper;
 using Capstone.Service;
+using Capstone.Service.Helper;
 using Microsoft.AspNetCore.Mvc;
 using System;
 

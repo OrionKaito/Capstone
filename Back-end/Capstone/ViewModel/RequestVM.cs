@@ -55,7 +55,7 @@ namespace Capstone.ViewModel
 
         public Guid RequestActionID { get; set; }
 
-        public StatusEnum Status { get; set; }
+        //public StatusEnum Status { get; set; }
 
         public Guid NextStepID { get; set; }
 

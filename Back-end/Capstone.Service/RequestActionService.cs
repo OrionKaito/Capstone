@@ -10,6 +10,7 @@ namespace Capstone.Service
     {
         IEnumerable<RequestAction> GetAll();
         IEnumerable<RequestAction> GetExceptStartAction(Guid startActionTemplateID, Guid RequestID);
+        IEnumerable<RequestAction> GetActionByStatus(StatusEnum statusEnum);
         RequestAction GetByID(Guid ID);
         RequestAction GetStartAction(Guid startActionTemplateID, Guid requestID);
         void Create(RequestAction requestAction);
@@ -55,6 +56,11 @@ namespace Capstone.Service
         public void Save()
         {
             _unitOfWork.Commit();
+        }
+
+        public IEnumerable<RequestAction> GetActionByStatus(StatusEnum statusEnum)
+        {
+            return _requestActionRepository.GetActionByStatus(statusEnum);
         }
     }
 }

@@ -44,7 +44,7 @@ namespace Capstone.Service
 
         public IEnumerable<UserDevice> GetDeviceTokenByUserID(string userID)
         {
-            return _userDeviceRepository.GetMany(u => u.UserID.Equals(userID));
+            return _userDeviceRepository.GetDeviceTokenByUserID(userID);
         }
     }
 }

@@ -355,7 +355,7 @@ public class HandleRequestFragment extends Fragment {
                             builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
-                                    handleRequest(handleRequestForm.getRequest().getId(), connection.getNextStepID(), 2);
+                                    handleRequest(handleRequestForm.getRequest().getId(), connection.getNextStepID());
                                     dialog.dismiss();
                                 }
                             })
@@ -380,7 +380,7 @@ public class HandleRequestFragment extends Fragment {
         });
     }
 
-    private void handleRequest(String requestID, String nextStepID, int status) {
+    private void handleRequest(String requestID, String nextStepID) {
         List<ActionValueModel> actionValueModelList = new ArrayList<>();
         for (int i = 0; i < stringCommentList.size(); i++) {
             actionValueModelList.add(new ActionValueModel("comment " + i, stringCommentList.get(i)));
@@ -390,7 +390,6 @@ public class HandleRequestFragment extends Fragment {
         requestApproveModel.setRequestID(requestID);
         requestApproveModel.setRequestActionID(requestActionID);
         requestApproveModel.setNextStepID(nextStepID);
-        requestApproveModel.setStatus(status);
         requestApproveModel.setActionValueModels(actionValueModelList);
 
         final KProgressHUD progressHUD = KProgressHUDManager.showProgressBar(getContext());

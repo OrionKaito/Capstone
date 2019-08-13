@@ -12,6 +12,7 @@ namespace Capstone.Service
     {
         IEnumerable<Request> GetAll();
         IEnumerable<Request> GetRequestToApproveByPermissions(List<Guid> permissions);
+        IEnumerable<Request> GetRequestToApproveByLineManager();
         IEnumerable<Request> GetByUserID(string ID);
         Request GetByID(Guid ID);
         void Create(Request request);
@@ -102,6 +103,21 @@ namespace Capstone.Service
         public void RollBack()
         {
             _unitOfWork.RollBack();
+        }
+
+        public IEnumerable<Request> GetRequestToApproveByLineManager()
+        {
+            var pendingRequestAction = _requestActionRepository.GetMany(r => r.Status == StatusEnum.Pending 
+            && r.NextStep.IsApprovedByLineManager == true);
+
+            List<Request> result = new List<Request>();
+
+            foreach (var requestAction in pendingRequestAction)
+            {
+                result.Add(requestAction.Request);
+            }
+
+            return result;
         }
     }
 }
