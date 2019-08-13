@@ -274,11 +274,6 @@ namespace Capstone.Controllers
 
                 var currentRequestAction = _requestActionService.GetByID(model.RequestActionID);
 
-                if (!userPermissions.Contains(currentRequestAction.NextStep.PermissionToUseID.GetValueOrDefault()))
-                {
-                    return BadRequest(WebConstant.AccessDined);
-                }
-
                 //Kiểm tra request action đã được xử lý chưa
                 if (currentRequestAction.Status == StatusEnum.Handled)
                 {
@@ -390,6 +385,10 @@ namespace Capstone.Controllers
                         //Lấy các user có permission xử lý action để gửi notification
                         if (nextStep.PermissionToUseID.HasValue)
                         {
+                            if (!userPermissions.Contains(currentRequestAction.NextStep.PermissionToUseID.GetValueOrDefault()))
+                            {
+                                return BadRequest(WebConstant.AccessDined);
+                            }
                             var users = _userService.GetUsersByPermissionID(nextStep.PermissionToUseID.GetValueOrDefault());
 
                             if (users != null && users.Any())

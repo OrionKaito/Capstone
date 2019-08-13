@@ -227,7 +227,7 @@ namespace Capstone.Controllers
         {
             var workFlowInDb = _workFlowService.GetByID(ID);
             if (workFlowInDb == null) return BadRequest(WebConstant.NotFound);
-            
+
             if (workFlowInDb.IsCheckConnection == false)
             {
                 return BadRequest(WebConstant.ToggleWorkflowFail);
@@ -315,16 +315,23 @@ namespace Capstone.Controllers
                         connectionTypeInDb = connectionType;
                     }
 
-                    WorkFlowTemplateActionConnection workflowConnection = new WorkFlowTemplateActionConnection
+                    if (connection.TimeInterval < 0)
                     {
-                        ConnectionTypeID = connectionTypeInDb.ID,
-                        FromWorkFlowTemplateActionID = connection.FromWorkFlowTemplateActionID,
-                        ToWorkFlowTemplateActionID = connection.ToWorkFlowTemplateActionID,
-                        TimeInterval = connection.TimeInterval,
-                        Type = connection.Type
-                    };
+                        return BadRequest(WebConstant.InvalidTimeInterval);
+                    }
+                    else
+                    {
+                        WorkFlowTemplateActionConnection workflowConnection = new WorkFlowTemplateActionConnection
+                        {
+                            ConnectionTypeID = connectionTypeInDb.ID,
+                            FromWorkFlowTemplateActionID = connection.FromWorkFlowTemplateActionID,
+                            ToWorkFlowTemplateActionID = connection.ToWorkFlowTemplateActionID,
+                            TimeInterval = connection.TimeInterval,
+                            Type = connection.Type
+                        };
 
-                    _workFlowTemplateActionConnectionService.Create(workflowConnection);
+                        _workFlowTemplateActionConnectionService.Create(workflowConnection);
+                    }
                 }
 
                 _workFlowService.CommitTransaction();
