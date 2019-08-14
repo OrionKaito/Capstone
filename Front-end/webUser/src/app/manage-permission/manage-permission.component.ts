@@ -35,12 +35,13 @@ export class ManagePermissionComponent implements OnInit {
     this.callAll();
   }
   callAll() {
-    this.loadStaffAcountService.loadPermissionData().toPromise().then(data => {
+    this.loadStaffAcountService.loadAllPermissionData().toPromise().then(data => {
       this.users = data;
       this.listData = new MatTableDataSource(this.users);
       this.listData.sort = this.sort;
       this.listData.paginator = this.paginator;
-
+    },err =>{
+      this.toastr.error(err.error);
     })
   }
 
@@ -53,16 +54,16 @@ export class ManagePermissionComponent implements OnInit {
   }
   banOrUnbanAcc(id) {
 
-    this.LoginService.BanOrUnbanAcc(id).subscribe(
+    this.LoginService.BanOrUnbanPer(id).toPromise().then(
       data => {
-        console.log(data);
-
+        this.toastr.success(data);
+        this.callAll();
       },
       err => {
         console.log(err);
       }
     )
-    location.reload();
+
   };
   register() {
     this.model.dateOfBirth = this.model.dateOfBirth.toString() + "T06:08:08-05:00";
@@ -80,7 +81,7 @@ export class ManagePermissionComponent implements OnInit {
         }
       },
       error => {
-        this.errorMessage = error.message;
+        this.errorMessage = error.error;
       });
   };
   AddOrEditWF(id: string) {

@@ -1,0 +1,23 @@
+.addLine2:after {
+content: '';
+    height: 1px;
+    padding-left: 10px;
+    padding-right: 10px;
+    background-color: #cccccc;
+    opacity: .7;
+    position: absolute;
+    width: 88.4%;
+    left: 10px;
+}
+.addLine0:before{
+    content: '';
+    height: 1px;
+    padding-left: 10px;
+    padding-right: 10px;
+    background-color: #cccccc;
+    opacity: .5;
+    position: absolute;
+    width: 88.4%;
+    left: 15px;
+    top: 2px;
+}

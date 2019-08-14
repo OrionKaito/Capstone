@@ -8,6 +8,7 @@ import { AngularFirestore } from '@angular/fire/firestore';
 import { Observable } from 'rxjs';
 import { tap, finalize } from 'rxjs/operators';
 import { SendRequest } from 'app/useClass/send-request';
+import {FormControl, Validators} from '@angular/forms';
 
 @Component({
   selector: 'app-add-new-request',
@@ -33,6 +34,7 @@ export class AddNewRequestComponent implements OnInit {
   actionValues: any = [];
   workFlowTemplateID: any;
   dynamicForm:any;
+  workFlowTemplateActionID:any;
   // formDataEdit = new AddGroupIdName();
   constructor(private storage: AngularFireStorage, private db: AngularFirestore, @Inject(MAT_DIALOG_DATA) public data,
     public dialogRef: MatDialogRef<AddNewRequestComponent>, private toastr: ToastrService,
@@ -47,32 +49,44 @@ export class AddNewRequestComponent implements OnInit {
   }
   sendReqNextStep(nextStepID){
     debugger;
-
+    let b= true;
     this.dynamicForm.forEach(element => {
+      let a = true;
       if(element.textOnly.name.toString() != "" ){
+        
         this.actionValues.push({ "key": element.textOnly.name.toString(), "value": ""});
       }
       if(element.shortText.name.toString() != "" ){
+        if(element.textOnly.value=="" ||element.textOnly.value=="0") {a = false};
         this.actionValues.push({ "key": element.shortText.name.toString(), "value": element.shortText.value.toString()});
       }
       if(element.longText.name.toString() != "" ){
+        if(element.longText.value=="" ||element.longText.value=="0") {a = false};
         this.actionValues.push({ "key": element.longText.name.toString(), "value": element.longText.value.toString()});
       }
       if(element.comboBox.name.toString() != "" ){
+        if(element.comboBox.value=="" ||element.comboBox.value=="0") {a = false};
         this.actionValues.push({ "key": element.comboBox.name.toString(), "value": element.comboBox.value.toString()});
       }
       if(element.inputCheckbox.name.toString() != "" ){
-        this.actionValues.push({ "key": element.inputCheckbox.name.toString(), "value": element.inputCheckbox.value.toString()});
+        if(element.inputCheckbox.value){
+        this.actionValues.push({ "key": element.inputCheckbox.name.toString(), "value": "Yes"}); }
+        else {
+          this.actionValues.push({ "key": element.inputCheckbox.name.toString(), "value": "No"});
+        }
       }
-      
+
+      if(!a) {
+        b= false;
+      }
+
     });
-    
-
-
-
+    if(!b){
+      this.toastr.error("Please input all field!");
+    } else {
 
     //this.actionValues.push({ "key": this.formKey, "value": this.formValue})
-    var mdSendReq = new SendRequest("", this.actionValues, this.listURL, this.workFlowTemplateID.toString(), nextStepID.toString());
+    var mdSendReq = new SendRequest("", this.actionValues, this.listURL, this.workFlowTemplateID.toString(), nextStepID.toString(), this.workFlowTemplateActionID);
     console.log(JSON.stringify(mdSendReq));
     
     this.loadStaffAcountService.sendReq(mdSendReq).toPromise().then(data =>{
@@ -82,9 +96,9 @@ export class AddNewRequestComponent implements OnInit {
       console.log(this.listURL);
       this.dialogRef.close();
     }, (err) => {
-        this.toastr.error("Error:" + err.message, "Something wrong!" );
+        this.toastr.error("Error:" + err.error, "Something wrong!" );
       });
-    
+    }
   }
   
   onDrop(files: FileList) {
@@ -132,16 +146,20 @@ export class AddNewRequestComponent implements OnInit {
 
     this.workFlowTemplateID = this.data;
     this.loadStaffAcountService.getRequestForm(this.workFlowTemplateID).toPromise().then(res => {
-      
       this.saveData = res;
-      console.log(this.saveData);
+      console.log("savedata" , this.saveData);
       this.buttons = this.saveData.connections;
       this.formKey = this.saveData.actionType.name;
       this.dynamicForm = JSON.parse(this.saveData.actionType.data);
+      this.workFlowTemplateActionID = this.saveData.workFlowTemplateActionID;
       console.log(this.formKey);
+    },err =>{
+      this.toastr.error(err.error);
     })
 
   }
+  validateInput = new FormControl('', [Validators.required]);
+  validateInput1 = new FormControl('', [Validators.required]);
   onSubmit() {
     //   this.loadStaffAcountService.addPermission(this.formData).toPromise().then(    
     //     resp => {    

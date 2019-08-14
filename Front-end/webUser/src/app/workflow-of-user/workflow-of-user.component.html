@@ -25,24 +25,23 @@
 
                         </div>
                         <div class="hal3-div">
-                            <button (click)="AddOrEditWF(null)" mat-raised-button>
+                            <!-- <button (click)="AddOrEditWF(null)" mat-raised-button>
                                 <mat-icon>add</mat-icon>
-                            </button>Create
+                            </button>Create -->
                         </div>
                     </div>
-
-
                     <div class="card-body">
-
                         <div class="table-responsive">
-
-
                             <mat-table [dataSource]="listData" matSort>
-
                                 <ng-container matColumnDef="name">
                                     <mat-header-cell *matHeaderCellDef mat-sort-header>Name</mat-header-cell>
-                                    <mat-cell *matCellDef="let element" (click)="CreateRequestOfWF(element.id)">
+                                    <mat-cell *matCellDef="let element" matTooltip="{{element.description}}" (click)="CreateRequestOfWF(element.id)">
                                         {{element.name}}</mat-cell>
+                                </ng-container>
+                                <ng-container matColumnDef="createTime">
+                                    <mat-header-cell *matHeaderCellDef mat-sort-header>Time Create </mat-header-cell>
+                                    <mat-cell *matCellDef="let element" (click)="CreateRequestOfWF(element.id)">
+                                        {{element.createDate  | date:'dd/MM/yyyy hh:mm a' }}</mat-cell>
                                 </ng-container>
                                 <ng-container matColumnDef="isDeleted">
                                     <mat-header-cell *matHeaderCellDef></mat-header-cell>

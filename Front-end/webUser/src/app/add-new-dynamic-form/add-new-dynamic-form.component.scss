@@ -1,3 +1,33 @@
 .icon-head-pup {
     float: right;
 }
+
+.btn-dynamic{
+    background: #adadad!important;
+}
+.btn-dynamic:hover{
+    opacity: .8;
+}
+
+.txtdeepshadow {
+    border-bottom: 1px solid #cccccc;
+    max-width: 50%;
+}
+
+.dynamic-warpper{
+    max-width: 50%;
+    border: 1px solid #cccccc;
+}
+
+.Addbtn-dynamic{
+    margin-left: 76%;
+    margin-top: -10%;
+}
+.textOnlyClass {
+    padding: 5px;
+    background: #0a6ebd;
+    border: 1px solid transparent;
+    border-radius: 5px;
+    text-align: center;
+    margin-top: 10px;
+}

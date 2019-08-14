@@ -4,7 +4,7 @@ import { LoginService } from 'app/service/login.service';
 import { Router } from '@angular/router';
 import { DatePipe } from '@angular/common';
 import { ToastrService } from 'ngx-toastr';
-
+import {FormControl, Validators} from '@angular/forms';
 
 @Component({
   selector: 'app-user-profile',
@@ -15,10 +15,12 @@ export class UserProfileComponent implements OnInit {
 userDetail1: any=[];
 userDetail;
 changePass: any;
+openChangePass: any;
 
   constructor(private router: Router ,private toastr: ToastrService, private loginService: LoginService ) { }
 
   ngOnInit() {
+    this.openChangePass = false;
     this.changePass= {
       cur : "",
       new: "",
@@ -33,9 +35,8 @@ changePass: any;
         
         // this.userDetail.dateOfBirth = Date.parse(this.userDetail.dateOfBirth) ;
         // console.log(this.userDetail.dateOfBirth);
-      },
-      err => {
-        console.log(err);
+      },err =>{
+        this.toastr.error(err.error);
       }
     )
   }
@@ -45,7 +46,7 @@ changePass: any;
         this.toastr.success("Update your profile success!!!", "Success!");   
       },
       err=>{
-        this.toastr.error("Error: " + err.message + ". Please do it later!!", "Something wrong!");   
+        this.toastr.error("Error: " + err.error + ". Please do it later!!", "Something wrong!");   
       }
 
     )
@@ -56,11 +57,30 @@ changePass: any;
     this.loginService.changePass(this.changePass.cur, this.changePass.new).subscribe(
       data=>{
         this.toastr.success("Change your password success!!!", "Success!");   
+        this.changePass= {
+          cur : "",
+          new: "",
+          re: ""
+        };
       },
       err=>{
-        this.toastr.error("Error: " + err.message + ". Please try again!!", "Something wrong!");   
+        this.toastr.error("Error: " + err.error + ". Please try again!!", "Something wrong!");   
       }
     )
   }
-
+  openChangePassDiv(){
+    this.openChangePass = !this.openChangePass;
+  }
+  OldpassFormControl = new FormControl('', [
+    Validators.required,
+    Validators.minLength(6),
+  ]);
+  NewpassFormControl = new FormControl('', [
+    Validators.required,
+    Validators.minLength(6),
+  ]);
+  RepassFormControl = new FormControl('', [
+    Validators.required,
+    Validators.minLength(6),
+  ]);
 }

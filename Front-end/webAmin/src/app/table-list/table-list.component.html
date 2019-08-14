@@ -26,7 +26,7 @@
                         <div class="hal3-div">
                             <button (click)="AddAccountItem(null)" mat-raised-button>
                                 <mat-icon>add</mat-icon>
-                            </button>Create
+                            </button>
                         </div>
                     </div>
 
@@ -39,12 +39,12 @@
 
                                 <ng-container matColumnDef="fullName">
                                     <mat-header-cell *matHeaderCellDef mat-sort-header>Full name</mat-header-cell>
-                                    <mat-cell *matCellDef="let element">{{element.fullName}}</mat-cell>
+                                    <mat-cell *matCellDef="let element" matTooltip="{{element.email}}">{{element.fullName}} </mat-cell>
                                 </ng-container>
-                                <ng-container matColumnDef="email">
+                                <!-- <ng-container matColumnDef="email">
                                     <mat-header-cell *matHeaderCellDef mat-sort-header>Email</mat-header-cell>
                                     <mat-cell *matCellDef="let element">{{element.email}}</mat-cell>
-                                </ng-container>
+                                </ng-container> -->
                                  <ng-container matColumnDef="manage">
                                     <mat-header-cell *matHeaderCellDef mat-sort-header>Manage</mat-header-cell>
                                     <mat-cell *matCellDef="let element">{{element.managerName}}</mat-cell>
@@ -66,13 +66,13 @@
                                     <mat-header-cell *matHeaderCellDef></mat-header-cell>
                                     <mat-cell *matCellDef="let element">
                                         <td *ngIf="element.isDeleted;  else elseBlock">
-                                            <button (click)="banOrUnbanAcc(element.id)" mat-icon-button color="primary"
+                                            <button (click)="banOrUnbanAcc(element.id)" mat-icon-button color="warn"
                                                 matTooltip="Un-Ban ACcount">
-                                                <mat-icon id="element.id">check_circle_outline</mat-icon>
+                                                <mat-icon id="element.id">block</mat-icon>
                                             </button></td>
                                         <ng-template #elseBlock><button (click)="banOrUnbanAcc(element.id)"
-                                                mat-icon-button color="warn" matTooltip="Ban ACcount">
-                                                <mat-icon id="element.id">block</mat-icon>
+                                                mat-icon-button color="primary" matTooltip="Ban ACcount">
+                                                <mat-icon id="element.id">check_circle_outline</mat-icon>
                                             </button>
                                         </ng-template>
                                         <button (click)="AddAccountItem(element.id)" mat-icon-button

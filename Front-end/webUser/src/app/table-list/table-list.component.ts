@@ -23,7 +23,7 @@ export class TableListComponent implements OnInit {
   model: any = {};
   errorMessage: string;
   listData: MatTableDataSource<any>;
-  displayedColumns: string[] = ['name', "isDeleted"];
+  displayedColumns: string[] = ['name','createTime', "isDeleted"];
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild(MatPaginator) paginator: MatPaginator;
   constructor(private toastr: ToastrService, private router: Router, private dialog: MatDialog,
@@ -34,10 +34,13 @@ export class TableListComponent implements OnInit {
   }
   callAll() {
      this.loadStaffAcountService.loadWorkFlow().toPromise().then(data => {
-       this.users= data;
+      this.users= data;
       this.listData = new MatTableDataSource(this.users);
+      // this.listData = new MatTableDataSource(this.users.workFlowTemplates);
       this.listData.sort = this.sort;
       this.listData.paginator = this.paginator;
+  },err =>{
+    this.toastr.error(err.error);
   })
   }
 
@@ -52,12 +55,12 @@ export class TableListComponent implements OnInit {
 
     this.LoginService.enabledDisableWF(id).subscribe(
       data => {
-        console.log(data);
+        this.toastr.success(data);
         this.callAll()
 
       },
       err => {
-        console.log(err);
+        this.toastr.error(err.error);
         this.callAll()
       }
     )
@@ -80,7 +83,7 @@ export class TableListComponent implements OnInit {
         }
       },
       error => {
-        this.errorMessage = error.message;
+        this.errorMessage = error.error;
       });
   };
   AddOrEditWF(id: string) {
@@ -88,10 +91,12 @@ export class TableListComponent implements OnInit {
     dialogConfig.autoFocus = true;
     dialogConfig.disableClose = true;
     dialogConfig.width = "50%";
+  
     dialogConfig.data = id;
     this.dialog.open(AddAccountComponent, dialogConfig).afterClosed().subscribe(res => {
       this.callAll();
     });
+    this.callAll();
   }
   EditWFAtTool() {
 
@@ -101,7 +106,7 @@ export class TableListComponent implements OnInit {
     // navigate qua trang edit với id của User
     // Mock IdUser
 
-    this.router.navigate(['edit-account/', id]);
+    this.router.navigate(['edit-workflow-by-tool/', id]);
   }
 
 }

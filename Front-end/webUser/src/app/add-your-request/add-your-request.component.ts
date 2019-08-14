@@ -18,10 +18,23 @@ export class AddYourRequestComponent implements OnInit {
   private router: Router, private loadStaffAcountService: LoadStaffAcountService) { }
 
   yourRequest: any;
+
   ngOnInit() {
-    this.loadStaffAcountService.getYourRequest(this.data).toPromise().then(res=>{
+    this.yourRequest ={
+      workFlowTemplateName: "",
+      status: "",
+      staffResult: []
+    }
+    console.log(this.data);
+    this.loadStaffAcountService.getYourRequest(this.data.id).toPromise().then(res=>{
       this.yourRequest = res;
+      console.log(this.yourRequest);
+    },err =>{
+      this.toastr.error(err.error);
     })
   }
-
+  closeForm(){
+    debugger;
+    this.dialogRef.close();
+  }
 }

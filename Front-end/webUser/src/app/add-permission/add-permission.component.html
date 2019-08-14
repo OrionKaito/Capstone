@@ -16,8 +16,13 @@
 <form #form="ngForm" autocomplete="off" (submit)="onSubmit()">
   <div class="form-row">
     <div class="form-group col-md-6">
+      <mat-form-field>
       <label>Name of Permission</label>
-      <input name="name" [(ngModel)]="formData.name" class="form-control">
+      <input [formControl]="descriptionFormControl" matInput name="name" [(ngModel)]="formData.name" class="form-control">
+        <mat-error *ngIf="descriptionFormControl.hasError('required')">
+          Permission Name is <strong>required</strong>
+        </mat-error>
+      </mat-form-field>
     </div>
   </div>
   <!-- <div class="form-row">

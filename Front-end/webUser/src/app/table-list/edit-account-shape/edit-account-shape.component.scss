@@ -1,45 +1,111 @@
+.example-box1 .deleteShape {
+  right: -18px;
+}
+.example-box1 .add-input{
+  transform: rotate(45deg);
+  -webkit-transform: rotate(45deg);
+  -moz-transform: rotate(45deg);
+  -ms-transform: rotate(45deg);
+  transform: rotate(45deg);
+  -o-transform-origin: 35% -20%;
+  -webkit-transform-origin: 35% -20%;
+  -ms-transform-origin: 35% -20%;
+  -moz-transform-origin: 35% -20%;
+}
+.example-box1 .add-input input{
+  transform: rotate(0deg);
+  -webkit-transform: rotate(0deg);
+  -moz-transform: rotate(0deg);
+  -ms-transform: rotate(0deg);
+  transform: rotate(0deg);
+  -o-transform-origin: 35% -20%;
+  -webkit-transform-origin: 35% -20%;
+  -ms-transform-origin: 35% -20%;
+  -moz-transform-origin: 35% -20%;
+}
+.example-box1 .draw-arrow {
+  right: 82px !important;
+  transform: rotate(-45deg) !important;
+  -webkit-transform: rotate(-45deg);
+  -moz-transform: rotate(-45deg);
+  -ms-transform: rotate(-45deg);
+  -o-transform: rotate(-45deg);
+  -o-transform-origin: -29px -6px;
+  -webkit-transform-origin: -29px -6px;
+  -ms-transform-origin: -29px -6px;
+  -moz-transform-origin: -29px -6px;
+}
+
+.example-box1 .deleteShape {
+  transform: rotate(-45deg) !important;
+  -webkit-transform: rotate(-45deg);
+  -moz-transform: rotate(-45deg);
+  -ms-transform: rotate(-45deg);
+  -o-transform: rotate(-45deg);
+  transform-origin: -24px 10px;
+}
+
+.example-box1 input {
+  -webkit-transform: rotate(45deg);
+  -moz-transform: rotate(45deg);
+  -ms-transform: rotate(45deg);
+  -o-transform: rotate(45deg);
+  transform: rotate(45deg);
+}
+
+.example-box input, .example-box1 input, .example-box3 input {
+  max-width: 90%;
+  margin-left: 5px;
+}
+
 .container-fluid {
   height: 100%;
-  /deep/.botton-left__table{
+
+  /deep/ .botton-left__table {
     overflow-y: auto;
     overflow-x: hidden;
     padding: 5px;
     width: 16.6666667%;
-    height: 50%;
-    position:fixed;
-     bottom:0 !important;
-     left: 0;
-    background-color: #1A2A3A !important; 
+    height: 72%;
+    position: fixed;
+    top: 28%;
+    bottom: 0 !important;
+    left: 0;
+    background-color: #cccccc !important;
     -webkit-box-shadow: 10px 7px 5px -4px rgba(0, 0, 0, 0.75);
-  -moz-box-shadow: 10px 7px 5px -4px rgba(0, 0, 0, 0.75);
-  box-shadow: 10px 7px 5px -4px rgba(0, 0, 0, 0.75);
-    color: white;
-  button {
-    height: 35px !important;
-  }
-    /deep/.mat-form-field {
-      .mat-select-value-text {
-    color: white !important;
+    -moz-box-shadow: 10px 7px 5px -4px rgba(0, 0, 0, 0.75);
+    box-shadow: 10px 7px 5px -4px rgba(0, 0, 0, 0.75);
+    color: black;
+
+    button {
+      height: 35px !important;
+      width: 90%;
     }
+
+    /deep/ .mat-form-field {
+      .mat-select-value-text {
+        color: black !important;
+      }
+    }
+
+    .mat-form-field-infix {
+      color: black !important;
+    }
+
+    .mat-form-field-underline {
+      background-color: black !important;
+    }
+
+    .mat-select-value {
+      color: black !important;
+    }
+
+    .mat-form-field-label {
+      color: black !important;
+    }
+
   }
 
-.mat-form-field-infix {
-  color: white !important;
-}
-
-.mat-form-field-underline {
-  background-color: white !important;
-}
-
-.mat-select-value {
-  color: white !important;
-}
-
-.mat-form-field-label {
-  color: white !important;
-}
-
-  }
   .import-json {
     z-index: 777;
     position: fixed;
@@ -164,7 +230,7 @@
     }
 
     .circular-menu.circular-menu-left .floating-btn {
-      background-color: hsl(217, 89%, 61%);
+      background-color: hsl(123, 89%, 61%);
     }
 
     .circular-menu.circular-menu-left:after {
@@ -242,11 +308,11 @@
       }
 
       .example-box {
-        width: 120px;
-        height: 120px;
+        width: 100px;
+        height: 100px;
         margin-top: 10px;
         margin-bottom: 20px;
-        border: solid 1px #ccc;
+        //border: solid 1px #ccc;
         color: rgba(0, 0, 0, 0.87);
         cursor: move;
         display: flex;
@@ -254,18 +320,32 @@
         justify-content: center;
         align-items: center;
         text-align: center;
-        background: #fff;
+        background: #ffffff;
+        border: 5px solid black;
+        text-align: center;
         border-radius: 50%;
         position: relative;
         z-index: 1;
-        transition: box-shadow 200ms cubic-bezier(0, 0, 0.2, 1);
+        transition: box-shadow 100ms cubic-bezier(0, 0, 0.2, 1);
         box-shadow: 0 3px 1px -2px rgba(0, 0, 0, 0.2),
-          0 2px 2px 0 rgba(0, 0, 0, 0.14),
-          0 1px 5px 0 rgba(0, 0, 0, 0.12);
+        0 2px 2px 0 rgba(0, 0, 0, 0.14),
+        0 1px 5px 0 rgba(0, 0, 0, 0.12);
 
         #input1 {
           width: 100%;
           margin: 0 auto;
+        }
+
+        .start-action {
+          width: 40px;
+          height: 40px;
+          border: 1px solid #cccccc;
+          border-radius: 50%;
+          background-color: black;
+          opacity: .4;
+          position: absolute;
+          left: 50%;
+          transform: translateX(-50%);
         }
 
       }
@@ -273,10 +353,11 @@
       .example-box1 {
         width: 120px;
         height: 120px;
-        margin-top: 10px;
-        margin-bottom: 20px;
-        border: solid 1px black;
+        margin-top: 12%;
+        //margin-bottom: 20px;
+        //border: solid 1px black;
         color: rgba(0, 0, 0, 0.87);
+        border: 1px solid rgba(0, 0, 0, 0.87);
         cursor: move;
         display: flex;
         justify-content: center;
@@ -287,10 +368,24 @@
         position: relative;
         margin-left: 10px;
         z-index: 1;
+        left: 3%;
         transition: box-shadow 200ms cubic-bezier(0, 0, 0.2, 1);
         box-shadow: 0 3px 1px -2px rgba(0, 0, 0, 0.2),
-          0 2px 2px 0 rgba(0, 0, 0, 0.14),
-          0 1px 5px 0 rgba(0, 0, 0, 0.12);
+        0 2px 2px 0 rgba(0, 0, 0, 0.14),
+        0 1px 5px 0 rgba(0, 0, 0, 0.12);
+        /* Rotate */
+        -webkit-transform: rotate(-45deg);
+        -moz-transform: rotate(-45deg);
+        -ms-transform: rotate(-45deg);
+        -o-transform: rotate(-45deg);
+        transform: rotate(-45deg);
+        /* Rotate Origin */
+        -webkit-transform-origin: 0 100%;
+        -moz-transform-origin: 0 100%;
+        -ms-transform-origin: 0 100%;
+        -o-transform-origin: 0 100%;
+        transform-origin: 46% 61%;
+        //margin: 60px 0 10px 310px;
 
         #input2 {
           width: 100%;
@@ -324,35 +419,36 @@
           position: absolute;
         }
 
-        /deep/.draw-arrow {
+        /deep/ .draw-arrow {
           top: 51px !important;
-          left: 17px;
+          left: 20px;
           position: absolute;
         }
 
       }
 
       .example-box3 {
-        width: 120px;
-        height: 120px;
+        width: 110px;
+        height: 110px;
         margin-top: 10px;
         margin-bottom: 20px;
-        border: solid 1px #ccc;
+        //border: solid 1px #ccc;
         color: rgba(0, 0, 0, 0.87);
         cursor: move;
         display: flex;
+        border: 10px solid rgba(0, 0, 0, 0.87);
         justify-content: center;
         align-items: center;
         text-align: center;
-        background: #fff;
-        border-radius: 30%;
+        background: white;
+        border-radius: 50%;
         margin-left: 10px;
         position: relative;
         z-index: 1;
         transition: box-shadow 200ms cubic-bezier(0, 0, 0.2, 1);
         box-shadow: 0 3px 1px -2px rgba(0, 0, 0, 0.2),
-          0 2px 2px 0 rgba(0, 0, 0, 0.14),
-          0 1px 5px 0 rgba(0, 0, 0, 0.12);
+        0 2px 2px 0 rgba(0, 0, 0, 0.14),
+        0 1px 5px 0 rgba(0, 0, 0, 0.12);
 
         #input4 {
           width: 100%;
@@ -379,7 +475,7 @@
         border-bottom: 120px solid #00C851;
         transition: box-shadow 200ms cubic-bezier(0, 0, 0.2, 1);
 
-        /deep/.draw-arrow {
+        /deep/ .draw-arrow {
           right: -3px;
           bottom: -60px;
           position: absolute;
@@ -413,16 +509,16 @@
   }
 }
 
-/deep/.deleteShape {
+/deep/ .deleteShape {
   top: 0;
   position: absolute;
-  right: 27px;
-  font-size: 11px;
+  right: 21px;
+  font-size: 14px;
   cursor: pointer;
 }
 
-/deep/.draw-arrow {
-  right: 25px;
+/deep/ .draw-arrow {
+  right: 20px;
   bottom: 0;
   position: absolute;
   cursor: pointer;
@@ -432,11 +528,11 @@
   margin: 0 !important;
 }
 
-/deep/.mat-select-arrow-wrapper {
+/deep/ .mat-select-arrow-wrapper {
   visibility: hidden !important;
 }
 
-/deep/.group-start-end {
+/deep/ .group-start-end {
   width: 100%;
   position: absolute;
   color: white;
@@ -461,12 +557,13 @@
   pointer-events: none;
   opacity: 0.2;
 }
-.btn-custom{
+
+.btn-custom {
   margin-left: 50%;
   transform: translateX(-50%);
 }
 
-.edit-inut{
+.edit-inut {
   max-width: 80%;
   margin-top: 4px;
   border: 1px solid transparent;
@@ -474,7 +571,8 @@
   background-color: #009999;
   padding-left: 5px;
 }
-.customlabel{
+
+.customlabel {
   margin-top: 10px;
 }
 
@@ -494,4 +592,14 @@
 
 ::-webkit-scrollbar-thumb:hover {
   background: #999999;
+}
+
+.addcallBorder {
+  border: 3px solid transparent;
+}
+
+.add-input{
+  position: absolute;
+  top: 90%;
+  left: -47%;
 }

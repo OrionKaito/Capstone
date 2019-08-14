@@ -36,6 +36,11 @@ export class AddHandleRequestComponent implements OnInit {
   actionValues: any = [];
   workFlowTemplateID: any;
   gloUrl = GlobalVar.url;
+
+  
+  
+
+
   // formDataEdit = new AddGroupIdName();
   constructor( @Inject(MAT_DIALOG_DATA) public data,
     public dialogRef: MatDialogRef<AddHandleRequestComponent>, private toastr: ToastrService,
@@ -55,6 +60,8 @@ export class AddHandleRequestComponent implements OnInit {
     this.loadStaffAcountService.sendReqHandle(mdSendReq).toPromise().then(data =>{
       this.toastr.success('Success! ' , '' );
       this.dialogRef.close();
+    },err =>{
+      this.toastr.error(err.error);
     }
     )
 
@@ -70,7 +77,7 @@ export class AddHandleRequestComponent implements OnInit {
 
 
   ngOnInit() {
-    debugger;
+
     console.log("vo day");
     this.workFlowTemplateID = this.data;
     console.log(this.data);
@@ -84,19 +91,31 @@ export class AddHandleRequestComponent implements OnInit {
       this.requestActionHandleFile = this.saveData.userRequestAction.requestFiles;
       this.requestActionHandleFile.forEach(element => {
         element.path = this.gloUrl +element.path;
-        element.name = element.path.substr(34);
+        let a ="\\";
+        console.log("here:", a);
+        // a.lastIndexOf()
+        element.name = element.path.substring(element.path.lastIndexOf('\\')+1);
+        
       });
 
       this.requestActionHandleValue = this.saveData.userRequestAction.requestValues;
       this.cmtHandle = this.saveData.staffRequestActions;
 
+    },err =>{
+      this.toastr.error(err.error);
     })
 
   }
   addNewCmt(){
     var a = new String(this.cmt);
+
     this.listCmt.push(a);
+    this.cmt = "";
   }
 
+
+
+ 
+  
 
 }

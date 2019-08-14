@@ -68,6 +68,7 @@ AddOrEditItem(id:string){
     this.callAll();
     console.log(res);
   });
+  this.callAll();
 }
  
 }

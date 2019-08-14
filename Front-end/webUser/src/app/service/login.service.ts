@@ -28,7 +28,8 @@ export class LoginService {
   Login(model : any){  
     debugger;  
 
-     var a =this.Url + "api/Token/User";  
+     var a =this.Url + "api/Token/NewLogin";
+    //  var a =this.Url + "api/Token/User";
    return  this.http.post(a,model, { observe: 'response' });  
   }  
   Register(model : any){
@@ -73,16 +74,21 @@ export class LoginService {
     const headers = new HttpHeaders({ 'Content-Type': 'application/json'}); 
     return this.http.put(this.Url + "api/Accounts/ToggleBanAccount?ID=" +id, {"ID": id},{ headers: headers });
   }
+  BanOrUnbanPer(id){
+    var token = "Bearer " + localStorage.getItem("token");
+    var tokenHeader = new HttpHeaders({'Authorization': token});
+   
+    return this.http.delete( this.Url+"api/Permissions?ID="+id , {headers : tokenHeader , responseType: 'text' });
+  }
   enabledDisableWF(id: string){
     const headers = new HttpHeaders({ 'Content-Type': 'application/json'}); 
-    return this.http.put(this.Url + "api/WorkflowsTemplates/ToggleEnable?ID=" +id, {"ID": id},{ headers: headers });
+    return this.http.put(this.Url + "api/WorkflowsTemplates/ToggleEnable?ID=" +id, {"ID": id},{ headers: headers , responseType: 'text' });
   }
   resetPassword(email: string){
-    return this.http.post(this.Url + '/api/Accounts/ForgotPassword?email=' + email, {'email': email} ,{ responseType: 'text'});
+    return this.http.post(this.Url + 'api/Accounts/ForgotPassword?email=' + email, {'email': email} ,{ responseType: 'text'});
   }
   sendCodeConfig(code: string, email: string, password: string ) {
-
-    return this.http.put(this.Url + '/api/Accounts/ConfirmForgotPassword?code=' + code + '&email=' + email + '&password=' + password,
+    return this.http.put(this.Url + 'api/Accounts/ConfirmForgotPassword?code=' + code + '&email=' + email + '&password=' + password,
         {'code': code, 'email': email, 'password': password}, { responseType: 'text'});
   }
 }  

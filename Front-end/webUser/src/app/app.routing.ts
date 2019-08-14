@@ -29,7 +29,7 @@ const routes: Routes =[
       loadChildren: './layouts/admin-layout/admin-layout.module#AdminLayoutModule'
     }]
   },
-  { path: 'edit-account/:id',   component: EditAccountShapeComponent },
+  { path: 'edit-workflow-by-tool/:id',   component: EditAccountShapeComponent },
 ];
 
 @NgModule({

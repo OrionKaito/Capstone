@@ -29,7 +29,7 @@ export class LoginComponent {
         debugger;    
         if(data.toString() != "")    
         {       
-          this.router.navigate(['/Dashboard']);    
+          this.router.navigate(['/create-request']);    
           debugger;    
         }    
         else{    
@@ -37,7 +37,7 @@ export class LoginComponent {
         }    
       },    
       error => {    
-        this.errorMessage = error.message;    
+        this.errorMessage = error.error;    
       });    
   };    
  } 

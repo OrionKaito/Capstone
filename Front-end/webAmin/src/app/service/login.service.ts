@@ -31,8 +31,10 @@ export class LoginService {
   editAccount(model : any){
     var token = "Bearer " + localStorage.getItem("token");
     var tokenHeader = new HttpHeaders({'Authorization': token});
-    var b =this.Url + "/api/Accounts/PutByID?ID=" + model.id;   
-  return this.http.put(b,model,{headers : tokenHeader }); 
+    //var b =this.Url + "/api/Accounts/PutAccountByAdmin?ID=" + model.id;   
+    var b =this.Url + "/api/Accounts/PutAccountByAdmin"
+
+  return this.http.put(b,model,{headers : tokenHeader, responseType: "text" }); 
  }
 
   getUserProfile(){
@@ -44,12 +46,19 @@ export class LoginService {
     var token = "Bearer " + localStorage.getItem("token");
     var tokenHeader = new HttpHeaders({'Authorization': token});
     var body= {"fullName":a,"dateOfBirth":b};
-    return this.http.put(this.Url + "/api/Accounts", body, {headers : tokenHeader });
+    return this.http.put(this.Url + "/api/Accounts/UpdateProfile", body, {headers : tokenHeader, responseType: "text" });
   }
 
   BanOrUnbanAcc(id: string){
     const headers = new HttpHeaders({ 'Content-Type': 'application/json'});
     return this.http.put(this.Url + "/api/Accounts/ToggleBanAccount?ID=" +id, {headers: headers });
+  }
+  changePass(cur: any, newP: any ){
+    debugger;
+    var token = "Bearer " + localStorage.getItem("token");
+    var tokenHeader = new HttpHeaders({'Authorization': token});
+    let thisURL= this.Url + "/api/Accounts/ChangePassword?oldPassword="+ cur +"&newPassword="+ newP;
+    return this.http.put( thisURL, {"oldPassword": cur, "newPassword": newP} , {headers : tokenHeader , responseType: 'text' });
   }
  
 }  

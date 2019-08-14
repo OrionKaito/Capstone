@@ -1,62 +1,142 @@
 $MINT: linear-gradient(40deg, #ff6ec4, #7873f5) !important;
-
+.diamond {
+  width: 40px;
+  height: 40px;
+  background: #1eff00;
+  /* Rotate */
+  -webkit-transform: rotate(-45deg);
+  -moz-transform: rotate(-45deg);
+  -ms-transform: rotate(-45deg);
+  -o-transform: rotate(-45deg);
+  transform: rotate(-45deg);
+  /* Rotate Origin */
+  -webkit-transform-origin: 0 100%;
+  -moz-transform-origin: 0 100%;
+  -ms-transform-origin: 0 100%;
+  -o-transform-origin: 0 100%;
+  transform-origin: 0 100%;
+  margin: 60px 0 10px 310px;
+}
+.sidebar {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 2;
+  width: 16.666667%;
+  background: #fff;
+  box-shadow: 0 16px 38px -12px rgba(0, 0, 0, 0.56), 0 4px 25px 0px rgba(0, 0, 0, 0.12), 0 8px 10px -5px rgba(0, 0, 0, 0.2);
+  max-height: 11%;
+}
+.sidebar .logo {
+  padding: 15px 0px;
+  margin: 0;
+  display: block;
+  position: relative;
+  z-index: 4;
+}
+.caret, .sidebar a {
+  transition: all 150ms ease-in;
+}
+.sidebar .logo .simple-text {
+  text-transform: uppercase;
+  padding: 5px 0px;
+  display: inline-block;
+  font-size: 1em;
+  color: #3C4858;
+  white-space: nowrap;
+  font-weight: 400;
+  line-height: 30px;
+  overflow: hidden;
+  text-align: center;
+  display: block;
+}
+.sidebar .logo:after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  right: 15px;
+  height: 1px;
+  width: calc(100% - 30px);
+  background-color: rgba(180, 180, 180, 0.3);
+}
+.sidebar .logo-img {
+  width: 30px;
+  display: block;
+  max-height: 30px;
+  margin-left: 10px;
+  margin-right: 15px;
+}
+.sidebar .logo-img img {
+  width: 35px;
+  top: 16px;
+  position: absolute;
+}
 .menu-main {
   width: 16.666667%;
-  height: 50%;
+  height: 17%;
   position: fixed;
+  top: 11%;
   box-sizing: border-box;
-  --higru:#1A2A3A;
+  --higru:#ccc;
   background: var(--higru);  
   // background-color: #111;
   // background: #eaeae1;
   // border-right: 1px solid #cbcbb4;
-  -webkit-box-shadow: 10px 7px 5px -4px rgba(0, 0, 0, 0.75);
-  -moz-box-shadow: 10px 7px 5px -4px rgba(0, 0, 0, 0.75);
-  box-shadow: 10px 7px 5px -4px rgba(0, 0, 0, 0.75);
-
+  // -webkit-box-shadow: 10px 7px 5px -4px rgba(0, 0, 0, 0.75);
+  // -moz-box-shadow: 10px 7px 5px -4px rgba(0, 0, 0, 0.75);
+  // box-shadow: 10px 7px 5px -4px rgba(0, 0, 0, 0.75);
+  display: block;
   .example-box {
-    width: 100px;
-    height: 100px;
-    margin-top: 10px;
-    margin-bottom: 20px;
-    // border: solid 1px #ccc;
-    color: rgba(0, 0, 0, 0.87);
-    cursor: move;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-    background: #fff;
+    width: 40px;
+    height: 40px;
     border-radius: 50%;
-    position: relative;
-    z-index: 1;
-    transition: box-shadow 200ms cubic-bezier(0, 0, 0.2, 1);
-    box-shadow: 0 3px 1px -2px rgba(0, 0, 0, 0.2),
-      0 2px 2px 0 rgba(0, 0, 0, 0.14),
-      0 1px 5px 0 rgba(0, 0, 0, 0.12);
-      background: transparent;
+    display: inline-block;
+    margin-top: 10px;
+    background-color: #ffffff;
+    border: 3px solid black;
+
   }
 
+  //.example-box:after {
+  //  content: '';
+  //  width: 20px;
+  //  height: 20px;
+  //  border: 1px solid #cccccc;
+  //  border-radius: 50%;
+  //  background-color: black;
+  //  opacity: .4;
+  //  position: absolute;
+  //  left: 50%;
+  //  transform: translateX(-50%);
+  //  top: 5px;
+  //  z-index: 0;
+  //}
+  .example-box:hover .horverTexS{
+    display: block;
+    opacity: 1;
+  }
   .example-box1 {
-    width: 100px;
-    height: 100px;
-    margin-top: 10px;
-    margin-bottom: 20px;
-    // border: solid 1px #ccc;
-    color: rgba(0, 0, 0, 0.87);
-    cursor: move;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-    background: white !important;
-    border-radius: 4px;
-    position: relative;
-    z-index: 1;
-    transition: box-shadow 200ms cubic-bezier(0, 0, 0.2, 1);
-    box-shadow: 0 3px 1px -2px rgba(0, 0, 0, 0.2),
-      0 2px 2px 0 rgba(0, 0, 0, 0.14),
-      0 1px 5px 0 rgba(0, 0, 0, 0.12);
+    width: 40px;
+    height: 40px;
+    display: inline-block;
+    background: #fff;
+    margin-left: 10px;
+    margin-right: 10px;
+    //margin-top: 10px;
+    border: 1px solid rgba(0, 0, 0, 0.87);
+    /* Rotate */
+    -webkit-transform: rotate(-45deg);
+    -moz-transform: rotate(-45deg);
+    -ms-transform: rotate(-45deg);
+    -o-transform: rotate(-45deg);
+    transform: rotate(-45deg);
+    /* Rotate Origin */
+    -webkit-transform-origin: 63% 48%;
+    -moz-transform-origin:63% 48%;
+    -ms-transform-origin: 63% 48%;
+    -o-transform-origin:63% 48%;
+    transform-origin: 63% 48%;
   }
 
   .example-box2 {
@@ -67,42 +147,35 @@ $MINT: linear-gradient(40deg, #ff6ec4, #7873f5) !important;
     color: rgba(0, 0, 0, 0.87);
     cursor: move;
     display: flex;
-    justify-content: center;
+    justify-content: left;
     align-items: center;
     text-align: center;
-    background: #fff;
+
     border-radius: 4px;
-    position: relative;
-    z-index: 1;
+    //position: relative;
+      z-index: 1;
       border-right: 20px solid transparent;
       border-left: 20px solid transparent ;
       border-bottom: 100px solid rgba(244,67,54,0.7);
   }
 
   .example-box3 {
-    transform: rotate(45deg) !important;
-    transform-origin: 0 100% !important;
-    width: 100px;
-    height: 100px;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: inline-block;
     margin-top: 10px;
-    margin-bottom: 20px;
-    // border: solid 1px #ccc;
-    color: rgba(0, 0, 0, 0.87);
-    cursor: move;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-    background: #fff;
-    border-radius: 30px;
-    position: relative;
-    z-index: 1;
-    transition: box-shadow 200ms cubic-bezier(0, 0, 0.2, 1);
-    box-shadow: 0 3px 1px -2px rgba(0, 0, 0, 0.2),
-      0 2px 2px 0 rgba(0, 0, 0, 0.14),
-      0 1px 5px 0 rgba(0, 0, 0, 0.12);
-  }
+    margin-left: 5px;
+    background-color: #ffffff;
+    border: 5px solid black;
+   //background-color: orangered!important;
 
+
+  }
+  .example-box3:hover .horverTexE{
+    display: block;
+    opacity: 1;
+  }
   .example-box4 {
     width: 0;
     height: 0;
@@ -133,5 +206,33 @@ $MINT: linear-gradient(40deg, #ff6ec4, #7873f5) !important;
     width: 100%;
   }
 
+  .horverTexS{
+    padding: 5px;
+    background-color: #00bbff;
+    position: absolute;
+    left: -95%;
+    top: 90%;
+    display: none;
+    border-radius: 10px;
+    opacity: 0;
+    text-align: center;
+  }
+
+
+  .horverTexE{
+    padding: 5px;
+    background-color: orangered;
+    position: absolute;
+    left: 85%;
+    top: 80%;
+    display: none;
+    border-radius: 10px;
+    opacity: 0;
+    text-align: center;
+  }
 }
 
+.actionTitle{
+  margin: 5px 5px 5px 5px;
+  text-align: center;
+}

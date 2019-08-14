@@ -3,6 +3,7 @@ import { ROUTES } from '../sidebar/sidebar.component';
 import {Location, LocationStrategy, PathLocationStrategy} from '@angular/common';
 import { Router } from '@angular/router';
 import { LoadStaffAcountService } from 'app/service/load-staff-acount.service';
+import { Toast, ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-navbar',
@@ -19,22 +20,31 @@ export class NavbarComponent implements OnInit {
     listNoti: any=[];
     numberNoti: any;
     noNoti:boolean;
+    noNotiMore:boolean;
 
     constructor(location: Location,  private element: ElementRef, private router: Router,
-         private loadStaffAcountService: LoadStaffAcountService) {
+         private loadStaffAcountService: LoadStaffAcountService,
+         private toastr: ToastrService) {
       this.location = location;
           this.sidebarVisible = false;
     }
 
     ngOnInit(){
         this.loadStaffAcountService.getNotiUser().toPromise().then(rep=>{
-            this.listNoti = rep;
+            let a : any;
+            a = rep;
+            this.listNoti = a.userNotifications;
             console.log(this.listNoti);
-        })
+        },err =>{
+            this.toastr.error(err.error);
+          })
         this.loadStaffAcountService.getNumNotiUser().toPromise().then(rep=>{
             this.numberNoti = rep;
             if(this.numberNoti == 0) this.noNoti = true;
-        })
+            if(this.listNoti.length == 0) this.noNotiMore = true;
+        },err =>{
+            this.toastr.error(err.error);
+          })
       this.listTitles = ROUTES.filter(listTitle => listTitle);
       const navbar: HTMLElement = this.element.nativeElement;
       this.toggleButton = navbar.getElementsByClassName('navbar-toggler')[0];
@@ -59,8 +69,15 @@ export class NavbarComponent implements OnInit {
         this.sidebarVisible = true;
     };
     logOut(){
-        localStorage.removeItem("token");
+        let model={deviceToken: localStorage.getItem("tokenNoti").toString()};
+        this.loadStaffAcountService.logOut(model).toPromise().then(res=>{   
+           
+        }, err=>{
+            console.log(err);
+        })
         this.router.navigate(['/login']);
+        localStorage.removeItem("token");
+
     };
     checkUserProfile(){
         this.router.navigate(['/user-profile']);
