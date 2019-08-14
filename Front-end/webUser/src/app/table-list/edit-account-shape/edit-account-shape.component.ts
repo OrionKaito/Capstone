@@ -632,6 +632,7 @@ export class EditAccountShapeComponent implements OnInit {
                 }
             }
             this.arrowLeft = [];
+            let textArrowLeft= [];
             // Chạy for cho nhiều mủi tên của nhiều cặp hình
             for (let i = 0; i < this.listArrow.length; i++) {
                 let subArrow: any;
@@ -640,7 +641,11 @@ export class EditAccountShapeComponent implements OnInit {
                     // lấy querySelector của mủi tên
                     subArrow = document.querySelector('#' + this.listArrow[i]);
                     if (subArrow) {
+                       
+                        textArrowLeft.push(document.querySelector('#text' + this.listArrow[i]));
+                        console.log("list text", textArrowLeft);
                         this.arrowLeft.push(document.querySelector('#' + this.listArrow[i]));
+                        
                         source.unsubscribe();
                         for (let e = 0; e < this.arrowLeft.length; e++) {
                             // Tạo vị trí của mủi tên
@@ -652,8 +657,12 @@ export class EditAccountShapeComponent implements OnInit {
                                 // 'L' vẽ một đường thắng bắt đầu từ điểm 'M' đến điểm x, y của 'L'
                                 'L' +
                                 (this.posnBLeft[e].x + 55) + ',' + (this.posnBLeft[e].y);
+                            let xText = (this.posnALeft[e].x + this.posnBLeft[e].x)/2;
+                            let yText = (this.posnALeft[e].y + this.posnBLeft[e].y)/2
                             // setAttribute để vẽ mủi tên
                             this.arrowLeft[e].setAttribute('d', dStrLeft);
+                            textArrowLeft[e].setAttribute('x', xText);
+                            textArrowLeft[e].setAttribute('y', yText);
                         }
                     }
                 });
@@ -692,6 +701,7 @@ export class EditAccountShapeComponent implements OnInit {
                 }
             }
             this.arrowLeft = [];
+            let textArrowLeft= [];
             // Chạy for cho nhiều mủi tên của nhiều cặp hình
             for (let i = 0; i < this.listArrow.length; i++) {
                 let subArrow: any;
@@ -700,6 +710,8 @@ export class EditAccountShapeComponent implements OnInit {
                     // lấy querySelector của mủi tên
                     subArrow = document.querySelector('#' + this.listArrow[i]);
                     if (subArrow) {
+                    
+                        textArrowLeft.push(document.querySelector('#text' + this.listArrow[i]));
                         this.arrowLeft.push(document.querySelector('#' + this.listArrow[i]));
                         source.unsubscribe();
                         for (let e = 0; e < this.arrowLeft.length; e++) {
@@ -712,8 +724,12 @@ export class EditAccountShapeComponent implements OnInit {
                                 // 'L' vẽ một đường thắng bắt đầu từ điểm 'M' đến điểm x, y của 'L'
                                 'L' +
                                 (this.posnBLeft[e].x + 55) + ',' + (this.posnBLeft[e].y);
-                            // setAttribute để vẽ mủi tên
-                            this.arrowLeft[e].setAttribute('d', dStrLeft);
+                                let xText = (this.posnALeft[e].x + this.posnBLeft[e].x)/2;
+                                let yText = (this.posnALeft[e].y + this.posnBLeft[e].y)/2
+                                // setAttribute để vẽ mủi tên
+                                this.arrowLeft[e].setAttribute('d', dStrLeft);
+                                textArrowLeft[e].setAttribute('x', xText);
+                                textArrowLeft[e].setAttribute('y', yText);
                         }
                     }
                 });
@@ -756,13 +772,17 @@ export class EditAccountShapeComponent implements OnInit {
                 });
             });
             const arrowLeft = [];
+            let textArrowLeft= [];
             for (let i = 0; i < subArrow.length; i++) {
                 const divA: any = document.querySelector('#' + avgDiv[i][0]);
                 const divB: any = document.querySelector('#' + avgDiv[i][1]);
                 let subArrow1: any;
                 const source = interval(500).subscribe(() => {
+
                     subArrow1 = document.querySelector('#' + subArrow[i]);
                     if (subArrow1) {
+         
+                        textArrowLeft.push(document.querySelector('#text' + subArrow[i]));
                         arrowLeft.push(document.querySelector('#' + subArrow[i]));
                         source.unsubscribe();
                         const posnALeft = {
@@ -779,6 +799,11 @@ export class EditAccountShapeComponent implements OnInit {
                             'L' +
                             (posnBLeft.x + 55) + ',' + (posnBLeft.y);
                         arrowLeft[i].setAttribute('d', dStrLeft);
+
+                        let xText = (posnALeft.x + posnBLeft.x)/2;
+                        let yText = (posnALeft.y + posnBLeft.y)/2
+                        textArrowLeft[i].setAttribute('x', xText);
+                        textArrowLeft[i].setAttribute('y', yText);  
                     }
                 });
             }
