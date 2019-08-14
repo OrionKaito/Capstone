@@ -12,6 +12,8 @@
     <div class="modifymenu">
         <div (click)="drop(item)" *ngFor="let item of menuList; let i = index"
              class="{{item.class}} animated bounceInUp">
+            <span style="position: absolute; z-index: 1;" *ngIf="item.class ==='example-box'">start</span>
+            <span style="position: absolute; z-index: 1;" *ngIf="item.class ==='example-box3'">end</span>
             <strong class="horverTexS">Start Action</strong>
             <strong class="horverTexE">End Action</strong>
         </div>
