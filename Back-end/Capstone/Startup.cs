@@ -10,6 +10,9 @@ using Hangfire.SqlServer;
 using Hangfire.Storage;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.DataProtection;
+using Microsoft.AspNetCore.DataProtection.AuthenticatedEncryption;
+using Microsoft.AspNetCore.DataProtection.AuthenticatedEncryption.ConfigurationModel;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
@@ -40,6 +43,15 @@ namespace Capstone
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+
+            services.AddDataProtection()
+                .UseCryptographicAlgorithms(new AuthenticatedEncryptorConfiguration()
+                {
+                    EncryptionAlgorithm = EncryptionAlgorithm.AES_256_GCM,
+                    ValidationAlgorithm = ValidationAlgorithm.HMACSHA256
+                })
+                .SetApplicationName("Capstone");
+
             //fix bug lỗi không chạy dc do "has been blocked by CORS policy: 
             //Response to preflight request doesn't pass access control check: 
             //No 'Access-Control-Allow-Origin' header is present on the requested resource."
@@ -255,27 +267,30 @@ namespace Capstone
 
             app.UseHangfireDashboard();
 
-            //using (var connection = JobStorage.Current.GetConnection())
-            //{
-            //    foreach (var recurringJob in connection.GetRecurringJobs())
-            //    {
-            //        RecurringJob.RemoveIfExists(recurringJob.Id);
-            //    }
-            //}
-
-            //backgroundJobs.Schedule<IHangfireService>(u => u.checkAndChange(), TimeSpan.FromMinutes(1));
-
-            List<RecurringJobDto> list;
+            //khi chạy server
+            //xóa hết id cũ
             using (var connection = JobStorage.Current.GetConnection())
             {
-                list = connection.GetRecurringJobs();
+                foreach (var recurringJob in connection.GetRecurringJobs())
+                {
+                    RecurringJob.RemoveIfExists(recurringJob.Id);
+                }
             }
 
-            var job = list?.FirstOrDefault(j => j.Id == "test");  // jobId is the recurring job ID, whatever that is
-            if (job != null && !string.IsNullOrEmpty(job.LastJobId))
-            {
-                BackgroundJob.Delete(job.LastJobId);
-            }
+            //backgroundJobs.Schedule<IHangfireService>(u => u.checkAndChange(), TimeSpan.FromMinutes(1));
+            RecurringJob.AddOrUpdate<IHangfireService>(h => h.HandleByHangfire(), Configuration["CronExpression"]);
+
+            //List<RecurringJobDto> list;
+            //using (var connection = JobStorage.Current.GetConnection())
+            //{
+            //    list = connection.GetRecurringJobs();
+            //}
+
+            //var job = list?.FirstOrDefault(j => j.Id == "test");  // jobId is the recurring job ID, whatever that is
+            //if (job != null && !string.IsNullOrEmpty(job.LastJobId))
+            //{
+            //    BackgroundJob.Delete(job.LastJobId);
+            //}
 
             app.UseStaticFiles();
             app.UseStaticFiles(new StaticFileOptions()

@@ -10,6 +10,7 @@ namespace Capstone.Data.Repositories
     {
         RequestAction GetStartAction(Guid startActionTemplateID, Guid requestID);
         IEnumerable<RequestAction> GetExceptStartAction(Guid startActionTemplateID, Guid requestID);
+        IEnumerable<RequestAction> GetActionByStatus(StatusEnum statusEnum);
     }
     public class RequestActionRepository : RepositoryBase<RequestAction>, IRequestActionRepository
     {
@@ -20,6 +21,11 @@ namespace Capstone.Data.Repositories
         public IEnumerable<RequestAction> GetExceptStartAction(Guid startActionTemplateID, Guid requestID)
         {
             return DbContext.RequestActions.Where(r => r.WorkFlowTemplateActionID != startActionTemplateID && r.RequestID == requestID).ToList();
+        }
+
+        public IEnumerable<RequestAction> GetActionByStatus(StatusEnum statusEnum)
+        {
+            return DbContext.RequestActions.Where(r => r.Status == statusEnum).ToList();
         }
 
         public RequestAction GetStartAction(Guid startActionTemplateID, Guid requestID)

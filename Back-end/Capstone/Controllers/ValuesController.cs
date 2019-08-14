@@ -1,11 +1,8 @@
-﻿using Capstone.Helper;
-using Capstone.Service;
+﻿using Capstone.Service;
 using Hangfire;
-using Hangfire.Storage;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace Capstone.Controllers
@@ -85,7 +82,7 @@ namespace Capstone.Controllers
 
 
             //string message = _emailService.GenerateMessageApproveRequest("Kiet", names, links);
-            string message = _emailService.GenerateMessageTest("orionkaito@gmail.com", "locnt", "Quy trình nghỉ học", "Phòng đào tạo duyệt", dynamicform, listButton);
+            string message = _emailService.GenerateMessageTest("orionkaito@gmail.com", "locnt", "Quy trình nghỉ học", "Phòng đào tạo duyệt", dynamicform, null, listButton);
             try
             {
                 _emailService.SendMail("orionkaito@gmail.com", "Test", message, new List<string>());
@@ -97,12 +94,12 @@ namespace Capstone.Controllers
             return Ok(domain);
         }
 
-        [HttpGet("TestHandfire")]
-        public ActionResult TestHandfire()
-        {
-            RecurringJob.AddOrUpdate("test",() => _emailService.SendMail("kevinz2014st@gmail.com","test hangfire", "hangfire test", new List<string>()), "*/5 * * * *");
-            return Ok();
-        }
+        //[HttpGet("TestHandfire")]
+        //public ActionResult TestHandfire()
+        //{
+        //    RecurringJob.AddOrUpdate("test",() => _emailService.SendMail("kevinz2014st@gmail.com","test hangfire", "hangfire test", new List<string>()), "*/5 * * * *");
+        //    return Ok();
+        //}
 
         // POST api/values
         [HttpPost("PushNotificationToDevice")]
