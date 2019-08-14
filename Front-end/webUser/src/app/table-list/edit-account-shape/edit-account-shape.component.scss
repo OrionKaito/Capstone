@@ -5,6 +5,10 @@
   right: 82px!important;
 }
 .example-box1 input{
+  -webkit-transform: rotate(45deg)!important;
+  -moz-transform: rotate(45deg)!important;
+  -ms-transform: rotate(45deg)!important;
+  -o-transform: rotate(45deg)!important;
   transform: rotate(45deg)!important;
 }
 .container-fluid {
@@ -326,7 +330,7 @@
         -moz-transform-origin: 0 100%;
         -ms-transform-origin: 0 100%;
         -o-transform-origin: 0 100%;
-        transform-origin: 0 100%;
+        transform-origin: 48% 42%;
         //margin: 60px 0 10px 310px;
 
         #input2 {
