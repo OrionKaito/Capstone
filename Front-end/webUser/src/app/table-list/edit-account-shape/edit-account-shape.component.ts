@@ -224,8 +224,8 @@ export class EditAccountShapeComponent implements OnInit {
                         idDiv: this.subClass,
                         idArrow: this.create_UUID().toString(),
                         name: 'arrow' + count,
-                        timeNumber: 0,
-                        typeTime: 1
+                        timeInterval: 0,
+                        type: 1
                     });
                 } else {
                     //những mũi tên tiếp theo nó lấy mũi đầu cắt chuỗi lấy số rồi cộng lên
@@ -239,8 +239,8 @@ export class EditAccountShapeComponent implements OnInit {
                         // idArrow: 'arrow' + this.listClass.length
                         idArrow: this.create_UUID().toString(),
                         name: 'arrow' + (+count + 1),
-                        timeNumber: 0,
-                        typeTime: 1
+                        timeInterval: 0,
+                        type: 1
                     });
                 }
                 // Gọi hàm vẽ mủi tên
@@ -1187,14 +1187,14 @@ export class EditAccountShapeComponent implements OnInit {
                         fromWorkFlowTemplateActionID: '',
                         toWorkFlowTemplateActionID: '',
                         name: '',
-                        timeNumber: "",
-                        typeTime: ""
+                        timeInterval: "",
+                        type: ""
                     };
                     b.fromWorkFlowTemplateActionID = element.idDiv[0].toString();
                     b.toWorkFlowTemplateActionID = element.idDiv[1].toString();
                     b.name = element.name.toString();
-                    b.timeNumber = element.timeNumber.toString();
-                    b.typeTime = element.typeTime.toString();
+                    b.timeInterval = element.timeInterval;
+                    b.type = element.type;
                     jsonConnections.push(b);
                 });
 

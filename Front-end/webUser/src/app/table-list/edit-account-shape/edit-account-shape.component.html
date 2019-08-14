@@ -134,7 +134,7 @@
         <td class="d-flex align-items-center">
 
           <div class="mr-3">Timer (Time delay): </div>
-          <input type="number" [(ngModel)]="propertiesArr.timeNumber">
+          <input type="number" [(ngModel)]="propertiesArr.timeInterval">
 
         </td>
       </tr>
@@ -144,10 +144,10 @@
 
             <div class="mr-3">Type</div>
 
-            <select [(ngModel)]="propertiesArr.typeTime">
-              <option value="1">Ngày </option>
+            <select [(ngModel)]="propertiesArr.type">
+              <option value="1">Phút</option>
               <option value="2">Giờ </option>
-              <option value="3">Phút </option>
+              <option value="3">Ngày</option>
             </select>
           </td>
         </tr>
