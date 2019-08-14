@@ -11,6 +11,10 @@
   -o-transform: rotate(45deg)!important;
   transform: rotate(45deg)!important;
 }
+.example-box input, .example-box1 input, .example-box3 input{
+  max-width: 90%;
+  margin-left: 5px;
+}
 .container-fluid {
   height: 100%;
   /deep/.botton-left__table{
@@ -289,7 +293,7 @@
           height: 40px;
           border: 1px solid #cccccc;
           border-radius: 50%;
-          background-color: #cccccc;
+          background-color: black;
           opacity: .4;
           position: absolute;
           left: 50%;
@@ -330,7 +334,7 @@
         -moz-transform-origin: 0 100%;
         -ms-transform-origin: 0 100%;
         -o-transform-origin: 0 100%;
-        transform-origin: 48% 42%;
+        transform-origin: 46% 61%;
         //margin: 60px 0 10px 310px;
 
         #input2 {

@@ -86,12 +86,13 @@ $MINT: linear-gradient(40deg, #ff6ec4, #7873f5) !important;
     height: 20px;
     border: 1px solid #cccccc;
     border-radius: 50%;
-    background-color: #cccccc;
+    background-color: black;
     opacity: .4;
     position: absolute;
     left: 50%;
     transform: translateX(-50%);
     top: 5px;
+    z-index: 0;
   }
   .example-box:hover .horverTexS{
     display: block;
