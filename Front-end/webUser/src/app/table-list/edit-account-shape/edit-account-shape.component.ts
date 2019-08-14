@@ -1007,16 +1007,17 @@ export class EditAccountShapeComponent implements OnInit {
     }
 
     saveDraf() {
+
         if (this.menuList1.length > 0) {
             let positionKey: any;
             let classKey: any;
 
             //const exportJson = [];
             let exportJson: any = {action: [], arrow: []};
-            let exportJson2: any = {workFlowID: String, action: [], arrow: []};
+         //   let exportJson2: any = {workFlowID: String, action: [], arrow: []};
 
             for (let i = 0; i < this.menuList1.length; i++) {
-                let obj;
+             //   let obj;
                 positionKey = $('#' + this.menuList1[i].id);
                 // lọc ra những thằng làm đầu mũi tên
                 classKey = this.menuList1[i];
@@ -1024,9 +1025,7 @@ export class EditAccountShapeComponent implements OnInit {
                 classKey.positionTop = positionKey.position().top;
                 classKey.positionLeft = positionKey.position().left;
                 exportJson.action.push(classKey);
-                exportJson2.action.push(classKey);
-
-
+           //     exportJson2.action.push(classKey);
             }
             if (exportJson.length <= 0) {
                 this.toastr.error('Chưa có dữ liệu !!');
@@ -1034,12 +1033,10 @@ export class EditAccountShapeComponent implements OnInit {
                 //đẩy mũi tên vô có 1 dòng vậy thôi à?
                 this.listClass.forEach(element => {
                     exportJson.arrow.push(element);
-                    exportJson2.arrow.push(element);
+                 //   exportJson2.arrow.push(element);
                 })
 
-                exportJson2.workFlowID = this.saveIDofWF;
-                //lưu  lại
-                const json = JSON.stringify(exportJson2);
+               // exportJson2.workFlowID = this.saveIDofWF;
 
 
                 var a = {
@@ -1049,13 +1046,7 @@ export class EditAccountShapeComponent implements OnInit {
                     'description': this.saveActiontype.description,
                     'permissionToUseID': this.saveActiontype.permissionToUseID
                 };
-                exportJson2.workFlowID = this.saveIDofWF;
-                var b = {
-                    'id': this.saveIDofWF,
-                    'data': JSON.stringify(exportJson2),
-
-                };
-
+           //     exportJson2.workFlowID = this.saveIDofWF;
                 this.LoginService.editWF(a).toPromise().then((res: any) => {
                     this.toastr.success('Save draft WorkFlow success!');
 

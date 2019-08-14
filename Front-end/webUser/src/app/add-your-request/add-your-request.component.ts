@@ -25,7 +25,8 @@ export class AddYourRequestComponent implements OnInit {
       status: "",
       staffResult: []
     }
-    this.loadStaffAcountService.getYourRequest(this.data).toPromise().then(res=>{
+    console.log(this.data);
+    this.loadStaffAcountService.getYourRequest(this.data.id).toPromise().then(res=>{
       this.yourRequest = res;
       console.log(this.yourRequest);
     },err =>{
