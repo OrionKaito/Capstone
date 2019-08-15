@@ -116,7 +116,7 @@ namespace CapstoneMvc.Controllers
                 {
                     Status = StatusEnum.Pending,
                     RequestID = model.RequestID,
-                    ActorEmail = "Hahaha",
+                    ActorEmail = currentRequestAction.ActorEmail,
                     NextStepID = model.NextStepID,
                     CreateDate = DateTime.Now,
                     WorkFlowTemplateActionID = model.NextStepID,
