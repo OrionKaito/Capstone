@@ -148,6 +148,10 @@ export class LoadStaffAcountService {
   loadPermissionData() {
     return this.http.get(this.Url + "api/Permissions");
   }
+  loadAllPermissionData() {
+    return this.http.get(this.Url + "api/Permissions/GetAllPermission");
+  }
+
   deletePermission(id: string) {
     return this.http.delete(this.Url + "api/Permissions?ID=" + id);
   }
@@ -211,7 +215,7 @@ export class LoadStaffAcountService {
   createAction(action){
     var token = "Bearer " + localStorage.getItem("token");
     var tokenHeader = new HttpHeaders({'Authorization': token});
-    return this.http.post(this.Url + "api/ActionTypes", action, {headers : tokenHeader });
+    return this.http.post(this.Url + "api/ActionTypes", action, {headers : tokenHeader, responseType: "text" });
   }
   loadPermissionByGr(id){
     var token = "Bearer " + localStorage.getItem("token");
@@ -234,6 +238,10 @@ export class LoadStaffAcountService {
    // return this.http.post(this.Url + "api/Accounts/ConfirmEmail", model);
 
   }
+  logOut(model){
+    return this.http.put(this.Url + "api/Token/Logout?deviceToken=", model.deviceToken);
+  }
+  
   
 
 }

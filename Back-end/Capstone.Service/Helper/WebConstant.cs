@@ -1,4 +1,4 @@
-﻿namespace Capstone.Helper
+﻿namespace Capstone.Service.Helper
 {
     public class WebConstant
     {
@@ -38,8 +38,10 @@
         public static string AccountCreated = "Account created, please check your email!";
         public static string EmptyList = "List is empty";
         public static string RequestIsHandled = "Sorry, this requested has been handled.";
+        public static string RequestHangfire = "Sorry, this requested is being processed";
         public static string WrongOldPassword = "Your current password was incorrect.";
         public static string PasswordToShort = "Passwords must be at least 6 characters.";
         public static string ToggleWorkflowFail = "Please design workflow first!";
+        public static string InvalidTimeInterval = "Time Interval must be larger than 0!";
     }
 }

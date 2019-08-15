@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Capstone.Helper
+namespace Capstone.Service.Helper
 {
     public static class Utilities
     {

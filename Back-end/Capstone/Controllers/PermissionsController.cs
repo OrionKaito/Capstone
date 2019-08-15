@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
-using Capstone.Helper;
 using Capstone.Model;
 using Capstone.Service;
+using Capstone.Service.Helper;
 using Capstone.ViewModel;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -145,13 +145,21 @@ namespace Capstone.Controllers
 
         // DELETE: api/Permissions
         [HttpDelete]
-        public ActionResult DeleteRole(Guid ID)
+        public ActionResult DeletePermission(Guid ID)
         {
             try
             {
                 var permissionInDb = _permissionService.GetByID(ID);
                 if (permissionInDb == null) return BadRequest(WebConstant.NotFound);
-                permissionInDb.IsDeleted = true;
+
+                if (permissionInDb.IsDeleted == true)
+                {
+                    permissionInDb.IsDeleted = false;
+                }
+                else
+                {
+                    permissionInDb.IsDeleted = true;
+                }
                 _permissionService.Save();
                 return Ok(WebConstant.Success);
             }

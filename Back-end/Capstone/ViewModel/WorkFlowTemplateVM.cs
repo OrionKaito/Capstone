@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Capstone.Model;
+using System;
 using System.Collections.Generic;
 
 namespace Capstone.ViewModel
@@ -55,6 +56,8 @@ namespace Capstone.ViewModel
         public Guid FromWorkFlowTemplateActionID { get; set; }
         public Guid ToWorkFlowTemplateActionID { get; set; }
         public string Name { get; set; }
+        public int TimeInterval { get; set; }
+        public TimeEnum Type { get; set; }
     }
 
     public class SaveWowkFlowTemplateUM

@@ -26,15 +26,16 @@
       <label>Password</label>
       <input name="password" [(ngModel)]="formData.password" class="form-control">
     </div>
-    <div class="form-group col-md-6">
+    <!-- <div class="form-group col-md-6">
       <label>Re-Password</label>
       <input name="RePassword" [(ngModel)]="rePassword" class="form-control">
+    </div> -->
+    <div *ngIf="createAcc" class="form-group col-md-6">
+      <label>Date of birth</label>
+      <input name="dateOfBirth" type="date" [(ngModel)]="formData.dateOfBirth" class="form-control">
     </div>
   </div>
-  <div *ngIf="createAcc" class="form-group">
-    <label>Date of birth</label>
-    <input name="dateOfBirth" type="date" [(ngModel)]="formData.dateOfBirth" class="form-control">
-  </div>
+
   <div class="form-row">
     <div class="form-group col-md-6">
       <label>Role</label>
@@ -69,7 +70,7 @@
   <div class="form-group">
     <label>Manage of user</label>
     <select name="group" [(ngModel)]="formData.LineManagerID" class="form-control">
-      <option value="0">-Select-</option>
+      <option value="0">No line manager</option>
       <option *ngFor="let item of manageList" value="{{item.id}}">{{item.fullName}}</option>
     </select>
   </div>

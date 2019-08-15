@@ -34,7 +34,6 @@ export class ManageYourRequestComponent implements OnInit {
   }
   callAll() {
     this.loadStaffAcountService.loadYourRequest().toPromise().then(data => {
-
       this.requests = data;
       let a=this.requests.myRequests;
       this.listData = new MatTableDataSource(a);
@@ -84,12 +83,12 @@ export class ManageYourRequestComponent implements OnInit {
         ;
       });
   };
-  SeeFullRequest(id: string) {
+  SeeFullRequest(id, date, name, isComplete) {
     const dialogConfig = new MatDialogConfig();
     dialogConfig.autoFocus = true;
     dialogConfig.disableClose = true;
     dialogConfig.width = "50%";
-    dialogConfig.data = id;
+    dialogConfig.data = {"id": id, "date": date, "name": name, "isComplete": isComplete};
     dialogConfig.panelClass = 'custom-dialog-container';
     dialogConfig.maxHeight ="80%",
     // dialogConfig.maxHeight = "inherit";

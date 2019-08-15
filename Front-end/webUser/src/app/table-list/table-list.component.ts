@@ -55,12 +55,12 @@ export class TableListComponent implements OnInit {
 
     this.LoginService.enabledDisableWF(id).subscribe(
       data => {
-        console.log(data);
+        this.toastr.success(data);
         this.callAll()
 
       },
       err => {
-        console.log(err);
+        this.toastr.error(err.error);
         this.callAll()
       }
     )
@@ -91,6 +91,7 @@ export class TableListComponent implements OnInit {
     dialogConfig.autoFocus = true;
     dialogConfig.disableClose = true;
     dialogConfig.width = "50%";
+  
     dialogConfig.data = id;
     this.dialog.open(AddAccountComponent, dialogConfig).afterClosed().subscribe(res => {
       this.callAll();

@@ -42,7 +42,7 @@
                             <div><p>{{item.workflowName}} from {{item.actorName}}</p></div>
                             <small style="color: blue">{{item.createDate | date:'dd/MM/yyyy hh:mm a'}}</small>
                         </div>
-                        <div *ngIf="noNotiMore" class="dropdown-item">There are no more Notification.</div>
+                        <div *ngIf="listNoti.lenght==0" class="dropdown-item">There are no more Notification.</div>
 
                     </div>
                 </li>

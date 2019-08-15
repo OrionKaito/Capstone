@@ -61,7 +61,7 @@
                               <ng-container matColumnDef="isDeleted">
                                   <mat-header-cell *matHeaderCellDef></mat-header-cell>
                                   <mat-cell *matCellDef="let element">
-                                      <button (click)="SeeFullRequest(element.currentRequestActionID)" mat-icon-button
+                                      <button (click)="SeeFullRequest(element.currentRequestActionID,element.createDate,element.workFlowTemplateName, element.isCompleted)" mat-icon-button
                                           matTooltip="Full information">
                                           <mat-icon id="element.id">description</mat-icon>
                                       </button>

@@ -1,6 +1,6 @@
-﻿using Capstone.Helper;
-using Capstone.Model;
+﻿using Capstone.Model;
 using Capstone.Service;
+using Capstone.Service.Helper;
 using Capstone.ViewModel;
 using CapstoneMvc.Models;
 using Microsoft.AspNetCore.DataProtection;
@@ -88,7 +88,7 @@ namespace CapstoneMvc.Controllers
                 //Decrypt chuỗi content
                 content = _dataProtector.Unprotect(content);
 
-                RequestApproveCM model = new RequestApproveCM
+                RequestApproveByMailCM model = new RequestApproveByMailCM
                 {
                     RequestID = Guid.Parse(content.Substring(content.IndexOf(WebConstant.RequestID) + WebConstant.RequestID.Count() + 1, 36)),
                     RequestActionID = Guid.Parse(content.Substring(content.IndexOf(WebConstant.RequestActionID) + WebConstant.RequestActionID.Count() + 1, 36)),
@@ -100,7 +100,7 @@ namespace CapstoneMvc.Controllers
                 {
                     Message handled = new Message
                     {
-                        strMessage = "Sorry, this requested has been handled",
+                        strMessage = WebConstant.RequestIsHandled,
                     };
                     return View(handled);
                 }
@@ -164,68 +164,96 @@ namespace CapstoneMvc.Controllers
 
                     _notificationService.Create(notification);
 
-                    //UserNotification
+                    //Lấy connection dựa vào action trước và kế tiếp
+                    var workFlowTemplateActionConnection = _workFlowTemplateActionConnectionService
+                        .GetByFromIDAndToID(currentRequestAction.NextStep.ID, model.NextStepID);
 
-                    if (nextStep.IsApprovedByLineManager)
+                    //kiểm tra connection coi có bị hangfire không?
+                    //nếu có thì để status của requestAction là Hangfire
+                    if (workFlowTemplateActionConnection.TimeInterval > 0)
                     {
-                        var ownerID = _requestService.GetByID(model.RequestID).InitiatorID;
-                        var manager = _userManager.FindByIdAsync(ownerID).Result;
-                        var managerID = manager.LineManagerID;
-
-                        if (managerID != "" || !string.IsNullOrEmpty(managerID))
-                        {
-                            //Push notification
-                            PushNotificationToUser(managerID, "Received Request", WebConstant.ReceivedRequestMessage, notification);
-                        }
+                        requestAction.Status = StatusEnum.Hangfire;
+                        _requestActionService.Save();
                     }
-                    //Lấy các user có permission xử lý action để gửi notification
-                    if (nextStep.PermissionToUseID.HasValue)
+                    else
                     {
-                        var users = _userService.getUsersByPermissionID(nextStep.PermissionToUseID.GetValueOrDefault());
-
-                        if (users != null && users.Any())
+                        if (nextStep.IsApprovedByLineManager)
                         {
-                            foreach (var user in users)
+                            var ownerID = _requestService.GetByID(model.RequestID).InitiatorID;
+                            var manager = _userManager.FindByIdAsync(ownerID).Result;
+                            var managerID = manager.LineManagerID;
+
+                            if (managerID != "" || !string.IsNullOrEmpty(managerID))
                             {
                                 //Push notification
-                                PushNotificationToUser(user.Id, "Received Request", WebConstant.ReceivedRequestMessage, notification);
+                                PushNotificationToUser(managerID, "Received Request", WebConstant.ReceivedRequestMessage, notification);
                             }
                         }
-                    }
-                    if (!nextStep.ToEmail.IsNullOrEmpty())
-                    {
-                        var requestValue = _requestValueService.GetByRequestActionID(requestAction.ID);
-
-                        Dictionary<string, string> dynamicform = new Dictionary<string, string>();
-
-                        foreach (var item in requestValue)
+                        //Lấy các user có permission xử lý action để gửi notification
+                        if (nextStep.PermissionToUseID.HasValue)
                         {
-                            dynamicform.Add(item.Key, item.Value);
+                            var users = _userService.GetUsersByPermissionID(nextStep.PermissionToUseID.GetValueOrDefault());
+                            if (users != null && users.Any())
+                            {
+                                foreach (var user in users)
+                                {
+                                    //Push notification
+                                    PushNotificationToUser(user.Id, "Received Request", WebConstant.ReceivedRequestMessage, notification);
+                                }
+                            }
                         }
-
-                        Dictionary<string, string> listButton = new Dictionary<string, string>();
-                        var connections = _workFlowTemplateActionConnectionService.GetByFromWorkflowTemplateActionID(nextStep.ID);
-                        foreach (var connection in connections)
+                        if (!nextStep.ToEmail.IsNullOrEmpty())
                         {
-                            listButton.Add(_configuration["UrlCapstoneMvc"]
-                                + "/home/ApproveRequest/?RequestID="
-                                + request.ID
-                                + "&RequestActionID="
-                                + requestAction.ID
-                                + "&NextStepID="
-                                + connection.ToWorkFlowTemplateActionID
-                                + "&ActorEmail="
-                                + nextStep.ToEmail, connection.ConnectionType.Name);
+                            //lấy giá trị form mà user input
+                            var userRequestValue = _requestValueService.GetByRequestActionID(userAction.ID);
+                            Dictionary<string, string> dynamicform = new Dictionary<string, string>();
+
+                            foreach (var item in userRequestValue)
+                            {
+                                dynamicform.Add(item.Key, item.Value);
+                            }
+
+                            //lấy comment của staff
+                            var staffRequestValue = _requestValueService.GetByRequestActionID(requestAction.ID);
+                            Dictionary<string, string> comments = new Dictionary<string, string>();
+                            if (!staffRequestValue.IsNullOrEmpty())
+                            {
+                                comments.Add("Name", _userManager.FindByIdAsync(requestAction.ActorID).Result.FullName);
+                                int i = 0;
+                                foreach (var item in staffRequestValue)
+                                {
+                                    i++;
+                                    comments.Add(item.Key + i, item.Value);
+                                }
+                            }
+                            
+                            Dictionary<string, string> listButton = new Dictionary<string, string>();
+                            var connections = _workFlowTemplateActionConnectionService.GetByFromWorkflowTemplateActionID(nextStep.ID);
+                            string url = "";
+                            foreach (var connection in connections)
+                            {
+                                url = (_configuration["UrlCapstoneMvc"]
+                                        + "/home/ApproveRequest/?content="
+                                        + _dataProtector.Protect("RequestID="
+                                            + request.ID
+                                            + "&RequestActionID="
+                                            + requestAction.ID
+                                            + "&NextStepID="
+                                            + connection.ToWorkFlowTemplateActionID)
+                                        );
+                                listButton.Add(url, connection.ConnectionType.Name);
+                            }
+
+                            string message = _emailService.GenerateMessageTest(nextStep.ToEmail
+                                , "Dynamic Workflow"
+                                , _workFlowTemplateService.GetByID(request.WorkFlowTemplateID).Name
+                                , nextStep.Name
+                                , dynamicform
+                                , comments
+                                , listButton);
+
+                            _emailService.SendMail(nextStep.ToEmail, "You receive", message, filePaths);
                         }
-
-                        string message = _emailService.GenerateMessageTest(nextStep.ToEmail
-                            , "Dynamic Workflow"
-                            , _workFlowTemplateService.GetByID(request.WorkFlowTemplateID).Name
-                            , nextStep.Name
-                            , dynamicform
-                            , listButton);
-
-                        _emailService.SendMail(nextStep.ToEmail, "You receive", message, filePaths);
                     }
                 }
                 else // Nếu nó là action cuối cùng (kết quả) thì gửi về cho người gửi request
