@@ -1,4 +1,22 @@
 $MINT: linear-gradient(40deg, #ff6ec4, #7873f5) !important;
+ul{
+  width:100% !important;
+  height: 25px;
+  padding: 0;
+  margin-bottom: 0px;
+
+  li{
+    width: 50%;
+    float: left;
+    list-style-type: none;
+    
+  }
+  
+}
+ul:hover{
+  cursor: pointer;
+  background: rgba(212, 211, 211, 0.87);
+}
 
 .diamond {
   width: 40px;
@@ -76,14 +94,14 @@ $MINT: linear-gradient(40deg, #ff6ec4, #7873f5) !important;
 }
 .menu-main {
   width: 16.666667%;
-
-  height: 17%;
-
+ 
+  height: 20%;
+  border-bottom: #3C4858; 
   position: fixed;
   top: 11%;
   box-sizing: border-box;
   --higru:#ccc;
-  background: var(--higru);  
+  background: white;  
   // background-color: #111;
   // background: #eaeae1;
   // border-right: 1px solid #cbcbb4;
@@ -91,15 +109,20 @@ $MINT: linear-gradient(40deg, #ff6ec4, #7873f5) !important;
   // -moz-box-shadow: 10px 7px 5px -4px rgba(0, 0, 0, 0.75);
   // box-shadow: 10px 7px 5px -4px rgba(0, 0, 0, 0.75);
   display: block;
+  .modifymenu{
+    width: 100%;
+    background-color: transparent;
+
   .example-box {
-    width: 40px;
-    height: 40px;
+    margin-left: 10px;
+    margin-right: 10px;
+    margin-bottom: 0px;
+    width: 20px;
+    height: 20px;
     border-radius: 50%;
     display: inline-block;
-    margin-top: 10px;
     background-color: #ffffff;
-
-    border: 3px solid black;
+    border: 1px solid black;
 
   }
 
@@ -123,14 +146,14 @@ $MINT: linear-gradient(40deg, #ff6ec4, #7873f5) !important;
     opacity: 1;
   }
   .example-box1 {
-    width: 40px;
-    height: 40px;
+    width: 16px;
+    height: 16px;
     display: inline-block;
     background: #fff;
 
     margin-left: 10px;
     margin-right: 10px;
-    //margin-top: 10px;
+    margin-top: 1.5px;
     border: 1px solid rgba(0, 0, 0, 0.87);
 
     /* Rotate */
@@ -170,15 +193,15 @@ $MINT: linear-gradient(40deg, #ff6ec4, #7873f5) !important;
   }
 
   .example-box3 {
-
-    width: 40px;
-    height: 40px;
+    margin-left: 10px;
+    margin-right: 10px;
+    width: 20px;
+    height: 20px;
     border-radius: 50%;
     display: inline-block;
-    margin-top: 10px;
-    margin-left: 5px;
+    margin-top: 4px;
     background-color: #ffffff;
-    border: 5px solid black;
+    border: 3px solid black;
    //background-color: orangered!important;
 
   }
@@ -240,6 +263,7 @@ $MINT: linear-gradient(40deg, #ff6ec4, #7873f5) !important;
     opacity: 0;
     text-align: center;
   }
+}
 }
 
 .actionTitle{

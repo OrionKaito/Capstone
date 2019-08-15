@@ -27,7 +27,7 @@ import {
     MatFormFieldModule,
     MatChipsModule,
     MatInputModule,
-    MatCardModule, MatMenuModule
+    MatCardModule, MatMenuModule, MatStepperModule
 } from '@angular/material';
 import { CdkTable, CdkTableModule } from '@angular/cdk/table';
 import { AddAccountComponent } from './add-account/add-account.component';
@@ -95,6 +95,7 @@ const config = {
         FormsModule,
         ReactiveFormsModule,
         MatTableModule,
+        MatStepperModule,
         AgmCoreModule.forRoot({
             apiKey: 'YOUR_GOOGLE_MAPS_API_KEY'
         }),
