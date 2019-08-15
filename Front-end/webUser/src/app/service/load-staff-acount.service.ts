@@ -238,6 +238,10 @@ export class LoadStaffAcountService {
    // return this.http.post(this.Url + "api/Accounts/ConfirmEmail", model);
 
   }
+  logOut(model){
+    return this.http.put(this.Url + "api/Token/Logout?deviceToken=", model.deviceToken);
+  }
+  
   
 
 }

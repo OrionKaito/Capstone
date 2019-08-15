@@ -37,7 +37,7 @@ export class MenuEditAccountShapeComponent implements OnInit {
       isStart: false,
       isEnd: true,
       toEmail: ""
-    }
+    },
     // {
     //   class: 'example-box2 peach-gradient',
     //   id: '',

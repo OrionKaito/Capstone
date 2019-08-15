@@ -10,11 +10,19 @@
 </div>
 <div class="menu-main d-flex flex-column align-items-center">
     <div class="modifymenu">
+
+        <h3 class="actionTitle">Action</h3>
         <div (click)="drop(item)" *ngFor="let item of menuList; let i = index"
-             class="{{item.class}} animated bounceInUp">
+             class="{{item.class}} animated ">
+<!--            <div *ngIf="item.class==='example-box1'" class=""></div>-->
+
+            <span style="position: absolute; z-index: 1;" *ngIf="item.class ==='example-box'">start</span>
+            <span style="position: absolute; z-index: 1;" *ngIf="item.class ==='example-box3'">end</span>
             <strong class="horverTexS">Start Action</strong>
             <strong class="horverTexE">End Action</strong>
         </div>
+
+<!--        <div id="diamond"></div>-->
 
     </div>
 </div>
