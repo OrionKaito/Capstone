@@ -49,6 +49,7 @@
       </tr>
       <!-- <tr *ngIf="checkIsAction">
 
+
         <td>
           <mat-form-field class="example-full-width">
             <input matInput placeholder="Description" name="properties.description" [(ngModel)]="properties.description"
@@ -57,11 +58,13 @@
         </td>
       </tr> -->
 
+
       <tr *ngIf="checkIsAction && properties.isStart">
         <!-- <td>Action Type</td>
         <td><select name="properties.actionTypeID" [(ngModel)]="properties.actionTypeID">
             <option *ngFor="let item of listActionType" value="{{item.id}}">{{item.name}}</option>
           </select></td> -->
+
 
         <mat-form-field class="example-full-width">
           <mat-label>Form</mat-label>
@@ -84,6 +87,7 @@
         <td colspan="2"><input class="edit-inut" name="approveByPer"
             [(ngModel)]="properties.approveByPer" type="checkbox">Approve by Permission</td>
       </tr>
+
       <tr *ngIf="checkIsAction && properties.approveByPer && !properties.isStart && !properties.isEnd">
         <!-- <td>Permission</td>
         <td><select name="properties.permissionToUseID" [(ngModel)]="properties.permissionToUseID">
@@ -172,10 +176,12 @@
 
 
     <div class="col-10 content-body">
-      <div *ngFor="let item of menuList1" style="position:absolute" [style.top.px]="item.positionTop"
-        [style.left.px]="item.positionLeft" class="{{item.class}}" id="{{item.id}}" (click)="showProperties(item)">
+      <div *ngFor="let item of menuList1"  style="position:absolute" [style.top.px]="item.positionTop"
+        [style.left.px]="item.positionLeft" class="{{item.class}} addtextaction" id="{{item.id}}" (click)="showProperties(item)">
         <mdb-icon fas icon="times" class="deleteShape" (click)="dialogConfirmDelete(item)"></mdb-icon>
-          <div class="start-action"></div>
+
+<!--          <div class="start-action"></div>-->
+
         <div class="md-form form-sm" id="{{item.idInput}}">
           <input mdbInput type="text" name="item.name" [(ngModel)]="item.name" class="form-control form-control-sm"
             placeholder="input text">
@@ -197,6 +203,11 @@
 
         </div>
         <mdb-icon fas icon="plus" class="draw-arrow" (click)="dropImageBottom(item)"></mdb-icon>
+
+        <mat-form-field class="add-input">
+          <input matInput id="{{'imput'+item.index}}" placeholder="Favorite food" value="">
+        </mat-form-field>
+
       </div>
 
       <svg (click)="clearConnect()" id="body-svg" xmlns="http://www.w3.org/2000/svg"
