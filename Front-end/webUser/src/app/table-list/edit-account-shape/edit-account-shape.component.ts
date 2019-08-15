@@ -37,7 +37,7 @@ export class EditAccountShapeComponent implements OnInit {
     listConnectionType: any = [];
     listErrorAction: any = [];
     public dataModel: any;
-
+    showIcon:any;
     secondFormGroup: FormGroup;
 
     listDropdown = [];
@@ -98,6 +98,7 @@ export class EditAccountShapeComponent implements OnInit {
     }
 
     callAll() {
+        this.showIcon =false;
         this.appoveByMail = false;
         this.approveByPer = false;
         this.properties = {
@@ -656,10 +657,10 @@ export class EditAccountShapeComponent implements OnInit {
                                 // 'M' bắt đầu vị trí mủi tên là vị trí x, y của hình 1
                                 // https://www.w3.org/TR/SVG/paths.html
                                 'M' +
-                                (this.posnALeft[e].x + 55) + ',' + (this.posnALeft[e].y) + ' ' +
+                                (this.posnALeft[e].x + 39) + ',' + (this.posnALeft[e].y) + ' ' +
                                 // 'L' vẽ một đường thắng bắt đầu từ điểm 'M' đến điểm x, y của 'L'
                                 'L' +
-                                (this.posnBLeft[e].x + 55) + ',' + (this.posnBLeft[e].y);
+                                (this.posnBLeft[e].x + 39) + ',' + (this.posnBLeft[e].y);
                             let xText = (this.posnALeft[e].x + this.posnBLeft[e].x)/2;
                             let yText = (this.posnALeft[e].y + this.posnBLeft[e].y)/2-7;
                             // setAttribute để vẽ mủi tên
@@ -723,10 +724,10 @@ export class EditAccountShapeComponent implements OnInit {
                                 // 'M' bắt đầu vị trí mủi tên là vị trí x, y của hình 1
                                 // https://www.w3.org/TR/SVG/paths.html
                                 'M' +
-                                (this.posnALeft[e].x + 55) + ',' + (this.posnALeft[e].y) + ' ' +
+                                (this.posnALeft[e].x + 39) + ',' + (this.posnALeft[e].y) + ' ' +
                                 // 'L' vẽ một đường thắng bắt đầu từ điểm 'M' đến điểm x, y của 'L'
                                 'L' +
-                                (this.posnBLeft[e].x + 55) + ',' + (this.posnBLeft[e].y);
+                                (this.posnBLeft[e].x + 39) + ',' + (this.posnBLeft[e].y);
                                 let xText = (this.posnALeft[e].x + this.posnBLeft[e].x)/2;
                                 let yText = (this.posnALeft[e].y + this.posnBLeft[e].y)/2-7;
                                 // setAttribute để vẽ mủi tên
@@ -757,7 +758,9 @@ export class EditAccountShapeComponent implements OnInit {
                 }
             }
             const subHeightSVG = subOffsetTop.sort((a, b) => a > b ? -1 : 1);
-            this.heightSVG = subHeightSVG[0] + 100 + 'px';
+            if(subHeightSVG[0]>490){
+            this.heightSVG = subHeightSVG[0] + 150 + 'px';
+            }
         }
 
         const subData = $('#' + id);
@@ -798,9 +801,9 @@ export class EditAccountShapeComponent implements OnInit {
                         };
                         const dStrLeft =
                             'M' +
-                            (posnALeft.x + 55) + ',' + (posnALeft.y) + ' ' +
+                            (posnALeft.x + 39) + ',' + (posnALeft.y) + ' ' +
                             'L' +
-                            (posnBLeft.x + 55) + ',' + (posnBLeft.y);
+                            (posnBLeft.x + 39) + ',' + (posnBLeft.y);
                         arrowLeft[i].setAttribute('d', dStrLeft);
 
                         let xText = (posnALeft.x + posnBLeft.x)/2;
@@ -1563,6 +1566,12 @@ export class EditAccountShapeComponent implements OnInit {
             }
         }
         return temp.sort((a, b) => a - b);
+    }
+    allIconFalse(){
+        this.menuList1.forEach(element => {
+            element.showIcon = false;
+        });
+        
     }
 
 }

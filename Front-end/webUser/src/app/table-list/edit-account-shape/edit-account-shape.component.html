@@ -1,6 +1,6 @@
-<div class="container-fluid">
+<div class="container-fluid" >
   <div class="import-json">
-
+    
     <div id="circularMenu" class="circular-menu">
 
       <a class="floating-btn" onclick="document.getElementById('circularMenu').classList.toggle('active');">
@@ -176,9 +176,9 @@
 
 
     <div class="col-10 content-body">
-      <div *ngFor="let item of menuList1"  style="position:absolute" [style.top.px]="item.positionTop"
+      <div *ngFor="let item of menuList1" (mouseover)="item.showIcon=true" style="position:absolute" [style.top.px]="item.positionTop"
         [style.left.px]="item.positionLeft" class="{{item.class}} addtextaction" id="{{item.id}}" (click)="showProperties(item)">
-        <mdb-icon fas icon="times" class="deleteShape" (click)="dialogConfirmDelete(item)"></mdb-icon>
+        <mdb-icon *ngIf="item.showIcon" fas icon="times" class="deleteShape" (click)="dialogConfirmDelete(item)"></mdb-icon>
 
 
 <!--          <div class="start-action"></div>-->
@@ -187,8 +187,8 @@
         <div class="md-form form-sm" id="{{item.idInput}}">
           <input mdbInput type="text" style="text-align:center;" name="item.name" [(ngModel)]="item.name"
             class="form-control form-control-sm" placeholder="input text">
-          <span *ngIf="item.class ==='example-box'">start</span>
-          <span *ngIf="item.class ==='example-box3'">end</span>
+          <!-- <span *ngIf="item.class ==='example-box'">start</span>
+          <span *ngIf="item.class ==='example-box3'">end</span> -->
 
           <!-- <form [formGroup]="secondFormGroup" id="{{item.idText}}">
             <mat-form-field>
@@ -203,25 +203,26 @@
             <div class="btn-end" (click)="endShape(item)" [class.disabled]="!item.end"></div>
           </div> -->
 
-        </div>
-        <mdb-icon fas icon="plus" class="draw-arrow" (click)="dropImageBottom(item)"></mdb-icon>
+        </div >
+        <mdb-icon *ngIf="item.showIcon" fas icon="plus" class="draw-arrow" (click)="dropImageBottom(item)"></mdb-icon>
 
-        <mat-form-field class="add-input">
+        <!-- <mat-form-field class="add-input">
           <input matInput id="{{'imput'+item.index}}" placeholder="Favorite food" value="">
-        </mat-form-field>
-
+           
+        </mat-form-field> -->
+        <!-- <h3 class="add-input" style="text-align:center;"  id="{{'imput'+item.index}}"> abc</h3> -->
       </div>
 
-      <svg (click)="clearConnect()" id="body-svg" xmlns="http://www.w3.org/2000/svg"
-        style="position:absolute;left:0px;top:0px" width="100%" [attr.height]="heightSVG">
+      <svg (mouseover)="allIconFalse()" [ngStyle]="{'background' : 'url(./assets/img/background_draw.png)'}"  (click)="clearConnect()" id="body-svg" xmlns="http://www.w3.org/2000/svg"
+        style="position:absolute;left:0px;top:0px" width="100%"   [attr.height]="heightSVG">
 
         <defs>
-          <marker id="arrowhead" viewBox="0 0 10 10" refX="55" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+          <marker id="arrowhead" viewBox="0 0 10 10" refX="70" refY="5" markerWidth="10" markerHeight="10" orient="auto">
             <path d="M 0 0 L 10 5 L 0 10 z" />
           </marker>
         </defs>
         <ng-container *ngFor="let item of listArrow; index as i">
-        <g fill="none" stroke="black" stroke-width="3" marker-end="url(#arrowhead)">
+        <g fill="none" stroke="#000000" stroke-miterlimit="10" marker-end="url(#arrowhead)">
           
             <path id="{{item}}" (click)="openDialog(item)" />
             <!-- https://www.w3.org/TR/SVG/text.html#TextElement -->
