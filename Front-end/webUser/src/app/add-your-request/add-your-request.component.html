@@ -26,7 +26,7 @@
       <div class="timeline-panel">
         <div class="timeline-heading">
           <h4 class="timeline-title">Send request for <i>{{this.data.name}}</i> </h4>
-          <p><small class="text-muted"><i class="glyphicon glyphicon-time"></i> {{this.data.date}}</small></p>
+          <p><small class="text-muted"><i class="glyphicon glyphicon-time"></i> {{this.data.date| date:'yyyy-MM-dd HH:mm'}}</small></p>
         </div>
         <!-- <div class="timeline-body">
           <p>By {{item.fullName}} ({{item.userName}})</p>
@@ -43,7 +43,7 @@
         <div class="timeline-panel">
           <div class="timeline-heading">
             <h4 class="timeline-title">{{item.status}}</h4>
-            <p><small class="text-muted"><i class="glyphicon glyphicon-time"></i> {{item.createDate}}</small></p>
+            <p><small class="text-muted"><i class="glyphicon glyphicon-time"></i> {{item.createDate| date:'yyyy-MM-dd HH:mm'}}</small></p>
           </div>
           <div class="timeline-body">
             <p>By {{item.fullName}} ({{item.userName}})</p>
@@ -58,7 +58,7 @@
           <div class="timeline-panel">
             <div class="timeline-heading">
               <h4 class="timeline-title">{{item.status}}</h4>
-              <p><small class="text-muted"><i class="glyphicon glyphicon-time"></i> {{item.createDate}}</small></p>
+              <p><small class="text-muted"><i class="glyphicon glyphicon-time"></i> {{item.createDate| date:'yyyy-MM-dd HH:mm'}}</small></p>
             </div>
             <div class="timeline-body">
               <p>By {{item.fullName}} ({{item.userName}})</p>
@@ -73,7 +73,7 @@
             <div class="timeline-panel">
               <div class="timeline-heading">
                 <h4 class="timeline-title">{{item.status}}</h4>
-                <p><small class="text-muted"><i class="glyphicon glyphicon-time"></i> {{item.createDate}}</small></p>
+                <p><small class="text-muted"><i class="glyphicon glyphicon-time"></i> {{item.createDate| date:'yyyy-MM-dd HH:mm'}}</small></p>
               </div>
               <div class="timeline-body">
                 <p>By {{item.fullName}} ({{item.userName}})</p>
@@ -88,7 +88,7 @@
               <div class="timeline-panel">
                 <div class="timeline-heading">
                   <h4 class="timeline-title">{{item.status}}</h4>
-                  <p><small class="text-muted"><i class="glyphicon glyphicon-time"></i> {{item.createDate}}</small></p>
+                  <p><small class="text-muted"><i class="glyphicon glyphicon-time"></i> {{item.createDate| date:'yyyy-MM-dd HH:mm'}}</small></p>
                 </div>
                 <div class="timeline-body">
                   <p>By {{item.fullName}} ({{item.userName}})</p>

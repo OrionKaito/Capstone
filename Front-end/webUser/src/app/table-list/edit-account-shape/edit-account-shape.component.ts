@@ -661,7 +661,7 @@ export class EditAccountShapeComponent implements OnInit {
                                 'L' +
                                 (this.posnBLeft[e].x + 55) + ',' + (this.posnBLeft[e].y);
                             let xText = (this.posnALeft[e].x + this.posnBLeft[e].x)/2;
-                            let yText = (this.posnALeft[e].y + this.posnBLeft[e].y)/2
+                            let yText = (this.posnALeft[e].y + this.posnBLeft[e].y)/2-7;
                             // setAttribute để vẽ mủi tên
                             this.arrowLeft[e].setAttribute('d', dStrLeft);
                             textArrowLeft[e].setAttribute('x', xText);
@@ -728,7 +728,7 @@ export class EditAccountShapeComponent implements OnInit {
                                 'L' +
                                 (this.posnBLeft[e].x + 55) + ',' + (this.posnBLeft[e].y);
                                 let xText = (this.posnALeft[e].x + this.posnBLeft[e].x)/2;
-                                let yText = (this.posnALeft[e].y + this.posnBLeft[e].y)/2
+                                let yText = (this.posnALeft[e].y + this.posnBLeft[e].y)/2-7;
                                 // setAttribute để vẽ mủi tên
                                 this.arrowLeft[e].setAttribute('d', dStrLeft);
                                 textArrowLeft[e].setAttribute('x', xText);
@@ -804,9 +804,9 @@ export class EditAccountShapeComponent implements OnInit {
                         arrowLeft[i].setAttribute('d', dStrLeft);
 
                         let xText = (posnALeft.x + posnBLeft.x)/2;
-                        let yText = (posnALeft.y + posnBLeft.y)/2
+                        let yText = (posnALeft.y + posnBLeft.y)/2-7;
                         textArrowLeft[i].setAttribute('x', xText);
-                        textArrowLeft[i].setAttribute('y', yText);  
+                        textArrowLeft[i].setAttribute('y', yText);
                     }
                 });
             }

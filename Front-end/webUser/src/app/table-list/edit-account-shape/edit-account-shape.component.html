@@ -65,7 +65,7 @@
 
         <mat-form-field class="example-full-width">
           <mat-label>Form</mat-label>
-          <mat-select name="properties.actionTypeID"  [(ngModel)]="properties.actionTypeID">
+          <mat-select name="properties.actionTypeID" [(ngModel)]="properties.actionTypeID">
             <mat-option value="0">---Select form---</mat-option>
             <mat-option *ngFor="let item of listActionType" value="{{item.id}}"> {{item.name}} </mat-option>
           </mat-select>
@@ -81,8 +81,8 @@
             [(ngModel)]="properties.isApprovedByLineManager" type="checkbox">Manager Approve</td>
       </tr>
       <tr *ngIf="checkIsAction && !properties.isStart && !properties.isEnd">
-        <td colspan="2"><input class="edit-inut" name="approveByPer"
-            [(ngModel)]="properties.approveByPer" type="checkbox">Approve by Permission</td>
+        <td colspan="2"><input class="edit-inut" name="approveByPer" [(ngModel)]="properties.approveByPer"
+            type="checkbox">Approve by Permission</td>
       </tr>
       <tr *ngIf="checkIsAction && properties.approveByPer && !properties.isStart && !properties.isEnd">
         <!-- <td>Permission</td>
@@ -108,7 +108,7 @@
 
 
         <mat-form-field class="example-full-width">
-          <input matInput placeholder="Email" name="properties.toEmail" [(ngModel)]="properties.toEmail" type="text"> 
+          <input matInput placeholder="Email" name="properties.toEmail" [(ngModel)]="properties.toEmail" type="text">
         </mat-form-field>
 
       </tr>
@@ -139,18 +139,18 @@
         </td>
       </tr>
       <tr *ngIf="checkIsArrow">
-          <!-- <td>Name arrow</td> -->
-          <td class="d-flex align-items-center">
+        <!-- <td>Name arrow</td> -->
+        <td class="d-flex align-items-center">
 
-            <div class="mr-3">Type</div>
+          <div class="mr-3">Type</div>
 
-            <select [(ngModel)]="propertiesArr.type">
-              <option value="1">Phút</option>
-              <option value="2">Giờ </option>
-              <option value="3">Ngày</option>
-            </select>
-          </td>
-        </tr>
+          <select [(ngModel)]="propertiesArr.type">
+            <option value="1">Phút</option>
+            <option value="2">Giờ </option>
+            <option value="3">Ngày</option>
+          </select>
+        </td>
+      </tr>
     </table>
   </div>
   <div class="row main">
@@ -175,12 +175,12 @@
       <div *ngFor="let item of menuList1" style="position:absolute" [style.top.px]="item.positionTop"
         [style.left.px]="item.positionLeft" class="{{item.class}}" id="{{item.id}}" (click)="showProperties(item)">
         <mdb-icon fas icon="times" class="deleteShape" (click)="dialogConfirmDelete(item)"></mdb-icon>
-          <div class="start-action"></div>
+        <div class="start-action"></div>
         <div class="md-form form-sm" id="{{item.idInput}}">
-          <input mdbInput type="text" name="item.name" [(ngModel)]="item.name" class="form-control form-control-sm"
-            placeholder="input text">
+          <input mdbInput type="text" style="text-align:center;" name="item.name" [(ngModel)]="item.name"
+            class="form-control form-control-sm" placeholder="input text">
           <span *ngIf="item.class ==='example-box'">start</span>
-            <span *ngIf="item.class ==='example-box3'">end</span>
+          <span *ngIf="item.class ==='example-box3'">end</span>
 
           <!-- <form [formGroup]="secondFormGroup" id="{{item.idText}}">
             <mat-form-field>
@@ -207,18 +207,18 @@
             <path d="M 0 0 L 10 5 L 0 10 z" />
           </marker>
         </defs>
- 
+        <ng-container *ngFor="let item of listArrow; index as i">
         <g fill="none" stroke="black" stroke-width="3" marker-end="url(#arrowhead)">
-          <ng-container *ngFor="let item of listArrow; index as i">
-          <path  id="{{item}}" (click)="openDialog(item)" />
-          <!-- https://www.w3.org/TR/SVG/text.html#TextElement -->
-          <text style="font: 15px sans-serif;" fill="none" id="text{{item}}" (click)="openDialog(item)">
-              <tspan border="none" fill="none  " >{{listClass[i].name}}</tspan>
-              </text>
-          </ng-container>
           
+            <path id="{{item}}" (click)="openDialog(item)" />
+            <!-- https://www.w3.org/TR/SVG/text.html#TextElement -->
+            
+            <text border="none" font-family="Verdana" font-size="12" stroke="blue" stroke-width="0.1" fill="blue" id="text{{item}}" (click)="openDialog(item)">
+              {{listClass[i].name}}
+            </text>
         </g>
 
+      </ng-container>
       </svg>
 
 

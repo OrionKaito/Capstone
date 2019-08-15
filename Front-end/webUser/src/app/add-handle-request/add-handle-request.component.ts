@@ -6,12 +6,14 @@ import { LoadStaffAcountService } from 'app/service/load-staff-acount.service';
 import { SendRequest } from 'app/useClass/send-request';
 import { ApproveRequest } from 'app/useClass/approve-request';
 import { GlobalVar } from 'app/useClass/global-var';
+import {MatStepperModule} from '@angular/material/stepper';
+
 
 
 @Component({
   selector: 'app-add-handle-request',
   templateUrl: './add-handle-request.component.html',
-  styleUrls: ['./add-handle-request.component.scss']
+  styleUrls: ['./add-handle-request.component.scss'],
 })
 export class AddHandleRequestComponent implements OnInit {
 
@@ -77,7 +79,16 @@ export class AddHandleRequestComponent implements OnInit {
 
 
   ngOnInit() {
-
+    this.requestHandle ={
+      "id": "string",
+      "description": "string",
+      "initiatorID": "string",
+      "initiatorName": "string",
+      "workFlowTemplateID": "string",
+      "workFlowTemplateName": "string",
+      "createDate": "2019-08-14T11:55:53.918Z",
+      "requestActionID": "string"
+    }
     console.log("vo day");
     this.workFlowTemplateID = this.data;
     console.log(this.data);
@@ -101,6 +112,7 @@ export class AddHandleRequestComponent implements OnInit {
       this.requestActionHandleValue = this.saveData.userRequestAction.requestValues;
       this.cmtHandle = this.saveData.staffRequestActions;
 
+      console.log("cmtHandle", this.cmtHandle);
     },err =>{
       this.toastr.error(err.error);
     })
