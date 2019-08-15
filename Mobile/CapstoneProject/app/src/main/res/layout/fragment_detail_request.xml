@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".fragment.DetailRequestFragment">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp50"
+        android:background="@color/light_blue">
+
+        <ImageView
+            android:id="@+id/img_Back"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/dp24"
+            android:layout_centerVertical="true"
+            android:layout_margin="@dimen/dp12"
+            android:background="@drawable/ic_white_back" />
+
+        <TextView
+            android:id="@+id/tv_workflow_name_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:textColor="@color/white"
+            android:textSize="@dimen/sp20" />
+
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/dp5"
+        android:layout_marginTop="@dimen/dp10"
+        android:layout_marginRight="@dimen/dp5"
+        android:background="@drawable/border_workflow"
+        android:gravity="center_horizontal"
+        android:orientation="vertical"
+        android:padding="@dimen/dp5">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:weightSum="30">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/dp10"
+                android:layout_weight="20"
+                android:text="Create date:"
+                android:textColor="@color/colorAccent"
+                android:textSize="@dimen/sp20" />
+
+            <TextView
+                android:id="@+id/tv_create_date"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/dp5"
+                android:layout_marginRight="@dimen/dp10"
+                android:layout_weight="10"
+                android:textColor="@color/light_blue"
+                android:textSize="@dimen/sp18" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:weightSum="10">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/dp10"
+                android:layout_weight="7"
+                android:text="Status:"
+                android:textColor="@color/colorAccent"
+                android:textSize="@dimen/sp20" />
+
+            <TextView
+                android:id="@+id/tv_request_status"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/dp5"
+                android:layout_marginRight="@dimen/dp10"
+                android:layout_weight="3"
+                android:textColor="@color/colortext"
+                android:textSize="@dimen/sp20" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="@dimen/dp5"
+            android:orientation="vertical">
+
+        </LinearLayout>
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/tv_history_approve"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/dp10"
+        android:layout_marginTop="@dimen/dp5"
+        android:text="Detail:"
+        android:textColor="@color/light_blue"
+        android:textSize="@dimen/sp20" />
+
+    <ListView
+        android:id="@+id/list_status_staff_handle"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:divider="@android:color/transparent"
+        android:scrollbars="none"></ListView>
+</LinearLayout>

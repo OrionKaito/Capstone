@@ -4,10 +4,12 @@ public class Comment {
 
     private String comment;
     private String fullName;
+    private String date;
 
-    public Comment(String comment, String fullName) {
+    public Comment(String comment, String fullName, String date) {
         this.comment = comment;
         this.fullName = fullName;
+        this.date = date;
     }
 
     public String getComment() {
@@ -24,5 +26,13 @@ public class Comment {
 
     public void setFullName(String fullName) {
         this.fullName = fullName;
+    }
+
+    public String getDate() {
+        return date;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
     }
 }

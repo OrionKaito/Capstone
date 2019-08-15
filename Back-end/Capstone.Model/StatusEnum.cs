@@ -3,7 +3,7 @@
     public enum StatusEnum
     {
         Pending = 1,
-        Accepted = 2,
-        Denied = 3
+        Handled = 2,
+        Hangfire = 3
     }
 }

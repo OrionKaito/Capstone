@@ -7,25 +7,21 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.InstanceIdResult;
-import com.squareup.picasso.Picasso;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
 
 import workflow.capstone.capstoneproject.R;
-import workflow.capstone.capstoneproject.api.TestLogin;
+import workflow.capstone.capstoneproject.api.LoginModel;
 import workflow.capstone.capstoneproject.customdialog.VerifyAccountDialog;
 import workflow.capstone.capstoneproject.entities.Login;
 import workflow.capstone.capstoneproject.repository.CapstoneRepository;
@@ -95,10 +91,10 @@ public class LoginActivity extends AppCompatActivity {
         if (deviceToken == null) {
             deviceToken = FirebaseInstanceId.getInstance().getToken();
         }
-        TestLogin testLogin = new TestLogin();
-        testLogin.setUserName(username);
-        testLogin.setPassword(password);
-        testLogin.setDeviceToken(deviceToken);
+        LoginModel loginModel = new LoginModel();
+        loginModel.setUserName(username);
+        loginModel.setPassword(password);
+        loginModel.setDeviceToken(deviceToken);
 
         SharedPreferences preferences = context.getSharedPreferences("VERIFYACCOUNT", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
@@ -121,31 +117,7 @@ public class LoginActivity extends AppCompatActivity {
             setTextError("Please input password!");
         } else {
             capstoneRepository = new CapstoneRepositoryImpl();
-//            capstoneRepository.login(context, fields, new CallBackData<Login>() {
-//                @Override
-//                public void onSuccess(Login login) {
-//                    DynamicWorkflowSharedPreferences.storeJWT(context, ConstantDataManager.AUTHORIZATION_TOKEN, login.getToken());
-//                    Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-//                    startActivity(intent);
-//                    finish();
-//                }
-//
-//                @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
-//                @Override
-//                public void onFail(String message) {
-//                    if (message.contains("Invalid username or password!")) {
-//                        setTextError(message);
-//                    } else if (message.contains("Please verify your account first")) {
-//                        VerifyAccountDialog dialog = new VerifyAccountDialog(LoginActivity.this);
-//                        dialog.setCancelable(false);
-//                        dialog.create();
-//                        dialog.show();
-//                    } else {
-//                        setTextError(message);
-//                    }
-//                }
-//            });
-            capstoneRepository.newLogin(context, testLogin, new CallBackData<Login>() {
+            capstoneRepository.newLogin(context, loginModel, new CallBackData<Login>() {
                 @Override
                 public void onSuccess(Login login) {
                     DynamicWorkflowSharedPreferences.storeJWT(context, ConstantDataManager.AUTHORIZATION_TOKEN, login.getToken());

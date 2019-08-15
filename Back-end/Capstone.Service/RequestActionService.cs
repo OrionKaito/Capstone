@@ -3,16 +3,16 @@ using Capstone.Data.Repositories;
 using Capstone.Model;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace Capstone.Service
 {
     public interface IRequestActionService
     {
         IEnumerable<RequestAction> GetAll();
-        IEnumerable<RequestAction> GetExceptActorIDAndRequestID(string ID, Guid RequestID);
+        IEnumerable<RequestAction> GetExceptStartAction(Guid startActionTemplateID, Guid RequestID);
+        IEnumerable<RequestAction> GetActionByStatus(StatusEnum statusEnum);
         RequestAction GetByID(Guid ID);
-        RequestAction GetByActorID(string ID, Guid RequestID);
+        RequestAction GetStartAction(Guid startActionTemplateID, Guid requestID);
         void Create(RequestAction requestAction);
         void Save();
     }
@@ -43,19 +43,24 @@ namespace Capstone.Service
             return _requestActionRepository.GetById(ID);
         }
 
-        public RequestAction GetByActorID(string ID, Guid RequestID)
+        public RequestAction GetStartAction(Guid startActionTemplateID, Guid requestID)
         {
-            return _requestActionRepository.GetMany(r => r.ActorID.Equals(ID) && r.RequestID == RequestID).FirstOrDefault();
+            return _requestActionRepository.GetStartAction(startActionTemplateID, requestID);
         }
 
-        public IEnumerable<RequestAction> GetExceptActorIDAndRequestID(string ID, Guid RequestID)
+        public IEnumerable<RequestAction> GetExceptStartAction(Guid startActionTemplateID, Guid requestID)
         {
-            return _requestActionRepository.GetMany(r => !r.ActorID.Equals(ID) && r.RequestID == RequestID);
+            return _requestActionRepository.GetExceptStartAction(startActionTemplateID, requestID);
         }
 
         public void Save()
         {
             _unitOfWork.Commit();
+        }
+
+        public IEnumerable<RequestAction> GetActionByStatus(StatusEnum statusEnum)
+        {
+            return _requestActionRepository.GetActionByStatus(statusEnum);
         }
     }
 }

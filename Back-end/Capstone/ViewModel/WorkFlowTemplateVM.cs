@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Capstone.Model;
+using System;
 using System.Collections.Generic;
 
 namespace Capstone.ViewModel
@@ -6,7 +7,7 @@ namespace Capstone.ViewModel
     public class WorkFlowTemplatePaginVM
     {
         public int TotalRecord { get; set; }
-        public IEnumerable<WorkFlowTemplateVM> workFlowTemplates { get; set; }
+        public IEnumerable<WorkFlowTemplateVM> WorkFlowTemplates { get; set; }
     }
 
     public class WorkFlowTemplateVM
@@ -17,6 +18,7 @@ namespace Capstone.ViewModel
         public string Description { get; set; }
         public string Data { get; set; }
         public Guid PermissionToUseID { get; set; }
+        public DateTime CreateDate { get; set; }
         public bool IsEnabled { get; set; }
     }
 
@@ -41,9 +43,10 @@ namespace Capstone.ViewModel
         public Guid Id { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
-        public Guid ActionTypeID { get; set; }
+        public Guid? ActionTypeID { get; set; }
         public Guid? PermissionToUseID { get; set; }
         public bool IsApprovedByLineManager { get; set; }
+        public string ToEmail { get; set; }
         public bool IsStart { get; set; }
         public bool IsEnd { get; set; }
     }
@@ -53,6 +56,8 @@ namespace Capstone.ViewModel
         public Guid FromWorkFlowTemplateActionID { get; set; }
         public Guid ToWorkFlowTemplateActionID { get; set; }
         public string Name { get; set; }
+        public int TimeInterval { get; set; }
+        public TimeEnum Type { get; set; }
     }
 
     public class SaveWowkFlowTemplateUM

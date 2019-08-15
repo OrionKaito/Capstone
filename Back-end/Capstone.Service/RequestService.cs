@@ -12,6 +12,7 @@ namespace Capstone.Service
     {
         IEnumerable<Request> GetAll();
         IEnumerable<Request> GetRequestToApproveByPermissions(List<Guid> permissions);
+        IEnumerable<Request> GetRequestToApproveByLineManager();
         IEnumerable<Request> GetByUserID(string ID);
         Request GetByID(Guid ID);
         void Create(Request request);
@@ -56,17 +57,29 @@ namespace Capstone.Service
 
         public IEnumerable<Request> GetRequestToApproveByPermissions(List<Guid> permissions)
         {
-            var requestNotComplete = _requestRepository.GetMany(r => r.IsCompleted == false);
+            //var requestNotComplete = _requestRepository.GetMany(r => r.IsCompleted == false);
 
+            //List<Request> result = new List<Request>();
+
+            //foreach (var request in requestNotComplete)
+            //{
+            //    var requestAction = _requestActionRepository.GetById(request.CurrentRequestActionID);
+            //    var permisisonOfRequest = requestAction.NextStep.PermissionToUseID.GetValueOrDefault();
+            //    if (permissions.Contains(permisisonOfRequest))
+            //    {
+            //        result.Add(request);
+            //    }
+            //}
+
+            var pendingRequestAction = _requestActionRepository.GetMany(r => r.Status == StatusEnum.Pending);
             List<Request> result = new List<Request>();
 
-            foreach (var request in requestNotComplete)
+            foreach (var requestAction in pendingRequestAction)
             {
-                var requestAction = _requestActionRepository.GetById(request.CurrentRequestActionID);
-                var permisisonOfRequest = requestAction.WorkFlowTemplateAction.PermissionToUseID.GetValueOrDefault();
-                if (permissions.Contains(permisisonOfRequest))
+                var permissionOfRequest = requestAction.NextStep.PermissionToUseID.GetValueOrDefault();
+                if (permissions.Contains(permissionOfRequest))
                 {
-                    result.Add(request);
+                    result.Add(requestAction.Request);
                 }
             }
 
@@ -90,6 +103,21 @@ namespace Capstone.Service
         public void RollBack()
         {
             _unitOfWork.RollBack();
+        }
+
+        public IEnumerable<Request> GetRequestToApproveByLineManager()
+        {
+            var pendingRequestAction = _requestActionRepository.GetMany(r => r.Status == StatusEnum.Pending 
+            && r.NextStep.IsApprovedByLineManager == true);
+
+            List<Request> result = new List<Request>();
+
+            foreach (var requestAction in pendingRequestAction)
+            {
+                result.Add(requestAction.Request);
+            }
+
+            return result;
         }
     }
 }

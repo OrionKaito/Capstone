@@ -9,7 +9,6 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
@@ -27,22 +26,19 @@ import android.widget.TextView;
 import com.kaopiz.kprogresshud.KProgressHUD;
 import com.squareup.picasso.Picasso;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import es.dmoral.toasty.Toasty;
-import okhttp3.ResponseBody;
 import workflow.capstone.capstoneproject.R;
-import workflow.capstone.capstoneproject.activity.MainActivity;
 import workflow.capstone.capstoneproject.adapter.CommentAdapter;
 import workflow.capstone.capstoneproject.adapter.HandleFileNameAdapter;
-import workflow.capstone.capstoneproject.api.ActionValue;
-import workflow.capstone.capstoneproject.api.RequestApprove;
+import workflow.capstone.capstoneproject.api.ActionValueModel;
+import workflow.capstone.capstoneproject.api.RequestApproveModel;
 import workflow.capstone.capstoneproject.entities.Comment;
 import workflow.capstone.capstoneproject.entities.Connection;
 import workflow.capstone.capstoneproject.entities.HandleRequestForm;
@@ -61,6 +57,7 @@ import workflow.capstone.capstoneproject.utils.KProgressHUDManager;
 
 public class HandleRequestFragment extends Fragment {
 
+    private TextView tvActionName;
     private ImageView imgSendComment;
     private EditText edtComment;
     private CapstoneRepository capstoneRepository;
@@ -80,7 +77,6 @@ public class HandleRequestFragment extends Fragment {
     private String token = null;
     private TextView tvInitiatorName;
     private TextView tvWorkFlowName;
-    private TextView tvReason;
     private DownloadManager downloadManager;
     private String requestActionID;
     private LinearLayout lnRequestForm;
@@ -121,6 +117,7 @@ public class HandleRequestFragment extends Fragment {
     }
 
     private void initView(View view) {
+        tvActionName = view.findViewById(R.id.tv_action_title);
         imgSendComment = view.findViewById(R.id.img_send_comment);
         edtComment = view.findViewById(R.id.edt_comment);
         listViewComment = view.findViewById(R.id.list_comment);
@@ -130,7 +127,6 @@ public class HandleRequestFragment extends Fragment {
         tvInitiatorName = view.findViewById(R.id.tv_initiator_name);
         tvWorkFlowName = view.findViewById(R.id.tv_name_of_workflow);
         lnRequestForm = view.findViewById(R.id.ln_request_form);
-//        tvReason = view.findViewById(R.id.tv_reason);
     }
 
     private void updateListComment() {
@@ -139,7 +135,12 @@ public class HandleRequestFragment extends Fragment {
 
         Profile profile = DynamicWorkflowSharedPreferences.getStoredData(getContext(), ConstantDataManager.PROFILE_KEY, ConstantDataManager.PROFILE_NAME);
         fullName = profile.getFullName();
-        Comment comment = new Comment(stringComment, fullName);
+
+        //get current date
+        Date currentTime = Calendar.getInstance().getTime();
+        String date = new SimpleDateFormat("MMM dd yyyy' at 'hh:mm a").format(currentTime);
+        Comment comment = new Comment(stringComment, fullName, date);
+
         edtComment.setText("");
         commentList.add(comment);
         if (getActivity() != null) {
@@ -186,10 +187,10 @@ public class HandleRequestFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 final String fileNameUrl = fileUrl.get(position);
-                final String imageName = fileNameList.get(position);
                 String imageExtension = fileNameUrl.substring(fileNameUrl.lastIndexOf(".") + 1);
                 boolean checkIsImage = DynamicWorkflowUtils.accept(imageExtension);
 
+                //check nếu là image thì hiển thị, ngược lại download file
                 if (checkIsImage) {
                     AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
                     builder.setPositiveButton("Close", new DialogInterface.OnClickListener() {
@@ -212,11 +213,8 @@ public class HandleRequestFragment extends Fragment {
                             Picasso.get()
                                     .load(fileNameUrl)
                                     .into(image);
-//                            image.setBackground(getResources().getDrawable(R.drawable.ic_notification_grey));
 
-                            float imageWidthInPX = (float) image.getWidth();
-
-                            LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
+                            LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
                             image.setLayoutParams(layoutParams);
 
 
@@ -224,13 +222,11 @@ public class HandleRequestFragment extends Fragment {
                     });
                     dialog.show();
                 } else {
-//                    downloadFile(fileNameUrl, imageName);
                     new AlertDialog.Builder(getContext())
                             .setTitle("Download file.")
                             .setMessage("Are you sure you want to download this file?")
                             .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int which) {
-//                                    downloadFile(fileNameUrl, imageName);
                                     downloadFileWithDownloadManager(fileNameUrl);
                                     dialog.dismiss();
                                 }
@@ -268,6 +264,9 @@ public class HandleRequestFragment extends Fragment {
         capstoneRepository.getRequestHandleForm(token, requestActionID, new CallBackData<HandleRequestForm>() {
             @Override
             public void onSuccess(final HandleRequestForm handleRequestForm) {
+                //set title
+                tvActionName.setText(handleRequestForm.getWorkFlowTemplateActionName());
+
                 final List<Connection> connectionList = handleRequestForm.getConnections();
 
                 //set InitiatorName
@@ -276,12 +275,9 @@ public class HandleRequestFragment extends Fragment {
                 //set Workflow Name
                 tvWorkFlowName.setText(handleRequestForm.getWorkFlowTemplateName());
 
-                //get message
+                //get form
                 List<RequestValue> requestValueUserList = handleRequestForm.getUserRequestAction().getRequestValues();
                 for (RequestValue requestValue : requestValueUserList) {
-//                    if (requestValue.getKey()) {
-//                        tvReason.setText(requestValue.getValue());
-//                    }
                     LinearLayout linearLayout = new LinearLayout(getActivity());
                     LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
                     params.setMargins(0,5,0,5);
@@ -290,29 +286,46 @@ public class HandleRequestFragment extends Fragment {
                     linearLayout.setBackgroundResource(R.color.white);
                     linearLayout.setWeightSum(10);
 
-                    TextView textViewKey = new TextView(getActivity());
-                    textViewKey.setText(requestValue.getKey());
-                    textViewKey.setTextSize(15.0f);
-                    textViewKey.setTextColor(getResources().getColor(R.color.colorAccent));
-                    textViewKey.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT, 7.0f));
-                    linearLayout.addView(textViewKey);
+                    if (requestValue.getValue().isEmpty()) {
+                        //label
+                        TextView textViewKey = new TextView(getActivity());
+                        textViewKey.setText(requestValue.getKey());
+                        textViewKey.setTextSize(15.0f);
+                        textViewKey.setTextColor(getResources().getColor(R.color.colortext));
+                        textViewKey.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                        linearLayout.addView(textViewKey);
+                    } else {
+                        TextView textViewKey = new TextView(getActivity());
+                        textViewKey.setText(requestValue.getKey());
+                        textViewKey.setTextSize(15.0f);
+                        textViewKey.setTextColor(getResources().getColor(R.color.colorAccent));
+                        textViewKey.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT, 7.0f));
+                        linearLayout.addView(textViewKey);
 
-                    TextView textViewName = new TextView(getActivity());
-                    textViewName.setText(requestValue.getValue());
-                    textViewName.setTextSize(18.0f);
-                    textViewName.setTextColor(getResources().getColor(R.color.colortext));
-                    textViewName.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT, 3.0f));
-                    linearLayout.addView(textViewName);
+                        TextView textViewName = new TextView(getActivity());
+                        textViewName.setText(requestValue.getValue());
+                        textViewName.setTextSize(18.0f);
+                        textViewName.setTextColor(getResources().getColor(R.color.colortext));
+                        textViewName.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT, 3.0f));
+                        linearLayout.addView(textViewName);
+                    }
 
                     lnRequestForm.addView(linearLayout);
                 }
 
-                //get comment
+                //get comment from api
                 List<StaffRequestAction> staffRequestActionList = handleRequestForm.getStaffRequestActions();
                 for (StaffRequestAction staffRequestAction : staffRequestActionList) {
                     List<RequestValue> requestValueStaffList = staffRequestAction.getRequestValues();
                     for (RequestValue requestValue : requestValueStaffList) {
-                        commentList.add(new Comment(requestValue.getValue(), DynamicWorkflowUtils.mapNameWithUserName(staffRequestAction.getFullName(), staffRequestAction.getUserName())));
+                        String createDate = "";
+                        try {
+                            Date date = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss").parse(staffRequestAction.getCreateDate());
+                            createDate = new SimpleDateFormat("MMM dd yyyy' at 'hh:mm a").format(date);
+                        } catch (ParseException e) {
+                            e.printStackTrace();
+                        }
+                        commentList.add(new Comment(requestValue.getValue(), staffRequestAction.getFullName(), createDate));
                     }
                 }
                 getListComment();
@@ -342,7 +355,7 @@ public class HandleRequestFragment extends Fragment {
                             builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
-                                    handleRequest(handleRequestForm.getRequest().getId(), connection.getNextStepID(), 2);
+                                    handleRequest(handleRequestForm.getRequest().getId(), connection.getNextStepID());
                                     dialog.dismiss();
                                 }
                             })
@@ -367,46 +380,24 @@ public class HandleRequestFragment extends Fragment {
         });
     }
 
-    private void handleRequest(String requestID, String nextStepID, int status) {
-        List<ActionValue> actionValueList = new ArrayList<>();
+    private void handleRequest(String requestID, String nextStepID) {
+        List<ActionValueModel> actionValueModelList = new ArrayList<>();
         for (int i = 0; i < stringCommentList.size(); i++) {
-            actionValueList.add(new ActionValue("comment " + i, stringCommentList.get(i)));
+            actionValueModelList.add(new ActionValueModel("comment " + i, stringCommentList.get(i)));
         }
 
-        RequestApprove requestApprove = new RequestApprove();
-        requestApprove.setRequestID(requestID);
-        requestApprove.setRequestActionID(requestActionID);
-        requestApprove.setNextStepID(nextStepID);
-        requestApprove.setStatus(status);
-        requestApprove.setActionValues(actionValueList);
+        RequestApproveModel requestApproveModel = new RequestApproveModel();
+        requestApproveModel.setRequestID(requestID);
+        requestApproveModel.setRequestActionID(requestActionID);
+        requestApproveModel.setNextStepID(nextStepID);
+        requestApproveModel.setActionValueModels(actionValueModelList);
 
         final KProgressHUD progressHUD = KProgressHUDManager.showProgressBar(getContext());
         capstoneRepository = new CapstoneRepositoryImpl();
-        capstoneRepository.approveRequest(token, requestApprove, new CallBackData<String>() {
+        capstoneRepository.approveRequest(token, requestApproveModel, new CallBackData<String>() {
             @Override
             public void onSuccess(String s) {
                 FragmentUtils.back(getActivity());
-//                View taskView = MainActivity.tabLayout.getTabAt(2).getCustomView();
-//                MainActivity.imageViewTask = taskView.findViewById(R.id.task_icon);
-//                MainActivity.imageViewTask.setImageResource(R.drawable.ic_task_gray);
-//                MainActivity.taskBadge = taskView.findViewById(R.id.task_badge);
-//                capstoneRepository = new CapstoneRepositoryImpl();
-//                capstoneRepository.getNumberOfNotification(token, new CallBackData<String>() {
-//                    @Override
-//                    public void onSuccess(String s) {
-//                        if (Integer.parseInt(s) > 0) {
-//                            MainActivity.taskBadge.setText(s);
-//                            MainActivity.taskBadge.setVisibility(View.VISIBLE);
-//                        } else {
-//                            MainActivity.taskBadge.setVisibility(View.INVISIBLE);
-//                        }
-//                    }
-//
-//                    @Override
-//                    public void onFail(String message) {
-//
-//                    }
-//                });
                 progressHUD.dismiss();
                 Toasty.success(getContext(), R.string.handle_success, Toasty.LENGTH_SHORT).show();
             }

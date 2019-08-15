@@ -11,15 +11,18 @@ namespace Capstone.Model
 
         public Guid FromWorkFlowTemplateActionID { get; set; }
         [ForeignKey("FromWorkFlowTemplateActionID")]
-        public virtual WorkFlowTemplateAction WorkFlowTemplateActionFrom { get; set; }
+        public virtual WorkFlowTemplateAction FromWorkFlowTemplateAction { get; set; }
 
         public Guid ToWorkFlowTemplateActionID { get; set; }
         [ForeignKey("ToWorkFlowTemplateActionID")]
-        public virtual WorkFlowTemplateAction WorkFlowTemplateActionTo { get; set; }
+        public virtual WorkFlowTemplateAction ToWorkFlowTemplateAction { get; set; }
 
         public Guid ConnectionTypeID { get; set; }
         [ForeignKey("ConnectionTypeID")]
         public virtual ConnectionType ConnectionType { get; set; }
+
+        public int TimeInterval { get; set; }
+        public TimeEnum Type { get; set; }
 
         public bool IsDeleted { get; set; }
     }

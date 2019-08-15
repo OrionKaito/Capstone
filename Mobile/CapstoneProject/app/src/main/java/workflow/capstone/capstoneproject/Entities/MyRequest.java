@@ -7,27 +7,35 @@ public class MyRequest {
     @SerializedName("id")
     @Expose
     private String id;
+
     @SerializedName("createDate")
     @Expose
     private String createDate;
+
     @SerializedName("description")
     @Expose
     private String description;
+
     @SerializedName("workFlowTemplateID")
     @Expose
     private String workFlowTemplateID;
+
     @SerializedName("workFlowTemplateName")
     @Expose
     private String workFlowTemplateName;
+
     @SerializedName("currentRequestActionID")
     @Expose
     private String currentRequestActionID;
+
     @SerializedName("currentRequestActionName")
     @Expose
     private String currentRequestActionName;
+
     @SerializedName("isCompleted")
     @Expose
     private Boolean isCompleted;
+
     @SerializedName("isDeleted")
     @Expose
     private Boolean isDeleted;

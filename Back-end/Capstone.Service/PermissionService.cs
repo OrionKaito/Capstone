@@ -10,6 +10,7 @@ namespace Capstone.Service
     public interface IPermissionService
     {
         IEnumerable<Permission> GetAll();
+        IEnumerable<Permission> GetIsDelete();
         Permission GetByID(Guid ID);
         Permission GetByName(string Name);
         IEnumerable<Permission> GetByUserID(string ID);
@@ -48,7 +49,7 @@ namespace Capstone.Service
 
         public IEnumerable<Permission> GetAll()
         {
-            return _permissionRepository.GetAll().Where(p => p.IsDeleted == false);
+            return _permissionRepository.GetAll();
         }
 
         public Permission GetByID(Guid ID)
@@ -76,6 +77,11 @@ namespace Capstone.Service
                 }
             }
             return permissions;
+        }
+
+        public IEnumerable<Permission> GetIsDelete()
+        {
+            return _permissionRepository.GetMany(p => p.IsDeleted == false);
         }
 
         public void Save()

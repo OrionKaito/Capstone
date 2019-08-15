@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
-using Capstone.Helper;
 using Capstone.Model;
 using Capstone.Service;
+using Capstone.Service.Helper;
 using Capstone.ViewModel;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -28,7 +28,8 @@ namespace Capstone.Controllers
             , IPermissionService permissionService
             , IWorkFlowTemplateActionService workFlowTemplateActionService
             , IWorkFlowTemplateActionConnectionService workFlowTemplateActionConnectionService
-            , IRoleService roleService)
+            , IRoleService roleService
+            , IConnectionTypeService connectionTypeService)
         {
             _mapper = mapper;
             _workFlowService = workFlowService;
@@ -36,27 +37,7 @@ namespace Capstone.Controllers
             _workFlowTemplateActionService = workFlowTemplateActionService;
             _workFlowTemplateActionConnectionService = workFlowTemplateActionConnectionService;
             _roleService = roleService;
-        }
-
-        // GET: api/Workflows
-        [HttpGet]
-        public ActionResult<IEnumerable<WorkFlowTemplateVM>> GetWorkflowsTemplates()
-        {
-            try
-            {
-                List<WorkFlowTemplateVM> result = new List<WorkFlowTemplateVM>();
-                var workFlow = new WorkFlowTemplateVM();
-                var data = _workFlowService.GetAll();
-                foreach (var item in data)
-                {
-                    result.Add(_mapper.Map<WorkFlowTemplateVM>(item));
-                }
-                return Ok(result);
-            }
-            catch (Exception e)
-            {
-                return BadRequest(e.Message);
-            }
+            _connectionTypeService = connectionTypeService;
         }
 
         // GET: api/Workflows/5
@@ -99,10 +80,51 @@ namespace Capstone.Controllers
                     }
                 }
 
+                workFlowTemplates.OrderByDescending(w => w.CreateDate);
+
                 WorkFlowTemplatePaginVM result = new WorkFlowTemplatePaginVM
                 {
                     TotalRecord = workFlowTemplates.Count(),
-                    workFlowTemplates = workFlowTemplates.Skip((page - 1) * count).Take(count),
+                    WorkFlowTemplates = workFlowTemplates.Skip((page - 1) * count).Take(count),
+                };
+
+                return Ok(result);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
+
+        [HttpGet("SearchWorkflowToUse")]
+        public ActionResult<IEnumerable<WorkFlowTemplatePaginVM>> SearchWorkflowToUse(int? numberOfPage, int? NumberOfRecord, string search)
+        {
+            try
+            {
+                var page = numberOfPage ?? 1;
+                var count = NumberOfRecord ?? WebConstant.DefaultPageRecordCount;
+
+                var userID = HttpContext.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier).Value;
+                var permissionsOfUser = _permissionService.GetByUserID(userID);
+
+                List<WorkFlowTemplateVM> workFlowTemplates = new List<WorkFlowTemplateVM>();
+
+                foreach (var item in permissionsOfUser)
+                {
+                    var workflows = _workFlowService.GetByPermissionToUse(item.ID);
+
+                    foreach (var workflow in workflows)
+                    {
+                        workFlowTemplates.Add(_mapper.Map<WorkFlowTemplateVM>(workflow));
+                    }
+                }
+
+                workFlowTemplates.OrderByDescending(w => w.CreateDate);
+
+                WorkFlowTemplatePaginVM result = new WorkFlowTemplatePaginVM
+                {
+                    TotalRecord = workFlowTemplates.Count(),
+                    WorkFlowTemplates = workFlowTemplates.Skip((page - 1) * count).Take(count),
                 };
 
                 return Ok(result);
@@ -114,10 +136,13 @@ namespace Capstone.Controllers
         }
 
         [HttpGet("GetWorkflowToEdit")]
-        public ActionResult<IEnumerable<WorkFlowTemplateVM>> GetWorkflowToEdit()
+        public ActionResult<IEnumerable<WorkFlowTemplatePaginVM>> GetWorkflowToEdit(int? numberOfPage, int? NumberOfRecord)
         {
             try
             {
+                var page = numberOfPage ?? 1;
+                var count = NumberOfRecord ?? WebConstant.DefaultPageRecordCount;
+
                 var userID = HttpContext.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier).Value;
                 var role = _roleService.GetByUserID(userID);
 
@@ -131,6 +156,18 @@ namespace Capstone.Controllers
                         workFlowTemplates.Add(_mapper.Map<WorkFlowTemplateVM>(workflow));
                     }
                 }
+                else
+                {
+                    return StatusCode(403, WebConstant.AccessDined);
+                }
+
+                workFlowTemplates.OrderByDescending(w => w.CreateDate);
+
+                WorkFlowTemplatePaginVM result = new WorkFlowTemplatePaginVM
+                {
+                    TotalRecord = workFlowTemplates.Count(),
+                    WorkFlowTemplates = workFlowTemplates.Skip((page - 1) * count).Take(count),
+                };
 
                 return Ok(workFlowTemplates);
             }
@@ -191,6 +228,11 @@ namespace Capstone.Controllers
             var workFlowInDb = _workFlowService.GetByID(ID);
             if (workFlowInDb == null) return BadRequest(WebConstant.NotFound);
 
+            if (workFlowInDb.IsCheckConnection == false)
+            {
+                return BadRequest(WebConstant.ToggleWorkflowFail);
+            }
+
             try
             {
                 if (workFlowInDb.IsEnabled == true)
@@ -239,6 +281,8 @@ namespace Capstone.Controllers
                         Name = workFlowInDB.Name,
                         OwnerID = workFlowInDB.OwnerID,
                         PermissionToUseID = workFlowInDB.PermissionToUseID,
+                        CreateDate = DateTime.Now,
+                        IsCheckConnection = true
                     };
                     _workFlowService.Create(workFlow);
 
@@ -246,6 +290,7 @@ namespace Capstone.Controllers
                 }
                 else
                 {
+                    workFlowInDB.IsCheckConnection = true;
                     workFlowInDB.Data = model.Data;
                 }
 
@@ -270,14 +315,23 @@ namespace Capstone.Controllers
                         connectionTypeInDb = connectionType;
                     }
 
-                    WorkFlowTemplateActionConnection workflowConnection = new WorkFlowTemplateActionConnection
+                    if (connection.TimeInterval < 0)
                     {
-                        ConnectionTypeID = connectionTypeInDb.ID,
-                        FromWorkFlowTemplateActionID = connection.FromWorkFlowTemplateActionID,
-                        ToWorkFlowTemplateActionID = connection.ToWorkFlowTemplateActionID,
-                    };
+                        return BadRequest(WebConstant.InvalidTimeInterval);
+                    }
+                    else
+                    {
+                        WorkFlowTemplateActionConnection workflowConnection = new WorkFlowTemplateActionConnection
+                        {
+                            ConnectionTypeID = connectionTypeInDb.ID,
+                            FromWorkFlowTemplateActionID = connection.FromWorkFlowTemplateActionID,
+                            ToWorkFlowTemplateActionID = connection.ToWorkFlowTemplateActionID,
+                            TimeInterval = connection.TimeInterval,
+                            Type = connection.Type
+                        };
 
-                    _workFlowTemplateActionConnectionService.Create(workflowConnection);
+                        _workFlowTemplateActionConnectionService.Create(workflowConnection);
+                    }
                 }
 
                 _workFlowService.CommitTransaction();

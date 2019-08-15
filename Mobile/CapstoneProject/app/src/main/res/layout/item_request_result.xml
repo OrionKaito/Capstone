@@ -2,97 +2,111 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:layout_marginLeft="@dimen/dp10"
+    android:layout_marginRight="@dimen/dp10"
+    android:orientation="horizontal">
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center_vertical">
+        android:layout_height="match_parent"
+        android:layout_weight="90">
 
-        <TextView
-            android:id="@+id/tv_create_date"
-            android:layout_width="match_parent"
+        <ImageView
+            android:layout_width="2dp"
+            android:layout_height="match_parent"
+            android:layout_centerHorizontal="true"
+            android:background="@color/gray" />
+
+        <ImageView
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/dp10"
-            android:layout_marginRight="@dimen/dp10"
-            android:textColor="@color/light_blue"
-            android:textSize="@dimen/sp13" />
-    </LinearLayout>
+            android:background="@drawable/ic_lens_green_24dp"
+            android:layout_centerInParent="true"
+            android:layout_centerHorizontal="true" />
+
+    </RelativeLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:gravity="center_horizontal"
-        android:orientation="vertical"
-        android:layout_marginBottom="@dimen/dp5">
+        android:layout_weight="10"
+        android:orientation="vertical">
 
-        <View
-            android:id="@+id/line_view"
+        <TextView
+            android:id="@+id/tv_date_approve"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/dp3"
-            android:layout_marginTop="@dimen/dp5"
-            android:background="@color/gray"
-            android:visibility="gone" />
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/dp10"
+            android:layout_marginTop="@dimen/dp3"
+            android:layout_marginRight="@dimen/dp5"
+            android:text="11/07/2019"
+            android:textColor="@color/colortext"
+            android:textSize="@dimen/sp20" />
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center_vertical"
-            android:orientation="vertical">
+            android:layout_height="match_parent"
+            android:layout_marginTop="@dimen/dp5"
+            android:layout_marginRight="@dimen/dp10"
+            android:layout_marginBottom="@dimen/dp5"
+            android:background="@drawable/border_workflow"
+            android:orientation="vertical"
+            android:paddingLeft="@dimen/dp10">
+
+            <TextView
+                android:id="@+id/tv_status"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp5"
+                android:text="Action name"
+                android:textColor="@color/red"
+                android:textSize="@dimen/sp25" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp5"
+                android:text="Approve by:"
+                android:textColor="@color/light_blue"
+                android:textSize="@dimen/sp20" />
 
             <TextView
                 android:id="@+id/tv_staff_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/dp10"
-                android:layout_marginRight="@dimen/dp10"
+                android:layout_marginTop="@dimen/dp5"
+                android:text="Staff name"
                 android:textColor="@color/colortext"
-                android:textSize="@dimen/sp20"
-                android:textStyle="bold" />
+                android:textSize="@dimen/sp20" />
 
             <TextView
-                android:id="@+id/tv_username"
+                android:id="@+id/tv_staff_username"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/dp10"
-                android:layout_marginTop="-5dp"
-                android:layout_marginRight="@dimen/dp10"
-                android:layout_marginBottom="@dimen/dp5"
+                android:layout_marginTop="@dimen/dp5"
+                android:text="Staff Username"
                 android:textColor="@color/colortext"
-                android:textSize="@dimen/sp17" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center_vertical"
-            android:weightSum="10">
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/dp10"
-                android:layout_weight="7"
-                android:text="Status:"
-                android:textColor="@color/colorAccent"
                 android:textSize="@dimen/sp18" />
 
             <TextView
-                android:id="@+id/tv_status"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="@dimen/dp5"
-                android:layout_marginRight="@dimen/dp10"
-                android:layout_weight="3"
-                android:textColor="@color/colortext"
+                android:layout_marginTop="@dimen/dp5"
+                android:text="Comment:"
+                android:textColor="@color/light_blue"
                 android:textSize="@dimen/sp20" />
-        </LinearLayout>
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/dp3"
-            android:layout_marginTop="@dimen/dp5"
-            android:background="@color/gray"
-            android:visibility="gone" />
+            <ListView
+                android:id="@+id/lv_comment"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:divider="@android:color/transparent"
+                android:dividerHeight="10.0sp"
+                android:scrollbars="none"
+                android:visibility="visible"></ListView>
+        </LinearLayout>
     </LinearLayout>
+
 </LinearLayout>

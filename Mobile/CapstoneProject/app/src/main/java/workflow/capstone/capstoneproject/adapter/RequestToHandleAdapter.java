@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.text.ParseException;
@@ -31,6 +32,11 @@ public class RequestToHandleAdapter extends BaseAdapter {
         this.listData = listData;
         this.mContext = mContext;
         layoutInflater = LayoutInflater.from(mContext);
+    }
+
+    public void AddListItemAdapter(List<RequestToHandle> listDataPlus) {
+        listData.addAll(listDataPlus);
+        this.notifyDataSetChanged();
     }
 
     @Override
@@ -58,7 +64,7 @@ public class RequestToHandleAdapter extends BaseAdapter {
             holder.tvWorkflowName = convertView.findViewById(R.id.tv_workflow_name);
             holder.tvMessage = convertView.findViewById(R.id.tv_message);
             holder.tvCreateDate = convertView.findViewById(R.id.tv_create_date);
-            holder.imgIsRead = convertView.findViewById(R.id.img_is_read);
+            holder.lnIsRead = convertView.findViewById(R.id.ln_is_read);
             convertView.setTag(holder);
         } else {
             holder = (ViewHolder) convertView.getTag();
@@ -78,7 +84,7 @@ public class RequestToHandleAdapter extends BaseAdapter {
             e.printStackTrace();
         }
         holder.tvCreateDate.setText(createDate);
-        holder.imgIsRead.setVisibility(View.GONE);
+        holder.lnIsRead.setVisibility(View.GONE);
 
         return convertView;
     }
@@ -87,6 +93,6 @@ public class RequestToHandleAdapter extends BaseAdapter {
         TextView tvWorkflowName;
         TextView tvMessage;
         TextView tvCreateDate;
-        ImageView imgIsRead;
+        LinearLayout lnIsRead;
     }
 }

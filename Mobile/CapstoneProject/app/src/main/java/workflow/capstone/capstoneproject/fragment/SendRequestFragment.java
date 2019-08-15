@@ -30,7 +30,6 @@ import android.widget.ListView;
 import android.widget.Scroller;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -49,8 +48,8 @@ import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 import workflow.capstone.capstoneproject.R;
 import workflow.capstone.capstoneproject.adapter.ListFileNameAdapter;
-import workflow.capstone.capstoneproject.api.ActionValue;
-import workflow.capstone.capstoneproject.api.Request;
+import workflow.capstone.capstoneproject.api.ActionValueModel;
+import workflow.capstone.capstoneproject.api.RequestModel;
 import workflow.capstone.capstoneproject.entities.Connection;
 import workflow.capstone.capstoneproject.entities.DynamicForm.DynamicForm;
 import workflow.capstone.capstoneproject.entities.RequestForm;
@@ -68,6 +67,7 @@ public class SendRequestFragment extends Fragment {
 
     private LinearLayout lnButton;
     private LinearLayout lnDynamicForm;
+    private TextView tvActionName;
     private ImageView imgBack;
     private ImageView imgUploadFile;
     private ImageView imgUploadImage;
@@ -182,6 +182,7 @@ public class SendRequestFragment extends Fragment {
     }
 
     private void initView(View view) {
+        tvActionName = view.findViewById(R.id.tv_action_title);
         lnDynamicForm = view.findViewById(R.id.ln_dynamic_form);
         lnButton = view.findViewById(R.id.ln_button);
         imgBack = view.findViewById(R.id.img_Back);
@@ -198,6 +199,9 @@ public class SendRequestFragment extends Fragment {
         capstoneRepository.getRequestForm(token, workFlowTemplateID, new CallBackData<RequestForm>() {
             @Override
             public void onSuccess(final RequestForm requestForm) {
+                //set title
+                tvActionName.setText(requestForm.getWorkFlowTemplateActionName());
+
                 //Build Dynamic form
                 buildDynamicForm(requestForm.getActionType().getData());
 
@@ -215,7 +219,7 @@ public class SendRequestFragment extends Fragment {
                             builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
-                                    sendRequest(workFlowTemplateID, connection.getNextStepID(), requestForm.getActionType().getData());
+                                    sendRequest(workFlowTemplateID, connection.getNextStepID(), requestForm.getWorkFlowTemplateActionID(), requestForm.getActionType().getData());
                                     dialog.dismiss();
                                 }
                             })
@@ -250,7 +254,7 @@ public class SendRequestFragment extends Fragment {
             if (!dynamicFormList.get(i).getTextOnly().getName().isEmpty()) {
                 LinearLayout linearLayoutLabel = new LinearLayout(getActivity());
                 LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-                params.setMargins(0,5,0,5);
+                params.setMargins(0, 5, 0, 5);
                 linearLayoutLabel.setLayoutParams(params);
                 linearLayoutLabel.setOrientation(LinearLayout.VERTICAL);
                 linearLayoutLabel.setBackgroundResource(R.color.white);
@@ -265,17 +269,14 @@ public class SendRequestFragment extends Fragment {
                 linearLayoutLabel.addView(textView);
                 lnDynamicForm.addView(linearLayoutLabel);
 
-//                View lineView = new View(getActivity());
-//                LinearLayout.LayoutParams viewParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 1);
-//                viewParams.setMargins(10,10,10,10);
-//                lineView.setLayoutParams(viewParams);
-//                lineView.setBackgroundColor(getResources().getColor(R.color.colortext));
-//                lnDynamicForm.addView(lineView);
-
             } else if (!dynamicFormList.get(i).getShortText().getName().isEmpty()) {
                 EditText editText = new EditText(getActivity());
                 //set layout_weight cho edittext
                 editText.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT, 3.0f));
+                editText.setVerticalScrollBarEnabled(true);
+                editText.setMinLines(1);
+                editText.setMaxLines(1);
+                editText.setPadding(10, 20, 10, 20);
                 editText.setBackgroundColor(getResources().getColor(R.color.edit_text_background));
                 editText.setBackgroundResource(R.drawable.border_radius);
 
@@ -290,9 +291,11 @@ public class SendRequestFragment extends Fragment {
                 editText.setVerticalScrollBarEnabled(true);
                 editText.setMinLines(5);
                 editText.setMaxLines(5);
+                editText.setPadding(10, 10, 10, 10);
                 editText.setGravity(Gravity.TOP);
                 editText.setBackgroundColor(getResources().getColor(R.color.edit_text_background));
                 editText.setBackgroundResource(R.drawable.border_radius);
+
                 putIdToMap(editText, i);
 
                 configView(dynamicFormList.get(i).getLongText().getName(), editText);
@@ -326,7 +329,7 @@ public class SendRequestFragment extends Fragment {
     private void configView(String textViewName, View view2) {
         LinearLayout linearLayout = new LinearLayout(getActivity());
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        params.setMargins(0,5,0,5);
+        params.setMargins(0, 10, 0, 10);
         linearLayout.setLayoutParams(params);
         linearLayout.setOrientation(LinearLayout.HORIZONTAL);
         linearLayout.setBackgroundResource(R.color.white);
@@ -336,21 +339,13 @@ public class SendRequestFragment extends Fragment {
         //set layout_weight cho textview
         textView.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT, 7.0f));
         textView.setText(textViewName);
-        textView.setTextSize(17.0f);
+        textView.setTextSize(16.0f);
         textView.setTextColor(getResources().getColor(R.color.colorAccent));
 
         //add child view to linear layout
         linearLayout.addView(textView);
         linearLayout.addView(view2);
         lnDynamicForm.addView(linearLayout);
-
-        //add line view underline linear layout
-//        View lineView = new View(getActivity());
-//        LinearLayout.LayoutParams viewParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 2);
-//        viewParams.setMargins(10,10,10,10);
-//        lineView.setLayoutParams(viewParams);
-//        lineView.setBackgroundColor(getResources().getColor(R.color.colortext));
-//        lnDynamicForm.addView(lineView);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
@@ -405,47 +400,69 @@ public class SendRequestFragment extends Fragment {
         }
     }
 
-    private void sendRequest(String workFlowTemplateID, String nextStepID, String data) {
+    private void sendRequest(String workFlowTemplateID, String nextStepID, String workFlowTemplateActionID, String data) {
         if (token != null) {
             Type type = new TypeToken<List<DynamicForm>>() {
             }.getType();
             List<DynamicForm> dynamicFormList = new Gson().fromJson(data, type);
-            List<ActionValue> actionValueList = new ArrayList<>();
+            List<ActionValueModel> actionValueModelList = new ArrayList<>();
+            boolean checkIsEmpty = false;
             for (int i = 0; i < dynamicFormList.size(); i++) {
                 String name = "task" + i;
                 if (!dynamicFormList.get(i).getTextOnly().getName().isEmpty()) {
-                    TextView textView = (TextView) idsMap.get(name);
-                    ActionValue actionValue = new ActionValue(dynamicFormList.get(i).getTextOnly().getName(), textView.getText().toString());
-                    actionValueList.add(actionValue);
+                    ActionValueModel actionValueModel = new ActionValueModel(dynamicFormList.get(i).getTextOnly().getName(), "");
+                    actionValueModelList.add(actionValueModel);
                 } else if (!dynamicFormList.get(i).getShortText().getName().isEmpty()) {
                     EditText editText = (EditText) idsMap.get(name);
-                    ActionValue actionValue = new ActionValue(dynamicFormList.get(i).getShortText().getName(), editText.getText().toString());
-                    actionValueList.add(actionValue);
+                    String text = editText.getText().toString();
+                    if (text.isEmpty()) {
+                        checkIsEmpty = true;
+                    } else {
+                        ActionValueModel actionValueModel = new ActionValueModel(dynamicFormList.get(i).getShortText().getName(), text);
+                        actionValueModelList.add(actionValueModel);
+                    }
                 } else if (!dynamicFormList.get(i).getLongText().getName().isEmpty()) {
                     EditText editText = (EditText) idsMap.get(name);
-                    ActionValue actionValue = new ActionValue(dynamicFormList.get(i).getLongText().getName(), editText.getText().toString());
-                    actionValueList.add(actionValue);
+                    String text = editText.getText().toString();
+                    if (text.isEmpty()) {
+                        checkIsEmpty = true;
+                    } else {
+                        ActionValueModel actionValueModel = new ActionValueModel(dynamicFormList.get(i).getLongText().getName(), text);
+                        actionValueModelList.add(actionValueModel);
+                    }
                 } else if (!dynamicFormList.get(i).getInputCheckbox().getName().isEmpty()) {
                     CheckBox checkBox = (CheckBox) idsMap.get(name);
-                    ActionValue actionValue = new ActionValue(dynamicFormList.get(i).getInputCheckbox().getName(), checkBox.isChecked() + "");
-                    actionValueList.add(actionValue);
+                    boolean check = checkBox.isChecked();
+                    ActionValueModel actionValueModel;
+                    if (check) {
+                        actionValueModel = new ActionValueModel(dynamicFormList.get(i).getInputCheckbox().getName(), "Yes");
+                    } else {
+                        actionValueModel = new ActionValueModel(dynamicFormList.get(i).getInputCheckbox().getName(), "No");
+                    }
+                    actionValueModelList.add(actionValueModel);
                 } else if (!dynamicFormList.get(i).getComboBox().getName().isEmpty()) {
                     Spinner spinner = (Spinner) idsMap.get(name);
-                    ActionValue actionValue = new ActionValue(dynamicFormList.get(i).getComboBox().getName(), spinner.getSelectedItem().toString());
-                    actionValueList.add(actionValue);
+                    ActionValueModel actionValueModel = new ActionValueModel(dynamicFormList.get(i).getComboBox().getName(), spinner.getSelectedItem().toString());
+                    actionValueModelList.add(actionValueModel);
                 }
             }
 
-            Request request = new Request();
-            request.setDescription("");
-            request.setWorkFlowTemplateID(workFlowTemplateID);
-            request.setNextStepID(nextStepID);
-            request.setActionValues(actionValueList);
-            request.setImagePaths(listPath);
+            if (checkIsEmpty) {
+                Toasty.error(getContext(), getResources().getString(R.string.input_all_fields), Toasty.LENGTH_SHORT).show();
+                return;
+            }
+
+            RequestModel requestModel = new RequestModel();
+            requestModel.setDescription("");
+            requestModel.setWorkFlowTemplateID(workFlowTemplateID);
+            requestModel.setWorkFlowTemplateActionID(workFlowTemplateActionID);
+            requestModel.setNextStepID(nextStepID);
+            requestModel.setActionValues(actionValueModelList);
+            requestModel.setImagePaths(listPath);
 
             final KProgressHUD progressHUD = KProgressHUDManager.showProgressBar(getContext());
             capstoneRepository = new CapstoneRepositoryImpl();
-            capstoneRepository.postRequest(token, request, new CallBackData<String>() {
+            capstoneRepository.postRequest(token, requestModel, new CallBackData<String>() {
                 @Override
                 public void onSuccess(String s) {
                     FragmentUtils.back(getActivity());

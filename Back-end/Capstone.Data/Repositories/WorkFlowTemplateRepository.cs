@@ -10,7 +10,7 @@ namespace Capstone.Data.Repositories
     {
         WorkFlowTemplate GetByName(string name);
         IEnumerable<WorkFlowTemplate> GetByPermissionToUse(Guid permissionID);
-        //IEnumerable<WorkFlowTemplate> GetByPermissionToEdit(Guid permissionID);
+        IEnumerable<WorkFlowTemplate> SearchByNameOnPermissionToUse(Guid permissionID, string search);
     }
 
     public class WorkFlowTemplateRepository : RepositoryBase<WorkFlowTemplate>, IWorkFlowTemplateRepository
@@ -22,14 +22,14 @@ namespace Capstone.Data.Repositories
             return DbContext.WorkFlowTemplates.Where(w => w.Name.Equals(name)).FirstOrDefault();
         }
 
-        //public IEnumerable<WorkFlowTemplate> GetByPermissionToEdit(Guid permissionID)
-        //{
-        //    return DbContext.WorkFlowTemplates.Where(w => w.PermissionToEditID == permissionID && w.IsDeleted == false);
-        //}
-
         public IEnumerable<WorkFlowTemplate> GetByPermissionToUse(Guid permissionID)
         {
             return DbContext.WorkFlowTemplates.Where(w => w.PermissionToUseID == permissionID && w.IsDeleted == false && w.IsEnabled == true);
+        }
+
+        public IEnumerable<WorkFlowTemplate> SearchByNameOnPermissionToUse(Guid permissionID, string search)
+        {
+            return DbContext.WorkFlowTemplates.Where(w => w.PermissionToUseID == permissionID && w.IsDeleted == false && w.IsEnabled == true && w.Name.Contains(search));
         }
     }
 }

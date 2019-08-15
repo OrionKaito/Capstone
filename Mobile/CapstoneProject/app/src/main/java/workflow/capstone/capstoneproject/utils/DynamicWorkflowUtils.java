@@ -3,10 +3,14 @@ package workflow.capstone.capstoneproject.utils;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListAdapter;
 import android.widget.ListView;
+import android.widget.ProgressBar;
+
+import workflow.capstone.capstoneproject.R;
 
 public class DynamicWorkflowUtils {
 
@@ -26,7 +30,6 @@ public class DynamicWorkflowUtils {
         }
         return false;
     }
-
 
     public static void setListViewHeightBasedOnChildren(ListView listView) {
         ListAdapter listAdapter = listView.getAdapter();

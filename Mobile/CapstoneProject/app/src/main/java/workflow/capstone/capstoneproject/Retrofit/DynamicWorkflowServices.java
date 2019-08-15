@@ -13,10 +13,10 @@ import retrofit2.http.POST;
 import retrofit2.http.PUT;
 import retrofit2.http.Part;
 import retrofit2.http.Query;
-import retrofit2.http.Url;
-import workflow.capstone.capstoneproject.api.Request;
-import workflow.capstone.capstoneproject.api.RequestApprove;
-import workflow.capstone.capstoneproject.api.TestLogin;
+import workflow.capstone.capstoneproject.api.RequestModel;
+import workflow.capstone.capstoneproject.api.RequestApproveModel;
+import workflow.capstone.capstoneproject.api.LoginModel;
+import workflow.capstone.capstoneproject.api.UpdateAvatarModel;
 import workflow.capstone.capstoneproject.api.UpdateProfileModel;
 
 public interface DynamicWorkflowServices {
@@ -26,7 +26,7 @@ public interface DynamicWorkflowServices {
 
     @Headers({"Content-Type:application/json"})
     @POST(ConfigApi.Api.NEW_LOGIN)
-    Call<ResponseBody> newLogin(@Body TestLogin testLogin);
+    Call<ResponseBody> newLogin(@Body LoginModel loginModel);
 
     @PUT(ConfigApi.Api.LOGOUT)
     Call<ResponseBody> logout(@Query(value = "deviceToken", encoded = true) String deviceToken);
@@ -39,7 +39,7 @@ public interface DynamicWorkflowServices {
     Call<ResponseBody> updateProfile(@Body UpdateProfileModel model);
 
     @PUT(ConfigApi.Api.UPDATE_AVATAR)
-    Call<ResponseBody> updateAvatar(@Query(value = "imagePath", encoded = true) String imagePath);
+    Call<ResponseBody> updateAvatar(@Body UpdateAvatarModel updateAvatarModel);
 
     @PUT(ConfigApi.Api.CHANGE_PASSWORD)
     Call<ResponseBody> changePassword(@Query(value = "oldPassword", encoded = true) String oldPassword, @Query(value = "newPassword", encoded = true) String newPassword);
@@ -57,26 +57,26 @@ public interface DynamicWorkflowServices {
                                      @Query(value = "email", encoded = true) String email);
 
     @GET(ConfigApi.Api.GET_WORKFLOW)
-    Call<ResponseBody> getWorkflow();
+    Call<ResponseBody> getWorkflow(@Query(value = "numberOfPage", encoded = true) Integer numberOfPage, @Query(value = "NumberOfRecord", encoded = true) Integer NumberOfRecord);
 
     @GET(ConfigApi.Api.GET_NUMBER_NOTIFICATION)
     Call<ResponseBody> getNumberNotification();
 
     @GET(ConfigApi.Api.GET_NOTIFICATION)
-    Call<ResponseBody> getNotification();
+    Call<ResponseBody> getNotification(@Query(value = "numberOfPage", encoded = true) Integer numberOfPage, @Query(value = "NumberOfRecord", encoded = true) Integer NumberOfRecord);
 
     @GET(ConfigApi.Api.GET_REQUESTS_TO_HANDLE_BY_PERMISSION)
-    Call<ResponseBody> getRequestsToHandleByPermission();
+    Call<ResponseBody> getRequestsToHandleByPermission(@Query(value = "numberOfPage", encoded = true) Integer numberOfPage, @Query(value = "NumberOfRecord", encoded = true) Integer NumberOfRecord);
 
     @GET(ConfigApi.Api.GET_NOTIFICATION_BY_TYPE)
     Call<ResponseBody> getNotificationByType(@Query(value = "notificationType", encoded = true) int notificationType);
 
     @GET(ConfigApi.Api.GET_MY_REQUEST)
-    Call<ResponseBody> getMyRequest();
+    Call<ResponseBody> getMyRequest(@Query(value = "numberOfPage", encoded = true) Integer numberOfPage, @Query(value = "NumberOfRecord", encoded = true) Integer NumberOfRecord);
 
     @Headers({"Content-Type:application/json"})
     @POST(ConfigApi.Api.POST_REQUEST)
-    Call<ResponseBody> postRequest(@Body Request request);
+    Call<ResponseBody> postRequest(@Body RequestModel requestModel);
 
     @Multipart
     @POST(ConfigApi.Api.POST_REQUEST_FILE)
@@ -104,9 +104,6 @@ public interface DynamicWorkflowServices {
 
     @Headers({"Content-Type:application/json"})
     @POST(ConfigApi.Api.APPROVE_REQUEST)
-    Call<ResponseBody> approveRequest(@Body RequestApprove requestApprove);
-
-    @GET
-    Call<ResponseBody> downloadFileWithDynamicUrlSync(@Url String fileUrl);
+    Call<ResponseBody> approveRequest(@Body RequestApproveModel requestApproveModel);
 
 }
