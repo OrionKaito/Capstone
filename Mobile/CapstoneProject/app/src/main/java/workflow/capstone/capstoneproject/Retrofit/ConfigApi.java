@@ -1,7 +1,7 @@
 package workflow.capstone.capstoneproject.retrofit;
 
 public class ConfigApi {
-    public static final String BASE_URL = "http://192.168.1.118:159/api/";
+    public static final String BASE_URL = "http://172.20.10.2:159/api/";
 
     public interface Api {
         String LOGIN = "Token/User";
