@@ -11,6 +11,7 @@ namespace Capstone.Service
     {
         IEnumerable<WorkFlowTemplateActionConnection> GetAll();
         IEnumerable<WorkFlowTemplateActionConnection> GetByFromWorkflowTemplateActionID(Guid ID);
+        WorkFlowTemplateActionConnection GetByToWorkflowTemplateActionID(Guid ID);
         WorkFlowTemplateActionConnection GetByID(Guid ID);
         WorkFlowTemplateActionConnection GetByFromIDAndToID(Guid fromID, Guid toID);
         void Create(WorkFlowTemplateActionConnection connection);
@@ -53,6 +54,11 @@ namespace Capstone.Service
         public WorkFlowTemplateActionConnection GetByID(Guid ID)
         {
             return _workFlowTemplateActionConnectionRepository.GetById(ID);
+        }
+
+        public WorkFlowTemplateActionConnection GetByToWorkflowTemplateActionID(Guid ID)
+        {
+            return _workFlowTemplateActionConnectionRepository.GetByToWorkflowTemplateActionID(ID);
         }
 
         public void Save()

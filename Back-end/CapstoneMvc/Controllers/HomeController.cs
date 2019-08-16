@@ -116,10 +116,10 @@ namespace CapstoneMvc.Controllers
                 {
                     Status = StatusEnum.Pending,
                     RequestID = model.RequestID,
-                    ActorEmail = currentRequestAction.ActorEmail,
+                    ActorEmail = _workFlowTemplateActionService.GetByID(currentRequestAction.NextStepID.GetValueOrDefault()).ToEmail,
                     NextStepID = model.NextStepID,
                     CreateDate = DateTime.Now,
-                    WorkFlowTemplateActionID = model.NextStepID,
+                    WorkFlowTemplateActionID = currentRequestAction.NextStepID,
                 };
 
                 //Lấy phần thông tin của người gửi request
@@ -261,6 +261,8 @@ namespace CapstoneMvc.Controllers
                     //Cập nhật request
                     request.IsCompleted = true;
                     request.CurrentRequestActionID = requestAction.ID;
+                    requestAction.Status = StatusEnum.Handled;
+                    _requestActionService.Save();
                     _requestService.Save();
 
                     //Notification
