@@ -1,21 +1,21 @@
-import {Component, OnInit, ViewChild, HostListener} from '@angular/core';
+import { Component, OnInit, ViewChild, HostListener } from '@angular/core';
 // import $ from 'jquery';
 import * as $ from 'jquery';
 import 'jquery-ui/ui/widgets/draggable.js';
-import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
-import {ToastrService} from 'ngx-toastr';
-import {saveAs} from 'file-saver';
+import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
+import { ToastrService } from 'ngx-toastr';
+import { saveAs } from 'file-saver';
 import * as moment from 'moment-timezone';
-import {interval} from 'rxjs';
-import {ModalDirective} from 'angular-bootstrap-md';
-import {FormControl, FormGroup, FormBuilder, Validators} from '@angular/forms';
-import {ShapeService} from './shape.service';
-import {ActivatedRoute, Router} from '@angular/router';
-import {element} from '@angular/core/src/render3';
-import {AddNewDynamicFormComponent} from 'app/add-new-dynamic-form/add-new-dynamic-form.component';
-import {LoginService} from 'app/service/login.service';
-import {debug} from 'util';
-import {elementAt} from 'rxjs/operators';
+import { interval } from 'rxjs';
+import { ModalDirective } from 'angular-bootstrap-md';
+import { FormControl, FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { ShapeService } from './shape.service';
+import { ActivatedRoute, Router } from '@angular/router';
+import { element } from '@angular/core/src/render3';
+import { AddNewDynamicFormComponent } from 'app/add-new-dynamic-form/add-new-dynamic-form.component';
+import { LoginService } from 'app/service/login.service';
+import { debug } from 'util';
+import { elementAt } from 'rxjs/operators';
 
 @Component({
     selector: 'app-edit-account-shape',
@@ -26,7 +26,10 @@ export class EditAccountShapeComponent implements OnInit {
     @ViewChild('basicModal') public showModalOnClick: ModalDirective;
     @ViewChild('confirmDelete') public showModalConfirmDelete: ModalDirective;
 
+    showNameArrow: any;
+    showNamePer: any;
     appoveByMail: any;
+    perCreater: any;
     approveByPer: any;
     checkConnectionResult: any;
     properties: any;
@@ -37,7 +40,7 @@ export class EditAccountShapeComponent implements OnInit {
     listConnectionType: any = [];
     listErrorAction: any = [];
     public dataModel: any;
-    showIcon:any;
+    showIcon: any;
     secondFormGroup: FormGroup;
 
     listDropdown = [];
@@ -98,7 +101,10 @@ export class EditAccountShapeComponent implements OnInit {
     }
 
     callAll() {
-        this.showIcon =false;
+        this.showNameArrow = true;
+        this.showNamePer = false;
+        this.perCreater = "";
+        this.showIcon = false;
         this.appoveByMail = false;
         this.approveByPer = false;
         this.properties = {
@@ -109,7 +115,10 @@ export class EditAccountShapeComponent implements OnInit {
             email: ''
         }
         this.propertiesArr = {
-            name: ''
+            name: '',
+            type:1,
+            timeInterval: 0
+
         }
         this.activatedRoute.params.subscribe(item => {
             if (item.id) {
@@ -120,6 +129,8 @@ export class EditAccountShapeComponent implements OnInit {
 
                     if (res) {
                         this.saveActiontype = res;
+                        this.perCreater = this.saveActiontype.permissionToUseID;
+                        console.log("perCre:", this.perCreater);
                         var b = this.saveActiontype.data;
                         console.log(b);
                         var a = JSON.parse(this.saveActiontype.data);
@@ -160,13 +171,12 @@ export class EditAccountShapeComponent implements OnInit {
                     this.listConnectionType.push(item);
                 });
             }
-
         }, err => {
             this.toastr.error(err.error);
         })
     }
 
-    public getlistActionType(){
+    public getlistActionType() {
         this.shapeService.getActiontype().toPromise().then((res: any) => {
             this.listActionType = [];
 
@@ -199,19 +209,26 @@ export class EditAccountShapeComponent implements OnInit {
         //lấy id của hình ra, bỏ vô subClass
 
         if (this.subClass.length == 1) {
-            debugger;
+            if(item.isStart){
+                this.toastr.error('Arrow can not come to Start Action')
+                this.subClass = [];
+            } else
             if (this.subClass[0] == item.id) {
                 this.toastr.error('Cannot create arrow by itself!!!')
                 this.subClass = [];
-            }
+            } else
             if (this.checkIdOfAction(this.subClass[0], item.id)) {
-                this.toastr.error('There is an arrow between 2 action aready!!!')
+                this.toastr.error('There is an arrow between 2 action aready!!!');
                 this.subClass = [];
             } else {
                 this.subClass.push(item.id);
             }
         } else if (this.subClass.length < 1) {
-            this.subClass.push(item.id);
+            if (item.isEnd) {
+                this.toastr.error('Arrow can not start from End Action');
+            } else {
+                this.subClass.push(item.id);
+            }
         }
         // this.subClass.push(item.id);
         if (this.subClass.length > 1) {
@@ -313,10 +330,10 @@ export class EditAccountShapeComponent implements OnInit {
 
         // Show message
         if (this.menuList1.length < 2) {
-            this.toastr.info('Move the action !!', '', {timeOut: 5000});
+            this.toastr.info('Move the action !!', '', { timeOut: 5000 });
             setTimeout(() => {
-                this.toastr.info('Blue shape is start action !!', '', {timeOut: 7000});
-                this.toastr.info('Red shape is end action !!', '', {timeOut: 7000});
+                // this.toastr.info('Blue shape is start action !!', '', { timeOut: 7000 });
+                // this.toastr.info('Red shape is end action !!', '', { timeOut: 7000 });
 
             }, 2000);
         }
@@ -425,8 +442,8 @@ export class EditAccountShapeComponent implements OnInit {
         let classOption: any;
 
         //const exportJson = [];
-        let exportJson: any = {action: [], arrow: []};
-        let exportJson2: any = {workFlowID: String, action: [], arrow: []};
+        let exportJson: any = { action: [], arrow: [] };
+        let exportJson2: any = { workFlowID: String, action: [], arrow: [] };
         // for (let i = 0; i < this.listClass.length; i++) {
         //   let obj;
         //   // Lấy value từ id input tag
@@ -547,20 +564,20 @@ export class EditAccountShapeComponent implements OnInit {
             exportJson2.workFlowID = this.saveIDofWF;
             //lưu  lại
             const json = JSON.stringify(exportJson2);
-            const blob = new Blob([json], {type: 'application/json'});
+            const blob = new Blob([json], { type: 'application/json' });
             saveAs(blob, 'data' + this.convertDateFileName(new Date()) + '.json');
             //đoạn này mình chỉnh sửa để push dc lên server
             // const data = {
             //   json: exportJson
             // }
-            var a = {id: this.saveIDofWF, 'data': JSON.stringify(exportJson)};
+            var a = { id: this.saveIDofWF, 'data': JSON.stringify(exportJson) };
             // debugger;
             // this.shapeService.postJsonFile(a).subscribe((res: any) => {
             // }, (err) => {
             //   console.log(err);
             // });
             exportJson2.workFlowID = this.saveIDofWF;
-            var b = {id: this.saveIDofWF, 'data': JSON.stringify(exportJson2)};
+            var b = { id: this.saveIDofWF, 'data': JSON.stringify(exportJson2) };
             // this.shapeService.saveAndACtiveJsonFile(exportJson2).subscribe((res: any) => {
             // }, (err) => {
             //   console.log(err);
@@ -636,7 +653,7 @@ export class EditAccountShapeComponent implements OnInit {
                 }
             }
             this.arrowLeft = [];
-            let textArrowLeft= [];
+            let textArrowLeft = [];
             // Chạy for cho nhiều mủi tên của nhiều cặp hình
             for (let i = 0; i < this.listArrow.length; i++) {
                 let subArrow: any;
@@ -645,11 +662,11 @@ export class EditAccountShapeComponent implements OnInit {
                     // lấy querySelector của mủi tên
                     subArrow = document.querySelector('#' + this.listArrow[i]);
                     if (subArrow) {
-                       
+
                         textArrowLeft.push(document.querySelector('#text' + this.listArrow[i]));
                         console.log("list text", textArrowLeft);
                         this.arrowLeft.push(document.querySelector('#' + this.listArrow[i]));
-                        
+
                         source.unsubscribe();
                         for (let e = 0; e < this.arrowLeft.length; e++) {
                             // Tạo vị trí của mủi tên
@@ -661,8 +678,8 @@ export class EditAccountShapeComponent implements OnInit {
                                 // 'L' vẽ một đường thắng bắt đầu từ điểm 'M' đến điểm x, y của 'L'
                                 'L' +
                                 (this.posnBLeft[e].x + 39) + ',' + (this.posnBLeft[e].y);
-                            let xText = (this.posnALeft[e].x + this.posnBLeft[e].x)/2;
-                            let yText = (this.posnALeft[e].y + this.posnBLeft[e].y)/2-7;
+                            let xText = (this.posnALeft[e].x + this.posnBLeft[e].x) / 2;
+                            let yText = (this.posnALeft[e].y + this.posnBLeft[e].y) / 2 - 7;
                             // setAttribute để vẽ mủi tên
                             this.arrowLeft[e].setAttribute('d', dStrLeft);
                             textArrowLeft[e].setAttribute('x', xText);
@@ -705,7 +722,7 @@ export class EditAccountShapeComponent implements OnInit {
                 }
             }
             this.arrowLeft = [];
-            let textArrowLeft= [];
+            let textArrowLeft = [];
             // Chạy for cho nhiều mủi tên của nhiều cặp hình
             for (let i = 0; i < this.listArrow.length; i++) {
                 let subArrow: any;
@@ -714,7 +731,7 @@ export class EditAccountShapeComponent implements OnInit {
                     // lấy querySelector của mủi tên
                     subArrow = document.querySelector('#' + this.listArrow[i]);
                     if (subArrow) {
-                    
+
                         textArrowLeft.push(document.querySelector('#text' + this.listArrow[i]));
                         this.arrowLeft.push(document.querySelector('#' + this.listArrow[i]));
                         source.unsubscribe();
@@ -728,12 +745,12 @@ export class EditAccountShapeComponent implements OnInit {
                                 // 'L' vẽ một đường thắng bắt đầu từ điểm 'M' đến điểm x, y của 'L'
                                 'L' +
                                 (this.posnBLeft[e].x + 39) + ',' + (this.posnBLeft[e].y);
-                                let xText = (this.posnALeft[e].x + this.posnBLeft[e].x)/2;
-                                let yText = (this.posnALeft[e].y + this.posnBLeft[e].y)/2-7;
-                                // setAttribute để vẽ mủi tên
-                                this.arrowLeft[e].setAttribute('d', dStrLeft);
-                                textArrowLeft[e].setAttribute('x', xText);
-                                textArrowLeft[e].setAttribute('y', yText);
+                            let xText = (this.posnALeft[e].x + this.posnBLeft[e].x) / 2;
+                            let yText = (this.posnALeft[e].y + this.posnBLeft[e].y) / 2 - 7;
+                            // setAttribute để vẽ mủi tên
+                            this.arrowLeft[e].setAttribute('d', dStrLeft);
+                            textArrowLeft[e].setAttribute('x', xText);
+                            textArrowLeft[e].setAttribute('y', yText);
                         }
                     }
                 });
@@ -758,8 +775,8 @@ export class EditAccountShapeComponent implements OnInit {
                 }
             }
             const subHeightSVG = subOffsetTop.sort((a, b) => a > b ? -1 : 1);
-            if(subHeightSVG[0]>490){
-            this.heightSVG = subHeightSVG[0] + 150 + 'px';
+            if (subHeightSVG[0] > 507) {
+                this.heightSVG = subHeightSVG[0] + 150 + 'px';
             }
         }
 
@@ -778,7 +795,7 @@ export class EditAccountShapeComponent implements OnInit {
                 });
             });
             const arrowLeft = [];
-            let textArrowLeft= [];
+            let textArrowLeft = [];
             for (let i = 0; i < subArrow.length; i++) {
                 const divA: any = document.querySelector('#' + avgDiv[i][0]);
                 const divB: any = document.querySelector('#' + avgDiv[i][1]);
@@ -787,7 +804,7 @@ export class EditAccountShapeComponent implements OnInit {
 
                     subArrow1 = document.querySelector('#' + subArrow[i]);
                     if (subArrow1) {
-         
+
                         textArrowLeft.push(document.querySelector('#text' + subArrow[i]));
                         arrowLeft.push(document.querySelector('#' + subArrow[i]));
                         source.unsubscribe();
@@ -806,8 +823,8 @@ export class EditAccountShapeComponent implements OnInit {
                             (posnBLeft.x + 39) + ',' + (posnBLeft.y);
                         arrowLeft[i].setAttribute('d', dStrLeft);
 
-                        let xText = (posnALeft.x + posnBLeft.x)/2;
-                        let yText = (posnALeft.y + posnBLeft.y)/2-7;
+                        let xText = (posnALeft.x + posnBLeft.x) / 2;
+                        let yText = (posnALeft.y + posnBLeft.y) / 2 - 7;
                         textArrowLeft[i].setAttribute('x', xText);
                         textArrowLeft[i].setAttribute('y', yText);
                     }
@@ -954,6 +971,7 @@ export class EditAccountShapeComponent implements OnInit {
     }
 
     showProperties(item) {
+        this.removeBorder(item.id);
         debugger;
         this.menuList1.forEach(element => {
 
@@ -999,7 +1017,7 @@ export class EditAccountShapeComponent implements OnInit {
         dialogConfig.autoFocus = true;
         // dialogConfig.disableClose = true;
         dialogConfig.width = '50%';
-        dialogConfig.maxHeight= "80%";
+        dialogConfig.maxHeight = "80%";
         dialogConfig.data = [];
         this.dialog.open(AddNewDynamicFormComponent, dialogConfig).afterClosed().subscribe(res => {
             console.log(res);
@@ -1015,12 +1033,10 @@ export class EditAccountShapeComponent implements OnInit {
             let positionKey: any;
             let classKey: any;
 
-            //const exportJson = [];
-            let exportJson: any = {action: [], arrow: []};
-         //   let exportJson2: any = {workFlowID: String, action: [], arrow: []};
 
+            let exportJson: any = { action: [], arrow: [] };
             for (let i = 0; i < this.menuList1.length; i++) {
-             //   let obj;
+                //   let obj;
                 positionKey = $('#' + this.menuList1[i].id);
                 // lọc ra những thằng làm đầu mũi tên
                 classKey = this.menuList1[i];
@@ -1028,7 +1044,7 @@ export class EditAccountShapeComponent implements OnInit {
                 classKey.positionTop = positionKey.position().top;
                 classKey.positionLeft = positionKey.position().left;
                 exportJson.action.push(classKey);
-           //     exportJson2.action.push(classKey);
+                //     exportJson2.action.push(classKey);
             }
             if (exportJson.length <= 0) {
                 this.toastr.error('Chưa có dữ liệu !!');
@@ -1036,10 +1052,10 @@ export class EditAccountShapeComponent implements OnInit {
                 //đẩy mũi tên vô có 1 dòng vậy thôi à?
                 this.listClass.forEach(element => {
                     exportJson.arrow.push(element);
-                 //   exportJson2.arrow.push(element);
+                    //   exportJson2.arrow.push(element);
                 })
 
-               // exportJson2.workFlowID = this.saveIDofWF;
+                // exportJson2.workFlowID = this.saveIDofWF;
 
 
                 var a = {
@@ -1049,7 +1065,7 @@ export class EditAccountShapeComponent implements OnInit {
                     'description': this.saveActiontype.description,
                     'permissionToUseID': this.saveActiontype.permissionToUseID
                 };
-           //     exportJson2.workFlowID = this.saveIDofWF;
+
                 this.LoginService.editWF(a).toPromise().then((res: any) => {
                     this.toastr.success('Save draft WorkFlow success!');
 
@@ -1104,8 +1120,8 @@ export class EditAccountShapeComponent implements OnInit {
             let classKey: any;
 
             //const exportJson = [];
-            let exportJson: any = {action: [], arrow: []};
-            let exportJson2: any = {workFlowID: String, action: [], arrow: []};
+            let exportJson: any = { action: [], arrow: [] };
+            let exportJson2: any = { workFlowID: String, action: [], arrow: [] };
 
             for (let i = 0; i < this.menuList1.length; i++) {
                 let obj;
@@ -1225,28 +1241,29 @@ export class EditAccountShapeComponent implements OnInit {
                         // console.log(err);
                     });
             }
-        } else {
-            this.listClass.forEach((values) => {
-                tpm.push(values.idDiv[0]);
-                tpm.push(values.idDiv[1]);
-            });
-            this.menuList1.forEach(el => {
-                errR2.push(el.id);
-            })
-            errRl = this.deduplicate(tpm);
-            this.listErrorAction = this.differenceOf2Arrays(errRl, errR2);
-
-            this.listErrorAction.forEach(el => {
-                console.log(el);
-                document.getElementById(el).style.border = '5px solid #9c27b0';
-            });
-            errRl.forEach(el => {
-                document.getElementById(el).style.border = '3px solid transparent';
-                console.log(el);
-            });
-            this.toastr.error('Action not usefull please try again with Arrow');
-            // console.log(errRl);
         }
+        //  else {
+        //     this.listClass.forEach((values) => {
+        //         tpm.push(values.idDiv[0]);
+        //         tpm.push(values.idDiv[1]);
+        //     });
+        //     this.menuList1.forEach(el => {
+        //         errR2.push(el.id);
+        //     })
+        //     errRl = this.deduplicate(tpm);
+        //     this.listErrorAction = this.differenceOf2Arrays(errRl, errR2);
+
+        //     this.listErrorAction.forEach(el => {
+        //         console.log(el);
+        //         document.getElementById(el).style.border = '5px solid #9c27b0';
+        //     });
+        //     errRl.forEach(el => {
+        //         document.getElementById(el).style.border = '3px solid transparent';
+        //         console.log(el);
+        //     });
+        //     this.toastr.error('Action not usefull please try again with Arrow');
+        //     // console.log(errRl);
+        // }
     }
 
     create_UUID() {
@@ -1265,8 +1282,8 @@ export class EditAccountShapeComponent implements OnInit {
         let classKey: any;
 
         //const exportJson = [];
-        let exportJson: any = {action: [], arrow: []};
-        let exportJson2: any = {workFlowID: String, action: [], arrow: []};
+        let exportJson: any = { action: [], arrow: [] };
+        let exportJson2: any = { workFlowID: String, action: [], arrow: [] };
 
         for (let i = 0; i < this.menuList1.length; i++) {
             let obj;
@@ -1316,7 +1333,7 @@ export class EditAccountShapeComponent implements OnInit {
                 jsonActions.push(oneAction);
             });
             let jsonData = JSON.stringify(exportJson);
-            let a = {'nodes': jsonActions, 'connections': jsonConnections};
+            let a = { 'nodes': jsonActions, 'connections': jsonConnections };
 
             console.log(JSON.stringify(a));
             this.shapeService.checkConnection(a).toPromise().then(res => {
@@ -1336,13 +1353,13 @@ export class EditAccountShapeComponent implements OnInit {
         let listNode: any = [];
         let listArr: any = [];
         this.menuList1.forEach(element => {
-            listNode.push({id: element.id, isStart: element.isStart, isEnd: element.isEnd});
+            listNode.push({ id: element.id, isStart: element.isStart, isEnd: element.isEnd });
         })
         this.listClass.forEach(element => {
-            listArr.push({from: element.idDiv[0], to: element.idDiv[1]});
+            listArr.push({ from: element.idDiv[0], to: element.idDiv[1] });
         });
         if (this.checkStart(listNode, listArr) && this.checkEnd(listNode, listArr)) {
-            // this.toastr.success("Sucess");
+            //  this.toastr.success("Sucess");
             result = true;
         }
         return result;
@@ -1372,7 +1389,8 @@ export class EditAccountShapeComponent implements OnInit {
                             //thì tìm thằng đuôi
                             if (this.findNode(arr.to, listNode).id == '') {
                                 //k có đuôi báo lỗi
-                                this.toastr.error('Mũi tên từ action' + arr.from + ' phải chỉa tới một action!');
+                                // this.toastr.error('Mũi tên từ action' + arr.from + ' phải chỉa tới một action!');
+                                this.toastr.error('Mũi tên từ action phải chỉa tới một action!');
                                 return false;
                             } else {
 
@@ -1422,10 +1440,10 @@ export class EditAccountShapeComponent implements OnInit {
             } else {
                 let a = '';
                 nodeWithoutStart.forEach(element => {
-                    a = a + element.id + ', ';
-                    console.log(element);
+                    this.addBorder(element.id);
                 });
-                // this.toastr.error('Action not usefull, can not come here from start: ');
+                this.addBorder(a);
+                this.toastr.error('Please connect Action by arrow', 'Start action can not come here');
                 return false;
             }
         }
@@ -1455,7 +1473,8 @@ export class EditAccountShapeComponent implements OnInit {
                         //thì tìm thằng đuôi
                         if (this.findNode(arr.from, listNode).id == '') {
                             //k có đuôi báo lỗi
-                            this.toastr.error('Mũi tên đuôi action' + arr.from + ' phải bắt đầu từ một action!');
+                            //this.toastr.error('Mũi tên đuôi action' + arr.from + ' phải bắt đầu từ một action!');
+                            this.toastr.error('Mũi tên đuôi action phải bắt đầu từ một action!');
                             return false;
                         } else {
 
@@ -1497,21 +1516,24 @@ export class EditAccountShapeComponent implements OnInit {
             }
         });
         if (nodeWithoutStart.length == 0) {
+
             return true;
 
         } else {
-            let a = '';
+
             nodeWithoutStart.forEach(element => {
-                a = a + element.id + ', ';
+                console.log("element: ", element)
+                this.addBorder(element.id);
             });
-            this.toastr.error('Action này không thể đi đến kết thúc' + a);
+
+            this.toastr.error('Action này không thể đi đến kết thúc');
             return false;
         }
         // }
     }
 
     findNode(node, listNode) {
-        let retu = {id: '', isStart: false, isEnd: false};
+        let retu = { id: '', isStart: false, isEnd: false };
         listNode.forEach(element => {
             if (node.toString() == element.id.toString()) {
                 retu = element;
@@ -1520,15 +1542,26 @@ export class EditAccountShapeComponent implements OnInit {
         return retu;
     }
 
-    addBorder(actionId: any = []) {
+    addBorder(actionId) {
+        //    let a: any;
 
-        $('#' + actionId).addClass('addcallBorder');
+        //    console.log("actionId:", actionId);
+
+        // //    a= $('#' + this.menuList1[1].id);
+        //     a= $('#' + actionId.toString());
+        //     this.menuList1.forEach(element => {
+        //         if(actionId.toString() == element.id){
+        //             console.log("trùng");
+        //         }
+        //     });
+        //    console.log("đây:", a);
+        if (actionId.length > 0) {
+            $('#' + actionId).addClass('addcallBorder');
+        }
     }
 
-    removeBorder(actionId: any) {
-        $('#' + actionId).css({
-            border: 'none'
-        })
+    removeBorder(actionId) {
+        $('#' + actionId).removeClass('addcallBorder');
     }
 
     deduplicate(arr) {
@@ -1567,11 +1600,11 @@ export class EditAccountShapeComponent implements OnInit {
         }
         return temp.sort((a, b) => a - b);
     }
-    allIconFalse(){
+
+    allIconFalse() {
         this.menuList1.forEach(element => {
             element.showIcon = false;
         });
-        
     }
 
 }
