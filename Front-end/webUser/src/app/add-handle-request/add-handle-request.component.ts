@@ -106,7 +106,6 @@ export class AddHandleRequestComponent implements OnInit {
         console.log("here:", a);
         // a.lastIndexOf()
         element.name = element.path.substring(element.path.lastIndexOf('\\')+1);
-        
       });
 
       this.requestActionHandleValue = this.saveData.userRequestAction.requestValues;

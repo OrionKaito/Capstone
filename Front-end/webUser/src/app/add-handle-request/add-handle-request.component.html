@@ -5,7 +5,7 @@
     </div>
   </h3>
   <hr>
-  <form class="" #form="ngForm" autocomplete="off">
+  <!-- <form class="" #form="ngForm" autocomplete="off">
     <div class="form-row">
       <label class="lable-custom">initiatorName</label>
       <div class="content-info"> {{initiatorName}} </div>
@@ -22,7 +22,7 @@
       <label class="lable-custom">File</label>
     </div>
     <div *ngFor="let item of requestActionHandleFile" class="form-row box-file">
-      <!-- <a href="{{item.path}}" target="_blank">{{item.name}}</a> -->
+  
       <a href="{{item.path}}" target="_blank"> {{item.name}} </a>
     </div>
   </form>
@@ -58,10 +58,10 @@
   </div>
   <div class="form-group">
     <button *ngFor="let item of buttons" id="item.nextStepID" (click)="sendReqNextStep(item.nextStepID)"
-      class="btn btn-dark"><i class="fa fa-database"></i> {{item.connectionTypeName}}</button>
-    <!-- <button id="ádasd"   > adsdasd</button>  -->
-    <!-- <button type="button" class="btn btn-outline-dark ml-1" [mat-dialog-close]><i class="fa fa-close"></i> Close</button> -->
-  </div>
+      class="btn btn-dark"><i class="fa fa-database"></i> {{item.connectionTypeName}}</button> -->
+  <!-- <button id="ádasd"   > adsdasd</button>  -->
+  <!-- <button type="button" class="btn btn-outline-dark ml-1" [mat-dialog-close]><i class="fa fa-close"></i> Close</button> -->
+  <!-- </div> -->
 
 
 
@@ -70,36 +70,36 @@
   </button> -->
 
   <mat-vertical-stepper [linear]="isLinear" #stepper>
-    <mat-step [stepControl]="firstFormGroup">
-      <form [formGroup]="firstFormGroup">
+
+    <mat-step >
+      <form >
         <ng-template matStepLabel>Fill out your name</ng-template>
-        <mat-form-field>
-          <input matInput placeholder="Last name, First name" formControlName="firstCtrl" required>
-        </mat-form-field>
-        <div>
-          <button mat-button matStepperNext>Next</button>
-        </div>
+        <ul class="chien-ul">
+          <li class=chien-li1><strong>tên:</strong></li>
+          <li class=chien-li2>Phán lê quang chiến</li>
+          <li class=chien-li1><strong>tên:</strong></li>
+          <li class=chien-li2>Phán lê quang chiến</li>
+        </ul>
       </form>
     </mat-step>
-    <mat-step [stepControl]="secondFormGroup">
-      <form [formGroup]="secondFormGroup">
+
+    <mat-step>
+      <form >
         <ng-template matStepLabel>Fill out your address</ng-template>
-        <mat-form-field>
+        <!-- <mat-form-field>
           <input matInput placeholder="Address" formControlName="secondCtrl" required>
-        </mat-form-field>
-        <div>
-          <button mat-button matStepperPrevious>Back</button>
-          <button mat-button matStepperNext>Next</button>
-        </div>
+        </mat-form-field> -->
       </form>
+    </mat-step>
+
+    <mat-step>
+      <ng-template matStepLabel>Done</ng-template>
+      You are now done.
     </mat-step>
     <mat-step>
       <ng-template matStepLabel>Done</ng-template>
       You are now done.
-      <div>
-        <button mat-button matStepperPrevious>Back</button>
-        <button mat-button (click)="stepper.reset()">Reset</button>
-      </div>
+
     </mat-step>
   </mat-vertical-stepper>
 
