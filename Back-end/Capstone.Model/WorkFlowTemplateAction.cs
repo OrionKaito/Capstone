@@ -11,6 +11,7 @@ namespace Capstone.Model
         public string Name { get; set; }
         public string Description { get; set; }
         public bool IsApprovedByLineManager { get; set; }
+        public bool IsApprovedByInitiator { get; set; }
         public string ToEmail { get; set; }
         public bool IsStart { get; set; }
         public bool IsEnd { get; set; }

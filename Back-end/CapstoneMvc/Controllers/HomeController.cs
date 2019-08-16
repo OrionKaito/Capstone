@@ -177,6 +177,12 @@ namespace CapstoneMvc.Controllers
                     }
                     else
                     {
+                        if (nextStep.IsApprovedByInitiator)
+                        {
+                            var initiator = _userManager.FindByIdAsync(request.InitiatorID).Result;
+                            PushNotificationToUser(initiator.Id, "Received Request", WebConstant.ReceivedRequestMessage, notification);
+                        }
+
                         if (nextStep.IsApprovedByLineManager)
                         {
                             var ownerID = _requestService.GetByID(model.RequestID).InitiatorID;
@@ -226,7 +232,7 @@ namespace CapstoneMvc.Controllers
                                     comments.Add(item.Key + i, item.Value);
                                 }
                             }
-                            
+
                             Dictionary<string, string> listButton = new Dictionary<string, string>();
                             var connections = _workFlowTemplateActionConnectionService.GetByFromWorkflowTemplateActionID(nextStep.ID);
                             string url = "";
