@@ -32,7 +32,7 @@ namespace Capstone.Service
             SmtpClient smtp = new SmtpClient();
             smtp.Host = "smtp.gmail.com";
             smtp.Port = 587;
-            smtp.Credentials = new NetworkCredential("dynamicworkflowteam@gmail.com", "dynamicworkflow12345678");
+            smtp.Credentials = new NetworkCredential("dynamicworkflowteam@gmail.com", "dynamicworkflow123456789");
             smtp.EnableSsl = true;
 
             MailMessage msg = new MailMessage();

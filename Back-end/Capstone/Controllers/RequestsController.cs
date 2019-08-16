@@ -299,7 +299,7 @@ namespace Capstone.Controllers
                     ActorID = userID,
                     NextStepID = model.NextStepID,
                     CreateDate = DateTime.Now,
-                    WorkFlowTemplateActionID = model.NextStepID,
+                    WorkFlowTemplateActionID = currentRequestAction.NextStepID,
                 };
 
                 _requestActionService.Create(requestAction);
@@ -459,6 +459,8 @@ namespace Capstone.Controllers
                     //Cập nhật request
                     request.IsCompleted = true;
                     request.CurrentRequestActionID = requestAction.ID;
+                    requestAction.Status = StatusEnum.Handled;
+                    _requestActionService.Save();
                     _requestService.Save();
 
                     //Notification
@@ -561,8 +563,10 @@ namespace Capstone.Controllers
 
                     var staffStatus = "";
 
+                    var toWorkflowTemplateActionConnection = _workFlowTemplateActionConnectionService.GetByToWorkflowTemplateActionID(staffAction.WorkFlowTemplateAction.ID);
+
                     staffStatus = _workFlowTemplateActionConnectionService
-                        .GetByFromIDAndToID(staffAction.WorkFlowTemplateAction.ID, staffAction.NextStep.ID)
+                        .GetByFromIDAndToID(staffAction.WorkFlowTemplateActionID.GetValueOrDefault(), staffAction.NextStep.ID)
                         .ConnectionType.Name;
 
                     StaffRequestActionVM staffRequestAction = new StaffRequestActionVM()

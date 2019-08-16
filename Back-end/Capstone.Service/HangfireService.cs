@@ -103,7 +103,15 @@ namespace Capstone.Service
                 //Kiểm tra giờ của requestAction nằm giữa giờ hiện tại và 5p sau của giờ hiện tại
                 if ((DateTime.Compare(resultTime, now) > 0) && (DateTime.Compare(resultTime, afterFiveMinutes) < 0))
                 {
-                    requestAction.Status = StatusEnum.Pending;
+                    if (!_workFlowTemplateActionRepository.GetByID(requestAction.NextStepID.GetValueOrDefault()).IsEnd)
+                    {
+                        requestAction.Status = StatusEnum.Handled;
+                    }
+                    else
+                    {
+                        requestAction.Status = StatusEnum.Pending;
+                    }
+
                     Save();
 
                     var workflowTemplateAction = _workFlowTemplateActionRepository.GetByID(requestAction.NextStepID.GetValueOrDefault());
@@ -173,10 +181,12 @@ namespace Capstone.Service
                 }
             }
         }
+
         public void Save()
         {
             _unitOfWork.Commit();
         }
+
         private async void PushNotificationToUser(string userID, string title, string body, Notification notification)
         {
             //get list user device by userID
