@@ -73,22 +73,38 @@
 
     <mat-step >
       <form >
-        <ng-template matStepLabel>Fill out your name</ng-template>
+        <ng-template matStepLabel>{{saveData.workFlowTemplateActionName}}</ng-template>
         <ul class="chien-ul">
-          <li class=chien-li1><strong>tên:</strong></li>
-          <li class=chien-li2>Phán lê quang chiến</li>
-          <li class=chien-li1><strong>tên:</strong></li>
-          <li class=chien-li2>Phán lê quang chiến</li>
+          <ng-container *ngFor="let item of requestActionHandleValue">
+              <li class=chien-li1><strong>{{item.key}}:</strong></li>
+              <li class=chien-li2>{{item.value}}</li>
+          </ng-container>
         </ul>
       </form>
     </mat-step>
 
-    <mat-step>
+    <mat-step *ngFor="let item of saveData.staffRequestActions">
       <form >
-        <ng-template matStepLabel>Fill out your address</ng-template>
+        <ng-template matStepLabel>{{item.workFlowActionName}}</ng-template>
         <!-- <mat-form-field>
           <input matInput placeholder="Address" formControlName="secondCtrl" required>
         </mat-form-field> -->
+
+        <ul class="list-comments">
+            <li>
+              <div class="card style-default-light">
+                <div class="comment-avatar"><i class="glyphicon glyphicon-user opacity-50"></i></div>
+                <div class="card-body">
+                  <h4 class="comment-title">Comment title <small>20/06/2013 at 4:02 pm</small></h4>
+                  <a class="btn btn-default-dark stick-top-right" href="#respond">Reply</a>
+                  <p>Etiam dui libero, tempor quis congue in, interdum eget tortor. Vivamus aliquam dictum lacus quis tincidunt.
+                    Phasellus rhoncus ante sollicitudin nisl consectetur ultricies. Sed rhoncus ullamcorper mauris, ac
+                    condimentum metus egestas ut. Nam et urna ante, vitae pretium lacus.</p>
+                </div>
+              </div>
+            </li>
+          </ul>
+          
       </form>
     </mat-step>
 
@@ -118,17 +134,6 @@
           <p>Etiam dui libero, tempor quis congue in, interdum eget tortor. Vivamus aliquam dictum lacus quis tincidunt.
             Phasellus rhoncus ante sollicitudin nisl consectetur ultricies. Sed rhoncus ullamcorper mauris, ac
             condimentum metus egestas ut. Nam et urna ante, vitae pretium lacus.</p>
-        </div>
-      </div>
-    </li>
-    <li>
-      <div class="card style-default-dark">
-        <div class="comment-avatar"><img class="img-circle" alt="" src="/assets/img/avatar1.jpg?1403934956"></div>
-        <div class="card-body">
-          <h4 class="comment-title">Comment title <small>20/06/2013 at 4:38 pm</small></h4>
-          <a class="btn btn-default-dark stick-top-right" href="#respond">Reply</a>
-          <p>Sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Integer ac magna lacinia
-            velit bibendum ornare. Morbi eget dui lectus, eget eleifend mi.</p>
         </div>
       </div>
     </li>
