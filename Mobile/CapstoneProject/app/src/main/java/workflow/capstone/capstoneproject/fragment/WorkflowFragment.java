@@ -155,7 +155,7 @@ public class WorkflowFragment extends Fragment {
                 if (workflowTemplatePaging.getWorkFlowTemplates().size() == 0) {
                     isNoNewData = true;
                     listView.removeFooterView(footerView);
-                    Toasty.success(getActivity(), "No new data", Toasty.LENGTH_SHORT).show();
+//                    Toasty.success(getActivity(), "No new data", Toasty.LENGTH_SHORT).show();
                 } else if (page == 1) {
                     listView.removeFooterView(footerView);
                     workflowList = workflowTemplatePaging.getWorkFlowTemplates();

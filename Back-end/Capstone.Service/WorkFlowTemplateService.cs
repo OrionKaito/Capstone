@@ -14,6 +14,7 @@ namespace Capstone.Service
         IEnumerable<WorkFlowTemplate> SearchByNameOnPermissionToUse(string search, Guid permissionID);
         WorkFlowTemplate GetByID(Guid ID);
         WorkFlowTemplate GetByName(string name);
+        int CountByIsDeleted();
         void Create(WorkFlowTemplate workflow);
         void Save();
         void BeginTransaction();
@@ -82,6 +83,11 @@ namespace Capstone.Service
         public void RollBack()
         {
             _unitOfWork.RollBack();
+        }
+
+        public int CountByIsDeleted()
+        {
+            return _workFlowTemplateRepository.GetAll().Where(w => w.IsDeleted == false).Count();
         }
     }
 }
