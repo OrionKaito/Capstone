@@ -1,6 +1,6 @@
-<div class="container-fluid" >
+<div class="container-fluid">
   <div class="import-json">
-    
+
     <div id="circularMenu" class="circular-menu">
 
       <a class="floating-btn" onclick="document.getElementById('circularMenu').classList.toggle('active');">
@@ -23,7 +23,16 @@
   </div>
   <div class="botton-left__table">
 
-
+    <table style="width:90% border=1px">
+      <!-- <tr>
+        <td colspan="2"> <input class="edit-inut" name="properties.isApprovedByLineManager"
+            [(ngModel)]="showNameArrow" (onChange)="initDraw()" type="checkbox">Show name of arrow</td>
+      </tr> -->
+      <tr>
+        <td colspan="2"><input class="edit-inut" name="approveByPer" [(ngModel)]="showNamePer"
+            type="checkbox">Show handler</td>
+      </tr>
+    </table>
     <div class="d-flex flex-column bd-highlight md-1">
       <div class="p-1 bd-highlight d-flex justify-content-center">
         <button mdbBtn mdbWavesEffect (click)="saveDraf()">Save draft</button></div>
@@ -81,7 +90,7 @@
       </tr>
       <tr *ngIf="checkIsAction && !properties.isStart && !properties.isEnd">
         <td colspan="2"> <input class="edit-inut" name="properties.isApprovedByLineManager"
-            [(ngModel)]="properties.isApprovedByLineManager" type="checkbox">Manager Approve</td>
+            [(ngModel)]="properties.isApprovedByLineManager" type="checkbox">Approve by Manager</td>
       </tr>
       <tr *ngIf="checkIsAction && !properties.isStart && !properties.isEnd">
         <td colspan="2"><input class="edit-inut" name="approveByPer" [(ngModel)]="properties.approveByPer"
@@ -122,38 +131,54 @@
       </tr> -->
       <tr *ngIf="checkIsArrow">
         <!-- <td>Name arrow</td> -->
-        <td class="d-flex align-items-center">
+        <mat-form-field class="example-full-width">
+            <input matInput placeholder="Name arrow:" name="propertiesArr.name" [(ngModel)]="propertiesArr.name" type="text">
+        </mat-form-field>
+        <!-- <td class="d-flex align-items-center">
           <div class="mr-3">Name arrow: </div>
-          <input type="text" [(ngModel)]="propertiesArr.name">
+          <input type="text" [(ngModel)]="propertiesArr.name"> -->
           <!-- <mat-form-field style="width: 50%; ">
             <mat-select name="propertiesArr.name" [disabled]="true" [(ngModel)]="propertiesArr.name">
               <mat-option  *ngFor="let item of listConnectionType" value="{{item.id}}">{{item.name}}</mat-option>
             </mat-select>
           </mat-form-field> -->
 
-        </td>
+
       </tr>
       <tr *ngIf="checkIsArrow">
         <!-- <td>Name arrow</td> -->
-        <td class="d-flex align-items-center">
+        <!-- <td class="d-flex align-items-center">
 
           <div class="mr-3">Timer (Time delay): </div>
-          <input type="number" [(ngModel)]="propertiesArr.timeInterval">
+          <input type="number" [(ngModel)]="propertiesArr.timeInterval"> -->
 
-        </td>
+          <mat-form-field class="example-full-width">
+              <input matInput placeholder="Timer" name="propertiesArr.timeInterval" [(ngModel)]="propertiesArr.timeInterval" type="number">
+          </mat-form-field>
+        <!-- </td> -->
       </tr>
       <tr *ngIf="checkIsArrow">
         <!-- <td>Name arrow</td> -->
-        <td class="d-flex align-items-center">
+        <!-- <mat-form-field class="example-full-width">
+          <mat-lable >Type</mat-lable>
+          <mat-select name="typeTimer" [(ngModel)]="propertiesArr.type">
+            <mat-option value="1">Phút</mat-option>
+            <mat-option value="2">Giờ </mat-option>
+            <mat-option value="3">Ngày</mat-option>
+          </mat-select>
+        </mat-form-field> -->
 
-          <div class="mr-3">Type</div>
+        
+        <mat-form-field class="example-full-width">
+            <mat-label>Type</mat-label>
+            <mat-select name="typeTimer" [(ngModel)]="propertiesArr.type">
+              <mat-option value="1">Phút</mat-option>
+              <mat-option value="2">Giờ</mat-option>
+              <mat-option value="3">Ngày</mat-option>
+              
+            </mat-select>
+          </mat-form-field>
 
-          <select [(ngModel)]="propertiesArr.type">
-            <option value="1">Phút</option>
-            <option value="2">Giờ </option>
-            <option value="3">Ngày</option>
-          </select>
-        </td>
       </tr>
     </table>
   </div>
@@ -176,17 +201,19 @@
 
 
     <div class="col-10 content-body">
-      <div *ngFor="let item of menuList1" (mouseover)="item.showIcon=true" style="position:absolute" [style.top.px]="item.positionTop"
-        [style.left.px]="item.positionLeft" class="{{item.class}} addtextaction" id="{{item.id}}" (click)="showProperties(item)">
-        <mdb-icon *ngIf="item.showIcon" fas icon="times" class="deleteShape" (click)="dialogConfirmDelete(item)"></mdb-icon>
+      <div *ngFor="let item of menuList1" (mouseover)="item.showIcon=true" style="position:absolute"
+        [style.top.px]="item.positionTop" [style.left.px]="item.positionLeft" class="{{item.class}} addtextaction"
+        id="{{item.id}}" (click)="showProperties(item)">
+        <mdb-icon *ngIf="item.showIcon" fas icon="times" class="deleteShape" (click)="dialogConfirmDelete(item)">
+        </mdb-icon>
 
 
-<!--          <div class="start-action"></div>-->
+        <!--          <div class="start-action"></div>-->
 
 
         <div class="md-form form-sm" id="{{item.idInput}}">
-          <input mdbInput type="text" style="text-align:center;" name="item.name" [(ngModel)]="item.name"
-            class="form-control form-control-sm" placeholder="input text">
+          <input class="border-0" type="text" style="text-align:center; font-size: 13px;" name="item.name"
+            [(ngModel)]="item.name" placeholder="input text">
           <!-- <span *ngIf="item.class ==='example-box'">start</span>
           <span *ngIf="item.class ==='example-box3'">end</span> -->
 
@@ -203,36 +230,55 @@
             <div class="btn-end" (click)="endShape(item)" [class.disabled]="!item.end"></div>
           </div> -->
 
-        </div >
+        </div>
         <mdb-icon *ngIf="item.showIcon" fas icon="plus" class="draw-arrow" (click)="dropImageBottom(item)"></mdb-icon>
 
         <!-- <mat-form-field class="add-input">
           <input matInput id="{{'imput'+item.index}}" placeholder="Favorite food" value="">
            
         </mat-form-field> -->
-        <!-- <h3 class="add-input" style="text-align:center;"  id="{{'imput'+item.index}}"> abc</h3> -->
+        <i *ngIf="showNamePer" class="add-input" style="text-align:left;" id="{{'imput'+item.index}}">
+          <p *ngIf="item.isStart">
+            <ng-container *ngFor="let item1 of listDropdown">
+              <ng-container *ngIf="perCreater==item1.id">{{item1.name}}</ng-container>
+            </ng-container>
+          </p>
+          <p *ngIf="item.isApprovedByLineManager">Line Manager</p>
+          <p *ngIf="item.approveByPer">
+            <ng-container *ngFor="let item1 of listDropdown">
+              <ng-container *ngIf="item.permissionToUseID==item1.id">{{item1.name}}</ng-container>
+            </ng-container>
+
+          </p>
+          <p *ngIf="item.appoveByMail">{{item.toEmail}}</p>
+        </i>
+
+        <!-- <i class="add-input" style="text-align:center;"  id="{{'imput'+item.index}}">chiến đẹp traiasdasdasdasád</i> -->
       </div>
 
-      <svg (mouseover)="allIconFalse()" [ngStyle]="{'background' : 'url(./assets/img/background_draw.png)'}"  (click)="clearConnect()" id="body-svg" xmlns="http://www.w3.org/2000/svg"
-        style="position:absolute;left:0px;top:0px" width="100%"   [attr.height]="heightSVG">
+      <svg (mouseover)="allIconFalse()" [ngStyle]="{'background' : 'url(./assets/img/background_draw.png)'}"
+        (click)="clearConnect()" id="body-svg" xmlns="http://www.w3.org/2000/svg"
+        style="position:absolute;left:0px;top:0px" width="100%" [attr.height]="heightSVG">
 
         <defs>
-          <marker id="arrowhead" viewBox="0 0 10 10" refX="70" refY="5" markerWidth="10" markerHeight="10" orient="auto">
+          <marker id="arrowhead" viewBox="0 0 10 10" refX="70" refY="5" markerWidth="10" markerHeight="10"
+            orient="auto">
             <path d="M 0 0 L 10 5 L 0 10 z" />
           </marker>
         </defs>
         <ng-container *ngFor="let item of listArrow; index as i">
-        <g fill="none" stroke="#000000" stroke-miterlimit="10" marker-end="url(#arrowhead)">
-          
+          <g fill="none" stroke="#000000" stroke-miterlimit="10" marker-end="url(#arrowhead)">
+
             <path id="{{item}}" (click)="openDialog(item)" />
             <!-- https://www.w3.org/TR/SVG/text.html#TextElement -->
-            
-            <text border="none" font-family="Verdana" font-size="12" stroke="blue" stroke-width="0.1" fill="blue" id="text{{item}}" (click)="openDialog(item)">
+
+            <text *ngIf="showNameArrow" border="none" font-family="Verdana" font-size="12" stroke="blue" stroke-width="0.1" fill="blue"
+              id="text{{item}}" (click)="openDialog(item)">
               {{listClass[i].name}}
             </text>
-        </g>
+          </g>
 
-      </ng-container>
+        </ng-container>
       </svg>
 
 

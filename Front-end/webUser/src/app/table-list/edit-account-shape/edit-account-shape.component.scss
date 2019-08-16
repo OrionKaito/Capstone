@@ -2,7 +2,11 @@
 .example-box1 .deleteShape {
   right: -18px;
 }
+.input-no-border{
+  border: none;
+}
 .example-box1 .add-input{
+  border: 0 !important;
   transform: rotate(45deg);
   -webkit-transform: rotate(45deg);
   -moz-transform: rotate(45deg);
@@ -56,8 +60,8 @@
 }
 
 .example-box input, .example-box1 input, .example-box3 input {
-  max-width: 90%;
-  margin-left: 5px;
+  max-width: 100%;
+  margin-left: 1px;
 }
 
 
@@ -623,12 +627,40 @@
 
 
 .addcallBorder {
-  border: 3px solid transparent;
+  border: 3px solid red !important;
 }
-
-.add-input{
-  position: absolute;
-  top: 90%;
-  left: -47%;
+.example-box{
+  .add-input{
+    font-size: 13.5px;
+    word-wrap: break-word;
+    white-space: nowrap;
+    width: 100%;
+    height: 15px;
+    position: absolute;
+    top: 100%;
+    left: -10%;
+    p{
+      height: 15px;
+      margin: 0;
+      top: 0;
+    }
+  }
+}
+.example-box1{
+  .add-input{
+    font-size: 13.5px;
+    word-wrap: break-word;
+    white-space: nowrap;
+    width: 100%;
+    height: 15px;
+    position: absolute;
+    top: 71%;
+    left: -50%;
+    p{
+      height: 15px;
+      margin: 0;
+      top: 0;
+    }
+  }
 }
 

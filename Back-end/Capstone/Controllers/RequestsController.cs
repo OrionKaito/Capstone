@@ -181,6 +181,12 @@ namespace Capstone.Controllers
                 }
                 else
                 {
+                    if (workflowTemplateAction.IsApprovedByInitiator)
+                    {
+                        var initiator = _userManager.FindByIdAsync(request.InitiatorID).Result;
+                        PushNotificationToUser(initiator.Id, "Received Request", WebConstant.ReceivedRequestMessage, notification);
+                    }
+
                     if (workflowTemplateAction.IsApprovedByLineManager)
                     {
                         var manager = _userManager.FindByIdAsync(userID).Result;
@@ -191,6 +197,7 @@ namespace Capstone.Controllers
                             PushNotificationToUser(managerID, "Received Request", WebConstant.ReceivedRequestMessage, notification);
                         }
                     }
+
                     if (workflowTemplateAction.PermissionToUseID.HasValue)
                     {
                         var users = _userService.GetUsersByPermissionID(workflowTemplateAction.PermissionToUseID.GetValueOrDefault());
@@ -203,6 +210,7 @@ namespace Capstone.Controllers
                             }
                         }
                     }
+
                     if (!workflowTemplateAction.ToEmail.IsNullOrEmpty())
                     {
                         var requestValue = _requestValueService.GetByRequestActionID(requestAction.ID);
@@ -370,6 +378,12 @@ namespace Capstone.Controllers
                     }
                     else
                     {
+                        if (nextStep.IsApprovedByInitiator)
+                        {
+                            var initiator = _userManager.FindByIdAsync(request.InitiatorID).Result;
+                            PushNotificationToUser(initiator.Id, "Received Request", WebConstant.ReceivedRequestMessage, notification);
+                        }
+
                         if (nextStep.IsApprovedByLineManager)
                         {
                             var ownerID = _requestService.GetByID(model.RequestID).InitiatorID;
@@ -424,7 +438,7 @@ namespace Capstone.Controllers
                                     comments.Add(item.Key + i, item.Value);
                                 }
                             }
-                            
+
                             Dictionary<string, string> listButton = new Dictionary<string, string>();
                             var connections = _workFlowTemplateActionConnectionService.GetByFromWorkflowTemplateActionID(nextStep.ID);
                             string url = "";
@@ -700,12 +714,30 @@ namespace Capstone.Controllers
                     });
                 }
             }
-            
+
+            var requestApproveByInitiator = _requestService.GetRequestToApproveByInitiator(userID);
+
+            foreach (var item in requestApproveByInitiator)
+            {
+                requests.Add(new RequestVM
+                {
+                    ID = item.ID,
+                    CreateDate = item.CreateDate.GetValueOrDefault(),
+                    Description = item.Description,
+                    InitiatorID = item.InitiatorID,
+                    InitiatorName = item.Initiator.FullName,
+                    WorkFlowTemplateID = item.WorkFlowTemplateID,
+                    WorkFlowTemplateName = item.WorkFlowTemplate.Name,
+                    RequestActionID = item.CurrentRequestActionID,
+                });
+            }
+
             var allRequestApproveByUser = requests.OrderByDescending(r => r.CreateDate).ToList();
 
             if (allRequestApproveByUser.IsNullOrEmpty())
             {
-                return Ok(new RequestPaginVM{
+                return Ok(new RequestPaginVM
+                {
                     Requests = new List<RequestVM>()
                 });
             }
@@ -752,6 +784,7 @@ namespace Capstone.Controllers
                 {
                     RequestFiles = requestFiles,
                     RequestValues = userRequestValues,
+                    WorkFlowActionName = userAction.WorkFlowTemplateAction.Name,
                 };
 
                 //Lấy phần thông tin của những người duyệt trước

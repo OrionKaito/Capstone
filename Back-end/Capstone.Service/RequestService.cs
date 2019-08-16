@@ -13,6 +13,7 @@ namespace Capstone.Service
         IEnumerable<Request> GetAll();
         IEnumerable<Request> GetRequestToApproveByPermissions(List<Guid> permissions);
         IEnumerable<Request> GetRequestToApproveByLineManager();
+        IEnumerable<Request> GetRequestToApproveByInitiator(string userID);
         IEnumerable<Request> GetByUserID(string ID);
         Request GetByID(Guid ID);
         int CountMyRequest(string ID);
@@ -108,7 +109,7 @@ namespace Capstone.Service
 
         public IEnumerable<Request> GetRequestToApproveByLineManager()
         {
-            var pendingRequestAction = _requestActionRepository.GetMany(r => r.Status == StatusEnum.Pending 
+            var pendingRequestAction = _requestActionRepository.GetMany(r => r.Status == StatusEnum.Pending
             && r.NextStep.IsApprovedByLineManager == true);
 
             List<Request> result = new List<Request>();
@@ -124,6 +125,21 @@ namespace Capstone.Service
         public int CountMyRequest(string ID)
         {
             return _requestRepository.CountMyRequest(ID);
+        }
+
+        public IEnumerable<Request> GetRequestToApproveByInitiator(string userID)
+        {
+            var pendingRequestAction = _requestActionRepository.GetMany(r => r.Status == StatusEnum.Pending
+            && r.NextStep.IsApprovedByInitiator == true && r.Request.InitiatorID == userID);
+
+            List<Request> result = new List<Request>();
+
+            foreach (var requestAction in pendingRequestAction)
+            {
+                result.Add(requestAction.Request);
+            }
+
+            return result;
         }
     }
 }
