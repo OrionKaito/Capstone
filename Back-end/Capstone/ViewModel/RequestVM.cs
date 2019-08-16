@@ -138,6 +138,8 @@ namespace Capstone.ViewModel
         public string Status { get; set; }
 
         public IEnumerable<RequestValueVM> RequestValues { get; set; }
+
+        public string WorkFlowActionName { get; set; }
     }
 
     public class RequestResultVM
