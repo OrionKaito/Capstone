@@ -855,7 +855,7 @@ namespace Capstone.Controllers
                     ActionType = _mapper.Map<ActionTypeVM>(actionType),
                     Request = _mapper.Map<RequestVM>(request),
                     UserRequestAction = userRequestAction,
-                    StaffRequestActions = staffRequestActions,
+                    StaffRequestActions = request.WorkFlowTemplate.IsViewDetail == true ? staffRequestActions : new List<StaffRequestActionVM>(),
                 };
 
                 return Ok(form);
