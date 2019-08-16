@@ -1,5 +1,4 @@
-﻿using Capstone.Model;
-using System;
+﻿using System;
 using System.Collections.Generic;
 
 namespace Capstone.ViewModel
@@ -125,6 +124,8 @@ namespace Capstone.ViewModel
         public IEnumerable<RequestFileVM> RequestFiles { get; set; }
 
         public IEnumerable<RequestValueVM> RequestValues { get; set; }
+
+        public string WorkFlowActionName { get; set; }
     }
 
     public class StaffRequestActionVM
