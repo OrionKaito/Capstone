@@ -18,11 +18,28 @@
   </div>
   <h3>Detail:</h3>
   <ul class="timeline">
-    
+
+
+
+    <li>
+      <div class="timeline-badge success"><i class="glyphicon glyphicon-check"></i>Start</div>
+      <div class="timeline-panel">
+        <div class="timeline-heading">
+          <h4 class="timeline-title">Send request for <i>{{this.data.name}}</i> </h4>
+          <p><small class="text-muted"><i class="glyphicon glyphicon-time"></i> {{this.data.date}}</small></p>
+        </div>
+        <!-- <div class="timeline-body">
+          <p>By {{item.fullName}} ({{item.userName}})</p>
+        </div> -->
+      </div>
+    </li>
+
+
+
     <ng-container *ngFor="let item of yourRequest.staffResult; index as ind">
 
-      <li *ngIf="ind%4 == 0">
-        <div class="timeline-badge"><i class="glyphicon glyphicon-check"></i> {{ind}}</div>
+      <li *ngIf="ind%4 == 0" class="timeline-inverted">
+        <div class="timeline-badge"><i class="glyphicon glyphicon-check"></i> {{ind+1}}</div>
         <div class="timeline-panel">
           <div class="timeline-heading">
             <h4 class="timeline-title">{{item.status}}</h4>
@@ -30,12 +47,14 @@
           </div>
           <div class="timeline-body">
             <p>By {{item.fullName}} ({{item.userName}})</p>
+            <p *ngIf="item.requestValues.length>0">Comment</p>
+            <p *ngFor="let item1 of item.requestValues">{{item1.value}} </p>
           </div>
         </div>
       </li>
 
-      <li *ngIf="ind%4 == 1" class="timeline-inverted">
-          <div class="timeline-badge warning"><i class="glyphicon glyphicon-credit-card"></i> {{ind}}</div>
+      <li *ngIf="ind%4 == 1">
+          <div class="timeline-badge warning"><i class="glyphicon glyphicon-credit-card"></i> {{ind+1}}</div>
           <div class="timeline-panel">
             <div class="timeline-heading">
               <h4 class="timeline-title">{{item.status}}</h4>
@@ -43,12 +62,14 @@
             </div>
             <div class="timeline-body">
               <p>By {{item.fullName}} ({{item.userName}})</p>
+              <p *ngIf="item.requestValues.length>0">Comment</p>
+              <p *ngFor="let item1 of item.requestValues">{{item1.value}} </p>
             </div>
           </div>
         </li>
 
-        <li *ngIf="ind%4 == 2">
-            <div class="timeline-badge danger"><i class="glyphicon glyphicon-check"></i> {{ind}}</div>
+        <li *ngIf="ind%4 == 2" class="timeline-inverted">
+            <div class="timeline-badge danger"><i class="glyphicon glyphicon-check"></i> {{ind+1}}</div>
             <div class="timeline-panel">
               <div class="timeline-heading">
                 <h4 class="timeline-title">{{item.status}}</h4>
@@ -56,12 +77,14 @@
               </div>
               <div class="timeline-body">
                 <p>By {{item.fullName}} ({{item.userName}})</p>
+                <p *ngIf="item.requestValues.length>0">Comment</p>
+                <p *ngFor="let item1 of item.requestValues">{{item1.value}} </p>
               </div>
             </div>
           </li>
 
-          <li *ngIf="ind%4 == 3" class="timeline-inverted">
-              <div class="timeline-badge info"><i class="glyphicon glyphicon-check"></i>{{ind}}</div>
+          <li *ngIf="ind%4 == 3" >
+              <div class="timeline-badge info"><i class="glyphicon glyphicon-check"></i>{{ind+1}}</div>
               <div class="timeline-panel">
                 <div class="timeline-heading">
                   <h4 class="timeline-title">{{item.status}}</h4>
@@ -69,12 +92,23 @@
                 </div>
                 <div class="timeline-body">
                   <p>By {{item.fullName}} ({{item.userName}})</p>
+                  <p *ngIf="item.requestValues.length>0">Comment</p>
+                  <p *ngFor="let item1 of item.requestValues">{{item1.value}} </p>
                 </div>
               </div>
             </li>
 
     </ng-container>
-
+    <ng-container *ngIf="this.data.isComplete">
+    <li >
+        <div class="timeline-badge danger"><i class="glyphicon glyphicon-check"></i>End</div>
+    </li>
+    </ng-container>
+    <ng-container *ngIf="!this.data.isComplete">
+        <li >
+            <div class="timeline-badge warning"><i class="glyphicon glyphicon-check"></i>Wait</div>
+        </li>
+      </ng-container>
     <!-- <li>
       <div class="timeline-badge"><i class="glyphicon glyphicon-check"></i> 1</div>
       <div class="timeline-panel">

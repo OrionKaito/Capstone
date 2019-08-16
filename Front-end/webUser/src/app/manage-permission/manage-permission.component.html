@@ -6,7 +6,7 @@
                     <div class="card-header card-header-danger">
                         <div class="hal-div">
                             <h4 class="card-title ">Permission list</h4>
-                            <p class="card-category">List of workflow in the system</p>
+                            <p class="card-category">List of Permission in the system</p>
                         </div>
                         <div class="hal2-div">
                             <div class="search-div">
@@ -25,8 +25,8 @@
                         </div>
                         <div class="hal3-div">
                             <button (click)="AddOrEditWF(null)" mat-raised-button>
-                                <mat-icon>add</mat-icon>
-                            </button>Create
+                                <mat-icon matTooltip="Add new Permission">add</mat-icon>
+                            </button>
                         </div>
                     </div>
 
@@ -46,13 +46,13 @@
                                     <mat-header-cell *matHeaderCellDef></mat-header-cell>
                                     <mat-cell *matCellDef="let element">
                                         <td *ngIf="element.isDeleted;  else elseBlock">
-                                            <button (click)="banOrUnbanAcc(element.id)" mat-icon-button color="primary"
-                                                matTooltip="De-Active Permission">
-                                                <mat-icon id="element.id">check_circle_outline</mat-icon>
+                                            <button (click)="banOrUnbanAcc(element.id)" mat-icon-button color="warn"
+                                                matTooltip="Active Permission">
+                                                <mat-icon id="element.id">block</mat-icon>
                                             </button></td>
                                         <ng-template #elseBlock><button (click)="banOrUnbanAcc(element.id)"
-                                                mat-icon-button color="warn" matTooltip="Active Permission">
-                                                <mat-icon id="element.id">block</mat-icon>
+                                                mat-icon-button color="primary" matTooltip="De-Active Permission">
+                                                <mat-icon id="element.id">check_circle_outline</mat-icon>
                                             </button>
                                         </ng-template>
                                         <button (click)="AddOrEditWF(element.id)" mat-icon-button

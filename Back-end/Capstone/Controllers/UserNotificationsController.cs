@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
-using Capstone.Helper;
 using Capstone.Model;
 using Capstone.Service;
+using Capstone.Service.Helper;
 using Capstone.ViewModel;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -249,8 +249,7 @@ namespace Capstone.Controllers
                         NotificationType = notificationInDb.NotificationType,
                         NotificationTypeName = notificationInDb.NotificationType.ToString(),
                         CreateDate = notificationInDb.CreateDate,
-                        IsRead = item.IsRead,
-                        IsHandled = notificationInDb.IsHandled
+                        IsRead = item.IsRead
                     };
                     data.Add(result);
                 }
@@ -266,8 +265,7 @@ namespace Capstone.Controllers
                         NotificationType = notificationInDb.NotificationType,
                         NotificationTypeName = notificationInDb.NotificationType.ToString(),
                         CreateDate = notificationInDb.CreateDate,
-                        IsRead = item.IsRead,
-                        IsHandled = notificationInDb.IsHandled
+                        IsRead = item.IsRead
                     };
                     data.Add(result);
                 }

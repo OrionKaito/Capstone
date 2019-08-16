@@ -1,89 +1,100 @@
 <!-- <h2 class="txtdeepshadow">
 
 </h2> -->
-<mat-dialog-content class="mat-typography">
-    <!-- <h4 class="dispaly-4">Name form:  <input name="nameForm" type="text" [(ngModel)]="nameForm"> -->
 
-    <mat-form-field class="example-full-width">
-        <input matInput placeholder="Name form" name="nameForm" type="text" [(ngModel)]="nameForm">
-    </mat-form-field>
+<!-- <h4 class="dispaly-4">Name form:  <input name="nameForm" type="text" [(ngModel)]="nameForm"> -->
 
-    <!-- <div (click)="closeForm()" class="icon-head-pup">
+<mat-dialog-content class="mat-typography"> 
+<mat-form-field>
+    <input [formControl]="validateInput" matInput placeholder="Name form" name="nameForm" type="text"
+        [(ngModel)]="nameForm">
+    <mat-error *ngIf="validateInput.hasError('required')">
+        Form Name is <strong>required</strong>
+    </mat-error>
+</mat-form-field>
+
+<!-- <div (click)="closeForm()" class="icon-head-pup">
         <button type="button" [mat-dialog-close]><i class="fa fa-close"></i>
         </button>
       </div> -->
 
-    <!-- </h4> -->
-    <!-- <hr> -->
-    <div class="form-row">
-        <!-- <div class="col-md-6">
+<!-- </h4> -->
+<!-- <hr> -->
+<div class="form-row">
+    <!-- <div class="col-md-6">
           Name property:
           <input name="nameHere" type="text" [(ngModel)]="nameHere">
         </div> -->
 
-        <mat-form-field class="example-full-width">
-            <input matInput placeholder="Name property" name="nameHere" type="text" [(ngModel)]="nameHere">
-        </mat-form-field>
+    <mat-form-field class="example-full-width">
+        <input [formControl]="validatePro" matInput placeholder="Name property" name="nameHere" type="text"
+            [(ngModel)]="nameHere">
+        <mat-error *ngIf="validatePro.hasError('required')">
+            Name property is <strong>required</strong>
+        </mat-error>
+    </mat-form-field>
 
-        <div class="col-md-6 d-flex">
-            <div>
-                <mat-form-field class="example-full-width">
-                    <mat-label>Type</mat-label>
-                    <mat-select name="propertiesThis" [(ngModel)]="propertiesThis">
-                        <mat-option value="0">-Select-</mat-option>
-                        <mat-option value="1">Label</mat-option>
-                        <mat-option value="2">Text</mat-option>
-                        <mat-option value="3">Text Area</mat-option>
-                        <mat-option value="4">Combo box</mat-option>
-                        <mat-option value="5">Check Box</mat-option>
-                    </mat-select>
-                </mat-form-field>
-            </div>
-        </div>
-
-        <div class="Addbtn-dynamic">
-            <button class="btn-dynamic" type="button" mdbWavesEffect mdbBtn color="secondary"
-                    (click)="addProperties(nameHere, propertiesThis)">Add Property
-            </button>
-        </div>
-
-    </div>
-    <div *ngIf="propertiesThis == 4" class="form-row">
-
-
-        <mat-form-field class="example-full-width">
-            <mat-label>Review</mat-label>
-            <mat-select value="0">
-                <mat-option value="0">-Select-</mat-option>
-                <mat-option *ngFor="let item of listCb; index as j">{{item}}
-                    <a (click)="deleteThisOption(j)" class="icon-head-pup">
-                        <i class="fa fa-close"></i>
-                    </a></mat-option>
-            </mat-select>
-        </mat-form-field>
-
-
-        <div class="col-md-6 d-flex">
-
-            <!-- Add option:
-            <input name="nameOfCb" type="text" [(ngModel)]="nameOfCb"> -->
+    <div class="col-md-6 d-flex">
+        <div>
             <mat-form-field class="example-full-width">
-                <input matInput placeholder="Add option:" name="nameOfCb" type="text" [(ngModel)]="nameOfCb">
+                <mat-label>Type</mat-label>
+                <mat-select name="propertiesThis" [(ngModel)]="propertiesThis">
+                    <mat-option value="0">-Select-</mat-option>
+                    <mat-option value="1">Label</mat-option>
+                    <mat-option value="2">Text</mat-option>
+                    <mat-option value="3">Text Area</mat-option>
+                    <mat-option value="4">Combo box</mat-option>
+                    <mat-option value="5">Check Box</mat-option>
+                </mat-select>
             </mat-form-field>
-
         </div>
-        <div class="Addbtn-dynamic">
-            <button class="icon-head-pup btn-dynamic" mdbWavesEffect mdbBtn color="secondary"
-                    (click)="addToCb(nameOfCb)">Add
-                option
-            </button>
-        </div>
-
     </div>
 
-    <hr>
-    <!-- <form #form="ngForm" autocomplete="off" (submit)="onSubmit()"> -->
+    <div class="Addbtn-dynamic">
+        <button class="btn-dynamic" type="button" mdbWavesEffect mdbBtn color="secondary"
+            (click)="addProperties(nameHere, propertiesThis)">Add Property
+        </button>
+    </div>
 
+</div>
+<div *ngIf="propertiesThis == 4" class="form-row">
+
+
+    <mat-form-field class="example-full-width">
+        <mat-label>Review</mat-label>
+        <mat-select [(ngModel)]="cbProperty">
+            <mat-option value="0">-Select-</mat-option>
+            <mat-option *ngFor="let item of listCb; index as j" value="{{item}}">{{item}}
+                <a (click)="deleteThisOption(j)" class="icon-head-pup">
+                    <i class="fa fa-close"></i>
+                </a></mat-option>
+        </mat-select>
+    </mat-form-field>
+
+
+    <div class="col-md-6 d-flex">
+
+        <!-- Add option:
+            <input name="nameOfCb" type="text" [(ngModel)]="nameOfCb"> -->
+        <mat-form-field class="example-full-width">
+            <input [formControl]="addobtion" matInput placeholder="Add option:" name="nameOfCb" type="text"
+                [(ngModel)]="nameOfCb">
+            <mat-error *ngIf="addobtion.hasError('required')">
+                Add obtion property is <strong>required</strong>
+            </mat-error>
+        </mat-form-field>
+
+    </div>
+    <div class="Addbtn-dynamic">
+        <button class="icon-head-pup btn-dynamic" mdbWavesEffect mdbBtn color="secondary"
+            (click)="addToCb(nameOfCb)">Add
+            option
+        </button>
+    </div>
+
+</div>
+<!-- </mat-dialog-content> 
+<mat-dialog-content class="mat-typography"> -->
     <div *ngFor="let item of listComboElement; index as i" class="form-row dynamic-warpper">
         <div *ngIf="item.textOnly.name" class="form-group col-md-11">
             <h4 class=" {{item.textOnly.class}}">{{item.textOnly.name}}</h4>
@@ -102,8 +113,8 @@
             <input [(ngModel)]="item.longText.value" type="text" class="shortText-dynamicForm"> -->
 
             <mat-form-field class="example-full-width">
-        <textarea matInput placeholder="{{item.longText.name}}" [(ngModel)]="item.longText.value"
-                  type="text"></textarea>
+                <textarea matInput placeholder="{{item.longText.name}}" [(ngModel)]="item.longText.value"
+                    type="text"></textarea>
             </mat-form-field>
 
         </div>
@@ -132,11 +143,12 @@
     </div> -->
 
 </mat-dialog-content>
+
 <mat-dialog-actions align="end">
     <button type="button" mdbBtn color="secondary" class="waves-light btn-dynamic" aria-label="Close" mat-dialog-close
-            mdbWavesEffect>Close
+        mdbWavesEffect>Close
     </button>
     <button mdbBtn [mat-dialog-close]="true" mdbWavesEffect color="secondary" class="btn-dynamic"
-            (click)="createNewForm()">Tạo form
+        (click)="createNewForm()">Tạo form
     </button>
 </mat-dialog-actions>

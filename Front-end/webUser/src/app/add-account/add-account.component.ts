@@ -6,6 +6,7 @@ import { inject } from '@angular/core/testing';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
 import { LoginService } from 'app/service/login.service';
 import { ToastrService } from 'ngx-toastr';
+import {FormControl, Validators} from '@angular/forms';
 
 @Component({
   selector: 'app-add-account',
@@ -100,5 +101,10 @@ export class AddAccountComponent implements OnInit {
 
     }
   }
-
+  emailFormControl = new FormControl('', [
+    Validators.required
+  ]);
+  descriptionFormControl = new FormControl('', [
+    Validators.required
+  ]);
 }

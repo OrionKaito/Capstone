@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
-using Capstone.Helper;
 using Capstone.Model;
 using Capstone.Service;
+using Capstone.Service.Helper;
 using Capstone.ViewModel;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -228,6 +228,11 @@ namespace Capstone.Controllers
             var workFlowInDb = _workFlowService.GetByID(ID);
             if (workFlowInDb == null) return BadRequest(WebConstant.NotFound);
 
+            if (workFlowInDb.IsCheckConnection == false)
+            {
+                return BadRequest(WebConstant.ToggleWorkflowFail);
+            }
+
             try
             {
                 if (workFlowInDb.IsEnabled == true)
@@ -276,6 +281,8 @@ namespace Capstone.Controllers
                         Name = workFlowInDB.Name,
                         OwnerID = workFlowInDB.OwnerID,
                         PermissionToUseID = workFlowInDB.PermissionToUseID,
+                        CreateDate = DateTime.Now,
+                        IsCheckConnection = true
                     };
                     _workFlowService.Create(workFlow);
 
@@ -283,6 +290,7 @@ namespace Capstone.Controllers
                 }
                 else
                 {
+                    workFlowInDB.IsCheckConnection = true;
                     workFlowInDB.Data = model.Data;
                 }
 
@@ -307,14 +315,23 @@ namespace Capstone.Controllers
                         connectionTypeInDb = connectionType;
                     }
 
-                    WorkFlowTemplateActionConnection workflowConnection = new WorkFlowTemplateActionConnection
+                    if (connection.TimeInterval < 0)
                     {
-                        ConnectionTypeID = connectionTypeInDb.ID,
-                        FromWorkFlowTemplateActionID = connection.FromWorkFlowTemplateActionID,
-                        ToWorkFlowTemplateActionID = connection.ToWorkFlowTemplateActionID,
-                    };
+                        return BadRequest(WebConstant.InvalidTimeInterval);
+                    }
+                    else
+                    {
+                        WorkFlowTemplateActionConnection workflowConnection = new WorkFlowTemplateActionConnection
+                        {
+                            ConnectionTypeID = connectionTypeInDb.ID,
+                            FromWorkFlowTemplateActionID = connection.FromWorkFlowTemplateActionID,
+                            ToWorkFlowTemplateActionID = connection.ToWorkFlowTemplateActionID,
+                            TimeInterval = connection.TimeInterval,
+                            Type = connection.Type
+                        };
 
-                    _workFlowTemplateActionConnectionService.Create(workflowConnection);
+                        _workFlowTemplateActionConnectionService.Create(workflowConnection);
+                    }
                 }
 
                 _workFlowService.CommitTransaction();

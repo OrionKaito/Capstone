@@ -113,9 +113,9 @@
                     <div class="form-group">
                         <input type="submit" value="{{ nameOfsummit }}" class="btn btn-primary">
                     </div>
-                    <div *ngIf="errorMessage" class="alert alert-danger error-msg">
-                        <div class="error">{{ errorMessage }}</div>
-                    </div>
+<!--                    <div *ngIf="errorMessage" class="alert alert-danger error-msg">-->
+<!--                        <div class="error">{{ errorMessage }}</div>-->
+<!--                    </div>-->
                 </form>
             </ng-container>
 
@@ -130,7 +130,7 @@
                                placeholder="Email" autocomplete="off">
                     </div>
                     <div class="form-group">
-                        <label for="email" class="sr-only">Email</label>
+                        <label for="code" class="sr-only">Email</label>
                         <!-- <i class="material-icons text-danger">account_circle</i><strong  style="font-size: 23px ">USERNAME</strong> -->
                         <input name="code"  type="text" [(ngModel)]="resetPassmodel.code" class="form-control" id="code"
                                placeholder="Code" autocomplete="off">
@@ -140,7 +140,7 @@
                         <label for="email" class="sr-only">Email</label>
                         <!-- <i class="material-icons text-danger">account_circle</i><strong  style="font-size: 23px ">USERNAME</strong> -->
                         <input name="password" type="password" [(ngModel)]="resetPassmodel.password" class="form-control" id="password"
-                               placeholder="Email" autocomplete="off">
+                               placeholder="New Password" autocomplete="off">
                     </div>
 
                     <div class="form-group">
@@ -150,7 +150,7 @@
                         <input type="submit" value="{{ nameOfsummit }}" class="btn btn-primary">
                     </div>
                     <div *ngIf="errorMessage" class="alert alert-danger error-msg">
-                        <div class="error">{{ errorMessage }}</div>
+                        <div class="error">{{ errorMessage }}  </div>
                     </div>
                 </form>
             </ng-container>

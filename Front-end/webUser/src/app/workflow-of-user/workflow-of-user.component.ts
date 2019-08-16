@@ -24,7 +24,7 @@ export class WorkflowOfUserComponent implements OnInit {
   model: any = {};
   errorMessage: string;
   listData: MatTableDataSource<any>;
-  displayedColumns: string[] = ['name', "isDeleted"];
+  displayedColumns: string[] = ['name', 'createTime', "isDeleted"];
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild(MatPaginator) paginator: MatPaginator;
   constructor(private toastr: ToastrService, private router: Router, private dialog: MatDialog,
@@ -34,14 +34,13 @@ export class WorkflowOfUserComponent implements OnInit {
     this.callAll();
   }
   callAll() {
+
     this.loadStaffAcountService.loadWorkflowForUserData().toPromise().then(data => {
       this.users = data;
       let a = this.users.workFlowTemplates;
-      console.log("abc ", this.users);
       this.listData = new MatTableDataSource(a);
       this.listData.sort = this.sort;
       this.listData.paginator = this.paginator;
-      console.log("xyz ", this.listData);
     },err =>{
       this.toastr.error(err.error);
     }

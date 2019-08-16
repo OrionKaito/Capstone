@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
-using Capstone.Helper;
 using Capstone.Model;
 using Capstone.Service;
+using Capstone.Service.Helper;
 using Capstone.ViewModel;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -228,7 +228,7 @@ namespace Capstone.Controllers
 
                     var message = _emailService.GenerateMessageSendConfirmCode(user.UserName, user.EmailConfirmCode);
 
-                    await _emailService.SendMail(user.Email, "Activation Code to Verify Email Address", message);
+                    await _emailService.SendMail(user.Email, "Activation Code to Verify Email Address", message, new List<string>());
 
                     //End transaction
                     _userService.CommitTransaction();
@@ -287,7 +287,7 @@ namespace Capstone.Controllers
 
                 if (!result.Succeeded) return new BadRequestObjectResult(result.Errors);
                 var message = _emailService.GenerateMessageSendConfirmCode(userInDB.UserName, userInDB.EmailConfirmCode);
-                await _emailService.SendMail(email, "Request To Change Password", message);
+                await _emailService.SendMail(email, "Request To Change Password", message, new List<string>());
 
                 return Ok(WebConstant.Success);
             }

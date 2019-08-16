@@ -1,5 +1,5 @@
-﻿using Capstone.Helper;
-using Capstone.Service;
+﻿using Capstone.Service;
+using Hangfire;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -13,11 +13,13 @@ namespace Capstone.Controllers
     {
         private readonly IEmailService _emailService;
         private readonly IRequestValueService _requestValueService;
+        private readonly IBackgroundJobClient _backgroundJob;
 
-        public ValuesController(IEmailService emailService, IRequestValueService requestValueService)
+        public ValuesController(IEmailService emailService, IRequestValueService requestValueService, IBackgroundJobClient backgroundJob)
         {
             _emailService = emailService;
             _requestValueService = requestValueService;
+            _backgroundJob = backgroundJob;
         }
 
         [HttpGet("Test")]
@@ -48,7 +50,7 @@ namespace Capstone.Controllers
             //string message = _emailService.GenerateTestMessage();
             try
             {
-                _emailService.SendMail("orionkaito@gmail.com", "Test", message);
+                _emailService.SendMail("orionkaito@gmail.com", "Test", message, new List<string>());
             }
             catch (Exception e)
             {
@@ -80,10 +82,10 @@ namespace Capstone.Controllers
 
 
             //string message = _emailService.GenerateMessageApproveRequest("Kiet", names, links);
-            string message = _emailService.GenerateMessageTest("orionkaito@gmail.com", "locnt", "Quy trình nghỉ học", "Phòng đào tạo duyệt", dynamicform, listButton);
+            string message = _emailService.GenerateMessageTest("orionkaito@gmail.com", "locnt", "Quy trình nghỉ học", "Phòng đào tạo duyệt", dynamicform, null, listButton);
             try
             {
-                _emailService.SendMail("orionkaito@gmail.com", "Test", message);
+                _emailService.SendMail("orionkaito@gmail.com", "Test", message, new List<string>());
             }
             catch (Exception e)
             {
@@ -91,6 +93,13 @@ namespace Capstone.Controllers
             }
             return Ok(domain);
         }
+
+        //[HttpGet("TestHandfire")]
+        //public ActionResult TestHandfire()
+        //{
+        //    RecurringJob.AddOrUpdate("test",() => _emailService.SendMail("kevinz2014st@gmail.com","test hangfire", "hangfire test", new List<string>()), "*/5 * * * *");
+        //    return Ok();
+        //}
 
         // POST api/values
         [HttpPost("PushNotificationToDevice")]

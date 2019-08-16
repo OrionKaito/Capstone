@@ -1,4 +1,4 @@
-﻿namespace Capstone.Helper
+﻿namespace Capstone.Service.Helper
 {
     public class WebConstant
     {
@@ -18,7 +18,7 @@
         //Return messages
         public static string Success = "Success.";
         public static string NotFound = "ID not found!";
-        public static string AccessDined = "Access Dined! You don't have permission to execute this action.";
+        public static string AccessDined = "Access Denied! You don't have permission to execute this action.";
         public static string NameExisted = "'s name is existed!";
         public static string InvalidUSer = "Invalid username or password!";
         public static string User = "user";
@@ -37,8 +37,11 @@
         public static string EmailExisted = "Email is existed!";
         public static string AccountCreated = "Account created, please check your email!";
         public static string EmptyList = "List is empty";
-        public static string RequestIsHandled = "This request has been handled.";
+        public static string RequestIsHandled = "Sorry, this requested has been handled.";
+        public static string RequestHangfire = "Sorry, this requested is being processed";
         public static string WrongOldPassword = "Your current password was incorrect.";
         public static string PasswordToShort = "Passwords must be at least 6 characters.";
+        public static string ToggleWorkflowFail = "Please design workflow first!";
+        public static string InvalidTimeInterval = "Time Interval must be larger than 0!";
     }
 }

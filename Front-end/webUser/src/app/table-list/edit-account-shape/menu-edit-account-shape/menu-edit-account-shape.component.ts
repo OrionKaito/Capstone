@@ -1,4 +1,5 @@
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-menu-edit-account-shape',
@@ -15,7 +16,8 @@ export class MenuEditAccountShapeComponent implements OnInit {
       idInput: 'input1',
       idText: '',
       isStart: true,
-      isEnd: false
+      isEnd: false, 
+      toEmail: ""
     },
     {
       class: 'example-box1',
@@ -23,7 +25,9 @@ export class MenuEditAccountShapeComponent implements OnInit {
       idInput: 'input2',
       idText: '',
       isStart: false,
-      isEnd: false
+      isEnd: false,
+      toEmail: ""
+
     },
     {
       class: 'example-box3',
@@ -31,8 +35,9 @@ export class MenuEditAccountShapeComponent implements OnInit {
       idInput: 'input1',
       idText: '',
       isStart: false,
-      isEnd: true
-    }
+      isEnd: true,
+      toEmail: ""
+    },
     // {
     //   class: 'example-box2 peach-gradient',
     //   id: '',
@@ -53,7 +58,7 @@ export class MenuEditAccountShapeComponent implements OnInit {
     // },
   ];
 
-  constructor() { }
+  constructor( private router: Router) { }
 
   ngOnInit() {
   }
@@ -63,6 +68,10 @@ export class MenuEditAccountShapeComponent implements OnInit {
     subEvent.id = '';
     // Bắt Output cho component cha
    this.draw.emit(subEvent);
+  }
+  moveToHome(){
+    this.router.navigate(['/create-request']);
+    
   }
 
 }

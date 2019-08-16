@@ -1,65 +1,79 @@
 <h4 class="dispaly-4">
-  {{saveData.workFlowName}}
-  : {{formKey}}
+    {{saveData.workFlowName}}
+    : {{formKey}}
     <div (click)="closeForm()" class="icon-head-pup">
         <!-- <button type="button" class="btn btn-outline-dark ml-1" [mat-dialog-close]><i class="fa fa-close"></i> Close</button> -->
-        <button type="button" [mat-dialog-close] ><i class="fa fa-close"></i>
-          </button>
-    </div> </h4>
+        <button type="button" [mat-dialog-close]><i class="fa fa-close"></i>
+        </button>
+    </div>
+</h4>
 
 <hr>
 
 
 <div *ngFor="let item of dynamicForm" class="form-row">
-    <div *ngIf="item.textOnly.name" class="form-group col-md-6">
-      <h6>{{item.textOnly.name}}</h6>
+    <div *ngIf="item.textOnly.name" class="form-group col-md-10">
+        <mat-card>  <h6>{{item.textOnly.name}}</h6></mat-card>
     </div>
-    <div *ngIf="item.shortText.name" class="form-group col-md-6">
-      <label>{{item.shortText.name}} </label>
-      <input [(ngModel)]="item.shortText.value" type="text" class="shortText-dynamicForm">
+    <div *ngIf="item.shortText.name" class="form-group col-md-10">
+        <mat-form-field class="fix-padding">
+            <!--            <label class="label-modify col-md-4">{{item.shortText.name}} </label>-->
+            <input style="margin-top: 5px" matInput [(ngModel)]="item.shortText.value" type="text" class="shortText-dynamicForm col-md-8"
+                   placeholder="{{item.shortText.name}}">
+            <mat-error *ngIf="validateInput.hasError('required')">
+                Form Name is <strong>required</strong>
+            </mat-error>
+        </mat-form-field>
     </div>
-    <div *ngIf="item.longText.name" class="form-group col-md-6">
-      <label>{{item.longText.name}} </label>
-      <input  [(ngModel)]="item.longText.value" type="text" style="min-height: 80px" class="shortText-dynamicForm input">
+    <div *ngIf="item.longText.name" class="form-group col-md-10">
+        <!--        <label placeholder="Leave a comment" class="label-modify"> </label>-->
+        <mat-form-field>
+            <textarea matInput [(ngModel)]="item.longText.value" type="text"
+                      placeholder="{{item.longText.name}}" class="shortText-dynamicForm input"></textarea>
+            <mat-error *ngIf="validateInput1.hasError('required')">
+                Form Name is <strong>required</strong>
+            </mat-error>
+        </mat-form-field>
     </div>
-    <div *ngIf="item.comboBox.name" class="form-row">
-      <label>{{item.comboBox.name}}</label>
-      <select [(ngModel)]="item.comboBox.value" value="0" class="form-control">
-        <option value="0">-Select-</option>
-        <option *ngFor="let ite of item.comboBox.valueOfProper">{{ite}}</option>
-      </select>
-  
+    <div *ngIf="item.comboBox.name" class="form-row col-md-6">
+               <label class="label-modify">{{item.comboBox.name}}</label>
+        <select [(ngModel)]="item.comboBox.value" class="form-control">
+            <option value="0">-Select-</option>
+            <option *ngFor="let ite of item.comboBox.valueOfProper" value="{{ite}}">{{ite}}</option>
+        </select>
     </div>
     <div *ngIf="item.inputCheckbox.name" class="form-group col-md-6">
-      <label>{{item.inputCheckbox.name }}</label>
-      <input [(ngModel)]="item.inputCheckbox.value" type="checkbox" />
+        <mat-checkbox style="margin-right: 10px;" [(ngModel)]="item.inputCheckbox.value"></mat-checkbox>
+        <label>   {{item.inputCheckbox.name }}</label>
     </div>
-  
+
 </div>
 
 
 <form #form="ngForm" autocomplete="off" (submit)="onSubmit()">
     <!-- <div class="form-row">
       <div class="form-group col-md-6">
-        <input name="name" [(ngModel)]="formValue" class="form-control"> 
+        <input name="name" [(ngModel)]="formValue" class="form-control">
       </div>
 
     </div> -->
     <div class="form-row">
-      <div class="dropzone" dropzone (hovered)="toggleHover($event)" (dropped)="onDrop($event)" [class.hovering]="isHovering">
-        <div class="file">
-          <label class="file-label">
-            <input class="file-input" type="file" multiple="multiple" (change)="onDrop($event.target.files)">
-          </label>
+        <div class="dropzone" dropzone (hovered)="toggleHover($event)" (dropped)="onDrop($event)"
+             [class.hovering]="isHovering">
+            <div class="file">
+                <label class="file-label">
+                    <input class="file-input" type="file" multiple="multiple" (change)="onDrop($event.target.files)">
+                </label>
+            </div>
         </div>
-      </div>
 
     </div>
     <div *ngFor="let file of files" class="form-row">
-        <app-upload-task (getURL)="addURLtoList($event)" [file]="file"></app-upload-task>
-      </div>
-  <div class="form-group">
-    <button *ngFor="let item of buttons" id="item.nextStepID" (click)="sendReqNextStep(item.nextStepID)" class="btn btn-dark"><i class="fa fa-database"></i> {{item.connectionTypeName}}</button>
-    <!-- <button type="button" class="btn btn-outline-dark ml-1" [mat-dialog-close]><i class="fa fa-close"></i> Close</button> -->
-  </div>
-</form> 
+        <mat-card>  <app-upload-task (getURL)="addURLtoList($event)" [file]="file"></app-upload-task></mat-card>
+    </div>
+    <div class="form-group">
+        <button *ngFor="let item of buttons" id="item.nextStepID" (click)="sendReqNextStep(item.nextStepID)"
+                class="btn btn-dark"><i class="fa fa-database"></i> {{item.connectionTypeName}}</button>
+        <!-- <button type="button" class="btn btn-outline-dark ml-1" [mat-dialog-close]><i class="fa fa-close"></i> Close</button> -->
+    </div>
+</form>

@@ -91,7 +91,11 @@ export class AddHandleRequestComponent implements OnInit {
       this.requestActionHandleFile = this.saveData.userRequestAction.requestFiles;
       this.requestActionHandleFile.forEach(element => {
         element.path = this.gloUrl +element.path;
-        element.name = element.path.substr(34);
+        let a ="\\";
+        console.log("here:", a);
+        // a.lastIndexOf()
+        element.name = element.path.substring(element.path.lastIndexOf('\\')+1);
+        
       });
 
       this.requestActionHandleValue = this.saveData.userRequestAction.requestValues;

@@ -15,10 +15,6 @@ public class RequestApproveModel {
     @Expose
     private String requestActionID;
 
-    @SerializedName("status")
-    @Expose
-    private Integer status;
-
     @SerializedName("nextStepID")
     @Expose
     private String nextStepID;
@@ -41,14 +37,6 @@ public class RequestApproveModel {
 
     public void setRequestActionID(String requestActionID) {
         this.requestActionID = requestActionID;
-    }
-
-    public Integer getStatus() {
-        return status;
-    }
-
-    public void setStatus(Integer status) {
-        this.status = status;
     }
 
     public String getNextStepID() {
