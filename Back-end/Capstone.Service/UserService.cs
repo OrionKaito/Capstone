@@ -10,6 +10,7 @@ namespace Capstone.Service
     public interface IUserService
     {
         IEnumerable<User> GetUsersByPermissionID(Guid? ID);
+        int Count();
         void BeginTransaction();
         void CommitTransaction();
         void RollBack();
@@ -64,6 +65,11 @@ namespace Capstone.Service
         public void RollBack()
         {
             _unitOfWork.RollBack();
+        }
+
+        public int Count()
+        {
+            return _userRepository.Count();
         }
     }
 }

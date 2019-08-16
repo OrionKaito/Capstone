@@ -80,12 +80,12 @@ namespace Capstone.Controllers
                         LineManagerID = u.LineManagerID,
                         ManagerName = string.IsNullOrEmpty(u.LineManagerID) ? "" : u.LineManager.FullName,
                         IsDeleted = u.IsDeleted
-                    });
+                    }).Skip((page - 1) * count).Take(count);
 
                 var data = new RegistrationPaginVM
                 {
-                    TotalRecord = _userManager.Users.ToListAsync().Result.Count(),
-                    Accounts = users.Skip((page - 1) * count).Take(count),
+                    TotalRecord = _userService.Count(),
+                    Accounts = users,
                 };
 
                 return Ok(data);

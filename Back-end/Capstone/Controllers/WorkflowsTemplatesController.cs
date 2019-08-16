@@ -136,7 +136,7 @@ namespace Capstone.Controllers
         }
 
         [HttpGet("GetWorkflowToEdit")]
-        public ActionResult<IEnumerable<WorkFlowTemplatePaginVM>> GetWorkflowToEdit(int? numberOfPage, int? NumberOfRecord)
+        public ActionResult<WorkFlowTemplatePaginVM> GetWorkflowToEdit(int? numberOfPage, int? NumberOfRecord)
         {
             try
             {
@@ -161,15 +161,15 @@ namespace Capstone.Controllers
                     return StatusCode(403, WebConstant.AccessDined);
                 }
 
-                workFlowTemplates.OrderByDescending(w => w.CreateDate);
+                var workflowTemplatesToEdit = workFlowTemplates.OrderByDescending(w => w.CreateDate);
 
                 WorkFlowTemplatePaginVM result = new WorkFlowTemplatePaginVM
                 {
-                    TotalRecord = workFlowTemplates.Count(),
-                    WorkFlowTemplates = workFlowTemplates.Skip((page - 1) * count).Take(count),
+                    TotalRecord = _workFlowService.CountByIsDeleted(),
+                    WorkFlowTemplates = workflowTemplatesToEdit.Skip((page - 1) * count).Take(count),
                 };
 
-                return Ok(workFlowTemplates);
+                return Ok(result);
             }
             catch (Exception e)
             {
