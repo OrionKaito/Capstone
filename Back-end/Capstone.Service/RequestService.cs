@@ -15,6 +15,7 @@ namespace Capstone.Service
         IEnumerable<Request> GetRequestToApproveByLineManager();
         IEnumerable<Request> GetByUserID(string ID);
         Request GetByID(Guid ID);
+        int CountMyRequest(string ID);
         void Create(Request request);
         void Save();
         void BeginTransaction();
@@ -118,6 +119,11 @@ namespace Capstone.Service
             }
 
             return result;
+        }
+
+        public int CountMyRequest(string ID)
+        {
+            return _requestRepository.CountMyRequest(ID);
         }
     }
 }

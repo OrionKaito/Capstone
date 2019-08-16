@@ -519,7 +519,8 @@ namespace Capstone.Controllers
 
                 MyRequestPaginVM myRequestPaginVM = new MyRequestPaginVM
                 {
-                    TotalRecord = requests.Count(),
+                    //TotalRecord = requests.Count(),
+                    TotalRecord = _requestService.CountMyRequest(userID),
                     MyRequests = requests.Skip((page - 1) * count).Take(count),
                 };
 
