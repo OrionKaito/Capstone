@@ -10,11 +10,10 @@
 </div>
 <div class="menu-main d-flex flex-column align-items-center">
     <div class="modifymenu">
-
-        <h3 class="actionTitle">Action</h3>
+        <h3 class="actionTitle">Design tool</h3>
         <ul (click)="drop(item)" *ngFor="let item of menuList; let i = index">
             <li  class="{{item.class}} animated"></li>
-            <li *ngIf="item.class==='example-box1'"> <span>Decision Action</span></li>
+            <li *ngIf="item.class==='example-box1'"> <span> Decision Action</span></li>
             <li *ngIf="item.class==='example-box'"><span>Start Action</span></li>
             <li *ngIf="item.class==='example-box3'"><span>End Action</span></li>
         </ul>
