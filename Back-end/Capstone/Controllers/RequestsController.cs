@@ -738,6 +738,7 @@ namespace Capstone.Controllers
             {
                 return Ok(new RequestPaginVM
                 {
+                    TotalRecord = 0,
                     Requests = new List<RequestVM>()
                 });
             }
