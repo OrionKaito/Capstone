@@ -299,7 +299,7 @@ namespace Capstone.Controllers
                     ActorID = userID,
                     NextStepID = model.NextStepID,
                     CreateDate = DateTime.Now,
-                    WorkFlowTemplateActionID = model.NextStepID,
+                    WorkFlowTemplateActionID = currentRequestAction.NextStepID,
                 };
 
                 _requestActionService.Create(requestAction);
@@ -459,6 +459,8 @@ namespace Capstone.Controllers
                     //Cập nhật request
                     request.IsCompleted = true;
                     request.CurrentRequestActionID = requestAction.ID;
+                    requestAction.Status = StatusEnum.Handled;
+                    _requestActionService.Save();
                     _requestService.Save();
 
                     //Notification
@@ -543,9 +545,7 @@ namespace Capstone.Controllers
                 var workflow = _workFlowTemplateService.GetByID(request.WorkFlowTemplateID);
 
                 //*Lấy kết quả cuối cùng
-                if (requestAction.NextStepID.GetValueOrDefault() == null) return BadRequest("NextStep's " + WebConstant.NotFound);
-
-                var status = _workFlowTemplateActionService.GetByID(requestAction.NextStepID.GetValueOrDefault()).Name;
+                var finalStatus = _workFlowTemplateActionService.GetByID(requestAction.NextStepID.GetValueOrDefault()).Name;
 
                 //Lấy phần thông tin của những người duyệt 
                 List<StaffRequestActionVM> staffResult = new List<StaffRequestActionVM>();
@@ -554,24 +554,29 @@ namespace Capstone.Controllers
 
                 foreach (var staffAction in staffActions)
                 {
-                    var staffRequestValuesss = _requestValueService.GetByRequestActionID(staffAction.ID).Select(r => new RequestValueVM
+                    var staffRequestValues = _requestValueService.GetByRequestActionID(staffAction.ID).Select(r => new RequestValueVM
                     {
                         ID = r.ID,
                         Key = r.Key,
                         Value = r.Value,
                     });
 
-                    var staffWorkflowaction = _workFlowTemplateActionService.GetByID(staffAction.NextStepID.GetValueOrDefault());
+                    var staffStatus = "";
 
-                    var staffStatus = _workFlowTemplateActionService.GetByID(staffWorkflowaction.ID).Name;
+                    var toWorkflowTemplateActionConnection = _workFlowTemplateActionConnectionService.GetByToWorkflowTemplateActionID(staffAction.WorkFlowTemplateAction.ID);
+
+                    staffStatus = _workFlowTemplateActionConnectionService
+                        .GetByFromIDAndToID(staffAction.WorkFlowTemplateActionID.GetValueOrDefault(), staffAction.NextStep.ID)
+                        .ConnectionType.Name;
 
                     StaffRequestActionVM staffRequestAction = new StaffRequestActionVM()
                     {
                         FullName = staffAction.Actor == null ? staffAction.ActorEmail : staffAction.Actor.FullName,
                         UserName = staffAction.ActorID == null ? staffAction.ActorEmail : _userManager.FindByIdAsync(staffAction.ActorID).Result.UserName,
                         CreateDate = staffAction.CreateDate,
-                        RequestValues = staffRequestValuesss,
+                        RequestValues = staffRequestValues,
                         Status = staffStatus,
+                        WorkFlowActionName = staffAction.WorkFlowTemplateAction.Name,
                     };
 
                     staffResult.Add(staffRequestAction);
@@ -580,7 +585,7 @@ namespace Capstone.Controllers
                 RequestResultVM result = new RequestResultVM
                 {
                     WorkFlowTemplateName = workflow.Name,
-                    Status = status,
+                    Status = finalStatus,
                     StaffResult = staffResult,
                 };
 
@@ -754,7 +759,7 @@ namespace Capstone.Controllers
 
                 foreach (var staffAction in staffActions)
                 {
-                    var staffRequestValuesss = _requestValueService.GetByRequestActionID(staffAction.ID).Select(r => new RequestValueVM
+                    var staffRequestValues = _requestValueService.GetByRequestActionID(staffAction.ID).Select(r => new RequestValueVM
                     {
                         ID = r.ID,
                         Key = r.Key,
@@ -763,15 +768,18 @@ namespace Capstone.Controllers
 
                     var staffWorkflowaction = _workFlowTemplateActionService.GetByID(staffAction.NextStepID.GetValueOrDefault());
 
-                    var staffStatus = _workFlowTemplateActionService.GetByID(staffWorkflowaction.ID).Name;
+                    var staffStatus = _workFlowTemplateActionConnectionService
+                        .GetByFromIDAndToID(staffAction.WorkFlowTemplateAction.ID, staffAction.NextStep.ID)
+                        .ConnectionType.Name; ;
 
                     StaffRequestActionVM staffRequestAction = new StaffRequestActionVM()
                     {
                         FullName = staffAction.Actor.FullName,
                         UserName = _userManager.FindByIdAsync(staffAction.ActorID).Result.UserName,
                         CreateDate = staffAction.CreateDate,
-                        RequestValues = staffRequestValuesss,
+                        RequestValues = staffRequestValues,
                         Status = staffStatus,
+                        WorkFlowActionName = staffAction.WorkFlowTemplateAction.Name,
                     };
 
                     staffRequestActions.Add(staffRequestAction);
