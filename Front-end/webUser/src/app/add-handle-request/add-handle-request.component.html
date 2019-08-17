@@ -5,7 +5,7 @@
     </div>
   </h3>
   <hr>
-  <form class="" #form="ngForm" autocomplete="off">
+  <!-- <form class="" #form="ngForm" autocomplete="off">
     <div class="form-row">
       <label class="lable-custom">initiatorName</label>
       <div class="content-info"> {{initiatorName}} </div>
@@ -22,7 +22,7 @@
       <label class="lable-custom">File</label>
     </div>
     <div *ngFor="let item of requestActionHandleFile" class="form-row box-file">
-      <!-- <a href="{{item.path}}" target="_blank">{{item.name}}</a> -->
+  
       <a href="{{item.path}}" target="_blank"> {{item.name}} </a>
     </div>
   </form>
@@ -58,10 +58,10 @@
   </div>
   <div class="form-group">
     <button *ngFor="let item of buttons" id="item.nextStepID" (click)="sendReqNextStep(item.nextStepID)"
-      class="btn btn-dark"><i class="fa fa-database"></i> {{item.connectionTypeName}}</button>
-    <!-- <button id="ádasd"   > adsdasd</button>  -->
-    <!-- <button type="button" class="btn btn-outline-dark ml-1" [mat-dialog-close]><i class="fa fa-close"></i> Close</button> -->
-  </div>
+      class="btn btn-dark"><i class="fa fa-database"></i> {{item.connectionTypeName}}</button> -->
+  <!-- <button id="ádasd"   > adsdasd</button>  -->
+  <!-- <button type="button" class="btn btn-outline-dark ml-1" [mat-dialog-close]><i class="fa fa-close"></i> Close</button> -->
+  <!-- </div> -->
 
 
 
@@ -70,37 +70,49 @@
   </button> -->
 
   <mat-vertical-stepper [linear]="isLinear" #stepper>
-    <mat-step [stepControl]="firstFormGroup">
-      <form [formGroup]="firstFormGroup">
-        <ng-template matStepLabel>Fill out your name</ng-template>
-        <mat-form-field>
-          <input matInput placeholder="Last name, First name" formControlName="firstCtrl" required>
-        </mat-form-field>
-        <div>
-          <button mat-button matStepperNext>Next</button>
-        </div>
+
+    <mat-step >
+      <form >
+        <ng-template matStepLabel>{{saveData.userRequestAction.workFlowActionName}}</ng-template>
+        <h5>Request send from <b>{{saveData.initiatorName}}</b> <small> {{saveData.request.createDate | date:'dd/MM/yyyy'}} at {{saveData.request.createDate | date: 'HH:mm a'}}</small></h5> 
+        <ul class="chien-ul">
+          <ng-container *ngFor="let item of requestActionHandleValue">
+              <li class=chien-li1><strong>{{item.key}}:</strong></li>
+              <li class=chien-li2>{{item.value}}</li>
+          </ng-container>
+        </ul>
       </form>
     </mat-step>
-    <mat-step [stepControl]="secondFormGroup">
-      <form [formGroup]="secondFormGroup">
-        <ng-template matStepLabel>Fill out your address</ng-template>
-        <mat-form-field>
-          <input matInput placeholder="Address" formControlName="secondCtrl" required>
-        </mat-form-field>
-        <div>
-          <button mat-button matStepperPrevious>Back</button>
-          <button mat-button matStepperNext>Next</button>
-        </div>
+
+    <mat-step *ngFor="let item of saveData.staffRequestActions">
+      <form >
+        <ng-template matStepLabel>{{item.workFlowActionName}}</ng-template>
+        <h5>Handle request by <b>{{item.fullName}} </b>
+           <small> ({{item.userName}}) {{item.createDate | date:'dd/MM/yyyy'}} at {{item.createDate | date: 'HH:mm a'}}</small></h5> 
+
+        <ul class="list-comments">
+            <li>
+              <div class="card style-default-light">
+                <div class="comment-avatar"><i class="glyphicon glyphicon-user opacity-50"></i></div>
+                <div class="card-body">
+                  <h4 class="comment-title"><strong>{{item.status}}</strong> <small> {{item.createDate | date:'dd/MM/yyyy'}} at {{item.createDate | date: 'HH:mm a'}}</small></h4>
+                  <p *ngFor="let item2 of item.requestValues">{{item2.value}}</p>
+                </div>
+              </div>
+            </li>
+          </ul>
+          
       </form>
     </mat-step>
+
     <mat-step>
-      <ng-template matStepLabel>Done</ng-template>
-      You are now done.
-      <div>
-        <button mat-button matStepperPrevious>Back</button>
-        <button mat-button (click)="stepper.reset()">Reset</button>
-      </div>
+      <ng-template matStepLabel>{{saveData.workFlowTemplateActionName}}</ng-template>
+      <input name="name" placeholder="Write a comment!" style="margin-top: 8px;  border: 1px solid black;" type="textArea" [(ngModel)]="cmt"
+        class="form-control chien-input" autocomplete="off">
+      <button *ngFor="let item of buttons" id="item.nextStepID" (click)="sendReqNextStep(item.nextStepID)"
+      class="btn btn-dark"><i class="fa fa-database"></i> {{item.connectionTypeName}}</button>
     </mat-step>
+
   </mat-vertical-stepper>
 
 
@@ -108,7 +120,7 @@
 
 
 
-  <ul class="list-comments">
+  <!-- <ul class="list-comments">
     <li>
       <div class="card style-default-light">
         <div class="comment-avatar"><i class="glyphicon glyphicon-user opacity-50"></i></div>
@@ -118,17 +130,6 @@
           <p>Etiam dui libero, tempor quis congue in, interdum eget tortor. Vivamus aliquam dictum lacus quis tincidunt.
             Phasellus rhoncus ante sollicitudin nisl consectetur ultricies. Sed rhoncus ullamcorper mauris, ac
             condimentum metus egestas ut. Nam et urna ante, vitae pretium lacus.</p>
-        </div>
-      </div>
-    </li>
-    <li>
-      <div class="card style-default-dark">
-        <div class="comment-avatar"><img class="img-circle" alt="" src="/assets/img/avatar1.jpg?1403934956"></div>
-        <div class="card-body">
-          <h4 class="comment-title">Comment title <small>20/06/2013 at 4:38 pm</small></h4>
-          <a class="btn btn-default-dark stick-top-right" href="#respond">Reply</a>
-          <p>Sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Integer ac magna lacinia
-            velit bibendum ornare. Morbi eget dui lectus, eget eleifend mi.</p>
         </div>
       </div>
     </li>
@@ -176,5 +177,5 @@
         audire. Per at postea mediocritatem, vim numquam aliquid eu, in nam sale gubergren. Dicant vituperata
         consequuntur at sea, mazim commodo</p>
     </div>
-  </div>
+  </div> -->
 </div>

@@ -112,7 +112,8 @@ export class EditAccountShapeComponent implements OnInit {
             description: '',
             permissionToUseID: '0',
             isApprovedByLineManager: false,
-            email: ''
+            email: '',
+            isApprovedByInitiator: false
         }
         this.propertiesArr = {
             name: '',
@@ -288,6 +289,7 @@ export class EditAccountShapeComponent implements OnInit {
         subEvent.description = 'FormDescription' + count;
         subEvent.permissionToUseID = '';
         subEvent.isApprovedByLineManager = false;
+        subEvent.isApprovedByInitiator = false;
         //subEvent.idText = 'form' + count;
         subEvent.formControlName = 'form' + count;
 
@@ -1097,10 +1099,11 @@ export class EditAccountShapeComponent implements OnInit {
                 console.log('1', element.permissionToUseID);
                 console.log('2', element.toEmail);
                 console.log('3', element.isApprovedByLineManager);
+                console.log('4', element.isApprovedByInitiator);
 
                 if (element.name == '' || element.description == '' ||
                     ((element.permissionToUseID == '' || element.permissionToUseID == 0)
-                        && element.toEmail == '' && !element.isApprovedByLineManager)) {
+                        && element.toEmail == '' && !element.isApprovedByLineManager && !element.isApprovedByInitiator)) {
                     this.toastr.error('Please fill all fields in Actions');
                     result = false;
                 }
@@ -1176,6 +1179,7 @@ export class EditAccountShapeComponent implements OnInit {
                             // actionTypeID:"32e45f6c-9976-4a5a-b0bc-08d71776929b",
                             permissionToUseID: element.permissionToUseID,
                             isApprovedByLineManager: element.isApprovedByLineManager,
+                            isApprovedByInitiator: element.isApprovedByInitiator,
                             isStart: element.isStart,
                             isEnd: element.isEnd,
                             toEmail: element.toEmail
@@ -1192,6 +1196,7 @@ export class EditAccountShapeComponent implements OnInit {
                             // actionTypeID:"32e45f6c-9976-4a5a-b0bc-08d71776929b",
                             //permissionToUseID: null,
                             isApprovedByLineManager: element.isApprovedByLineManager,
+                            isApprovedByInitiator: element.isApprovedByInitiator,
                             isStart: element.isStart,
                             isEnd: element.isEnd,
                             toEmail: element.toEmail
