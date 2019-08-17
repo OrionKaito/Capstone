@@ -74,6 +74,7 @@
     <mat-step >
       <form >
         <ng-template matStepLabel>{{saveData.userRequestAction.workFlowActionName}}</ng-template>
+        <h5>Request send from <b>{{saveData.initiatorName}}</b> <small> {{saveData.request.createDate | date:'dd/MM/yyyy'}} at {{saveData.request.createDate | date: 'HH:mm a'}}</small></h5> 
         <ul class="chien-ul">
           <ng-container *ngFor="let item of requestActionHandleValue">
               <li class=chien-li1><strong>{{item.key}}:</strong></li>
@@ -86,7 +87,8 @@
     <mat-step *ngFor="let item of saveData.staffRequestActions">
       <form >
         <ng-template matStepLabel>{{item.workFlowActionName}}</ng-template>
-
+        <h5>Handle request by <b>{{item.fullName}} </b>
+           <small> ({{item.userName}}) {{item.createDate | date:'dd/MM/yyyy'}} at {{item.createDate | date: 'HH:mm a'}}</small></h5> 
 
         <ul class="list-comments">
             <li>
@@ -105,8 +107,8 @@
 
     <mat-step>
       <ng-template matStepLabel>{{saveData.workFlowTemplateActionName}}</ng-template>
-      <input name="name" style="margin-top: 8px;" type="text" [(ngModel)]="cmt"
-        class="form-control">
+      <input name="name" placeholder="Write a comment!" style="margin-top: 8px;  border: 1px solid black;" type="textArea" [(ngModel)]="cmt"
+        class="form-control chien-input" autocomplete="off">
       <button *ngFor="let item of buttons" id="item.nextStepID" (click)="sendReqNextStep(item.nextStepID)"
       class="btn btn-dark"><i class="fa fa-database"></i> {{item.connectionTypeName}}</button>
     </mat-step>

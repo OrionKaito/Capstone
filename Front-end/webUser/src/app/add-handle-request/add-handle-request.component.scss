@@ -33,6 +33,7 @@ li{
     float: left;
     margin: 0px;
     padding: 0px;
+    border: 1px solid black;
     .chien-li1{
         width: 30%;
         text-align: right;
@@ -80,6 +81,11 @@ li{
     margin-right: auto;
     box-sizing: border-box;
     max-height: 29px;
+}
+.chien-input{
+    margin-top: 8px;  
+    border: 1px solid black;
+    min-height: 50px !important;
 }
 .box-file{
     min-height: 20px;
