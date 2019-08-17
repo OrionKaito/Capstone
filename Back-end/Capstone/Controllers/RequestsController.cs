@@ -533,7 +533,8 @@ namespace Capstone.Controllers
 
                 MyRequestPaginVM myRequestPaginVM = new MyRequestPaginVM
                 {
-                    TotalRecord = requests.Count(),
+                    //TotalRecord = requests.Count(),
+                    TotalRecord = _requestService.CountMyRequest(userID),
                     MyRequests = requests.Skip((page - 1) * count).Take(count),
                 };
 
@@ -737,6 +738,7 @@ namespace Capstone.Controllers
             {
                 return Ok(new RequestPaginVM
                 {
+                    TotalRecord = 0,
                     Requests = new List<RequestVM>()
                 });
             }
@@ -854,7 +856,7 @@ namespace Capstone.Controllers
                     ActionType = _mapper.Map<ActionTypeVM>(actionType),
                     Request = _mapper.Map<RequestVM>(request),
                     UserRequestAction = userRequestAction,
-                    StaffRequestActions = staffRequestActions,
+                    StaffRequestActions = request.WorkFlowTemplate.IsViewDetail == true ? staffRequestActions : new List<StaffRequestActionVM>(),
                 };
 
                 return Ok(form);

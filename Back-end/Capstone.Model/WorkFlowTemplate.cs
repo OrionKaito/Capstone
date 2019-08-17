@@ -12,6 +12,7 @@ namespace Capstone.Model
         public string Description { get; set; }
         public string Data { get; set; }
         public DateTime CreateDate { get; set; }
+        public string Icon { get; set; }
 
         public string OwnerID { get; set; }
         [ForeignKey("OwnerID")]
@@ -21,6 +22,7 @@ namespace Capstone.Model
         [ForeignKey("PermissionToUseID")]
         public virtual Permission PermissionToUse { get; set; }
 
+        public bool IsViewDetail { get; set; }
         public bool IsCheckConnection { get; set; }
         public bool IsEnabled { get; set; }
         public bool IsDeleted { get; set; }
