@@ -6,6 +6,8 @@ export class AccountItem {
         this.data="";
         this.permissionToEditID="";
         this.permissionToUseID="";
+        this.icon="folder_special";
+        this.isViewDetail=true;
     }
 
     id: string;
@@ -14,5 +16,7 @@ export class AccountItem {
     data: string;
     permissionToEditID: string;
     permissionToUseID: string;
+    icon: string;
+    isViewDetail: boolean;
 
 }
