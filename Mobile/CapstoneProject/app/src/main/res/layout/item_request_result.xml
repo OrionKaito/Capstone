@@ -37,16 +37,15 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/dp10"
-            android:layout_marginTop="@dimen/dp3"
+            android:layout_marginTop="@dimen/dp5"
             android:layout_marginRight="@dimen/dp5"
             android:text="11/07/2019"
             android:textColor="@color/colortext"
-            android:textSize="@dimen/sp20" />
+            android:textSize="@dimen/sp18" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginTop="@dimen/dp5"
             android:layout_marginRight="@dimen/dp10"
             android:layout_marginBottom="@dimen/dp5"
             android:background="@drawable/border_workflow"
@@ -60,7 +59,7 @@
                 android:layout_marginTop="@dimen/dp5"
                 android:text="Action name"
                 android:textColor="@color/red"
-                android:textSize="@dimen/sp25" />
+                android:textSize="@dimen/sp22" />
 
             <TextView
                 android:layout_width="match_parent"
@@ -98,14 +97,15 @@
                 android:textColor="@color/light_blue"
                 android:textSize="@dimen/sp20" />
 
-            <ListView
+            <LinearLayout
                 android:id="@+id/lv_comment"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:divider="@android:color/transparent"
-                android:dividerHeight="10.0sp"
-                android:scrollbars="none"
-                android:visibility="visible"></ListView>
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp5"
+                android:layout_marginBottom="@dimen/dp5"
+                android:orientation="vertical">
+
+            </LinearLayout>
         </LinearLayout>
     </LinearLayout>
 
