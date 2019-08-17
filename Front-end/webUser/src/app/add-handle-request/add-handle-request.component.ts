@@ -52,9 +52,12 @@ export class AddHandleRequestComponent implements OnInit {
     this.isHovering = event;
   }
   sendReqNextStep(nextStepID){
-
+    var a = new String(this.cmt);
+    if(a!=""){
+    this.listCmt.push(a);
+  }
     this.listCmt.forEach(element => {
-      this.actionValues.push({ "key": element , "value": element});
+      this.actionValues.push({ "key": "Comment" , "value": element});
     });
     debugger;
     var mdSendReq = new ApproveRequest(this.requestHandle.id, nextStepID, this.actionValues,this.data );
@@ -79,6 +82,7 @@ export class AddHandleRequestComponent implements OnInit {
 
 
   ngOnInit() {
+    this.cmt="";
     this.requestHandle ={
       "id": "string",
       "description": "string",
