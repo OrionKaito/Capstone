@@ -17,8 +17,10 @@ namespace Capstone.ViewModel
         public string Name { get; set; }
         public string Description { get; set; }
         public string Data { get; set; }
+        public string Icon { get; set; }
         public Guid PermissionToUseID { get; set; }
         public DateTime CreateDate { get; set; }
+        public bool IsViewDetail { get; set; }
         public bool IsEnabled { get; set; }
     }
 
@@ -32,13 +34,15 @@ namespace Capstone.ViewModel
         public Guid PermissionToUseID { get; set; }
     }
 
-    public class WorkFlowTemplateUM
-    {
-        public Guid WorkFlowTemplateID { get; set; }
-        public string Data { get; set; }
-        public IEnumerable<WorkFlowActionCM> Actions { get; set; }
-        public IEnumerable<WorkFlowTemplateActionConnectionCM> Connections { get; set; }
-    }
+    //public class WorkFlowTemplateUM
+    //{
+    //    public Guid WorkFlowTemplateID { get; set; }
+    //    public string Data { get; set; }
+    //    public bool IsViewDetail { get; set; }
+    //    public string Icon { get; set; }
+    //    public IEnumerable<WorkFlowActionCM> Actions { get; set; }
+    //    public IEnumerable<WorkFlowTemplateActionConnectionCM> Connections { get; set; }
+    //}
 
     public class WorkFlowActionCM
     {
