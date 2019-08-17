@@ -10,6 +10,7 @@ namespace Capstone.Data.Repositories
     {
         IEnumerable<WorkFlowTemplateActionConnection> GetByFromWorkflowTemplateActionID(Guid ID);
         WorkFlowTemplateActionConnection GetByFromIDAndToID(Guid fromID, Guid toID);
+        WorkFlowTemplateActionConnection GetByToWorkflowTemplateActionID(Guid ID);
     }
 
     public class WorkFlowTemplateActionConnectionRepository : RepositoryBase<WorkFlowTemplateActionConnection>, IWorkFlowTemplateActionConnectionRepository
@@ -24,6 +25,11 @@ namespace Capstone.Data.Repositories
         public IEnumerable<WorkFlowTemplateActionConnection> GetByFromWorkflowTemplateActionID(Guid ID)
         {
             return DbContext.WorkFlowTemplateActionConnections.Where(w => w.FromWorkFlowTemplateActionID == ID).ToList();
+        }
+
+        public WorkFlowTemplateActionConnection GetByToWorkflowTemplateActionID(Guid ID)
+        {
+            return DbContext.WorkFlowTemplateActionConnections.Where(w => w.ToWorkFlowTemplateActionID == ID).FirstOrDefault();
         }
     }
 }

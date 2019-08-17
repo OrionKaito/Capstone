@@ -14,5 +14,5 @@ public class ConstantDataManager {
     public static final int MY_PERMISSIONS_WRITE_EXTERNAL_STORAGE = 4;
     public static final int NUMBER_OF_RECORD = 10;
 
-    public static final String IMAGE_URL = "http://192.168.1.118:159/";
+    public static final String IMAGE_URL = "http://192.168.1.85:1234/";
 }

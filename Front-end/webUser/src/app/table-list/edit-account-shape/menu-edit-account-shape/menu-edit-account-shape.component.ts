@@ -17,7 +17,8 @@ export class MenuEditAccountShapeComponent implements OnInit {
       idText: '',
       isStart: true,
       isEnd: false, 
-      toEmail: ""
+      toEmail: "",
+      showIcon: false
     },
     {
       class: 'example-box1',
@@ -26,7 +27,8 @@ export class MenuEditAccountShapeComponent implements OnInit {
       idText: '',
       isStart: false,
       isEnd: false,
-      toEmail: ""
+      toEmail: "",
+      showIcon: false
 
     },
     {
@@ -36,7 +38,8 @@ export class MenuEditAccountShapeComponent implements OnInit {
       idText: '',
       isStart: false,
       isEnd: true,
-      toEmail: ""
+      toEmail: "",
+      showIcon: false
     },
     // {
     //   class: 'example-box2 peach-gradient',

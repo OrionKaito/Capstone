@@ -73,4 +73,9 @@ export class SidebarComponent implements OnInit {
     }
     return true;
   };
+
+  moveToHome(){
+    this.router.navigate(['/create-request']); 
+  }
+
 }

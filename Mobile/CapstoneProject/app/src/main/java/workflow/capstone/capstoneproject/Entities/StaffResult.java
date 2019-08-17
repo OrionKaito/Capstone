@@ -27,6 +27,11 @@ public class StaffResult {
     @Expose
     private List<RequestValue> requestValues;
 
+    @SerializedName("workFlowActionName")
+    @Expose
+    private String workFlowActionName;
+
+
     public String getFullName() {
         return fullName;
     }
@@ -67,4 +72,11 @@ public class StaffResult {
         this.requestValues = requestValues;
     }
 
+    public String getWorkFlowActionName() {
+        return workFlowActionName;
+    }
+
+    public void setWorkFlowActionName(String workFlowActionName) {
+        this.workFlowActionName = workFlowActionName;
+    }
 }

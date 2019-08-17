@@ -27,6 +27,8 @@ namespace Capstone.ViewModel
         public string Name { get; set; }
         public string Description { get; set; }
         public string Data { get; set; }
+        public string Icon { get; set; }
+        public bool IsViewDetail { get; set; }
         public Guid PermissionToUseID { get; set; }
     }
 
@@ -43,10 +45,10 @@ namespace Capstone.ViewModel
         public Guid Id { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
-        public string Icon { get; set; }
         public Guid? ActionTypeID { get; set; }
         public Guid? PermissionToUseID { get; set; }
         public bool IsApprovedByLineManager { get; set; }
+        public bool IsApprovedByInitiator { get; set; }
         public string ToEmail { get; set; }
         public bool IsStart { get; set; }
         public bool IsEnd { get; set; }
@@ -65,6 +67,8 @@ namespace Capstone.ViewModel
     {
         public Guid WorkFlowTemplateID { get; set; }
         public string Data { get; set; }
+        public string Icon { get; set; }
+        public bool IsViewDetail { get; set; }
         public IEnumerable<WorkFlowActionCM> Actions { get; set; }
         public IEnumerable<WorkFlowConnectionCM> Connections { get; set; }
     }
