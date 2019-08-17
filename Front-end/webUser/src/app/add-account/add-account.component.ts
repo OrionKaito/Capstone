@@ -14,6 +14,10 @@ import {FormControl, Validators} from '@angular/forms';
   styleUrls: ['./add-account.component.scss']
 })
 export class AddAccountComponent implements OnInit {
+
+  listIcon=["folder_special", "alarm", "account_balance_wallet",
+            "account_balance", "calendar_today", "commute", "library_books", 
+            "videocam", "airplanemode_active" ];
   formData = new AccountItem;
   dataGet: any = [];
   recevieData: any;
@@ -31,6 +35,7 @@ export class AddAccountComponent implements OnInit {
   groupList: any = [];
 
   ngOnInit() {
+    this.chooseIcon("folder_special");
     this.formData.permissionToEditID = "0";
     this.formData.permissionToUseID = "0";
 
@@ -69,6 +74,7 @@ export class AddAccountComponent implements OnInit {
       this.toastr.error("Please fill all fields!");
     } else {
       if (this.createAcc) {
+        console.log(this.formData);
         this.LoginService.addNewWF(this.formData).toPromise().then(
           resp => {
             if (resp != "") {
@@ -107,4 +113,11 @@ export class AddAccountComponent implements OnInit {
   descriptionFormControl = new FormControl('', [
     Validators.required
   ]);
+  chooseIcon(item){
+    this.listIcon.forEach(element => {
+      $('#icon'+element).removeClass("borderGreen");
+    });
+    $('#icon'+item).addClass("borderGreen");
+    this.formData.icon=item.toString();
+  }
 }

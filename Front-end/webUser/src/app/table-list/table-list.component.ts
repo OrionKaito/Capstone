@@ -35,8 +35,9 @@ export class TableListComponent implements OnInit {
   callAll() {
      this.loadStaffAcountService.loadWorkFlow().toPromise().then(data => {
       this.users= data;
-      this.listData = new MatTableDataSource(this.users);
-      // this.listData = new MatTableDataSource(this.users.workFlowTemplates);
+      //  this.listData = new MatTableDataSource(this.users);
+       this.listData = new MatTableDataSource(this.users.workFlowTemplates);
+       console.log("data nhận về table:", this.users);
       this.listData.sort = this.sort;
       this.listData.paginator = this.paginator;
   },err =>{

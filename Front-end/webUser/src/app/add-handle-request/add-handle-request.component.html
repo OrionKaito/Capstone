@@ -73,7 +73,7 @@
 
     <mat-step >
       <form >
-        <ng-template matStepLabel>{{saveData.workFlowTemplateActionName}}</ng-template>
+        <ng-template matStepLabel>{{saveData.userRequestAction.workFlowActionName}}</ng-template>
         <ul class="chien-ul">
           <ng-container *ngFor="let item of requestActionHandleValue">
               <li class=chien-li1><strong>{{item.key}}:</strong></li>
@@ -86,20 +86,15 @@
     <mat-step *ngFor="let item of saveData.staffRequestActions">
       <form >
         <ng-template matStepLabel>{{item.workFlowActionName}}</ng-template>
-        <!-- <mat-form-field>
-          <input matInput placeholder="Address" formControlName="secondCtrl" required>
-        </mat-form-field> -->
+
 
         <ul class="list-comments">
             <li>
               <div class="card style-default-light">
                 <div class="comment-avatar"><i class="glyphicon glyphicon-user opacity-50"></i></div>
                 <div class="card-body">
-                  <h4 class="comment-title">Comment title <small>20/06/2013 at 4:02 pm</small></h4>
-                  <a class="btn btn-default-dark stick-top-right" href="#respond">Reply</a>
-                  <p>Etiam dui libero, tempor quis congue in, interdum eget tortor. Vivamus aliquam dictum lacus quis tincidunt.
-                    Phasellus rhoncus ante sollicitudin nisl consectetur ultricies. Sed rhoncus ullamcorper mauris, ac
-                    condimentum metus egestas ut. Nam et urna ante, vitae pretium lacus.</p>
+                  <h4 class="comment-title"><strong>{{item.status}}</strong> <small> {{item.createDate | date:'dd/MM/yyyy'}} at {{item.createDate | date: 'HH:mm a'}}</small></h4>
+                  <p *ngFor="let item2 of item.requestValues">{{item2.value}}</p>
                 </div>
               </div>
             </li>
@@ -109,14 +104,13 @@
     </mat-step>
 
     <mat-step>
-      <ng-template matStepLabel>Done</ng-template>
-      You are now done.
+      <ng-template matStepLabel>{{saveData.workFlowTemplateActionName}}</ng-template>
+      <input name="name" style="margin-top: 8px;" type="text" [(ngModel)]="cmt"
+        class="form-control">
+      <button *ngFor="let item of buttons" id="item.nextStepID" (click)="sendReqNextStep(item.nextStepID)"
+      class="btn btn-dark"><i class="fa fa-database"></i> {{item.connectionTypeName}}</button>
     </mat-step>
-    <mat-step>
-      <ng-template matStepLabel>Done</ng-template>
-      You are now done.
 
-    </mat-step>
   </mat-vertical-stepper>
 
 
@@ -124,7 +118,7 @@
 
 
 
-  <ul class="list-comments">
+  <!-- <ul class="list-comments">
     <li>
       <div class="card style-default-light">
         <div class="comment-avatar"><i class="glyphicon glyphicon-user opacity-50"></i></div>
@@ -181,5 +175,5 @@
         audire. Per at postea mediocritatem, vim numquam aliquid eu, in nam sale gubergren. Dicant vituperata
         consequuntur at sea, mazim commodo</p>
     </div>
-  </div>
+  </div> -->
 </div>
