@@ -126,6 +126,8 @@ namespace Capstone.ViewModel
         public IEnumerable<RequestValueVM> RequestValues { get; set; }
 
         public string WorkFlowActionName { get; set; }
+
+        public string Description { get; set; }
     }
 
     public class StaffRequestActionVM
@@ -137,6 +139,8 @@ namespace Capstone.ViewModel
         public DateTime CreateDate { get; set; }
 
         public string Status { get; set; }
+
+        public string Description { get; set; }
 
         public IEnumerable<RequestValueVM> RequestValues { get; set; }
 
