@@ -14,6 +14,10 @@ public class UserRequestAction {
     @Expose
     private List<RequestValue> requestValues;
 
+    @SerializedName("workFlowActionName")
+    @Expose
+    private String workFlowActionName;
+
     public List<RequestFile> getRequestFiles() {
         return requestFiles;
     }
@@ -28,6 +32,14 @@ public class UserRequestAction {
 
     public void setRequestValues(List<RequestValue> requestValues) {
         this.requestValues = requestValues;
+    }
+
+    public String getWorkFlowActionName() {
+        return workFlowActionName;
+    }
+
+    public void setWorkFlowActionName(String workFlowActionName) {
+        this.workFlowActionName = workFlowActionName;
     }
 
 }

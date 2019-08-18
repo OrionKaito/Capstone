@@ -786,6 +786,7 @@ namespace Capstone.Controllers
                     RequestFiles = requestFiles,
                     RequestValues = userRequestValues,
                     WorkFlowActionName = userAction.WorkFlowTemplateAction.Name,
+                    Description = userAction.WorkFlowTemplateAction.Description
                 };
 
                 //Lấy phần thông tin của những người duyệt trước
@@ -815,6 +816,7 @@ namespace Capstone.Controllers
                         RequestValues = staffRequestValues,
                         Status = staffStatus,
                         WorkFlowActionName = staffAction.WorkFlowTemplateAction.Name,
+                        Description = staffAction.WorkFlowTemplateAction.Description
                     };
 
                     staffRequestActions.Add(staffRequestAction);
