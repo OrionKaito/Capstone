@@ -92,10 +92,11 @@ export class TableListComponent implements OnInit {
     dialogConfig.autoFocus = true;
     dialogConfig.disableClose = true;
     dialogConfig.width = "50%";
-  
     dialogConfig.data = id;
     this.dialog.open(AddAccountComponent, dialogConfig).afterClosed().subscribe(res => {
+
       this.callAll();
+      
     });
     this.callAll();
   }

@@ -87,6 +87,7 @@
     <mat-step *ngFor="let item of saveData.staffRequestActions">
       <form >
         <ng-template matStepLabel>{{item.workFlowActionName}}</ng-template>
+        <i>*{{item.description}}</i>
         <h5>Handle request by <b>{{item.fullName}} </b>
            <small> ({{item.userName}}) {{item.createDate | date:'dd/MM/yyyy'}} at {{item.createDate | date: 'HH:mm a'}}</small></h5> 
 
