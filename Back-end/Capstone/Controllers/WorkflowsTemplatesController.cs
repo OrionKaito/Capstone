@@ -367,6 +367,8 @@ namespace Capstone.Controllers
                 workFlowInDb.Name = model.Name;
                 workFlowInDb.Description = model.Description;
                 workFlowInDb.PermissionToUseID = model.PermissionToUseID;
+                workFlowInDb.Icon = model.Icon;
+                workFlowInDb.IsViewDetail = model.IsViewDetail;
                 _workFlowService.Save();
                 return Ok(WebConstant.Success);
             }
