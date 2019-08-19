@@ -83,6 +83,8 @@ namespace Capstone.ViewModel
         public string Name { get; set; }
         public string Description { get; set; }
         public string Data { get; set; }
+        public string Icon { get; set; }
+        public bool IsViewDetail { get; set; }
         public Guid PermissionToUseID { get; set; }
     }
 }
