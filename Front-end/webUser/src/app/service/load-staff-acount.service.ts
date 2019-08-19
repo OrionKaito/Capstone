@@ -240,7 +240,9 @@ export class LoadStaffAcountService {
   }
   logOut(model){
     console.log("lần 2:", model);
-    return this.http.put(this.Url + "api/Token/Logout?deviceToken=" +model.deviceToken, model);
+    var token = "Bearer " + localStorage.getItem("token");
+    var tokenHeader = new HttpHeaders({'Authorization': token});
+    return this.http.put(this.Url + "api/Token/Logout?deviceToken=" +model.deviceToken, {headers : tokenHeader, responseType: "text"});
   }
   
   
