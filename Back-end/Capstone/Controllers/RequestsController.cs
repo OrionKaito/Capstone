@@ -294,37 +294,38 @@ namespace Capstone.Controllers
                 }
 
                 var nextStep = _workFlowTemplateActionService.GetByID(model.NextStepID);
-                //bool checkPermission = false;
+                bool checkPermission = true;
 
                 //var actionIsStand = _workFlowTemplateActionService.GetByID(currentRequestAction.NextStepID.GetValueOrDefault());
                 if (currentRequestAction.NextStep.PermissionToUseID.HasValue)
                 {
                     if (!userPermissions.Contains(currentRequestAction.NextStep.PermissionToUseID.GetValueOrDefault()))
                     {
-                        //checkPermission = true;
-                        return BadRequest(WebConstant.AccessDined);
+                        checkPermission = false;
+                        //return BadRequest(WebConstant.AccessDined);
                     }
                 }
 
-                //if (actionIsStand.IsApprovedByInitiator)
-                //{
-                //    checkPermission = false;
-                //}
+                if (currentRequestAction.NextStep.IsApprovedByLineManager)
+                {
+                    if (_requestService.GetByID(currentRequestAction.RequestID).Initiator.LineManagerID.Equals(userID))
+                    {
+                        checkPermission = true;
+                    }
+                }
 
-                //if (actionIsStand.IsApprovedByLineManager)
-                //{
-                //    checkPermission = false;
-                //}
+                if (currentRequestAction.NextStep.IsApprovedByInitiator)
+                {
+                    if (_requestService.GetByID(currentRequestAction.RequestID).InitiatorID.Equals(userID))
+                    {
+                        checkPermission = true;
+                    }
+                }
 
-                //if (!actionIsStand.ToEmail.IsNullOrEmpty())
-                //{
-                //    checkPermission = false;
-                //}
-
-                //if (checkPermission == true)
-                //{
-                //    return BadRequest(WebConstant.AccessDined);
-                //}
+                if (checkPermission == false)
+                {
+                    return BadRequest(WebConstant.AccessDined);
+                }
 
                 //Cập nhật đã xử lý
                 currentRequestAction.Status = StatusEnum.Handled;
@@ -430,10 +431,6 @@ namespace Capstone.Controllers
                         //Lấy các user có permission xử lý action để gửi notification
                         if (nextStep.PermissionToUseID.HasValue)
                         {
-                            if (!userPermissions.Contains(currentRequestAction.NextStep.PermissionToUseID.GetValueOrDefault()))
-                            {
-                                return BadRequest(WebConstant.AccessDined);
-                            }
                             var users = _userService.GetUsersByPermissionID(nextStep.PermissionToUseID.GetValueOrDefault());
 
                             if (users != null && users.Any())
@@ -836,13 +833,14 @@ namespace Capstone.Controllers
                     var staffWorkflowaction = _workFlowTemplateActionService.GetByID(staffAction.NextStepID.GetValueOrDefault());
 
                     var staffStatus = _workFlowTemplateActionConnectionService
-                        .GetByFromIDAndToID(staffAction.WorkFlowTemplateAction.ID, staffAction.NextStep.ID)
+                        .GetByFromIDAndToID(staffAction.WorkFlowTemplateActionID.GetValueOrDefault(), staffAction.NextStep.ID)
                         .ConnectionType.Name; ;
 
                     StaffRequestActionVM staffRequestAction = new StaffRequestActionVM()
                     {
-                        FullName = staffAction.Actor.FullName,
-                        UserName = _userManager.FindByIdAsync(staffAction.ActorID).Result.UserName,
+
+                        FullName = staffAction.Actor == null ? staffAction.ActorEmail : staffAction.Actor.FullName,
+                        UserName = staffAction.ActorID == null ? staffAction.ActorEmail : _userManager.FindByIdAsync(staffAction.ActorID).Result.UserName,
                         CreateDate = staffAction.CreateDate,
                         RequestValues = staffRequestValues,
                         Status = staffStatus,
@@ -885,6 +883,7 @@ namespace Capstone.Controllers
                     WorkFlowTemplateName = request.WorkFlowTemplate.Name,
                     WorkFlowTemplateActionID = workFlowTemplateAction.ID,
                     WorkFlowTemplateActionName = workFlowTemplateAction.Name,
+                    Description = workFlowTemplateAction.Description,
                     Connections = connections,
                     ActionType = _mapper.Map<ActionTypeVM>(actionType),
                     Request = _mapper.Map<RequestVM>(request),
