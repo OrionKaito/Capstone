@@ -293,6 +293,39 @@ namespace Capstone.Controllers
                     return BadRequest(WebConstant.RequestHangfire);
                 }
 
+                var nextStep = _workFlowTemplateActionService.GetByID(model.NextStepID);
+                //bool checkPermission = false;
+
+                //var actionIsStand = _workFlowTemplateActionService.GetByID(currentRequestAction.NextStepID.GetValueOrDefault());
+                if (currentRequestAction.NextStep.PermissionToUseID.HasValue)
+                {
+                    if (!userPermissions.Contains(currentRequestAction.NextStep.PermissionToUseID.GetValueOrDefault()))
+                    {
+                        //checkPermission = true;
+                        return BadRequest(WebConstant.AccessDined);
+                    }
+                }
+
+                //if (actionIsStand.IsApprovedByInitiator)
+                //{
+                //    checkPermission = false;
+                //}
+
+                //if (actionIsStand.IsApprovedByLineManager)
+                //{
+                //    checkPermission = false;
+                //}
+
+                //if (!actionIsStand.ToEmail.IsNullOrEmpty())
+                //{
+                //    checkPermission = false;
+                //}
+
+                //if (checkPermission == true)
+                //{
+                //    return BadRequest(WebConstant.AccessDined);
+                //}
+
                 //Cập nhật đã xử lý
                 currentRequestAction.Status = StatusEnum.Handled;
 
@@ -346,8 +379,6 @@ namespace Capstone.Controllers
 
                     _requestValueService.Create(requestValue);
                 }
-
-                var nextStep = _workFlowTemplateActionService.GetByID(model.NextStepID);
 
                 if (!nextStep.IsEnd) //Kiểm tra đây không phải action cuối cùng
                 {
