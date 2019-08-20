@@ -123,10 +123,10 @@ export class EditAccountShapeComponent implements OnInit {
         }
         this.activatedRoute.params.subscribe(item => {
             if (item.id) {
-
                 this.saveIDofWF = item.id;
                 //load dữ liệu của thằng này kiểu json để show lên lại
                 this.shapeService.getJsonByUserId(item.id).toPromise().then(res => {
+
 
                     if (res) {
                         this.saveActiontype = res;
@@ -1225,7 +1225,8 @@ export class EditAccountShapeComponent implements OnInit {
 
                 let jsonData = JSON.stringify(exportJson);
                 let a = {
-                    'workFlowTemplateID': this.saveIDofWF, 'data': jsonData,
+                    'workFlowTemplateID': this.saveIDofWF, "icon": this.saveActiontype.icon,
+                    "isViewDetail": this.saveActiontype.isViewDetail, 'data': jsonData,
                     'actions': jsonActions, 'connections': jsonConnections
                 };
 
