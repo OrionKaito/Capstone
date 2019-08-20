@@ -13,42 +13,28 @@
     </div>
 </h4>
 <hr>
-<form #form="ngForm" autocomplete="off" (submit)="onSubmit()">
+<form autocomplete="off" (submit)="onSubmit()">
     <div class="form-group">
-
-
-        <mat-form-field>
-            <label>Name of Workflow</label>
-            <input matInput [formControl]="emailFormControl" name="name" type="text" [(ngModel)]="formData.name"
-                class="form-control">
+        <mat-form-field class="example-full-width">
+            <!-- <label>Name of Workflow</label> -->
+            <input  placeholder="Name of Workflow" matInput  name="name" type="text" [(ngModel)]="formData.name">
         </mat-form-field>
     </div>
-
     <div class="form-group">
-
-        <mat-form-field class="">
-            <label>Description</label>
-            <input matInput [formControl]="descriptionFormControl" name="description" type="text"
+        <mat-form-field class="example-full-width">
+            <input matInput  placeholder="Description"  name="description" type="text"
                 [(ngModel)]="formData.description" class="form-control">
         </mat-form-field>
     </div>
-    <!-- <div class="form-row">
-      <label>Permission to edit</label>
-      <select name="permissionEdit" [(ngModel)]="formData.permissionToEditID" class="form-control">
-        <option value="0">-Select-</option>
-        <option *ngFor="let item of permissionList" value="{{item.id}}">{{item.name}}</option>
-      </select>
-
-    </div> -->
-    <div class="form-row">
+    <div class="form-group">
         <label>Permission to apply this Workflow</label>
-        <select name="permissionUse" [(ngModel)]="formData.permissionToUseID" class="form-control">
+        <select matInput name="permissionUse" [(ngModel)]="formData.permissionToUseID" class="form-control">
             <option value="0">-Select-</option>
             <option *ngFor="let item of permissionList" value="{{item.id}}">{{item.name}}</option>
         </select>
     </div>
-    <div class="form-group">
-            <div class="form-row"><label>Icon </label></div>
+    <div style="color: black !important" class="form-group">
+            <div class="form-row">Icon </div>
         <a style="height: 30px; width: 30px;" *ngFor="let item of listIcon" name="icon{{item}}" id="icon{{item}}"  (click)=(chooseIcon(item))><mat-icon>{{item}}</mat-icon></a>
         <!-- <select name="icon" [(ngModel)]="formData.icon" class="form-control">
             <option value="folder_special"><mat-icon>folder_special</mat-icon></option>
