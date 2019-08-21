@@ -106,6 +106,8 @@ namespace Capstone.ViewModel
 
         public string WorkFlowTemplateActionName { get; set; }
 
+        public string Description { get; set; }
+
         public Guid WorkFlowTemplateActionID { get; set; }
 
         public RequestVM Request { get; set; }
