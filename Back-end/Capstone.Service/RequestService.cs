@@ -27,12 +27,20 @@ namespace Capstone.Service
     {
         private readonly IRequestRepository _requestRepository;
         private readonly IRequestActionRepository _requestActionRepository;
+        private readonly IPermissionOfGroupRepository _permissionOfGroupRepository;
+        private readonly IUserGroupRepository _userGroupRepository;
         private readonly IUnitOfWork _unitOfWork;
 
-        public RequestService(IRequestRepository requestRepository, IRequestActionRepository requestActionRepository, IUnitOfWork unitOfWork)
+        public RequestService(IRequestRepository requestRepository
+            , IRequestActionRepository requestActionRepository
+            , IPermissionOfGroupRepository permissionOfGroupRepository
+            , IUserGroupRepository userGroupRepository
+            , IUnitOfWork unitOfWork)
         {
             _requestRepository = requestRepository;
             _requestActionRepository = requestActionRepository;
+            _permissionOfGroupRepository = permissionOfGroupRepository;
+            _userGroupRepository = userGroupRepository;
             _unitOfWork = unitOfWork;
         }
 
@@ -86,6 +94,36 @@ namespace Capstone.Service
             }
 
             return result;
+        }
+
+        public IEnumerable<Request> GetRequestNotAbleToHandle()
+        {
+            //Lấy các request action mà duyệt bằng linemanager mà không có
+            var requests = _requestActionRepository.GetMany(r => r.Status == StatusEnum.Pending
+            && r.WorkFlowTemplateAction.IsApprovedByLineManager == true
+            && r.Request.Initiator.LineManagerID == null);
+
+            //Lấy các request action mà duyệt bằng permission 
+            List<Request> requestsNoPermisison = new List<Request>();
+            var requestsActionPermission = _requestActionRepository.GetMany(r => r.Status == StatusEnum.Pending
+            && r.WorkFlowTemplateAction.PermissionToUse != null);
+
+            foreach (var requestAction in requestsActionPermission)
+            {
+                //Lấy permissionOfGroup của nhưng request action vừa rồi
+                var permissionOfGroups = _permissionOfGroupRepository.GetMany(p => p.PermissionID == requestAction.WorkFlowTemplateAction.PermissionToUse.ID);
+                foreach (var permissionOfGroup in permissionOfGroups)
+                {
+                    //Kiểm tra usergroup có tồn tại không
+                    var userGroup = _userGroupRepository.GetMany(u => u.GroupID == permissionOfGroup.GroupID);
+                    if (userGroup == null)
+                    {
+                        requestsNoPermisison.Add(requestAction.Request);
+                    }
+                }
+            }
+
+            return null;
         }
 
         public void Save()

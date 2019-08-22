@@ -888,6 +888,42 @@ namespace Capstone.Controllers
             }
         }
 
+        [HttpGet]
+        public ActionResult<RequestNotAbleToHandleVM> GetRequestNotAbleToHandle(int? numberOfPage, int? NumberOfRecord)
+        {
+            try
+            {
+                var page = numberOfPage ?? 1;
+                var count = NumberOfRecord ?? WebConstant.DefaultPageRecordCount;
+
+                var requests = _requestService.GetByUserID(userID).Select(r => new MyRequestVM
+                {
+                    ID = r.ID,
+                    CreateDate = r.CreateDate,
+                    CurrentRequestActionID = r.CurrentRequestActionID,
+                    CurrentRequestActionName = _requestActionService.GetByID(r.CurrentRequestActionID).NextStep.Name,
+                    Description = r.Description,
+                    WorkFlowTemplateID = r.WorkFlowTemplateID,
+                    WorkFlowTemplateName = r.WorkFlowTemplate.Name,
+                    IsCompleted = r.IsCompleted,
+                    IsDeleted = r.IsDeleted,
+                }).OrderByDescending(r => r.CreateDate);
+
+                MyRequestPaginVM myRequestPaginVM = new MyRequestPaginVM
+                {
+                    //TotalRecord = requests.Count(),
+                    TotalRecord = _requestService.CountMyRequest(userID),
+                    MyRequests = requests.Skip((page - 1) * count).Take(count),
+                };
+
+                return Ok(myRequestPaginVM);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
+
         private async void PushNotificationToUser(string userID, string title, string body, Notification notification)
         {
             //get list user device by userID
