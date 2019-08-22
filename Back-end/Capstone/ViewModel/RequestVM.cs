@@ -184,4 +184,9 @@ namespace Capstone.ViewModel
 
         public bool IsDeleted { get; set; }
     }
+
+    public class RequestNotAbleToHandleVM
+    {
+
+    }
 }
