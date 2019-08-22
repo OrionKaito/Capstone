@@ -3,7 +3,7 @@ using Capstone.Data.Repositories;
 using Capstone.Model;
 using System;
 using System.Collections.Generic;
-
+using System.Linq;
 
 namespace Capstone.Service
 {
@@ -15,6 +15,8 @@ namespace Capstone.Service
         IEnumerable<Request> GetRequestToApproveByLineManager();
         IEnumerable<Request> GetRequestToApproveByInitiator(string userID);
         IEnumerable<Request> GetByUserID(string ID);
+        IEnumerable<Request> GetRequestNotAbleToHandleByPermission();
+        IEnumerable<Request> GetRequestNotAbleToHandleByLineManager();
         Request GetByID(Guid ID);
         int CountMyRequest(string ID);
         void Create(Request request);
@@ -96,34 +98,56 @@ namespace Capstone.Service
             return result;
         }
 
-        public IEnumerable<Request> GetRequestNotAbleToHandle()
+        public IEnumerable<Request> GetRequestNotAbleToHandleByPermission()
         {
-            //Lấy các request action mà duyệt bằng linemanager mà không có
-            var requests = _requestActionRepository.GetMany(r => r.Status == StatusEnum.Pending
-            && r.WorkFlowTemplateAction.IsApprovedByLineManager == true
-            && r.Request.Initiator.LineManagerID == null);
-
-            //Lấy các request action mà duyệt bằng permission 
             List<Request> requestsNoPermisison = new List<Request>();
+
             var requestsActionPermission = _requestActionRepository.GetMany(r => r.Status == StatusEnum.Pending
-            && r.WorkFlowTemplateAction.PermissionToUse != null);
+            && r.NextStep.PermissionToUse != null);
 
             foreach (var requestAction in requestsActionPermission)
             {
                 //Lấy permissionOfGroup của nhưng request action vừa rồi
-                var permissionOfGroups = _permissionOfGroupRepository.GetMany(p => p.PermissionID == requestAction.WorkFlowTemplateAction.PermissionToUse.ID);
+                var permissionOfGroups = _permissionOfGroupRepository.GetMany(p => p.PermissionID == requestAction.NextStep.PermissionToUse.ID);
+
+                //Lấy những permissionOfGroup theo permissionID
+                var permissionInGroup = _permissionOfGroupRepository.GetByPermission(requestAction.NextStep.PermissionToUse.ID);
+                //Kiểm tra permission đó có group chưa
+                if (permissionInGroup == null)
+                {
+                    requestsNoPermisison.Add(requestAction.Request);
+                }
+
                 foreach (var permissionOfGroup in permissionOfGroups)
                 {
                     //Kiểm tra usergroup có tồn tại không
                     var userGroup = _userGroupRepository.GetMany(u => u.GroupID == permissionOfGroup.GroupID);
-                    if (userGroup == null)
+                    if (userGroup.Count() == 0)
                     {
                         requestsNoPermisison.Add(requestAction.Request);
                     }
                 }
             }
+            
+            return requestsNoPermisison;
+        }
 
-            return null;
+        public IEnumerable<Request> GetRequestNotAbleToHandleByLineManager()
+        {
+            //Lấy các request action mà duyệt bằng linemanager mà không có
+            var requestActions = _requestActionRepository.GetMany(r => r.Status == StatusEnum.Pending
+            && r.NextStep.IsApprovedByLineManager == true
+            && r.Request.Initiator.LineManagerID == null);
+
+            //Lấy các request action mà duyệt bằng permission 
+            List<Request> requestsNoLineManager = new List<Request>();
+
+            foreach (var requestAction in requestActions)
+            {
+                requestsNoLineManager.Add(requestAction.Request);
+            }
+
+            return requestsNoLineManager;
         }
 
         public void Save()

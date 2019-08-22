@@ -918,7 +918,7 @@ namespace Capstone.Controllers
             }
         }
 
-        [HttpGet]
+        [HttpGet("GetRequestNotAbleToHandle")]
         public ActionResult<RequestNotAbleToHandleVM> GetRequestNotAbleToHandle(int? numberOfPage, int? NumberOfRecord)
         {
             try
@@ -926,24 +926,36 @@ namespace Capstone.Controllers
                 var page = numberOfPage ?? 1;
                 var count = NumberOfRecord ?? WebConstant.DefaultPageRecordCount;
 
-                var requests = _requestService.GetByUserID(userID).Select(r => new MyRequestVM
-                {
-                    ID = r.ID,
-                    CreateDate = r.CreateDate,
-                    CurrentRequestActionID = r.CurrentRequestActionID,
-                    CurrentRequestActionName = _requestActionService.GetByID(r.CurrentRequestActionID).NextStep.Name,
-                    Description = r.Description,
-                    WorkFlowTemplateID = r.WorkFlowTemplateID,
-                    WorkFlowTemplateName = r.WorkFlowTemplate.Name,
-                    IsCompleted = r.IsCompleted,
-                    IsDeleted = r.IsDeleted,
-                }).OrderByDescending(r => r.CreateDate);
+                List<RequestNotAbleToHandle> listRequest = new List<RequestNotAbleToHandle>();
 
-                MyRequestPaginVM myRequestPaginVM = new MyRequestPaginVM
+                var requestNotAbleToHandleByPermission = _requestService.GetRequestNotAbleToHandleByPermission().Select(r => new RequestNotAbleToHandle
+                {
+                    WorkFlowTemplateName = r.WorkFlowTemplate.Name,
+                    WorkflowTemplateActionName = _requestActionService.GetByID(r.CurrentRequestActionID).NextStep.Name,
+                    InitiatorName = r.Initiator.FullName,
+                    Reason = WebConstant.NotAbleToHandleByPermission,
+                    CreateDate = r.CreateDate
+                });
+
+                var requestNotAbleToHandleByLineManager= _requestService.GetRequestNotAbleToHandleByPermission().Select(r => new RequestNotAbleToHandle
+                {
+                    WorkFlowTemplateName = r.WorkFlowTemplate.Name,
+                    WorkflowTemplateActionName = _requestActionService.GetByID(r.CurrentRequestActionID).NextStep.Name,
+                    InitiatorName = r.Initiator.FullName,
+                    Reason = WebConstant.NotAbleToHandleByPermission,
+                    CreateDate = r.CreateDate
+                });
+
+                listRequest.AddRange(requestNotAbleToHandleByPermission);
+                listRequest.AddRange(requestNotAbleToHandleByLineManager);
+
+                var list = listRequest.OrderBy(r => r.CreateDate);
+
+                RequestNotAbleToHandleVM myRequestPaginVM = new RequestNotAbleToHandleVM
                 {
                     //TotalRecord = requests.Count(),
-                    TotalRecord = _requestService.CountMyRequest(userID),
-                    MyRequests = requests.Skip((page - 1) * count).Take(count),
+                    TotalRecord = list.Count(),
+                    MyRequests = list.Skip((page - 1) * count).Take(count),
                 };
 
                 return Ok(myRequestPaginVM);
