@@ -34,6 +34,7 @@ namespace Capstone.Service
         private readonly IRequestValueService _requestValueService;
         private readonly IRequestFileService _requestFileService;
         private readonly IDataProtector _dataProtector;
+        private readonly IWebHookService _webHookService;
 
         public HangfireService(IUnitOfWork unitOfWork, IRequestRepository requestRepository
             , IRequestActionRepository requestActionRepository
@@ -49,7 +50,8 @@ namespace Capstone.Service
             , IWorkFlowTemplateRepository workFlowTemplateRepository
             , UserManager<User> userManager
             , IUserService userService
-            , IDataProtectionProvider provider)
+            , IDataProtectionProvider provider
+            , IWebHookService webHookService)
         {
             _unitOfWork = unitOfWork;
             _requestRepository = requestRepository;
@@ -68,6 +70,7 @@ namespace Capstone.Service
             _userService = userService;
             _userManager = userManager;
             _dataProtector = provider.CreateProtector(WebConstant.Purpose);
+            _webHookService = webHookService;
         }
 
         public void HandleByHangfire()
@@ -105,78 +108,112 @@ namespace Capstone.Service
                 {
                     if (!_workFlowTemplateActionRepository.GetByID(requestAction.NextStepID.GetValueOrDefault()).IsEnd)
                     {
-                        requestAction.Status = StatusEnum.Handled;
+                        requestAction.Status = StatusEnum.Pending;
+                        Save();
+
+                        var workflowTemplateAction = _workFlowTemplateActionRepository.GetByID(requestAction.NextStepID.GetValueOrDefault());
+                        var notification = _notificationService.GetByRequestActionID(requestAction.ID);
+
+                        if (workflowTemplateAction.IsApprovedByInitiator)
+                        {
+                            var initiator = _userManager.FindByIdAsync(requestAction.Request.InitiatorID).Result;
+                            PushNotificationToUser(initiator.Id, "Received Request", WebConstant.ReceivedRequestMessage, notification);
+                        }
+                        if (workflowTemplateAction.IsApprovedByLineManager)
+                        {
+                            var manager = _userManager.FindByIdAsync(requestAction.Request.InitiatorID).Result;
+                            var managerID = manager.LineManagerID;
+                            if (managerID != "" || !string.IsNullOrEmpty(managerID))
+                            {
+                                //Push notification
+                                PushNotificationToUser(managerID, workflowTemplateAction.WorkFlowTemplate.Name, "You received a request from " + requestAction.Request.Initiator.FullName, notification);
+                            }
+                        }
+                        if (workflowTemplateAction.PermissionToUseID.HasValue)
+                        {
+                            var users = _userService.GetUsersByPermissionID(workflowTemplateAction.PermissionToUseID.GetValueOrDefault());
+
+                            if (users != null && users.Any())
+                            {
+                                foreach (var user in users)
+                                {
+                                    //Push notification
+                                    PushNotificationToUser(user.Id, "Received Request", "You received a request from " + requestAction.Request.Initiator.FullName, notification);
+                                }
+                            }
+                        }
+                        if (!workflowTemplateAction.ToEmail.IsNullOrEmpty())
+                        {
+                            var requestValue = _requestValueService.GetByRequestActionID(requestAction.ID);
+
+                            Dictionary<string, string> dynamicform = new Dictionary<string, string>();
+
+                            foreach (var item in requestValue)
+                            {
+                                dynamicform.Add(item.Key, item.Value);
+                            }
+
+                            Dictionary<string, string> listButton = new Dictionary<string, string>();
+                            var connections = _workFlowTemplateActionConnectionRepository.GetByFromWorkflowTemplateActionID(workflowTemplateAction.ID);
+                            string url = "";
+                            foreach (var connection in connections)
+                            {
+                                url = (_configuration["UrlCapstoneMvc"]
+                                        + "/home/ApproveRequest/?content="
+                                        + _dataProtector.Protect("RequestID="
+                                            + requestAction.Request.ID
+                                            + "&RequestActionID="
+                                            + requestAction.ID
+                                            + "&NextStepID="
+                                            + connection.ToWorkFlowTemplateActionID)
+                                        );
+                                listButton.Add(url, connection.ConnectionType.Name);
+                            }
+
+                            string message = _emailService.GenerateMessageTest(workflowTemplateAction.ToEmail
+                                , "Dynamic Workflow"
+                                , _workFlowTemplateRepository.GetById(requestAction.Request.WorkFlowTemplateID).Name
+                                , workflowTemplateAction.Name
+                                , dynamicform
+                                , null
+                                , listButton);
+
+                            _emailService.SendMail(workflowTemplateAction.ToEmail, "You receive request.", message, new List<string>());
+                        }
+
+                        //kiểm tra có webhook ko
+                        if (!workFlowTemplateActionConnection.Url.IsNullOrEmpty())
+                        {
+                            _webHookService.WebHook(workFlowTemplateActionConnection.Url, "Success");
+                        }
                     }
                     else
                     {
-                        requestAction.Status = StatusEnum.Pending;
-                    }
+                        //Cập nhật request
+                        requestAction.Request.IsCompleted = true;
+                        requestAction.Request.CurrentRequestActionID = requestAction.ID;
+                        requestAction.Status = StatusEnum.Handled;
+                        Save();
+                        _requestService.Save();
 
-                    Save();
-
-                    var workflowTemplateAction = _workFlowTemplateActionRepository.GetByID(requestAction.NextStepID.GetValueOrDefault());
-                    var notification = _notificationService.GetByRequestActionID(requestAction.ID);
-
-                    if (workflowTemplateAction.IsApprovedByLineManager)
-                    {
-                        var manager = _userManager.FindByIdAsync(requestAction.Request.InitiatorID).Result;
-                        var managerID = manager.LineManagerID;
-                        if (managerID != "" || !string.IsNullOrEmpty(managerID))
+                        //Notification
+                        Notification notification = new Notification
                         {
-                            //Push notification
-                            PushNotificationToUser(managerID, workflowTemplateAction.WorkFlowTemplate.Name, "You received a request from " + requestAction.Request.Initiator.FullName, notification);
-                        }
-                    }
-                    if (workflowTemplateAction.PermissionToUseID.HasValue)
-                    {
-                        var users = _userService.GetUsersByPermissionID(workflowTemplateAction.PermissionToUseID.GetValueOrDefault());
+                            EventID = requestAction.ID,
+                            NotificationType = NotificationEnum.CompletedRequest,
+                            CreateDate = DateTime.Now,
+                        };
 
-                        if (users != null && users.Any())
+                        _notificationService.Create(notification);
+
+                        //kiểm tra có webhook ko
+                        if (!workFlowTemplateActionConnection.Url.IsNullOrEmpty())
                         {
-                            foreach (var user in users)
-                            {
-                                //Push notification
-                                PushNotificationToUser(user.Id, "Received Request", "You received a request from " + requestAction.Request.Initiator.FullName, notification);
-                            }
-                        }
-                    }
-                    if (!workflowTemplateAction.ToEmail.IsNullOrEmpty())
-                    {
-                        var requestValue = _requestValueService.GetByRequestActionID(requestAction.ID);
-
-                        Dictionary<string, string> dynamicform = new Dictionary<string, string>();
-
-                        foreach (var item in requestValue)
-                        {
-                            dynamicform.Add(item.Key, item.Value);
+                            _webHookService.WebHook(workFlowTemplateActionConnection.Url, "Success");
                         }
 
-                        Dictionary<string, string> listButton = new Dictionary<string, string>();
-                        var connections = _workFlowTemplateActionConnectionRepository.GetByFromWorkflowTemplateActionID(workflowTemplateAction.ID);
-                        string url = "";
-                        foreach (var connection in connections)
-                        {
-                            url = (_configuration["UrlCapstoneMvc"]
-                                    + "/home/ApproveRequest/?content="
-                                    + _dataProtector.Protect("RequestID="
-                                        + requestAction.Request.ID
-                                        + "&RequestActionID="
-                                        + requestAction.ID
-                                        + "&NextStepID="
-                                        + connection.ToWorkFlowTemplateActionID)
-                                    );
-                            listButton.Add(url, connection.ConnectionType.Name);
-                        }
-
-                        string message = _emailService.GenerateMessageTest(workflowTemplateAction.ToEmail
-                            , "Dynamic Workflow"
-                            , _workFlowTemplateRepository.GetById(requestAction.Request.WorkFlowTemplateID).Name
-                            , workflowTemplateAction.Name
-                            , dynamicform
-                            , null
-                            , listButton);
-
-                        _emailService.SendMail(workflowTemplateAction.ToEmail, "You receive request.", message, new List<string>());
+                        //Push notification
+                        PushNotificationToUser(requestAction.Request.InitiatorID, "Completed Request", WebConstant.CompletedRequestMessage, notification);
                     }
                 }
             }

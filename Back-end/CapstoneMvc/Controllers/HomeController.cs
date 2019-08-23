@@ -33,6 +33,7 @@ namespace CapstoneMvc.Controllers
         private readonly IEmailService _emailService;
         private readonly IConfiguration _configuration;
         private readonly IDataProtector _dataProtector;
+        private readonly IWebHookService _webHookService;
 
         public HomeController(IRequestService requestService
             , IRequestActionService requestActionService
@@ -50,7 +51,8 @@ namespace CapstoneMvc.Controllers
             , IUserDeviceService userDeviceService
             , IEmailService emailService
             , IConfiguration configuration
-            , IDataProtectionProvider provider)
+            , IDataProtectionProvider provider
+            , IWebHookService webHookService)
         {
             _requestService = requestService;
             _requestActionService = requestActionService;
@@ -69,6 +71,7 @@ namespace CapstoneMvc.Controllers
             _emailService = emailService;
             _configuration = configuration;
             _dataProtector = provider.CreateProtector(WebConstant.Purpose);
+            _webHookService = webHookService;
         }
 
         public IActionResult Index()
@@ -147,6 +150,10 @@ namespace CapstoneMvc.Controllers
                 _requestActionService.Create(requestAction);
 
                 var nextStep = _workFlowTemplateActionService.GetByID(model.NextStepID);
+                
+                //Lấy connection dựa vào action trước và kế tiếp
+                var workFlowTemplateActionConnection = _workFlowTemplateActionConnectionService
+                    .GetByFromIDAndToID(currentRequestAction.NextStep.ID, model.NextStepID);
 
                 if (!nextStep.IsEnd) //Kiểm tra đây không phải action cuối cùng
                 {
@@ -163,11 +170,7 @@ namespace CapstoneMvc.Controllers
                     };
 
                     _notificationService.Create(notification);
-
-                    //Lấy connection dựa vào action trước và kế tiếp
-                    var workFlowTemplateActionConnection = _workFlowTemplateActionConnectionService
-                        .GetByFromIDAndToID(currentRequestAction.NextStep.ID, model.NextStepID);
-
+                   
                     //kiểm tra connection coi có bị hangfire không?
                     //nếu có thì để status của requestAction là Hangfire
                     if (workFlowTemplateActionConnection.TimeInterval > 0)
@@ -260,6 +263,11 @@ namespace CapstoneMvc.Controllers
 
                             _emailService.SendMail(nextStep.ToEmail, "You receive", message, filePaths);
                         }
+                        //kiểm tra có webhook ko
+                        if (!workFlowTemplateActionConnection.Url.IsNullOrEmpty())
+                        {
+                            _webHookService.WebHook(workFlowTemplateActionConnection.Url, "Success");
+                        }
                     }
                 }
                 else // Nếu nó là action cuối cùng (kết quả) thì gửi về cho người gửi request
@@ -283,6 +291,12 @@ namespace CapstoneMvc.Controllers
 
                     var ownerID = _requestService.GetByID(model.RequestID).InitiatorID;
                     var owner = _userManager.FindByIdAsync(ownerID).Result;
+
+                    //kiểm tra có webhook ko
+                    if (!workFlowTemplateActionConnection.Url.IsNullOrEmpty())
+                    {
+                        _webHookService.WebHook(workFlowTemplateActionConnection.Url, "Success");
+                    }
 
                     //Push notification
                     PushNotificationToUser(ownerID, "Completed Request", WebConstant.CompletedRequestMessage, notification);
