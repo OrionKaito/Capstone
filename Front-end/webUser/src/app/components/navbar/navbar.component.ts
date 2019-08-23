@@ -69,15 +69,17 @@ export class NavbarComponent implements OnInit {
         this.sidebarVisible = true;
     };
     logOut(){
-        let a=localStorage.getItem("tokenNoti").toString();
+        let a=localStorage.getItem("tokenNoti");
         let model={"deviceToken": a};
+        console.log("model:",model);
         this.loadStaffAcountService.logOut(model).toPromise().then(res=>{   
             localStorage.removeItem("token");
-
+            this.router.navigate(['/login']);
         }, err=>{
-            console.log(err);
+            localStorage.removeItem("token");
+            this.router.navigate(['/login']);
         })
-        this.router.navigate(['/login']);
+        
       
     };
     checkUserProfile(){

@@ -56,16 +56,14 @@
           </mat-form-field>
         </td>
       </tr>
-      <!-- <tr *ngIf="checkIsAction">
-
-
+      <tr *ngIf="checkIsAction">
         <td>
           <mat-form-field class="example-full-width">
             <input matInput placeholder="Description" name="properties.description" [(ngModel)]="properties.description"
               type="text">
           </mat-form-field>
         </td>
-      </tr> -->
+      </tr>
 
 
       <tr *ngIf="checkIsAction && properties.isStart">
@@ -148,6 +146,11 @@
           </mat-form-field> -->
 
 
+      </tr>
+      <tr *ngIf="checkIsArrow">
+          <mat-form-field class="example-full-width">
+              <input matInput placeholder="Web hook" name="propertiesArr.webHook" [(ngModel)]="propertiesArr.webHook" type="text">
+          </mat-form-field>
       </tr>
       <tr *ngIf="checkIsArrow">
         <!-- <td>Name arrow</td> -->

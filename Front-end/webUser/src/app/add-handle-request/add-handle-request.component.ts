@@ -93,12 +93,13 @@ export class AddHandleRequestComponent implements OnInit {
       "createDate": "2019-08-14T11:55:53.918Z",
       "requestActionID": "string"
     }
-    console.log("vo day");
+    
     this.workFlowTemplateID = this.data;
     console.log(this.data);
     this.loadStaffAcountService.getHandleForm(this.workFlowTemplateID).toPromise().then(res => {
       console.log(res);
       this.saveData = res;
+      console.log(this.saveData);
       this.initiatorName = this.saveData.initiatorName;
       this.workFlowTemplateName = this.saveData.workFlowTemplateName;
       this.buttons = this.saveData.connections;
@@ -110,12 +111,14 @@ export class AddHandleRequestComponent implements OnInit {
         console.log("here:", a);
         // a.lastIndexOf()
         element.name = element.path.substring(element.path.lastIndexOf('\\')+1);
+
       });
 
       this.requestActionHandleValue = this.saveData.userRequestAction.requestValues;
       this.cmtHandle = this.saveData.staffRequestActions;
 
       console.log("cmtHandle", this.cmtHandle);
+      
     },err =>{
       this.toastr.error(err.error);
     })

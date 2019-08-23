@@ -50,6 +50,9 @@ export class AddAccountComponent implements OnInit {
           this.formData.id = this.recevieData.id;
           this.formData.data = this.recevieData.data;
           this.formData.description = this.recevieData.description;
+          this.formData.isViewDetail = this.recevieData.isViewDetail;
+          this.formData.icon = this.recevieData.icon;
+
           //  this.formData.description = "Ádasd";
 
           this.formData.permissionToUseID = this.recevieData.permissionToUseID;
@@ -90,6 +93,7 @@ export class AddAccountComponent implements OnInit {
           });
 
       } else {
+        console.log("form",this.formData);
         this.LoginService.editWF(this.formData).toPromise().then(
           resp => {
             if (resp != "") {

@@ -106,6 +106,8 @@ namespace Capstone.ViewModel
 
         public string WorkFlowTemplateActionName { get; set; }
 
+        public string Description { get; set; }
+
         public Guid WorkFlowTemplateActionID { get; set; }
 
         public RequestVM Request { get; set; }
@@ -183,8 +185,18 @@ namespace Capstone.ViewModel
         public bool IsDeleted { get; set; }
     }
 
+    public class RequestNotAbleToHandle
+    {
+        public string WorkFlowTemplateName { get; set; }
+        public string WorkflowTemplateActionName { get; set; }
+        public string InitiatorName { get; set; }
+        public string Reason { get; set; }
+        public DateTime? CreateDate { get; set; }
+    }
+
     public class RequestNotAbleToHandleVM
     {
-
+        public int TotalRecord { get; set; }
+        public IEnumerable<RequestNotAbleToHandle> MyRequests { get; set; }
     }
 }

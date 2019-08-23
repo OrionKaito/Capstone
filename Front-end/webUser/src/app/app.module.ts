@@ -57,6 +57,7 @@ import { AddManagePerGrComponent } from './add-manage-per-gr/add-manage-per-gr.c
 import { AngularFireDatabase, AngularFireDatabaseModule } from 'angularfire2/database';
 import { ManageYourRequestComponent } from './manage-your-request/manage-your-request.component';
 import { AddYourRequestComponent } from './add-your-request/add-your-request.component';
+import { ManageErrRequestComponent } from './manage-err-request/manage-err-request.component';
 
 const config = {
   apiKey: "AIzaSyA870TvgTsit4CcKLI0hnn3v89-yR6mwLE",
@@ -126,6 +127,7 @@ const config = {
     AddNewDynamicFormComponent,
     AddManagePerGrComponent,
     AddYourRequestComponent,
+    // ManageErrRequestComponent,
 
 
   ],

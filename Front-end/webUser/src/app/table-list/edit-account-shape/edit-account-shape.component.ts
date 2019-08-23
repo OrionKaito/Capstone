@@ -118,15 +118,16 @@ export class EditAccountShapeComponent implements OnInit {
         this.propertiesArr = {
             name: '',
             type:1,
-            timeInterval: 0
+            timeInterval: 0,
+            webHook:""
 
         }
         this.activatedRoute.params.subscribe(item => {
             if (item.id) {
-
                 this.saveIDofWF = item.id;
                 //load dữ liệu của thằng này kiểu json để show lên lại
                 this.shapeService.getJsonByUserId(item.id).toPromise().then(res => {
+
 
                     if (res) {
                         this.saveActiontype = res;
@@ -187,7 +188,6 @@ export class EditAccountShapeComponent implements OnInit {
                     this.listActionType.push(item);
                 });
             }
-
         }, err => {
             this.toastr.error(err.error);
         })
@@ -244,7 +244,8 @@ export class EditAccountShapeComponent implements OnInit {
                         idArrow: this.create_UUID().toString(),
                         name: 'arrow' + count,
                         timeInterval: 0,
-                        type: 1
+                        type: 1,
+                        webHook: ""
                     });
                 } else {
                     //những mũi tên tiếp theo nó lấy mũi đầu cắt chuỗi lấy số rồi cộng lên
@@ -259,7 +260,8 @@ export class EditAccountShapeComponent implements OnInit {
                         idArrow: this.create_UUID().toString(),
                         name: 'arrow' + (+count + 1),
                         timeInterval: 0,
-                        type: 1
+                        type: 1,
+                        webHook:""
                     });
                 }
                 // Gọi hàm vẽ mủi tên
@@ -1023,7 +1025,10 @@ export class EditAccountShapeComponent implements OnInit {
         dialogConfig.data = [];
         this.dialog.open(AddNewDynamicFormComponent, dialogConfig).afterClosed().subscribe(res => {
             console.log(res);
-            this.getlistActionType();
+            setTimeout(() => {
+                this.getlistActionType();
+            }, 500);
+            
         });
         this.getlistActionType();
 
@@ -1212,20 +1217,23 @@ export class EditAccountShapeComponent implements OnInit {
                         toWorkFlowTemplateActionID: '',
                         name: '',
                         timeInterval: "",
-                        type: ""
+                        type: "",
+                        webHook:""
                     };
                     b.fromWorkFlowTemplateActionID = element.idDiv[0].toString();
                     b.toWorkFlowTemplateActionID = element.idDiv[1].toString();
                     b.name = element.name.toString();
                     b.timeInterval = element.timeInterval;
                     b.type = element.type;
+                    b.webHook = element.webHook;
                     jsonConnections.push(b);
                 });
 
 
                 let jsonData = JSON.stringify(exportJson);
                 let a = {
-                    'workFlowTemplateID': this.saveIDofWF, 'data': jsonData,
+                    'workFlowTemplateID': this.saveIDofWF, "icon": this.saveActiontype.icon,
+                    "isViewDetail": this.saveActiontype.isViewDetail, 'data': jsonData,
                     'actions': jsonActions, 'connections': jsonConnections
                 };
 
