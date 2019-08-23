@@ -33,22 +33,10 @@
             <option *ngFor="let item of permissionList" value="{{item.id}}">{{item.name}}</option>
         </select>
     </div>
-    <div style="color: black !important" class="form-group">
+    <!-- <div style="color: black !important" class="form-group">
             <div class="form-row">Icon </div>
         <a style="height: 30px; width: 30px;" *ngFor="let item of listIcon" name="icon{{item}}" id="icon{{item}}"  (click)=(chooseIcon(item))><mat-icon>{{item}}</mat-icon></a>
-        <!-- <select name="icon" [(ngModel)]="formData.icon" class="form-control">
-            <option value="folder_special"><mat-icon>folder_special</mat-icon></option>
-            <option value="alarm"><mat-icon>alarm</mat-icon></option>
-            <option value="account_balance_wallet"><mat-icon>account_balance_wallet</mat-icon></option>
-            <option value="account_balance"><mat-icon>account_balance</mat-icon></option>
-            <option value="calendar_today"><mat-icon>calendar_today</mat-icon></option>
-            <option value="commute"><mat-icon>commute</mat-icon></option>
-            <option value="library_books"><mat-icon>library_books</mat-icon></option>
-            <option value="videocam"><mat-icon>videocam</mat-icon></option>
-            <option value="airplanemode_active"><mat-icon>airplanemode_active</mat-icon></option>
-            
-        </select> -->
-    </div>
+    </div> -->
     <div class="form-row">
         <input type="checkbox" name="isViewDetail" class="checkbox checkbox-styled" [(ngModel)]="formData.isViewDetail">
         <label>Handler can view detail</label>

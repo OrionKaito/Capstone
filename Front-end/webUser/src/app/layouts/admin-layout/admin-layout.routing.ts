@@ -9,6 +9,7 @@ import { WorkflowOfUserComponent } from 'app/workflow-of-user/workflow-of-user.c
 import { HandleRequestComponent } from 'app/handle-request/handle-request.component';
 import { ManagePerGrComponent } from 'app/manage-per-gr/manage-per-gr.component';
 import { ManageYourRequestComponent } from 'app/manage-your-request/manage-your-request.component';
+import { ManageErrRequestComponent } from 'app/manage-err-request/manage-err-request.component';
 
 
 export const AdminLayoutRoutes: Routes = [
@@ -16,6 +17,7 @@ export const AdminLayoutRoutes: Routes = [
     { path: 'user-profile',   component: UserProfileComponent },
     { path: 'manage-workflow',     component: TableListComponent },
     { path: 'manage-permission',     component: ManagePermissionComponent },
+    { path: 'err-request',     component: ManageErrRequestComponent},
     { path: 'your-request',     component: ManageYourRequestComponent },
     { path: 'manage-per-gr',     component: ManagePerGrComponent },
     { path: 'create-request',     component: WorkflowOfUserComponent },

@@ -8878,7 +8878,7 @@ button:focus {
   .card .card-header-danger:not(.card-header-icon):not(.card-header-text), .card.bg-danger,
   .card.card-rotate.bg-danger .front,
   .card.card-rotate.bg-danger .back {
-    background: linear-gradient(60deg, #ef5350, #e53935); }
+    background: linear-gradient(60deg, #50daef, #eae8e8) !important; }
   .card .card-header-rose .card-icon,
   .card .card-header-rose .card-text,
   .card .card-header-rose:not(.card-header-icon):not(.card-header-text), .card.bg-rose,
