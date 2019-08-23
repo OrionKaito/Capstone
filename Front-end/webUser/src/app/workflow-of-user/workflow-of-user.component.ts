@@ -4,7 +4,6 @@ import { ToastrService } from 'ngx-toastr';
 import { Router } from '@angular/router';
 import { LoadStaffAcountService } from 'app/service/load-staff-acount.service';
 import { LoginService } from 'app/service/login.service';
-import { UserRequestComponent } from 'app/user-request/user-request.component';
 import { AddNewRequestComponent } from 'app/add-new-request/add-new-request.component';
 
 @Component({
