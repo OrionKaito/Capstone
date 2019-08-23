@@ -37,6 +37,7 @@ import { WorkflowOfUserComponent } from 'app/workflow-of-user/workflow-of-user.c
 import { HandleRequestComponent } from 'app/handle-request/handle-request.component';
 import { ManagePerGrComponent } from 'app/manage-per-gr/manage-per-gr.component';
 import { ManageYourRequestComponent } from 'app/manage-your-request/manage-your-request.component';
+import { ManageErrRequestComponent } from 'app/manage-err-request/manage-err-request.component';
 
 // const config = {
 //   apiKey: "AIzaSyCBhMb1lO_1ioNypRrHS4I1q9sYxJ2thcs",
@@ -81,6 +82,7 @@ import { ManageYourRequestComponent } from 'app/manage-your-request/manage-your-
     UserProfileComponent,
     TableListComponent,
     ManagePermissionComponent,
+    ManageErrRequestComponent,
     WorkflowOfUserComponent,
     HandleRequestComponent,
     ManagePerGrComponent,
