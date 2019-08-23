@@ -148,6 +148,11 @@
 
       </tr>
       <tr *ngIf="checkIsArrow">
+          <mat-form-field class="example-full-width">
+              <input matInput placeholder="Web hook" name="propertiesArr.webHook" [(ngModel)]="propertiesArr.webHook" type="text">
+          </mat-form-field>
+      </tr>
+      <tr *ngIf="checkIsArrow">
         <!-- <td>Name arrow</td> -->
         <!-- <td class="d-flex align-items-center">
 

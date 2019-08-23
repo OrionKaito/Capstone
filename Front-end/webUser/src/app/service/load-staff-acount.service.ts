@@ -151,6 +151,9 @@ export class LoadStaffAcountService {
   loadAllPermissionData() {
     return this.http.get(this.Url + "api/Permissions/GetAllPermission");
   }
+  loadErrRequestData() {
+    return this.http.get(this.Url + "api/Permissions/GetAllPermission");
+  }
 
   deletePermission(id: string) {
     return this.http.delete(this.Url + "api/Permissions?ID=" + id);

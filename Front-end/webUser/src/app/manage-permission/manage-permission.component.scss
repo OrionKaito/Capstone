@@ -37,3 +37,9 @@
     height: 32px;
     width: 32px;
 }
+.mat-header-cell {
+    color: #212529;
+}
+.card.card-rotate.bg-danger .back{
+    background: linear-gradient(60deg, #50daef, #eae8e8)!important ;
+}

@@ -37,7 +37,6 @@ export class SidebarComponent implements OnInit {
       if (this.dataNow.name == "staff") {
         for (let i = 0; i < 10; i++) {
           ROUTES.pop();
-
         }
         ROUTES.push(
           { path: '/create-request', title: 'Create Request', icon: 'content_paste', class: 'addLine' },
@@ -45,7 +44,8 @@ export class SidebarComponent implements OnInit {
           { path: '/your-request', title: 'My request', icon: 'content_paste', class: 'addLine' },
           { path: '/manage-workflow', title: 'Manage WorkFlow', icon: 'content_paste', class: 'addLine' },
           { path: '/manage-permission', title: 'Manage Permission', icon: 'content_paste', class: 'addLine' },
-          { path: '/manage-per-gr', title: 'Manage Permission Group', icon: 'content_paste', class: 'addLine' }
+          { path: '/manage-per-gr', title: 'Manage Permission Group', icon: 'content_paste', class: 'addLine' },
+          { path: '/err-request', title: 'Request Can Not Handle', icon: 'content_paste', class: 'addLine' }
         );
 
       } else {
