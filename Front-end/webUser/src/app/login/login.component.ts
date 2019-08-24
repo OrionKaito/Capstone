@@ -93,7 +93,16 @@ export class LoginComponent implements OnInit {
                         localStorage.setItem('saveMe', 'false');
                     }
                     this.router.navigate(['/create-request']);
-                    debugger;
+                 
+                    this.LoginService.getUserProfile().toPromise().then(
+                        resp =>{
+                            let data: any;
+                            data = resp;
+                            localStorage.setItem("name", data[0].fullName);
+                        },err =>{
+                          this.toastr.error(err.error);
+                        }
+                      )
                 }
             }, err => {
 

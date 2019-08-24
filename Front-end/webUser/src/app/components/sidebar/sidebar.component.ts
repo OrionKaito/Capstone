@@ -28,10 +28,12 @@ export const ROUTES: RouteInfo[] = [
 export class SidebarComponent implements OnInit {
   menuItems: any[];
   dataNow: any
+  name: any
 
   constructor(private toastr: ToastrService, private router: Router,private loadStaffAcountService: LoadStaffAcountService) { }
 
-  ngOnInit() {
+  ngOnInit(){
+    this.name = localStorage.getItem("name");
     this.loadStaffAcountService.checkRole().toPromise().then(rep => {
       this.dataNow = rep;
       if (this.dataNow.name == "staff") {

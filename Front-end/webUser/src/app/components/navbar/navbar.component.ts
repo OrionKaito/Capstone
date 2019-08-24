@@ -73,8 +73,10 @@ export class NavbarComponent implements OnInit {
         let model={"deviceToken": a};
         console.log("model:",model);
         this.loadStaffAcountService.logOut(model).toPromise().then(res=>{   
+
             localStorage.removeItem("token");
             this.router.navigate(['/login']);
+            console.log("thanh cong");
         }, err=>{
             localStorage.removeItem("token");
             this.router.navigate(['/login']);
