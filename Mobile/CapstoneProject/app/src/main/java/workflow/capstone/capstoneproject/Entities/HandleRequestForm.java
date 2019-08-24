@@ -19,13 +19,17 @@ public class HandleRequestForm {
     @Expose
     private String workFlowTemplateActionName;
 
+    @SerializedName("description")
+    @Expose
+    private String description;
+
     @SerializedName("workFlowTemplateActionID")
     @Expose
     private String workFlowTemplateActionID;
 
     @SerializedName("request")
     @Expose
-    private Request request;
+    private RequestHandle request;
 
     @SerializedName("userRequestAction")
     @Expose
@@ -67,6 +71,14 @@ public class HandleRequestForm {
         this.workFlowTemplateActionName = workFlowTemplateActionName;
     }
 
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
     public String getWorkFlowTemplateActionID() {
         return workFlowTemplateActionID;
     }
@@ -75,11 +87,11 @@ public class HandleRequestForm {
         this.workFlowTemplateActionID = workFlowTemplateActionID;
     }
 
-    public Request getRequest() {
+    public RequestHandle getRequest() {
         return request;
     }
 
-    public void setRequest(Request request) {
+    public void setRequest(RequestHandle request) {
         this.request = request;
     }
 

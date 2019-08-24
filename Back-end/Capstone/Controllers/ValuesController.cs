@@ -3,6 +3,7 @@ using Hangfire;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
+using System.Net.Http;
 using System.Threading.Tasks;
 
 namespace Capstone.Controllers
@@ -14,12 +15,15 @@ namespace Capstone.Controllers
         private readonly IEmailService _emailService;
         private readonly IRequestValueService _requestValueService;
         private readonly IBackgroundJobClient _backgroundJob;
+        private readonly IWebHookService _webHookService;
 
-        public ValuesController(IEmailService emailService, IRequestValueService requestValueService, IBackgroundJobClient backgroundJob)
+        public ValuesController(IEmailService emailService, IRequestValueService requestValueService, IBackgroundJobClient backgroundJob
+            , IWebHookService webHookService)
         {
             _emailService = emailService;
             _requestValueService = requestValueService;
             _backgroundJob = backgroundJob;
+            _webHookService = webHookService;
         }
 
         [HttpGet("Test")]
@@ -100,6 +104,12 @@ namespace Capstone.Controllers
         //    RecurringJob.AddOrUpdate("test",() => _emailService.SendMail("kevinz2014st@gmail.com","test hangfire", "hangfire test", new List<string>()), "*/5 * * * *");
         //    return Ok();
         //}
+
+        [HttpGet("TestWebHook")]
+        public async Task<HttpResponseMessage> TestWebHook(string url, string message)
+        {
+            return await _webHookService.WebHook(url, message);
+        }
 
         // POST api/values
         [HttpPost("PushNotificationToDevice")]

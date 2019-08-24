@@ -21,6 +21,8 @@ namespace Capstone.Model
         [ForeignKey("ConnectionTypeID")]
         public virtual ConnectionType ConnectionType { get; set; }
 
+        public string Url { get; set; }
+
         public int TimeInterval { get; set; }
         public TimeEnum Type { get; set; }
 
