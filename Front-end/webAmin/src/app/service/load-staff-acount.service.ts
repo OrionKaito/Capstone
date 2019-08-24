@@ -8,7 +8,7 @@ export class LoadStaffAcountService {
   Url: string;
   token: string;
   constructor(private http: HttpClient) {
-    this.Url = 'http://workflow.demo.saigontechnology.vn';
+    this.Url = 'https://api.workflow.demo.saigontechnology.vn';
     this.token = localStorage.getItem('token');
   }
   loadStaffData() {

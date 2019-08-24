@@ -18,6 +18,10 @@ public class UserRequestAction {
     @Expose
     private String workFlowActionName;
 
+    @SerializedName("description")
+    @Expose
+    private String description;
+
     public List<RequestFile> getRequestFiles() {
         return requestFiles;
     }
@@ -40,6 +44,14 @@ public class UserRequestAction {
 
     public void setWorkFlowActionName(String workFlowActionName) {
         this.workFlowActionName = workFlowActionName;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
 }

@@ -38,6 +38,7 @@ namespace Capstone.Controllers
         private readonly IEmailService _emailService;
         private readonly IConfiguration _configuration;
         private readonly IDataProtector _dataProtector;
+        private readonly IWebHookService _webHookService;
 
         public RequestsController(IActionTypeService actionTypeService
             , IMapper mapper
@@ -57,7 +58,8 @@ namespace Capstone.Controllers
             , IUserDeviceService userDeviceService
             , IEmailService emailService
             , IConfiguration configuration
-            , IDataProtectionProvider provider)
+            , IDataProtectionProvider provider
+            , IWebHookService webHookService)
         {
             _actionTypeService = actionTypeService;
             _mapper = mapper;
@@ -78,6 +80,7 @@ namespace Capstone.Controllers
             _emailService = emailService;
             _configuration = configuration;
             _dataProtector = provider.CreateProtector(WebConstant.Purpose);
+            _webHookService = webHookService;
         }
 
         // POST: api/Requests
@@ -171,7 +174,7 @@ namespace Capstone.Controllers
                 //Lấy connection dựa vào action trước và kế tiếp
                 var workFlowTemplateActionConnection = _workFlowTemplateActionConnectionService
                     .GetByFromIDAndToID(model.WorkFlowTemplateActionID, model.NextStepID);
-
+                
                 //kiểm tra connection coi có bị hangfire không?
                 //nếu có thì để status của requestAction là Hangfire
                 if (workFlowTemplateActionConnection.TimeInterval > 0)
@@ -250,6 +253,13 @@ namespace Capstone.Controllers
                         _emailService.SendMail(workflowTemplateAction.ToEmail, "You receive request.", message, filePaths);
 
                     }
+
+                    //kiểm tra có webhook ko
+                    if (!workFlowTemplateActionConnection.Url.IsNullOrEmpty())
+                    {
+                        _webHookService.WebHook(workFlowTemplateActionConnection.Url, "Success");
+                    }
+
                 }
                 //End transaction
                 _requestService.CommitTransaction();
@@ -380,6 +390,10 @@ namespace Capstone.Controllers
 
                     _requestValueService.Create(requestValue);
                 }
+                
+                //Lấy connection dựa vào action trước và kế tiếp
+                var workFlowTemplateActionConnection = _workFlowTemplateActionConnectionService
+                    .GetByFromIDAndToID(currentRequestAction.NextStep.ID, model.NextStepID);
 
                 if (!nextStep.IsEnd) //Kiểm tra đây không phải action cuối cùng
                 {
@@ -397,10 +411,8 @@ namespace Capstone.Controllers
 
                     _notificationService.Create(notification);
 
-                    //Lấy connection dựa vào action trước và kế tiếp
-                    var workFlowTemplateActionConnection = _workFlowTemplateActionConnectionService
-                        .GetByFromIDAndToID(currentRequestAction.NextStep.ID, model.NextStepID);
-
+                    
+                    
                     //kiểm tra connection coi có bị hangfire không?
                     //nếu có thì để status của requestAction là Hangfire
                     if (workFlowTemplateActionConnection.TimeInterval > 0)
@@ -494,32 +506,52 @@ namespace Capstone.Controllers
 
                             _emailService.SendMail(nextStep.ToEmail, "You receive", message, filePaths);
                         }
+
+                        //kiểm tra có webhook ko
+                        if (!workFlowTemplateActionConnection.Url.IsNullOrEmpty())
+                        {
+                            _webHookService.WebHook(workFlowTemplateActionConnection.Url, "Success");
+                        }
                     }
                 }
                 else // Nếu nó là action cuối cùng (kết quả) thì gửi về cho người gửi request
                 {
-                    //Cập nhật request
-                    request.IsCompleted = true;
-                    request.CurrentRequestActionID = requestAction.ID;
-                    requestAction.Status = StatusEnum.Handled;
-                    _requestActionService.Save();
-                    _requestService.Save();
-
-                    //Notification
-                    Notification notification = new Notification
+                    if (workFlowTemplateActionConnection.TimeInterval > 0)
                     {
-                        EventID = requestAction.ID,
-                        NotificationType = NotificationEnum.CompletedRequest,
-                        CreateDate = DateTime.Now,
-                    };
+                        requestAction.Status = StatusEnum.Hangfire;
+                        _requestActionService.Save();
+                    }
+                    else
+                    {
+                        //Cập nhật request
+                        request.IsCompleted = true;
+                        request.CurrentRequestActionID = requestAction.ID;
+                        requestAction.Status = StatusEnum.Handled;
+                        _requestActionService.Save();
+                        _requestService.Save();
 
-                    _notificationService.Create(notification);
+                        //Notification
+                        Notification notification = new Notification
+                        {
+                            EventID = requestAction.ID,
+                            NotificationType = NotificationEnum.CompletedRequest,
+                            CreateDate = DateTime.Now,
+                        };
 
-                    var ownerID = _requestService.GetByID(model.RequestID).InitiatorID;
-                    var owner = _userManager.FindByIdAsync(ownerID).Result;
+                        _notificationService.Create(notification);
 
-                    //Push notification
-                    PushNotificationToUser(ownerID, "Completed Request", WebConstant.CompletedRequestMessage, notification);
+                        var ownerID = _requestService.GetByID(model.RequestID).InitiatorID;
+                        var owner = _userManager.FindByIdAsync(ownerID).Result;
+
+                        //kiểm tra có webhook ko
+                        if (!workFlowTemplateActionConnection.Url.IsNullOrEmpty())
+                        {
+                            _webHookService.WebHook(workFlowTemplateActionConnection.Url, "Success");
+                        }
+
+                        //Push notification
+                        PushNotificationToUser(ownerID, "Completed Request", WebConstant.CompletedRequestMessage, notification);
+                    }
                 }
 
                 _notificationService.Save();
