@@ -1,4 +1,5 @@
 export class GlobalVar {
     // static url = "https://localhost:44359/" ;
-    static url = "http://workflow.demo.saigontechnology.vn/" ;
+    static url = "https://api.workflow.demo.saigontechnology.vn/" ;
+
 }
