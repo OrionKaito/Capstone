@@ -22,6 +22,10 @@ public class StaffRequestAction {
     @Expose
     private String status;
 
+    @SerializedName("description")
+    @Expose
+    private String description;
+
     @SerializedName("requestValues")
     @Expose
     private List<RequestValue> requestValues;
@@ -60,6 +64,14 @@ public class StaffRequestAction {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public List<RequestValue> getRequestValues() {

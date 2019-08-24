@@ -101,10 +101,10 @@ namespace Capstone.Service
                 }
 
                 DateTime now = DateTime.Now;
-                DateTime afterFiveMinutes = now.AddMinutes(2);
+                DateTime afterTwoMinutes = now.AddMinutes(Double.Parse(_configuration["AfterTime"]));
 
                 //Kiểm tra giờ của requestAction nằm giữa giờ hiện tại và 5p sau của giờ hiện tại
-                if ((DateTime.Compare(resultTime, now) > 0) && (DateTime.Compare(resultTime, afterFiveMinutes) < 0))
+                if ((DateTime.Compare(resultTime, now) > 0) && (DateTime.Compare(resultTime, afterTwoMinutes) < 0))
                 {
                     if (!_workFlowTemplateActionRepository.GetByID(requestAction.NextStepID.GetValueOrDefault()).IsEnd)
                     {
@@ -180,12 +180,6 @@ namespace Capstone.Service
 
                             _emailService.SendMail(workflowTemplateAction.ToEmail, "You receive request.", message, new List<string>());
                         }
-
-                        //kiểm tra có webhook ko
-                        if (!workFlowTemplateActionConnection.Url.IsNullOrEmpty())
-                        {
-                            _webHookService.WebHook(workFlowTemplateActionConnection.Url, "Success");
-                        }
                     }
                     else
                     {
@@ -206,14 +200,14 @@ namespace Capstone.Service
 
                         _notificationService.Create(notification);
 
-                        //kiểm tra có webhook ko
-                        if (!workFlowTemplateActionConnection.Url.IsNullOrEmpty())
-                        {
-                            _webHookService.WebHook(workFlowTemplateActionConnection.Url, "Success");
-                        }
-
                         //Push notification
                         PushNotificationToUser(requestAction.Request.InitiatorID, "Completed Request", WebConstant.CompletedRequestMessage, notification);
+                    }
+                    
+                    //kiểm tra có webhook ko
+                    if (!workFlowTemplateActionConnection.Url.IsNullOrEmpty())
+                    {
+                        _webHookService.WebHook(workFlowTemplateActionConnection.Url, "Success");
                     }
                 }
             }

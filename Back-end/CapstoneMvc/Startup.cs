@@ -138,6 +138,9 @@ namespace CapstoneMvc
             services.AddTransient<IUserDeviceRepository, UserDeviceRepository>();
             services.AddTransient<IUserDeviceService, UserDeviceService>();
 
+            //WebHook
+            services.AddTransient<IWebHookService, WebHookService>();
+
             #endregion
 
             // Auto Mapper Configurations

@@ -63,6 +63,7 @@ namespace Capstone.ViewModel
         public Guid FromWorkFlowTemplateActionID { get; set; }
         public Guid ToWorkFlowTemplateActionID { get; set; }
         public string Name { get; set; }
+        public string Url { get; set; }
         public int TimeInterval { get; set; }
         public TimeEnum Type { get; set; }
     }

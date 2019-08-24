@@ -263,11 +263,6 @@ namespace CapstoneMvc.Controllers
 
                             _emailService.SendMail(nextStep.ToEmail, "You receive", message, filePaths);
                         }
-                        //kiểm tra có webhook ko
-                        if (!workFlowTemplateActionConnection.Url.IsNullOrEmpty())
-                        {
-                            _webHookService.WebHook(workFlowTemplateActionConnection.Url, "Success");
-                        }
                     }
                 }
                 else // Nếu nó là action cuối cùng (kết quả) thì gửi về cho người gửi request
@@ -292,14 +287,14 @@ namespace CapstoneMvc.Controllers
                     var ownerID = _requestService.GetByID(model.RequestID).InitiatorID;
                     var owner = _userManager.FindByIdAsync(ownerID).Result;
 
-                    //kiểm tra có webhook ko
-                    if (!workFlowTemplateActionConnection.Url.IsNullOrEmpty())
-                    {
-                        _webHookService.WebHook(workFlowTemplateActionConnection.Url, "Success");
-                    }
-
                     //Push notification
                     PushNotificationToUser(ownerID, "Completed Request", WebConstant.CompletedRequestMessage, notification);
+                }
+                
+                //kiểm tra có webhook ko
+                if (!workFlowTemplateActionConnection.Url.IsNullOrEmpty())
+                {
+                    _webHookService.WebHook(workFlowTemplateActionConnection.Url, "Success");
                 }
 
                 _notificationService.Save();

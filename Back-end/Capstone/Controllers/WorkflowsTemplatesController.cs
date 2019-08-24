@@ -328,7 +328,7 @@ namespace Capstone.Controllers
                             ToWorkFlowTemplateActionID = connection.ToWorkFlowTemplateActionID,
                             TimeInterval = connection.TimeInterval,
                             Type = connection.Type,
-                            Url = "",
+                            Url = connection.Url,
                         };
 
                         _workFlowTemplateActionConnectionService.Create(workflowConnection);

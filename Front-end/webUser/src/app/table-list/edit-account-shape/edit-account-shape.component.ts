@@ -119,7 +119,7 @@ export class EditAccountShapeComponent implements OnInit {
             name: '',
             type:1,
             timeInterval: 0,
-            webHook:""
+            Url:""
 
         }
         this.activatedRoute.params.subscribe(item => {
@@ -245,7 +245,7 @@ export class EditAccountShapeComponent implements OnInit {
                         name: 'arrow' + count,
                         timeInterval: 0,
                         type: 1,
-                        webHook: ""
+                        Url: ""
                     });
                 } else {
                     //những mũi tên tiếp theo nó lấy mũi đầu cắt chuỗi lấy số rồi cộng lên
@@ -261,7 +261,7 @@ export class EditAccountShapeComponent implements OnInit {
                         name: 'arrow' + (+count + 1),
                         timeInterval: 0,
                         type: 1,
-                        webHook:""
+                        Url:""
                     });
                 }
                 // Gọi hàm vẽ mủi tên
@@ -1218,14 +1218,14 @@ export class EditAccountShapeComponent implements OnInit {
                         name: '',
                         timeInterval: "",
                         type: "",
-                        webHook:""
+                        Url:""
                     };
                     b.fromWorkFlowTemplateActionID = element.idDiv[0].toString();
                     b.toWorkFlowTemplateActionID = element.idDiv[1].toString();
                     b.name = element.name.toString();
                     b.timeInterval = element.timeInterval;
                     b.type = element.type;
-                    b.webHook = element.webHook;
+                    b.Url = element.Url;
                     jsonConnections.push(b);
                 });
 
