@@ -14,7 +14,7 @@ export class LoginService {
   
   constructor(private http : HttpClient) {   
   
-    this.Url = 'https://localhost:44359';  
+    this.Url = 'http://workflow.demo.saigontechnology.vn';  
   
     const headerSettings: {[name: string]: string | string[]; } = {};  
     this.header =  new HttpHeaders(headerSettings);  

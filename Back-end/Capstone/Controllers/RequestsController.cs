@@ -918,6 +918,54 @@ namespace Capstone.Controllers
             }
         }
 
+        [HttpGet("GetRequestNotAbleToHandle")]
+        public ActionResult<RequestNotAbleToHandleVM> GetRequestNotAbleToHandle(int? numberOfPage, int? NumberOfRecord)
+        {
+            try
+            {
+                var page = numberOfPage ?? 1;
+                var count = NumberOfRecord ?? WebConstant.DefaultPageRecordCount;
+
+                List<RequestNotAbleToHandle> listRequest = new List<RequestNotAbleToHandle>();
+
+                var requestNotAbleToHandleByPermission = _requestService.GetRequestNotAbleToHandleByPermission().Select(r => new RequestNotAbleToHandle
+                {
+                    WorkFlowTemplateName = r.WorkFlowTemplate.Name,
+                    WorkflowTemplateActionName = _requestActionService.GetByID(r.CurrentRequestActionID).NextStep.Name,
+                    InitiatorName = r.Initiator.FullName,
+                    Reason = WebConstant.NotAbleToHandleByPermission,
+                    CreateDate = r.CreateDate
+                });
+
+                var requestNotAbleToHandleByLineManager= _requestService.GetRequestNotAbleToHandleByPermission().Select(r => new RequestNotAbleToHandle
+                {
+                    WorkFlowTemplateName = r.WorkFlowTemplate.Name,
+                    WorkflowTemplateActionName = _requestActionService.GetByID(r.CurrentRequestActionID).NextStep.Name,
+                    InitiatorName = r.Initiator.FullName,
+                    Reason = WebConstant.NotAbleToHandleByPermission,
+                    CreateDate = r.CreateDate
+                });
+
+                listRequest.AddRange(requestNotAbleToHandleByPermission);
+                listRequest.AddRange(requestNotAbleToHandleByLineManager);
+
+                var list = listRequest.OrderBy(r => r.CreateDate);
+
+                RequestNotAbleToHandleVM myRequestPaginVM = new RequestNotAbleToHandleVM
+                {
+                    //TotalRecord = requests.Count(),
+                    TotalRecord = list.Count(),
+                    MyRequests = list.Skip((page - 1) * count).Take(count),
+                };
+
+                return Ok(myRequestPaginVM);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
+
         private async void PushNotificationToUser(string userID, string title, string body, Notification notification)
         {
             //get list user device by userID

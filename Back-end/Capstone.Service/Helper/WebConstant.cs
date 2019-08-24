@@ -43,5 +43,7 @@
         public static string PasswordToShort = "Passwords must be at least 6 characters.";
         public static string ToggleWorkflowFail = "Please design workflow first!";
         public static string InvalidTimeInterval = "Time Interval must be larger than 0!";
+        public static string NotAbleToHandleByPermission = "This request can not handle by permission.";
+        public static string NotAbleToHandleByLineManager = "This request can not handle by line manager.";
     }
 }
