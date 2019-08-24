@@ -5,6 +5,7 @@ import {ROUTES} from 'app/components/sidebar/sidebar.component';
 import {LoadStaffAcountService} from 'app/service/load-staff-acount.service';
 import {ToastrService} from 'ngx-toastr';
 import Swal from 'sweetalert2';
+import { Title } from '@angular/platform-browser';
 
 
 @Component({
@@ -33,7 +34,8 @@ export class LoginComponent implements OnInit {
 
     resetPassmodel: any = {};
 
-    constructor(private toastr: ToastrService, private router: Router, private LoginService: LoginService, private loadStaffAcountService: LoadStaffAcountService) {
+    constructor(private titleService: Title,
+        private toastr: ToastrService, private router: Router, private LoginService: LoginService, private loadStaffAcountService: LoadStaffAcountService) {
     }
 
     ngOnInit() {
@@ -93,7 +95,18 @@ export class LoginComponent implements OnInit {
                         localStorage.setItem('saveMe', 'false');
                     }
                     this.router.navigate(['/create-request']);
-                    debugger;
+                 
+                    this.LoginService.getUserProfile().toPromise().then(
+                        resp =>{
+                            let data: any;
+                            data = resp;
+                            localStorage.setItem("name", data[0].fullName);
+                            this.titleService.setTitle(data[0].fullName +" - Dynamic Workflow");
+                        },err =>{
+                          this.toastr.error(err.error);
+                        }
+                    )
+                    
                 }
             }, err => {
 

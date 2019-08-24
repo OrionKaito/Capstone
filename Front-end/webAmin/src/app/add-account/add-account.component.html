@@ -68,7 +68,7 @@
     </div>
   </div>
   <div class="form-group">
-    <label>Manage of user</label>
+    <label>Line manager</label>
     <select name="group" [(ngModel)]="formData.LineManagerID" class="form-control">
       <option value="0">No line manager</option>
       <option *ngFor="let item of manageList" value="{{item.id}}">{{item.fullName}}</option>
