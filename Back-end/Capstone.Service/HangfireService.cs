@@ -104,7 +104,7 @@ namespace Capstone.Service
                 DateTime afterTwoMinutes = now.AddMinutes(Double.Parse(_configuration["AfterTime"]));
 
                 //Kiểm tra giờ của requestAction nằm giữa giờ hiện tại và 5p sau của giờ hiện tại
-                if ((DateTime.Compare(resultTime, now) > 0) && (DateTime.Compare(resultTime, afterTwoMinutes) < 0))
+                if ((DateTime.Compare(resultTime, now) >= 0) && (DateTime.Compare(resultTime, afterTwoMinutes) < 0))
                 {
                     if (!_workFlowTemplateActionRepository.GetByID(requestAction.NextStepID.GetValueOrDefault()).IsEnd)
                     {
