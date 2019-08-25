@@ -45,5 +45,11 @@
         public static string InvalidTimeInterval = "Time Interval must be larger than 0!";
         public static string NotAbleToHandleByPermission = "This request can not handle by permission.";
         public static string NotAbleToHandleByLineManager = "This request can not handle by line manager.";
+        public static string WebHookSuccessMessage = "The information has been sent successfully.";
+
+        //Encode
+        public static string PasswordHash = "P@@Sw0rd";
+        public static string SaltKey = "S@LT&KEY";
+        public static string VIKey = "@1B2c3D4e5F6g7H8";
     }
 }

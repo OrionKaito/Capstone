@@ -257,7 +257,7 @@ namespace Capstone.Controllers
                     //kiểm tra có webhook ko
                     if (!workFlowTemplateActionConnection.Url.IsNullOrEmpty())
                     {
-                        _webHookService.WebHook(workFlowTemplateActionConnection.Url, "Success");
+                        _webHookService.WebHook(workFlowTemplateActionConnection.Url, request.InitiatorID, request.Initiator.UserName, WebConstant.WebHookSuccessMessage);
                     }
 
                 }
@@ -510,7 +510,7 @@ namespace Capstone.Controllers
                         //kiểm tra có webhook ko
                         if (!workFlowTemplateActionConnection.Url.IsNullOrEmpty())
                         {
-                            _webHookService.WebHook(workFlowTemplateActionConnection.Url, "Success");
+                            _webHookService.WebHook(workFlowTemplateActionConnection.Url, currentRequestAction.Request.Initiator.Id, currentRequestAction.Request.Initiator.UserName, WebConstant.WebHookSuccessMessage);
                         }
                     }
                 }
@@ -546,7 +546,7 @@ namespace Capstone.Controllers
                         //kiểm tra có webhook ko
                         if (!workFlowTemplateActionConnection.Url.IsNullOrEmpty())
                         {
-                            _webHookService.WebHook(workFlowTemplateActionConnection.Url, "Success");
+                            _webHookService.WebHook(workFlowTemplateActionConnection.Url, currentRequestAction.Request.InitiatorID, currentRequestAction.Request.Initiator.UserName, WebConstant.WebHookSuccessMessage);
                         }
 
                         //Push notification

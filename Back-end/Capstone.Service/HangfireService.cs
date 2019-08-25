@@ -207,7 +207,7 @@ namespace Capstone.Service
                     //kiểm tra có webhook ko
                     if (!workFlowTemplateActionConnection.Url.IsNullOrEmpty())
                     {
-                        _webHookService.WebHook(workFlowTemplateActionConnection.Url, "Success");
+                        _webHookService.WebHook(workFlowTemplateActionConnection.Url, requestAction.Request.InitiatorID, requestAction.Request.Initiator.UserName, WebConstant.WebHookSuccessMessage);
                     }
                 }
             }

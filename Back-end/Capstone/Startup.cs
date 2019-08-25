@@ -176,6 +176,9 @@ namespace Capstone
             //WebHook
             services.AddTransient<IWebHookService, WebHookService>();
 
+            //Encode
+            services.AddTransient<IEncodeService, EncodeService>();
+
             #endregion
 
             // Auto Mapper Configurations

@@ -16,14 +16,16 @@ namespace Capstone.Controllers
         private readonly IRequestValueService _requestValueService;
         private readonly IBackgroundJobClient _backgroundJob;
         private readonly IWebHookService _webHookService;
+        private readonly IEncodeService _encodeService;
 
         public ValuesController(IEmailService emailService, IRequestValueService requestValueService, IBackgroundJobClient backgroundJob
-            , IWebHookService webHookService)
+            , IWebHookService webHookService, IEncodeService encodeService)
         {
             _emailService = emailService;
             _requestValueService = requestValueService;
             _backgroundJob = backgroundJob;
             _webHookService = webHookService;
+            _encodeService = encodeService;
         }
 
         [HttpGet("Test")]
@@ -98,18 +100,23 @@ namespace Capstone.Controllers
             return Ok(domain);
         }
 
-        //[HttpGet("TestHandfire")]
-        //public ActionResult TestHandfire()
-        //{
-        //    RecurringJob.AddOrUpdate("test",() => _emailService.SendMail("kevinz2014st@gmail.com","test hangfire", "hangfire test", new List<string>()), "*/5 * * * *");
-        //    return Ok();
-        //}
-
-        [HttpGet("TestWebHook")]
-        public async Task<HttpResponseMessage> TestWebHook(string url, string message)
+        [HttpGet("Encrypt")]
+        public ActionResult TestHandfire(string encrypt)
         {
-            return await _webHookService.WebHook(url, message);
+            return Ok(_encodeService.Encrypt(encrypt));
         }
+
+        [HttpGet("Decrypt")]
+        public ActionResult TestHand(string decrypt)
+        {
+            return Ok(_encodeService.Decrypt(decrypt));
+        }
+
+        //[HttpGet("TestWebHook")]
+        //public async Task<HttpResponseMessage> TestWebHook(string url, string message)
+        //{
+        //    return await _webHookService.WebHook(url, message);
+        //}
 
         // POST api/values
         [HttpPost("PushNotificationToDevice")]

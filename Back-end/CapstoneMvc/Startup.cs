@@ -16,6 +16,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
+using System.IO;
 using System.Text;
 
 namespace CapstoneMvc
@@ -141,6 +142,8 @@ namespace CapstoneMvc
             //WebHook
             services.AddTransient<IWebHookService, WebHookService>();
 
+            //Encode
+            services.AddTransient<IEncodeService, EncodeService>();
             #endregion
 
             // Auto Mapper Configurations
