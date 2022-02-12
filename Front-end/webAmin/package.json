@@ -33,7 +33,7 @@
     "@angular/router": "7.0.2",
     "@fortawesome/fontawesome-free": "^5.9.0",
     "@types/chart.js": "^2.7.55",
-    "ajv": "6.4.0",
+    "ajv": "6.12.3",
     "angular-bootstrap-md": "^7.5.4",
     "arrive": "2.4.1",
     "bootstrap": "4.1.0",
